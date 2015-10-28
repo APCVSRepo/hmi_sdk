@@ -39,6 +39,9 @@ VideoStream::VideoStream(QWidget *parent) :
 
 VideoStream::~VideoStream()
 {
+    avformat_free_context(pAVFormatContext);
+    av_frame_free(&pAVFrame);
+    sws_freeContext(pSwsContext);
     delete m_Screen;
 }
 

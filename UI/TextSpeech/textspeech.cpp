@@ -73,13 +73,13 @@ void TextSpeech::dealevent(QString name, int arc , void* argv)
 //初始化语音函数
 bool TextSpeech::initSpeech()
 {
-    return false;
+return false;
 }
 
 //文本转语音朗读函数
 bool TextSpeech::speak(QString txt)
 {
-    return false;
+return false;
 }
 
 //判断语音系统是否运行函数

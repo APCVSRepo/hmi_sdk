@@ -27,7 +27,10 @@
 #include <QTableWidget>
 #include <QScrollBar>
 #include <QLineEdit>
-#include <UI/Config/Config.h>
+#include "UI/Config/Config.h"
 
+#include <stdio.h>
+//#define _D(msg, args...) fprintf(stderr,"[lk]-%s-%s():%d: ", msg, __FILE__, __FUNCTION__, __LINE__, ##args)
+#define _D   printf
 
 #endif // APPINCLUDE_H

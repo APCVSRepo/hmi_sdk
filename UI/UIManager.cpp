@@ -97,10 +97,14 @@ void CUIManager::onAppShow(int type)
 }
 void CUIManager::onTestVideoStreamStart()
 {
+    printf("emit onTestVideoStreamStart");
+    fflush(stdout);
     emit onTestStartSignal();
 }
 void CUIManager::onTestStartSlots()
 {
+    printf("onTestStartSlots");
+    fflush(stdout);
     std::string str_url = m_pAppDataInterface->getUrlString();
     //_D("%s\n",str_url.data());
 #ifdef VIDEO_TEST
@@ -320,9 +324,9 @@ void CUIManager::menuBtnClickedSlots(QString btnText)
     if("ListButton" == btnText)
     {
         this->AppShowSlot(ID_AUDIOPASSTHRU);
-//        ts.speak("请说一个指令");
-        while(ts.isSpeaking())
-            waitMSec(100);
+        //ts.speak("请说一个指令");
+        //while(ts.isSpeaking())
+           // waitMSec(100);
         m_pAppDataInterface->OnVRStartRecord();
     }
 }

@@ -15,9 +15,9 @@
 #include "UI/Common/PopBase.h"
 #include "UI/TextSpeech/textspeech.h"
 #include "UIInterface.h"
-#include "HMISDK/AppData/AppListInterface.h"
+#include "AppData/AppListInterface.h"
 #include "QMessageBox"
-//#define VIDEO_TEST
+#define VIDEO_TEST
 #ifdef VIDEO_TEST
 #include "UI/VideoStream/VideoStream.h"
 #endif

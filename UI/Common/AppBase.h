@@ -2,7 +2,7 @@
 #define APPBASE_H
 
 #include "UI/AppInclude.h"
-#include "../../AppData/AppDataInterface.h"
+#include "AppData/AppDataInterface.h"
 
 class AppBase : public QWidget
 {

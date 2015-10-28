@@ -2,7 +2,7 @@
 #include <QFontDatabase>
 #include <QTextCodec>
 
-#include "HMISDK/AppData/AppList.h"
+#include "AppData/AppList.h"
 #include "UI/UIManager.h"
 #include "UI/Config/Config.h"
 
@@ -20,24 +20,14 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
 #endif
 
-//    //将字体文件名传给addApplicationFont,得到字体的Id
-//    int fontId = QFontDatabase::addApplicationFont(":/LiberationSerif-Regular.ttf");
-//    //将字体Id传给applicationFontFamilies,得到一个QStringList,其中的第一个元素为新添加字体的family
-//    QString msyh = QFontDatabase::applicationFontFamilies ( fontId ).at(0);
-//    QFont font(msyh,10);
-//    //将此字体设为QApplication的默认字体
-//    QApplication::setFont(font);
-
     AppList m_appList;
     CUIManager m_ui;
 
-
+    m_ui.setAppListInterface(&m_appList);
+    m_ui.init();
 
     m_appList.setUIManager(&m_ui);
     m_appList.start();
-
-    m_ui.setAppListInterface(&m_appList);
-    m_ui.init();
 
     return a.exec();
 }

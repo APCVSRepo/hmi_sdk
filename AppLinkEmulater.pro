@@ -3,26 +3,38 @@
 # Project created by QtCreator 2015-05-05T16:04:10
 #
 #-------------------------------------------------
-QT       += core gui websockets
-
+QT       += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 win32:CONFIG += qaxcontainer
 
 TARGET = AppLinkEmulater
 TEMPLATE = app
 
+MOC_DIR=temp/moc
+RCC_DIR=temp/rcc
+UI_DIR=temp/ui
+OBJECTS_DIR=temp/obj
+DESTDIR=bin
+
+
 SOURCES += \
     main.cpp \
-    HMISDK/connect/vrclient.cpp \
-    HMISDK/connect/vehicleinfoclient.cpp \
-    HMISDK/connect/uiclient.cpp \
-    HMISDK/connect/ttsclient.cpp \
-    HMISDK/connect/socketstosdl.cpp \
-    HMISDK/connect/SDLConnector.cpp \
-    HMISDK/connect/navigationclient.cpp \
-    HMISDK/connect/Channel.cpp \
-    HMISDK/connect/buttonsclient.cpp \
-    HMISDK/connect/basecommunicationclient.cpp \
+    HMI_SDK/Connect/vrclient.cpp \
+    HMI_SDK/Connect/vehicleinfoclient.cpp \
+    HMI_SDK/Connect/uiclient.cpp \
+    HMI_SDK/Connect/ttsclient.cpp \
+    HMI_SDK/Connect/socketstosdl.cpp \
+    HMI_SDK/Connect/SDLConnector.cpp \
+    HMI_SDK/Connect/navigationclient.cpp \
+    HMI_SDK/Connect/Channel.cpp \
+    HMI_SDK/Connect/buttonsclient.cpp \
+    HMI_SDK/Connect/basecommunicationclient.cpp \
+    Tools/json/json_writer.cpp \
+    Tools/json/json_valueiterator.inl \
+    Tools/json/json_value.cpp \
+    Tools/json/json_reader.cpp \
+    HMI_SDK/AppData/AppList.cpp \
+    HMI_SDK/AppData/AppData.cpp \
     UI/AppLink.cpp \
     UI/Alert/AlertUI.cpp \
     UI/AudioPassThru/AudioPassThru.cpp \
@@ -38,36 +50,50 @@ SOURCES += \
     UI/ScrollableMessage/ScrollMsg.cpp \
     UI/Show/Show.cpp \
     UI/UIManager.cpp \
-    UI/Slider/Slider.cpp \
-    HMISDK/utils/jsoncpp/json_writer.cpp \
-    HMISDK/utils/jsoncpp/json_valueiterator.inl \
-    HMISDK/utils/jsoncpp/json_value.cpp \
-    HMISDK/utils/jsoncpp/json_reader.cpp \
+    UI/Slider/Slider.cpp \  
     UI/Notify/Notify.cpp \
     UI/Common/Background.cpp \
-#    UI/VideoStream/VideoStream.cpp \
-    UI/TextSpeech/textspeech.cpp \
-    Log.cpp \
-    HMISDK/AppData/AppData.cpp \
-    HMISDK/AppData/AppList.cpp
+    UI/VideoStream/VideoStream.cpp \
+    UI/TextSpeech/textspeech.cpp
 
+INCLUDEPATH += $$PWD/   \
+              $$PWD/Include \
+              $$PWD/HMI_SDK  \
+              $$PWD/Tools
 
-HEADERS  += \
-    HMISDK/include/connect/vrclient.h \
-    HMISDK/include/connect/vehicleinfoclient.h \
-    HMISDK/include/connect/uiclient.h \
-    HMISDK/include/connect/ttsclient.h \
-    HMISDK/include/connect/sockectstosdl.h \
-    HMISDK/include/connect/SDLConnector.h \
-    HMISDK/include/connect/navigationclient.h \
-    HMISDK/include/connect/connect.h \
-    HMISDK/include/connect/Channel.h \
-    HMISDK/include/connect/buttonsclient.h \
-    HMISDK/include/connect/basecommunicationclient.h \
-    HMISDK/include/protocolHandler/IMessageInterface.h \
-    UIcallBack.h \
+HEADERS  += HMI_SDK/AppData/AppListInterface.h \
+    HMI_SDK/AppData/AppDataInterface.h \
+    HMI_SDK/AppData/AppData.h \
+    HMI_SDK/Connect/vrclient.h \
+    HMI_SDK/Connect/vehicleinfoclient.h \
+    HMI_SDK/Connect/uiclient.h \
+    HMI_SDK/Connect/ttsclient.h \
+    HMI_SDK/Connect/sockectstosdl.h \
+    HMI_SDK/Connect/SDLConnector.h \
+    HMI_SDK/Connect/navigationclient.h \
+    HMI_SDK/Connect/connect.h \
+    HMI_SDK/Connect/Channel.h \
+    HMI_SDK/Connect/buttonsclient.h \
+    HMI_SDK/Connect/basecommunicationclient.h \
+    HMI_SDK/Connect/IMessageInterface.h \
+    HMI_SDK/Connect/SDLConnector.h \
+    HMI_SDK/Connect/ISocketManager.h \
+    Tools/json/version.h.in \
+    Tools/json/json_tool.h \
+    Tools/json/writer.h \
+    Tools/json/version.h \
+    Tools/json/value.h \
+    Tools/json/reader.h \
+    Tools/json/json.h \
+    Tools/json/forwards.h \
+    Tools/json/features.h \
+    Tools/json/config.h \
+    Tools/json/autolink.h \
+    Tools/json/assertions.h \
     UI/AppLink.h \
     UI/AppInclude.h \
+    UI/UIInterface.h \
+    UI/UIManager.h \
     UI/Alert/AlertUI.h \
     UI/AudioPassThru/AudioPassThru.h \
     UI/Choiceset/ChoicesetVR.h \
@@ -81,34 +107,11 @@ HEADERS  += \
     UI/Config/Config.h \
     UI/ScrollableMessage/ScrollMsg.h \
     UI/Show/Show.h \
-    UI/UIManager.h \
     UI/Slider/Slider.h \
-    HMISDK/utils/jsoncpp/version.h.in \
-    HMISDK/utils/jsoncpp/json_tool.h \
-    HMISDK/include/json/writer.h \
-    HMISDK/include/json/version.h \
-    HMISDK/include/json/value.h \
-    HMISDK/include/json/reader.h \
-    HMISDK/include/json/json.h \
-    HMISDK/include/json/forwards.h \
-    HMISDK/include/json/features.h \
-    HMISDK/include/json/config.h \
-    HMISDK/include/json/autolink.h \
-    HMISDK/include/json/assertions.h \
     UI/Notify/Notify.h \
     UI/Common/Background.h \
-    HMISDK/include/SDLConnector.h \
-    HMISDK/include/IMessageInterface.h \
-    HMISDK/include/connect/ISocketManager.h \
-    UI/UIInterface.h \
-#    UI/VideoStream/VideoStream.h \
-    UI/TextSpeech/textspeech.h \
-    Log.h \
-    HMISDK/AppData/AppData.h \
-    HMISDK/AppData/AppDataInterface.h \
-    HMISDK/AppData/AppList.h \
-    HMISDK/AppData/AppListInterface.h
-
+    UI/VideoStream/VideoStream.h \
+    UI/TextSpeech/textspeech.h
 
 
 RESOURCES += \
@@ -117,33 +120,41 @@ RESOURCES += \
 OTHER_FILES += \
     UI/LiberationSerif-Regular.ttf
 
-#INCLUDEPATH +=  $$PWD/ffmpeg/include
+INCLUDEPATH +=  $$PWD/Include/ffmpeg
 
 ###############################for windows
-INCLUDEPATH += $$PWD/HMISDK/include/pthread
-win32: LIBS +=  $$PWD/HMISDK/lib/pthreadVC2.lib
-win32: LIBS +=  $$PWD/HMISDK/lib/pthreadVCE2.lib
-win32: LIBS +=  $$PWD/HMISDK/lib/pthreadVSE2.lib
-win32: LIBS +=  $$PWD/HMISDK/lib/WS2_32.Lib
-#win32: LIBS += -L$$PWD/ffmpeg/lib -lavcodec -lavfilter -lavformat -lavutil -lswscale
-
+win32{
+DEFINES +=WIN32
+INCLUDEPATH += $$PWD/Include/pthread
+LIBS +=  $$PWD/Library/win32/pthread/pthreadVC2.lib
+LIBS +=  $$PWD/Library/win32/pthread/pthreadVCE2.lib
+LIBS +=  $$PWD/Library/win32/pthread/pthreadVSE2.lib
+LIBS +=  $$PWD/Library/win32/pthread/WS2_32.Lib
+#LIBS += -L$$PWD/lib/win32/ffmpeg -lavcodec -lavfilter -lavformat -lavutil -lswscale
+#win32: LIBS += -L$$PWD/ffmpeg/lib/ -lavcodec
+LIBS += $$PWD/Library/win32/ffmpeg/libavcodec.a  \
+$$PWD/Library/win32/ffmpeg/libavfilter.a  \
+$$PWD/Library/win32/ffmpeg/libavformat.a  \
+$$PWD/Library/win32/ffmpeg/libavutil.a  \
+$$PWD/Library/win32/ffmpeg/libswscale.a
+}
 
 ################################for linux
-#LIBS += -L$$PWD/ffmpeg/so -lavcodec -lavfilter -lavformat -lavutil -lswscale
+linux:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec -lavfilter -lavformat -lavutil -lswscale
 
 
 ################################for wince
-#INCLUDEPATH +=HMISDK/include
-#HEADERS += \
-#    HMISDK/include/global_first.h \
-#    HMISDK/include/unistd.h \
-#    HMISDK/include/stdint.h
-#LIBS +=  $$PWD/HMISDK/lib/wince/pthread.lib
-##LIBS += -L$$PWD/ffmpeg/ce/ -lavcodec -lavfilter -lavformat -lavutil -lswscale
+wince{
+INCLUDEPATH +=Include/pthread
+LIBS +=  $$PWD/Library/ce/pthread.lib
+#LIBS += -L$$PWD/lib/ce/ffmpeg -lavcodec -lavfilter -lavformat -lavutil -lswscale
 #LIBS += $$PWD/ffmpeg/ce/libavcodec.dll.a  $$PWD/ffmpeg/ce/libavfilter.dll.a  $$PWD/ffmpeg/ce/libavformat.dll.a  $$PWD/ffmpeg/ce/libswscale.dll.a  $$PWD/ffmpeg/ce/libavutil.dll.a
-
+LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
+}
 
 
 ################################for android
-#LIBS += -L$$PWD/ffmpeg/android -lffmpeg
+android:LIBS += -L$$PWD/Library/android/ffmpeg -lffmpeg
+
+
 

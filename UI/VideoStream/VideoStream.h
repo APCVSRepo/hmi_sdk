@@ -26,8 +26,13 @@ extern "C"
 #include <QObject>
 #include <QMutex>
 #include <QImage>
+#include <QTcpSocket>
+#include <QByteArray>
+#include <QMutex>
 
-
+//#define     VIDEO_STREAM_FILE    // 2//1:NET  2:FILE
+#define     VIDEO_STREM_NET
+//#define     VIDEO_STREAM_PIPE
 class VideoStream : public QWidget
 {
     Q_OBJECT
@@ -38,34 +43,47 @@ public:
     void setUrl(QString url);
     void startStream();
     void stopStream();
+    static void av_log_default_callback(void* ptr, int level, const char* fmt, va_list vl);
+
+    static void* ReadVideoFrame(void* arg);
+
+    void showTestLog(char *info,...);
 
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
+
 signals:
     void GetImage(const QImage &image);
     
 public slots:
     void SetImageSlots(const QImage &image);
-    void playSlots();
-
+    void PlayImageSlots();
 private:
 
-    QLabel *m_label;
+  //  QLabel *m_label;
     int m_i_w;
     int m_i_h;
     QString m_str_url;
     QTimer *m_timerPlay;
-
-
+    QImage m_image;
+    bool   m_Stop;
+    bool   m_streamOpenSucess;
+    QLabel  *m_Screen;
+    QByteArray  videobuffer;
     QMutex mutex;
     AVPicture  pAVPicture;
     AVFormatContext *pAVFormatContext;
     AVCodecContext *pAVCodecContext;
+    AVIOContext * pAVIOpb;
+    AVInputFormat *pAVInputFmt;
     AVFrame *pAVFrame;
     SwsContext * pSwsContext;
     AVPacket pAVPacket;
-
+#ifdef VIDEO_STREM_NET
+     QTcpSocket *m_tcpSocket;// = new QTcpSocket(this);
+     FILE       *m_fhandle;
+#endif
     int videoWidth;
     int videoHeight;
     int videoStreamIndex;

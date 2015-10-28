@@ -1,6 +1,6 @@
 #ifndef UIINTERFACE_H
 #define UIINTERFACE_H
-#include "HMISDK/AppData/AppDataInterface.h"
+#include "AppData/AppDataInterface.h"
 
 enum ShowType
 {

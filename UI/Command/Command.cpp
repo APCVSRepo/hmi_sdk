@@ -164,7 +164,7 @@ void Command::listWidgetDoubleClickedSlots(QModelIndex index)
 
         if(m_vec_isMenu.at(indexNo))
         {
-//            qDebug()<<m_vec_cmdID.at(indexNo).str_command;
+            qDebug()<<m_vec_cmdID.at(indexNo).str_command;
             for(int i = 0; i < m_vec_subStrList.size(); i++)
             {
                 if(m_vec_cmdID.at(indexNo).str_command == m_vec_subStrList.at(i).at(0).str_command)
@@ -204,13 +204,13 @@ void Command::listWidgetDoubleClickedSlots(QModelIndex index)
         }
         else
         {
-//            qDebug()<< m_vec_cmdID.at(indexNo).str_command<<"@@@"<<m_vec_cmdID.at(indexNo).i_cmdID;
+            qDebug()<< m_vec_cmdID.at(indexNo).str_command<<"@@@"<<m_vec_cmdID.at(indexNo).i_cmdID;
             emit commandClick(m_vec_cmdID.at(indexNo).i_cmdID);
         }
     }
     else
     {
-//        qDebug()<< m_vec_subStrList.at(no).at(index.row()+1).str_command<<"###"<<m_vec_subStrList.at(no).at(index.row()+1).i_cmdID;
+        qDebug()<< m_vec_subStrList.at(no).at(index.row()+1).str_command<<"###"<<m_vec_subStrList.at(no).at(index.row()+1).i_cmdID;
         emit commandClick(m_vec_subStrList.at(no).at(index.row()+1).i_cmdID);
     }
 }
@@ -248,7 +248,7 @@ void Command::addNewMenu(QString commandName, int menuID)
     tmpMenu.append(tmpMenuID);
     m_vec_subStrList.insert(0,tmpMenu);
 
-//    qDebug()<< commandName<<menuID;
+    qDebug()<< commandName<<menuID;
     m_b_backIcon = false;
     flushListWidget();
 }

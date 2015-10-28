@@ -5,7 +5,7 @@
 #include "QTimer"
 #include "QLabel"
 #include "Background.h"
-#include "HMISDK/AppData/AppDataInterface.h"
+#include "AppData/AppDataInterface.h"
 
 class CPopBase : public QWidget
 {

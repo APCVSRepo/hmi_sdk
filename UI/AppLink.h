@@ -5,7 +5,7 @@
 #include "Common/AppBase.h"
 #include "Common/ScrollBar.h"
 #include "Common/AppItemWidget.h"
-#include "HMISDK/AppData/AppListInterface.h"
+#include "AppData/AppListInterface.h"
 
 typedef struct appListStruct
 {

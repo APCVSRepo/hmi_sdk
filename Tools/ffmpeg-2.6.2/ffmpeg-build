@@ -1,0 +1,116 @@
+
+#!/bin/bash
+
+#create target
+rm -rf target
+mkdir target
+
+if [ $? -eq 0 ]; then
+  echo "creat target dir ok"
+else
+  exit 0
+fi
+
+LIST_FFMPEG="
+	libavutil
+	libavdevice
+	libavformat
+	libavfilter
+	libavcodec
+	libswscale
+	libpostproc
+"
+
+LIST_FFMPEG_LIB="
+	avutil
+	avdevice
+	avformat
+	avfilter
+	avcodec
+	swscale
+	postproc
+"
+
+del_output(){
+  path=$1
+  rm $path/*.lib 
+  rm $path/*.dll 
+  rm $path/*.def 
+}
+
+del_any(){
+  for opt; do
+        del_output $opt
+  done
+}
+
+make_all(){
+  for opt; do
+     echo "cd ${opt}"
+	 cd $opt
+     make
+    if [ $? != 0 ]; then
+       exit 0
+    fi
+    cd ../
+  done
+}
+
+cpy_all_libs(){
+  cur=target/lib
+  for opt; do
+    echo "$(pwd)"
+    cp $opt/*.lib $cur/
+    cp $opt/*.dll $cur/
+   # cp $opt/*.def $cur/
+  done
+}
+
+cpy_all_headers(){
+  cur=target/include
+  for opt; do
+    echo "$(pwd)"
+    inc=$cur/$opt
+    mkdir  $inc
+    cp $opt/*.h $inc/
+  done
+}
+
+def_all_libs(){
+   for opt; do
+     pexports  $opt.dll > $opt.def
+     lib /machine:ARM /def:$opt.def /out:$opt.lib
+   done
+}
+
+del_any  $LIST_FFMPEG
+
+
+echo "wait for configure..."
+
+
+ 
+#./configure --disable-debug --enable-static --enable-shared --enable-version3 --enable-libx264 --enable-gpl --enable-pthreads --enable-memalign-hack --enable-cross-compile --disable-network --enable-runtime-cpudetect --disable-doc --disable-asm  --enable-decoder=h264 --enable-encoder=libx264 --cc=${PLATFORM_ROOT}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang  --as='gas-preprocessor/gas-preprocessor.pl ${PLATFORM_ROOT}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang' --sysroot=${PLATFORM_ROOT}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk --extra-ldflags=-L${PLATFORM_ROOT}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/usr/lib/system  --target-os=darwin --arch=arm --cpu=cortex-a8 --extra-cflags='-arch armv7' --extra-ldflags='-arch armv7'  --target-path=${BUILD_DIR}  --prefix=${BUILD_DIR} --tempprefix=${BUILD_DIR}/
+
+./configure --enable-memalign-hack --target-os=mingw32ce --cpu=armv4 --arch=arm --extra-cflags="-march=armv4 -mtune=xscale"  --prefix=./target  --enable-cross-compile --cross-prefix=arm-mingw32ce-  --disable-static  --enable-shared  --enable-gpl  --enable-version3  --disable-w32threads  --enable-avisynth  --enable-bzlib  --enable-fontconfig  --enable-frei0r  --enable-gnutls  --enable-iconv  --enable-libass  --enable-libbluray  --enable-libbs2b  --enable-libcaca    --enable-libfreetype  --enable-libgme  --enable-libgsm  --enable-libilbc  --enable-libmodplug  --enable-libmp3lame  --enable-libopencore-amrnb  --enable-libopencore-amrwb  --enable-libopenjpeg  --enable-libopus  --enable-librtmp  --enable-libschroedinger  --enable-libsoxr  --enable-libspeex  --enable-libtheora  --enable-libtwolame  --enable-libvidstab  --enable-libvo-aacenc  --enable-libvo-amrwbenc  --enable-libvorbis  --enable-libvpx  --enable-libwavpack  --enable-libwebp  --enable-libx264  --enable-libx265  --enable-libxavs  --enable-libxvid  --enable-lzma  --enable-decklink  --enable-zlib
+
+#--cross-prefix=arm-mingw32ce-
+
+if [ $? -eq 0 ]; then
+  echo "configure ok"
+else
+  exit 0
+fi
+
+#make_all  $LIST_FFMPEG
+
+#mkdir target/lib
+#cpy_all_libs $LIST_FFMPEG
+
+#mkdir target/include
+#cpy_all_headers $LIST_FFMPEG
+
+#cd target/lib/
+#def_all_libs  $LIST_FFMPEG_LIB
+
+echo "done."

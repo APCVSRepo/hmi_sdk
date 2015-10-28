@@ -75,15 +75,11 @@ private:
     AVPicture  pAVPicture;
     AVFormatContext *pAVFormatContext;
     AVCodecContext *pAVCodecContext;
-    AVIOContext * pAVIOpb;
-    AVInputFormat *pAVInputFmt;
+
     AVFrame *pAVFrame;
     SwsContext * pSwsContext;
     AVPacket pAVPacket;
-#ifdef VIDEO_STREM_NET
-     QTcpSocket *m_tcpSocket;// = new QTcpSocket(this);
-     FILE       *m_fhandle;
-#endif
+
     int videoWidth;
     int videoHeight;
     int videoStreamIndex;

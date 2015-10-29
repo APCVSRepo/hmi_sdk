@@ -17,44 +17,44 @@
 
 typedef struct _SEND_DATA
 {
-	void * pData;
-	int iLength;
+    void * pData;
+    int iLength;
 }SEND_DATA;
 
 typedef struct _SOCK_HANDLE
 {
-	IChannel * pDataReceiver;
-	int socket;
-	std::queue<SEND_DATA> m_SendData;
+    IChannel * pDataReceiver;
+    int socket;
+    std::queue<SEND_DATA> m_SendData;
 }SOCK_HANDLE;
 
 class SocketsToSDL : public ISocketManager
 {
 public:
-	SocketsToSDL();
+    SocketsToSDL();
     virtual ~SocketsToSDL();
 
 public:
     bool ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * pNetwork = 0);
-	void SendData(void * pHandle, void * pData, int iLength);
+    void SendData(void * pHandle, void * pData, int iLength);
 
-	void RunThread();
+    void RunThread();
 
 
 private:
-	bool CreateSignal();
-	void Notify();
-	bool Send(SOCK_HANDLE * pHandle);
-	bool Receive(SOCK_HANDLE * pHandle);
+    bool CreateSignal();
+    void Notify();
+    bool Send(SOCK_HANDLE * pHandle);
+    bool Receive(SOCK_HANDLE * pHandle);
     void CloseSockets();
 
 private:
     int m_Read_Sign;
-	int m_Write_Sign;	
+    int m_Write_Sign;
 
-	mutable pthread_mutex_t m_SendMutex;
-	pthread_t m_SendThread;
-	bool m_bTerminate;
+    mutable pthread_mutex_t m_SendMutex;
+    pthread_t m_SendThread;
+    bool m_bTerminate;
 
     INetworkStatus * m_pNetwork;
 
@@ -62,7 +62,7 @@ private:
     std::string m_sHost;
     int m_iPort;
 
-	std::vector<SOCK_HANDLE *> m_SocketHandles;
+    std::vector<SOCK_HANDLE *> m_SocketHandles;
 };
 
 #endif // SOCKECTSTOSDL

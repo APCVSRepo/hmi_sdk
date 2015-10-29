@@ -23,7 +23,7 @@ const int R_OK =4;
 #define STDERR_FILENO 2
 /* should be in some equivalent to <sys/types.h> */
 #ifdef WINCE
-#include "HMISDK/include/stdint.h"
+#include "stdint.h"
 #else
 #include <stdint.h>
 #endif

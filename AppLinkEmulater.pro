@@ -140,7 +140,7 @@ $$PWD/Library/win32/ffmpeg/libswscale.a
 }
 
 ################################for linux
-unix:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec  -lavformat -lavutil -lswscale
+unix!linux:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec  -lavformat -lavutil -lswscale
 
 
 ################################for wince

@@ -126,8 +126,13 @@ std::string valueToString(double value) {
   len = sprintf_s(buffer, sizeof(buffer), "%.17g", value);
 #endif
 #else
+#ifdef ANDROID
+  if(std::isfinite(value)){
+      len = snprintf(buffer, sizeof(buffer), "%.17g", value);
+#else
   if (isfinite(value)) {
     len = snprintf(buffer, sizeof(buffer), "%.17g", value);
+#endif
   } else {
     // IEEE standard states that NaN values will not compare to themselves
     if (value != value) {

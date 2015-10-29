@@ -2,8 +2,8 @@
 #define APPLIST_H
 
 
-#include "connect/connect.h"
-#include "connect/SDLConnector.h"
+#include "Connect/connect.h"
+#include "Connect/SDLConnector.h"
 
 #include "AppData/AppListInterface.h"
 #include "AppData/AppData.h"

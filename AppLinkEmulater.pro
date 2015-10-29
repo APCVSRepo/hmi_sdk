@@ -57,7 +57,6 @@ SOURCES += \
     UI/TextSpeech/textspeech.cpp
 
 INCLUDEPATH += $$PWD/   \
-              $$PWD/Include \
               $$PWD/HMI_SDK  \
               $$PWD/Tools
 
@@ -125,7 +124,8 @@ INCLUDEPATH +=  $$PWD/Include/ffmpeg
 ###############################for windows
 win32{
 DEFINES +=WIN32
-INCLUDEPATH += $$PWD/Include/pthread
+INCLUDEPATH += $$PWD/Include/pthread \
+               $$PWD/Include
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVC2.lib
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVCE2.lib
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVSE2.lib
@@ -140,7 +140,7 @@ $$PWD/Library/win32/ffmpeg/libswscale.a
 }
 
 ################################for linux
-linux:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec -lavfilter -lavformat -lavutil -lswscale
+unix:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec  -lavformat -lavutil -lswscale
 
 
 ################################for wince

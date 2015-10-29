@@ -1,5 +1,5 @@
 //#include "HMISDK/include/global_first.h"
-#include <connect/navigationclient.h>
+#include <Connect/navigationclient.h>
 
 #include <iostream>
 #include <string>

@@ -1,5 +1,5 @@
-#include "global_first.h"
-#include <connect/SDLConnector.h>
+#include "Include/global_first.h"
+#include <Connect/SDLConnector.h>
 #include <vector>
 #include <iostream>
 #include<QString>

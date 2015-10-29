@@ -1,8 +1,8 @@
 #ifndef APPDATA_H
 #define APPDATA_H
 
-#include "connect/connect.h"
-#include "connect/SDLConnector.h"
+#include "Connect/connect.h"
+#include "Connect/SDLConnector.h"
 
 
 #include "AppData/AppDataInterface.h"

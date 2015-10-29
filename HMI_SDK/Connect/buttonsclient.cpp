@@ -1,5 +1,5 @@
 //#include "HMISDK/include/global_first.h"
-#include "connect/buttonsclient.h"
+#include "Connect/buttonsclient.h"
 
 #include <iostream>
 #include <string>

@@ -1,5 +1,5 @@
 ﻿//#include "HMISDK/include/global_first.h"
-#include <connect/sockectstosdl.h>
+#include <Connect/sockectstosdl.h>
 
 #ifdef WIN32
 #ifdef WINCE

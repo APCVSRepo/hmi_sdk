@@ -3,7 +3,7 @@
 
 #include "json/json.h"
 
-#include "connect/Channel.h"
+#include "Connect/Channel.h"
 
 class buttonsClient : public Channel
 {

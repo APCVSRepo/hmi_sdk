@@ -94,15 +94,13 @@ void Channel::ReadConfigure()
 #else
     getcwd(szPath,1024);
 #endif
-    char szDB[1024];
+    char szDB[1024]={0};
 #ifdef WIN32
-    ::sprintf(szDB, "%s\\%s", szPath, "config\\staticConfigDB.json");//..\\hmi-sdk-plus\\HMISDK\\
+    ::sprintf(szDB, "%s\\%s", szPath, "Config\\staticConfigDB.json");//..\\hmi-sdk-plus\\HMISDK\\
+     printf("szDB=%s\n",szDB);
 #else
-#ifdef ANDROID
-//    ::sprintf(szDB, "%s", "/mnt/udisk/staticConfigDB.json");
-#else
-   // ::sprintf(szDB, "%s/%s", szPath, "HMISDK/config/staticConfigDB.json");
-#endif
+    ::sprintf(szDB, "%s/%s", szPath, "Config/staticConfigDB.json");
+     printf("szDB=%s\n",szDB);
 #endif
 
 

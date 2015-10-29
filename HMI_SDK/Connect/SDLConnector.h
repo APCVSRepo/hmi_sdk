@@ -1,15 +1,15 @@
 ﻿#ifndef __SDL_CONNECTOR_H__
 #define __SDL_CONNECTOR_H__
-#include "connect/ISocketManager.h"
+#include "Connect/ISocketManager.h"
 
-#include "connect/basecommunicationclient.h"
-#include "connect/buttonsclient.h"
-#include "connect/navigationclient.h"
-#include "connect/ttsclient.h"
-#include "connect/uiclient.h"
-#include "connect/vehicleinfoclient.h"
-#include "connect/vrclient.h"
-#include "connect/sockectstosdl.h"
+#include "Connect/basecommunicationclient.h"
+#include "Connect/buttonsclient.h"
+#include "Connect/navigationclient.h"
+#include "Connect/ttsclient.h"
+#include "Connect/uiclient.h"
+#include "Connect/vehicleinfoclient.h"
+#include "Connect/vrclient.h"
+#include "Connect/sockectstosdl.h"
 #include <string>
 #include "json/json.h"
 #include <stdio.h>

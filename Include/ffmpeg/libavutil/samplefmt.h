@@ -18,8 +18,8 @@
 
 #ifndef AVUTIL_SAMPLEFMT_H
 #define AVUTIL_SAMPLEFMT_H
-#ifdef WINCE
-#include "HMISDK/include/stdint.h"
+#if  defined(WINCE)||defined(WIN32)
+#include "stdint.h"
 #else
 #include <stdint.h>
 #endif

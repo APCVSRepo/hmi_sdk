@@ -23,7 +23,7 @@
 #define AVUTIL_CHANNEL_LAYOUT_H
 
 #ifdef WINCE
-#include "HMISDK/include/stdint.h"
+#include "stdint.h"
 #else
 #include <stdint.h>
 #endif

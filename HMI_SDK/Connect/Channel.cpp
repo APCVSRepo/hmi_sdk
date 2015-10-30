@@ -1,5 +1,5 @@
-﻿//#include "HMISDK/include/global_first.h"
-#ifdef WINCE
+﻿#ifdef WINCE
+#include "global_first.h"
 #else
 #include <sys/stat.h>
 #endif

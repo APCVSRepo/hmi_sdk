@@ -1,4 +1,4 @@
-﻿//#include "HMISDK/include/global_first.h"
+﻿#include "Include/global_first.h"
 #include <Connect/sockectstosdl.h>
 
 #ifdef WIN32

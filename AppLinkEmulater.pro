@@ -7,6 +7,8 @@ QT       += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 win32:CONFIG += qaxcontainer
 
+#CONFIG  += wince  ##非wince 平台需要屏�?
+
 TARGET = AppLinkEmulater
 TEMPLATE = app
 
@@ -16,6 +18,8 @@ UI_DIR=temp/ui
 OBJECTS_DIR=temp/obj
 DESTDIR=bin
 
+target.path=$$DESTDIR
+INSTALLS+=target
 
 SOURCES += \
     main.cpp \
@@ -122,7 +126,7 @@ OTHER_FILES += \
 INCLUDEPATH +=  $$PWD/Include/ffmpeg
 
 ###############################for windows
-win32{
+win32:!wince{
 DEFINES +=WIN32
 INCLUDEPATH += $$PWD/Include/pthread \
                $$PWD/Include
@@ -137,24 +141,55 @@ $$PWD/Library/win32/ffmpeg/libavfilter.a  \
 $$PWD/Library/win32/ffmpeg/libavformat.a  \
 $$PWD/Library/win32/ffmpeg/libavutil.a  \
 $$PWD/Library/win32/ffmpeg/libswscale.a
+
+pthread.path=$$DESTDIR
+pthread.files=$$PWD/Library/win32/*.dll
+ffmpeg.path=$$DESTDIR
+ffmpeg.files=$$PWD/Library/win32/ffmpeg/*.dll  \
+$$PWD/Library/win32/pthread/*.dll
+INSTALLS+=pthread
+INSTALLS+=ffmpeg
+qt_dll.path=$$DESTDIR
+qt_dll.files=$$(QT_DIR)/bin/*.dll
+INSTALLS +=qt_dll
 }
 
-################################for linux
-unix!linux:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec  -lavformat -lavutil -lswscale
 
+################################for linux
+unix:!android:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec  -lavformat -lavutil -lswscale
 
 ################################for wince
 wince{
-INCLUDEPATH +=Include/pthread
+HEADERS += \
+    Include/global_first.h \
+    Include/unistd.h \
+    Include/stdint.h
+INCLUDEPATH += $$PWD/Include/pthread \
+               $$PWD/Include
 LIBS +=  $$PWD/Library/ce/pthread.lib
 #LIBS += -L$$PWD/lib/ce/ffmpeg -lavcodec -lavfilter -lavformat -lavutil -lswscale
 #LIBS += $$PWD/ffmpeg/ce/libavcodec.dll.a  $$PWD/ffmpeg/ce/libavfilter.dll.a  $$PWD/ffmpeg/ce/libavformat.dll.a  $$PWD/ffmpeg/ce/libswscale.dll.a  $$PWD/ffmpeg/ce/libavutil.dll.a
 LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
+pthread.path=$$DESTDIR
+pthread.files=$$PWD/Library/ce/*.dll
+ffmpeg.path=$$DESTDIR
+ffmpeg.files=$$PWD/Library/ce/ffmpeg/*.dll
+
+INSTALLS +=pthread
+INSTALLS+=ffmpeg
 }
 
 
 ################################for android
 android:LIBS += -L$$PWD/Library/android/ffmpeg -lffmpeg
+!android{
+configfile.path=$$DESTDIR/Config
+configfile.files=$$PWD/Config/*
+INSTALLS +=configfile
+}
 
-
+contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    ANDROID_EXTRA_LIBS = \
+        $$PWD/Library/android/ffmpeg/libffmpeg.so
+}
 

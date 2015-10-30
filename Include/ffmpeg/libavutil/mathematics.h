@@ -22,7 +22,7 @@
 #define AVUTIL_MATHEMATICS_H
 
 #ifdef WINCE
-#include "HMISDK/include/stdint.h"
+#include "stdint.h"
 #else
 #include <stdint.h>
 #endif

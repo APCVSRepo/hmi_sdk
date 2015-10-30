@@ -27,7 +27,7 @@
 #define AVUTIL_FRAME_H
 
 #ifdef WINCE
-#include "HMISDK/include/stdint.h"
+#include "stdint.h"
 #else
 #include <stdint.h>
 #endif

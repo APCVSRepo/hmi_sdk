@@ -31,8 +31,8 @@
 #endif
 
 #ifdef WINCE
-#include "HMISDK/include/stdint.h"
-#include "HMISDK/include/global_first.h"
+#include "stdint.h"
+#include "global_first.h"
 #else
 #include <inttypes.h>
 #include <stdint.h>

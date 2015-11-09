@@ -3,14 +3,11 @@
 #include "ScrollableMessage/ScrollMsg.h"
 #include "Show/Show.h"
 
-extern Config g_config;
-
 AppLink::AppLink(QWidget *parent)
     : AppBase(parent)
 {
 
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
-
 
     m_scrollWidget.init(4, 280);
     connect(&m_scrollWidget,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
@@ -90,7 +87,7 @@ void AppLink::initLayout()
 void AppLink::addListItemWidget(QString text)
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(g_config.m_i_itemW-10,g_config.m_i_itemH));
+    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-10,ConfigSingle::Instance()->getItemH()));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
     AppItemWidget *itemWidget = new AppItemWidget;

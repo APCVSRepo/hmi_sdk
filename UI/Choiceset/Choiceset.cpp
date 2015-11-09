@@ -81,7 +81,7 @@ void Choiceset::initLayout()
 void Choiceset::addListItemWidget(QString text, bool isMenu)
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(g_config.m_i_itemW-10,g_config.m_i_itemH));
+    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-10,ConfigSingle::Instance()->getItemH()));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
     AppItemWidget *itemWidget = new AppItemWidget;

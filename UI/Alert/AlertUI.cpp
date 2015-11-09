@@ -65,7 +65,7 @@ void CAlertUI::InitLayout()
 
 void CAlertUI::updateLayout()
 {
-    int iW = 540 * g_config.m_i_mainWindowW / 630;
+    int iW = 540 * ConfigSingle::Instance()->getMainWindowW() / 630;
     int iH = 0;
 
     if (mLayout)

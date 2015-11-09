@@ -32,5 +32,5 @@ void Config::loadResolution(int resolution)
         default:
             break;
     }
-    m_i_tcpPort = 10000;
+//    m_i_tcpPort = 10000;
 }

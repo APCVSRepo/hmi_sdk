@@ -30,8 +30,8 @@ CScrollMsg::~CScrollMsg()
 
 void CScrollMsg::InitLayout()
 {
-    int iW = g_config.m_i_mainWindowW*6/7;
-    int iH = g_config.m_i_mainWindowH*5/6;
+    int iW = ConfigSingle::Instance()->getMainWindowW()*6/7;
+    int iH = ConfigSingle::Instance()->getMainWindowH()*5/6;
 
     m_labelBackground.setParent(this);
     m_labelFrame.setParent(this);

@@ -30,7 +30,8 @@
 #include "UI/Config/Config.h"
 
 #include <stdio.h>
-//#define _D(msg, args...) fprintf(stderr,"[lk]-%s-%s():%d: ", msg, __FILE__, __FUNCTION__, __LINE__, ##args)
-#define _D   printf
+//#define _D(msg, args...) fprintf(stderr,"%s-%s():%d: ", __FILE__, __FUNCTION__, __LINE__, ##args)
+//#define _D   printf
+#define QDBG qDebug()<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
 
 #endif // APPINCLUDE_H

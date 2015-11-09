@@ -11,12 +11,12 @@ Notify::Notify(QWidget *parent) :
 
 void Notify::InitLayout()
 {
-//    this->setFixedWidth(540 * g_config.m_i_mainWindowW / 630);
+//    this->setFixedWidth(540 * ConfigSingle::Instance()->getMainWindowW() / 630);
 
     m_labelBackground.setParent(this);
-    m_labelBackground.setFixedWidth(540 * g_config.m_i_mainWindowW / 630);
+    m_labelBackground.setFixedWidth(540 * ConfigSingle::Instance()->getMainWindowW() / 630);
     m_labelFrame.setParent(this);
-    m_labelFrame.setFixedWidth(540 * g_config.m_i_mainWindowW / 630);
+    m_labelFrame.setFixedWidth(540 * ConfigSingle::Instance()->getMainWindowW() / 630);
 
 //    m_labelBackground.setStyleSheet("border: 1px solid black;border-radius:10px;background-color:rgb(36,43,61)");
 

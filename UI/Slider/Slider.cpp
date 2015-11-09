@@ -14,8 +14,8 @@ Slider::Slider(QWidget *parent) :
 
 void Slider::InitLayout()
 {
-    int iW = 540 * g_config.m_i_mainWindowW / 630;
-    int iH = 240 * g_config.m_i_mainWindowH / 378;
+    int iW = 540 * ConfigSingle::Instance()->getMainWindowW() / 630;
+    int iH = 240 * ConfigSingle::Instance()->getMainWindowH() / 378;
 
     m_labelBackground.setParent(this);
     m_labelFrame.setParent(this);

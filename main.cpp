@@ -6,12 +6,11 @@
 #include "UI/UIManager.h"
 #include "UI/Config/Config.h"
 
-Config g_config;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    g_config.loadResolution(W800_H480);
+    ConfigSingle::Instance()->loadResolution(W800_H480);
 
 #if (QT_VERSION <= QT_VERSION_CHECK(5,0,0))
     QTextCodec *codec=QTextCodec::codecForName("UTF-8");

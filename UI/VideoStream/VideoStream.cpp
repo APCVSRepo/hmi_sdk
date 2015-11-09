@@ -16,8 +16,8 @@ using namespace std;
 VideoStream::VideoStream(QWidget *parent) :
     QWidget(parent)
 {
-    m_i_w = g_config.m_i_mainWindowW;
-    m_i_h = g_config.m_i_mainWindowH;
+    m_i_w = ConfigSingle::Instance()->getMainWindowW();
+    m_i_h = ConfigSingle::Instance()->getMainWindowH();
 
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
     this->setGeometry(0,0,m_i_w,m_i_h);

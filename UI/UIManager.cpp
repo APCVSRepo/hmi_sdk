@@ -315,6 +315,7 @@ void CUIManager::setAppListInterface(AppListInterface* pInterface)
 
 void CUIManager::menuBtnClickedSlots(QString btnText)
 {
+
     //_D("%s\n",btnText.toUtf8().data());
     if(m_pCurUI == m_pAppLink)
         return;

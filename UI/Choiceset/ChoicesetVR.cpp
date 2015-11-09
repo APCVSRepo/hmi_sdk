@@ -17,10 +17,10 @@ CChoicesetVR::~CChoicesetVR()
 
 void CChoicesetVR::InitLayout()
 {
-//    this->setFixedSize(550 * g_config.m_i_mainWindowW / 630, 265 * g_config.m_i_mainWindowH / 378);
+//    this->setFixedSize(550 * ConfigSingle::Instance()->getMainWindowW() / 630, 265 * ConfigSingle::Instance()->getMainWindowH() / 378);
 
-    int iW = 550 * g_config.m_i_mainWindowW / 630;
-    int iH = 265 * g_config.m_i_mainWindowH / 378;
+    int iW = 550 * ConfigSingle::Instance()->getMainWindowW() / 630;
+    int iH = 265 * ConfigSingle::Instance()->getMainWindowH() / 378;
 
     m_labelBackground.setParent(this);
     m_labelFrame.setParent(this);

@@ -3,7 +3,7 @@ extern Config g_config;
 AppItemWidget::AppItemWidget(QWidget *parent)
     : QWidget(parent)
 {
-    this->setFixedSize(g_config.m_i_itemW,g_config.m_i_itemH);
+    this->setFixedSize(ConfigSingle::Instance()->getItemW(),ConfigSingle::Instance()->getItemH());
 
   //  this->setStyleSheet("background-color: transparent;");
 
@@ -24,7 +24,7 @@ AppItemWidget::AppItemWidget(QWidget *parent)
     m_lab_icon->setPixmap(fitpixmap);
 
     m_lab_border->setParent(this);
-    m_lab_border->setGeometry(5,5,g_config.m_i_itemW-10,g_config.m_i_itemH-10);
+    m_lab_border->setGeometry(5,5,ConfigSingle::Instance()->getItemW()-10,ConfigSingle::Instance()->getItemH()-10);
     m_lab_border->setStyleSheet("border: 2px solid white;border-radius: 10px;padding: 2px;");
     m_lab_border->setHidden(true);
 

@@ -6,8 +6,8 @@ CPopBase::CPopBase(QWidget *parent) :
     QWidget(parent)
 {
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
-    this->setFixedSize(g_config.m_i_mainWindowW, g_config.m_i_mainWindowH);
-    m_labelBackspace.setFixedSize(g_config.m_i_mainWindowW, g_config.m_i_mainWindowH);
+    this->setFixedSize(ConfigSingle::Instance()->getMainWindowW(), ConfigSingle::Instance()->getMainWindowH());
+    m_labelBackspace.setFixedSize(ConfigSingle::Instance()->getMainWindowW(), ConfigSingle::Instance()->getMainWindowH());
     m_labelBackspace.setAttribute(Qt::WA_TranslucentBackground, false);
 //    m_labelBackspace.setStyleSheet("border: 1px solid white;border-radius:10px;background-color:rgb(255,43,61)");
     m_labelBackspace.setParent(this);

@@ -5,11 +5,11 @@ AppBase::AppBase(QWidget *parent) : QWidget(parent)
 {
 
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
-    this->setGeometry(0,0,g_config.m_i_mainWindowW,g_config.m_i_mainWindowH);
-//    this->setFixedSize(g_config.m_i_mainWindowW,g_config.m_i_mainWindowH);
+    this->setGeometry(0,0,ConfigSingle::Instance()->getMainWindowW(),ConfigSingle::Instance()->getMainWindowH());
+//    this->setFixedSize(ConfigSingle::Instance()->getMainWindowW(),ConfigSingle::Instance()->getMainWindowH());
     this->setAutoFillBackground(true);    //Widget增加背景图片时，这句一定要。
     QPixmap pixmap(":/images/mfd5main.png");
-    QPixmap fitpixmap=pixmap.scaled(g_config.m_i_mainWindowW,g_config.m_i_mainWindowH, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPixmap fitpixmap=pixmap.scaled(ConfigSingle::Instance()->getMainWindowW(),ConfigSingle::Instance()->getMainWindowH(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(fitpixmap));
     this->setPalette(palette);

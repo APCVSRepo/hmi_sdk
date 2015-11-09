@@ -49,12 +49,12 @@ void Slider::InitLayout()
 //    setSliderTitle("Test string.");
 //    setPosition(3);
 
-    m_btnSoft1->initParameter(122, 60, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Close");
-    m_btnSoft2->initParameter(122, 60, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "");
+    m_btnSoft1->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Close");
+    m_btnSoft2->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "");
     m_btnSoft2->setIconExtra(":/images/leftarrow.png");
-    m_btnSoft3->initParameter(122, 60, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "");
+    m_btnSoft3->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "");
     m_btnSoft3->setIconExtra(":/images/rightarrow.png");
-    m_btnSoft4->initParameter(122, 60, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Cancel");
+    m_btnSoft4->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Cancel");
 
     m_btnSoft1->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btnSoft2->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
@@ -213,5 +213,29 @@ void Slider::execShow(AppDataInterface* pAppInterface)
 
         this->setSliderStrings(vec_strSliter,position);
     }
+    this->show();
+}
+
+void Slider::testShow()
+{
+
+//  this->setSliderID(22);
+    this->setTimeOut(20000);
+
+    int numTicks =7;
+    int position = 2;
+
+    this->setSliderTitle("ford hmi");
+
+    std::vector <std::string > vec_strSliter;
+    vec_strSliter.clear();
+    vec_strSliter.push_back("lk1");
+
+    while(vec_strSliter.size() < numTicks)
+    {
+        vec_strSliter.push_back("-");
+    }
+
+    this->setSliderStrings(vec_strSliter,position);
     this->show();
 }

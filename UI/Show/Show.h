@@ -26,6 +26,7 @@ public:
 
     void execShow(AppDataInterface* pAppInterface);
     void setMediaColckTimer(Json::Value jsonObj);
+    void testShow();
 
 signals:
     void moreClicked();

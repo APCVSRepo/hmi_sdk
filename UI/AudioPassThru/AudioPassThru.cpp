@@ -54,10 +54,10 @@ void CAudioPassThru::InitLayout()
 
 
     // Set button parameter. Like size, normal background image, text, etc.
-    m_btn1->initParameter(122, 60, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "-");
-    m_btn2->initParameter(122, 60, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "-");
-    m_btn3->initParameter(122, 60, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "-");
-    m_btn4->initParameter(122, 60, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "-");
+    m_btn1->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "-");
+    m_btn2->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "-");
+    m_btn3->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "-");
+    m_btn4->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "-");
 
     m_btn1->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btn2->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
@@ -220,5 +220,14 @@ void CAudioPassThru::execShow(AppDataInterface* pAppInterface)
             }
         }
     }
+    this->show();
+}
+
+void CAudioPassThru::testShow()
+{
+    this->setAudioPassThruDisplayText1("audioPassThruDisplayText1");
+    this->setAudioPassThruDisplayText2("audioPassThruDisplayText2");
+    this->setAudioPassThruID(3);
+    this->setTimeOut(20000);
     this->show();
 }

@@ -44,10 +44,10 @@ void CAlertUI::InitLayout()
     m_labelText2->setAlignment(Qt::AlignCenter);
     m_labelText3->setAlignment(Qt::AlignCenter);
 
-    m_btnSoft1->initParameter(122, 60, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft1");
-    m_btnSoft2->initParameter(122, 60, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "Soft2");
-    m_btnSoft3->initParameter(122, 60, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "Soft3");
-    m_btnSoft4->initParameter(122, 60, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft4");
+    m_btnSoft1->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft1");
+    m_btnSoft2->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "Soft2");
+    m_btnSoft3->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "Soft3");
+    m_btnSoft4->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft4");
 
     m_btnSoft1->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btnSoft2->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
@@ -84,9 +84,12 @@ void CAlertUI::updateLayout()
         {
             m_labelText2->setText(" ");
         }
-        m_labelText1->adjustSize();
-        m_labelText2->adjustSize();
-        m_labelText3->adjustSize();
+//        m_labelText1->adjustSize();
+//        m_labelText2->adjustSize();
+//        m_labelText3->adjustSize();
+        m_labelText1->setFixedHeight(ConfigSingle::Instance()->getAlertBtnH());
+        m_labelText2->setFixedHeight(ConfigSingle::Instance()->getAlertBtnH());
+        m_labelText3->setFixedHeight(ConfigSingle::Instance()->getAlertBtnH());
         mLayout->addWidget(m_labelText1, Qt::AlignTop);
         mLayout->addWidget(m_labelText2, Qt::AlignTop);
         mLayout->addWidget(m_labelText3, Qt::AlignTop);
@@ -98,15 +101,15 @@ void CAlertUI::updateLayout()
         {
             m_labelText1->setText(" ");
         }
-        m_labelText1->adjustSize();
-        m_labelText2->adjustSize();
+        m_labelText1->setFixedHeight(ConfigSingle::Instance()->getAlertBtnH());
+        m_labelText2->setFixedHeight(ConfigSingle::Instance()->getAlertBtnH());
         mLayout->addWidget(m_labelText1, Qt::AlignTop);
         mLayout->addWidget(m_labelText2, Qt::AlignTop);
         iH = m_labelText1->height() + m_labelText2->height();
     }
     else if (!m_labelText1->text().isEmpty())
     {
-        m_labelText1->adjustSize();
+        m_labelText1->setFixedHeight(ConfigSingle::Instance()->getAlertBtnH());
         mLayout->addWidget(m_labelText1, Qt::AlignTop);
         iH = m_labelText1->height();
     }
@@ -129,7 +132,7 @@ void CAlertUI::updateLayout()
     mLayout->addSpacing(10);
     mLayout->setMargin(0);
 
-    iH += m_btnSoft1->height() + 20;
+    iH += m_btnSoft1->height() + 40;
     m_labelBackground.setGeometry((width() - iW) / 2, 0.85 * height() - iH, iW, iH);
     m_labelFrame.setGeometry((width() - iW) / 2, 0.85 * height() - iH, iW, iH);
 
@@ -212,13 +215,13 @@ void CAlertUI::setBtnText(int btnIdx, QString text, bool highLight)
         m_btnSoft4->setText(text);
         if(highLight)
         {
-            m_btnSoft1->setIconNormal(":/images/highlightsoftbutton_alert.png");
-            m_btnSoft1->setIconPressed(":/images/highlightsoftbutton_alert.png");
+            m_btnSoft4->setIconNormal(":/images/highlightsoftbutton_alert.png");
+            m_btnSoft4->setIconPressed(":/images/highlightsoftbutton_alert.png");
         }
         else
         {
-            m_btnSoft1->setIconNormal(":/images/softbutton_alert.png");
-            m_btnSoft1->setIconPressed(":/images/softbutton_alert.png");
+            m_btnSoft4->setIconNormal(":/images/softbutton_alert.png");
+            m_btnSoft4->setIconPressed(":/images/softbutton_alert.png");
         }
     }
         break;
@@ -437,6 +440,23 @@ void CAlertUI::execShow(AppDataInterface* pAppInterface)
             setTimeOut(pObj["params"]["duration"].asInt());
         }
     }
+
+    updateLayout();
+    this->show();
+}
+
+void CAlertUI::testShow()
+{
+    m_i_alertID = 1;
+    setAlertText(0, "alert1");
+    setAlertText(1, "alert2");
+    setAlertText(2, "alert3");
+
+    setBtnText(0, "test1",true);
+    setBtnText(1, "test2",true);
+    setBtnText(2, "test3",true);
+    setBtnText(3, "test4",false);
+    setTimeOut(20000);
 
     updateLayout();
     this->show();

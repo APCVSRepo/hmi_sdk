@@ -14,6 +14,7 @@ public:
 
 public:
     void execShow(AppDataInterface* pAppInterface);
+    void testShow();
 
 
 signals:

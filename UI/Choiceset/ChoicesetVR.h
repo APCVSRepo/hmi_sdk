@@ -16,7 +16,7 @@ public:
     ~CChoicesetVR();
 
     void execShow(AppDataInterface* pAppInterface);
-
+    void testShow();
 
 signals:
     void VRmenuClicked(int code, int id, int choiceID);

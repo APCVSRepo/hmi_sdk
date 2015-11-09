@@ -84,19 +84,19 @@ void Command::initLayout()
     else
         m_scrollBar.hide();
 
-//    addNewCommand("Command1");
-//    addNewMenu("Menu1");
-//    addNewCommand("Command2");
-//    addNewMenu("Menu3");
-//    addNewMenu("Menu4");
+//    addNewCommand("Command1",1);
+//    addNewMenu("Menu1",1);
+//    addNewCommand("Command2",1);
+//    addNewMenu("Menu3",1);
+//    addNewMenu("Menu4",1);
 
 
-//    addSubCommand("Menu1","M1Commnad1");
-//    addSubCommand("Menu1","M1Commnad2");
-//    addSubCommand("Menu1","M1Commnad3");
-//    addSubCommand("Menu1","M1Commnad4");
-//    addSubCommand("Menu1","M1Commnad5");
-//    addSubCommand("Menu1","M1Commnad6");
+//    addSubCommand("Menu1",1,"M1Commnad1",1);
+//    addSubCommand("Menu1",1,"M1Commnad2",1);
+//    addSubCommand("Menu1",1,"M1Commnad3",1);
+//    addSubCommand("Menu1",1,"M1Commnad4",1);
+//    addSubCommand("Menu1",1,"M1Commnad5",1);
+//    addSubCommand("Menu1",1,"M1Commnad6",1);
 }
 
 void Command::hideBackIcon()
@@ -119,7 +119,7 @@ void Command::showBackIcon()
 void Command::addListItemWidget(QString text, bool isMenu)
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-10,ConfigSingle::Instance()->getItemH()));
+    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-25,ConfigSingle::Instance()->getItemH()));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
     AppItemWidget *itemWidget = new AppItemWidget;
@@ -459,6 +459,11 @@ void Command::execShow(AppDataInterface* pAppInterface)
             }
         }
     }
+        addNewCommand("Command1",1);
+        addNewMenu("Menu1",1);
+        addNewCommand("Command2",1);
+        addNewMenu("Menu3",1);
+        addNewMenu("Menu4",1);
 
     this->show();
 }

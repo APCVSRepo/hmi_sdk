@@ -18,6 +18,7 @@ public:
     ~CAudioPassThru();
 
     void execShow(AppDataInterface* pAppInterface);
+    void testShow();
 
 signals:
     void audioPassThruHide(int, int);

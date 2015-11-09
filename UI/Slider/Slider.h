@@ -17,6 +17,7 @@ public:
     explicit Slider(QWidget *parent = 0);
     
     void execShow(AppDataInterface* pAppInterface);
+    void testShow();
 
 
 signals:

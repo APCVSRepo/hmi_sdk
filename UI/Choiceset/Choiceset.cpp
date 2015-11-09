@@ -81,7 +81,7 @@ void Choiceset::initLayout()
 void Choiceset::addListItemWidget(QString text, bool isMenu)
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-10,ConfigSingle::Instance()->getItemH()));
+    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-25,ConfigSingle::Instance()->getItemH()));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
     AppItemWidget *itemWidget = new AppItemWidget;
@@ -252,5 +252,20 @@ void Choiceset::execShow(AppDataInterface* pAppInterface)
             this->addNewMenu(m_jsonData["params"]["choiceSet"][i]["choiceID"].asInt(),m_jsonData["params"]["choiceSet"][i]["menuName"].asString());
         }
     }
+    this->show();
+}
+
+void Choiceset::testShow()
+{
+
+    this->setTimeOut(20000);
+    this->setInteractionID(5);
+
+    this->addNewMenu(1,"MenuName1");
+    this->addNewMenu(2,"MenuName2");
+    this->addNewMenu(3,"MenuName3");
+    this->addNewMenu(4,"MenuName4");
+    this->addNewMenu(5,"MenuName5");
+
     this->show();
 }

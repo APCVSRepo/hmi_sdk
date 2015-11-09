@@ -50,10 +50,10 @@ void CScrollMsg::InitLayout()
     connect(m_btn_down,SIGNAL(clicked()),this,SLOT(downClickedSlots()));
 
 
-    m_btnSoft1->initParameter(150, 70, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft1");
-    m_btnSoft2->initParameter(150, 70, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "Soft2");
-    m_btnSoft3->initParameter(150, 70, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "Soft3");
-    m_btnSoft4->initParameter(150, 70, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft4");
+    m_btnSoft1->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft1");
+    m_btnSoft2->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "Soft2");
+    m_btnSoft3->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "Soft3");
+    m_btnSoft4->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft4");
 
     m_btnSoft1->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btnSoft2->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
@@ -206,8 +206,8 @@ void CScrollMsg::setBtnText(int btnIdx, QString text, bool highLight)
         m_btnSoft4->setText(text);
         if(highLight)
         {
-            m_btnSoft1->setIconNormal(":/images/highlightsoftbutton_alert.png");
-            m_btnSoft1->setIconPressed(":/images/highlightsoftbutton_alert.png");
+            m_btnSoft4->setIconNormal(":/images/highlightsoftbutton_alert.png");
+            m_btnSoft4->setIconPressed(":/images/highlightsoftbutton_alert.png");
         }
         else
         {
@@ -358,5 +358,18 @@ void CScrollMsg::execShow(AppDataInterface* pAppInterface)
             }
         }
     }
+    this->show();
+}
+
+void CScrollMsg::testShow()
+{
+    this->setTimeOut(20000);
+    this->setBtnText(0, "button1", true);
+    this->setBtnText(1, "OK", true);
+    this->setBtnText(2, "Save", true);
+    this->setBtnText(3, "Close", true);
+
+    this->setMessage("messageText, ksi jfd l name l ive oidf lsfj,messageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfj");
+
     this->show();
 }

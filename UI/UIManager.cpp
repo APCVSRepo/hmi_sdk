@@ -69,6 +69,7 @@ CUIManager::CUIManager(QWidget *parent) :
     connect(m_pShow,SIGNAL(menuBtnClicked(QString)),this,SLOT(menuBtnClickedSlots(QString)));
     connect(m_pCommand,SIGNAL(menuBtnClicked(QString)),this,SLOT(menuBtnClickedSlots(QString)));
 
+
 }
 
 CUIManager::~CUIManager()
@@ -79,6 +80,26 @@ CUIManager::~CUIManager()
 void CUIManager::init()
 {
     this->AppShowSlot(ID_APPLINK);
+//    m_pShow->testShow();
+
+//    m_pAlertUI->setParent(m_pShow);
+//    m_pAlertUI->testShow();
+
+//    m_pAudioPassThru->setParent(m_pShow);
+//    m_pAudioPassThru->testShow();
+
+//    m_pChoiceset->testShow();
+//    m_pChoicesetVR->setParent(m_pChoiceset);
+//    m_pChoicesetVR->testShow();
+
+//    m_pScrollMsg->setParent(m_pShow);
+//    m_pScrollMsg->testShow();
+
+//    m_pSlider->setParent(m_pShow);
+//    m_pSlider->testShow();
+
+//    m_pNotify->setParent(m_pShow);
+//    m_pNotify->testShow();
 }
 
 //ID_APPLINK = 0,

@@ -67,3 +67,16 @@ void Notify::execShow(AppDataInterface* pAppInterface)
     waitSec(1);
     this->hide();
 }
+
+void Notify::testShow()
+{
+    this->show();
+
+    this->setText("Searching...");
+
+    waitSec(1);
+    this->setText("No additional\nApps found.");
+
+    waitSec(1);
+    this->hide();
+}

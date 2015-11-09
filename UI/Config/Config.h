@@ -21,6 +21,11 @@ public:
     int getItemH(){return m_i_itemH;}
     int getMainWindowW(){return m_i_mainWindowW;}
     int getMainWindowH(){return m_i_mainWindowH;}
+    int getShowListW(){return m_i_showListW;}
+    int getShowListH(){return m_i_showListH;}
+
+    int getAlertBtnW(){return m_i_alertBtnW;}
+    int getAlertBtnH(){return m_i_alertBtnH;}
 
 
 
@@ -30,7 +35,12 @@ private:
 
     int m_i_itemW;
     int m_i_itemH;
-//    int m_i_tcpPort;
+
+    int m_i_showListW;
+    int m_i_showListH;
+
+    int m_i_alertBtnW;
+    int m_i_alertBtnH;
 
 };
 typedef Singleton<Config> ConfigSingle;

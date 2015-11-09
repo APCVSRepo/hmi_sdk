@@ -14,6 +14,7 @@ public:
     ~CScrollMsg();
 
     void execShow(AppDataInterface* pAppInterface);
+    void testShow();
 
 signals:
     void softButtonClicked(int btID, int mode);

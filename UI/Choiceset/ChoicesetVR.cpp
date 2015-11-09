@@ -61,7 +61,7 @@ void CChoicesetVR::InitLayout()
     mLayout->addLayout(iconLayout, 8);
     mLayout->addLayout(textLayout, 80);
     mLayout->addStretch(10);
-    mLayout->setMargin(0);
+    mLayout->setMargin(8);
 
     m_labelFrame.setLayout(mLayout);
 
@@ -197,5 +197,15 @@ void CChoicesetVR::execShow(AppDataInterface* pAppInterface)
             }
         }
     }
+    this->show();
+}
+
+void CChoicesetVR::testShow()
+{
+
+    this->setTimeOut(20000);
+    this->setChoicesetVRText(0,"asdfd");
+    this->setChoicesetVRText(1,"dsdsdsdsdsd");
+
     this->show();
 }

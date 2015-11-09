@@ -38,6 +38,7 @@ void Show::initLayout()
     hhLayout->addWidget(&m_lab_mediaClock,1,Qt::AlignRight|Qt::AlignBottom);
 
     QVBoxLayout *vLayout = new QVBoxLayout;
+    vLayout->addStretch(20);
     vLayout->addWidget(&m_listWidget,60,Qt::AlignCenter);
     vLayout->addLayout(hhLayout,40);
 
@@ -93,7 +94,7 @@ void Show::initLayout()
     pll.setBrush(QPalette::Base,QBrush(QColor(255,255,255,0)));
     m_listWidget.setPalette(pll);
 #endif
-    m_listWidget.setFixedSize(400,160);
+    m_listWidget.setFixedSize(ConfigSingle::Instance()->getShowListW(),ConfigSingle::Instance()->getShowListH());
     m_listWidget.setFrameShape(QFrame::NoFrame); //设置无边框
     m_listWidget.setFocusPolicy(Qt::NoFocus); //去除选中虚线框
     m_listWidget.setEditTriggers(QAbstractItemView::NoEditTriggers); //设置不可编辑
@@ -157,7 +158,7 @@ void Show::initLayout()
 void Show::addListItem()
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(400-10,80));
+    item->setSizeHint(QSize(ConfigSingle::Instance()->getShowListW()-10,ConfigSingle::Instance()->getShowListH()/2));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
     QLabel *label = new QLabel;
@@ -618,4 +619,36 @@ void Show::mediaClockSlots()
         m_timer_mediaClock->stop();
 
     this->setMediaClock(true,nowMeidaClockTime.toString());
+}
+
+void Show::testShow()
+{
+    std::vector <SSoftButton > vec_softButtons;
+    vec_softButtons.clear();
+    this->setMainField1(true,"");
+    this->setMainField2(true,"");
+    this->setMainField3(true,"");
+    this->setMainField4(true,"");
+    this->setMediaTrack(true,"");
+    this->setMediaClock(true,"");
+
+    this->setMainField1(true,"lklklklk1");
+    this->setMainField2(true,"lklklklk2");
+    this->setMainField3(true,"lklklklk3");
+    this->setMainField4(true,"lklklklk4");
+    this->setMediaTrack(true,"aadkk");
+    this->setMediaClock(true,"12:59");
+
+    for(int i = 0; i < 5; i++)
+    {
+        SSoftButton tmpSoftButton;
+        tmpSoftButton.b_isHighlighted = true;
+        tmpSoftButton.i_softButtonID = 1;
+        tmpSoftButton.str_text = "buttona";
+        vec_softButtons.push_back(tmpSoftButton);
+    }
+    this->setSoftButtons(vec_softButtons);
+
+
+    this->show();
 }

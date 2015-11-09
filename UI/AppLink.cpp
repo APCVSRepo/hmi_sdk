@@ -79,15 +79,12 @@ void AppLink::initLayout()
     else
         m_scrollWidget.hide();
 
-//    addNewApp("Sina");
-//    addNewApp("Baidu");
-//    addNewApp("Gaode");
 }
 
 void AppLink::addListItemWidget(QString text)
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-10,ConfigSingle::Instance()->getItemH()));
+    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-25,ConfigSingle::Instance()->getItemH()));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
     AppItemWidget *itemWidget = new AppItemWidget;
@@ -287,5 +284,9 @@ void AppLink::execShow(AppListInterface* pAppInterface)
         this->addNewApp(pVecNewApp.at(i)["params"]["application"]["appName"].asString().data()
                               ,pVecNewApp.at(i)["params"]["application"]["appID"].asInt());
     }
+
+//    addNewApp("Sina",1);
+//    addNewApp("Baidu",2);
+//    addNewApp("Gaode",3);
     this->show();
 }

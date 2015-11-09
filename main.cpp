@@ -10,7 +10,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    ConfigSingle::Instance()->loadResolution(W800_H480);
+//    ConfigSingle::Instance()->loadResolution(W800_H480);
+    ConfigSingle::Instance()->loadResolution(W1024_H600);
 
 #if (QT_VERSION <= QT_VERSION_CHECK(5,0,0))
     QTextCodec *codec=QTextCodec::codecForName("UTF-8");

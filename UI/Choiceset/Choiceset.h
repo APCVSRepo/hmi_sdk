@@ -22,6 +22,7 @@ public:
     ~Choiceset();
 
     void execShow(AppDataInterface* pAppInterface);
+    void testShow();
 
 signals:
     void menuClicked(int code, int id, int choiceID);

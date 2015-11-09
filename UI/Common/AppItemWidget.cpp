@@ -14,7 +14,7 @@ AppItemWidget::AppItemWidget(QWidget *parent)
     QHBoxLayout *mLayout = new QHBoxLayout(this);
     mLayout->addStretch(10);
     mLayout->addWidget(m_lab_caseTitle,80,Qt::AlignLeft);
-    mLayout->addWidget(m_lab_icon,10,Qt::AlignRight);
+    mLayout->addWidget(m_lab_icon,10,Qt::AlignCenter);
 
 
     m_lab_caseTitle->setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
@@ -24,7 +24,7 @@ AppItemWidget::AppItemWidget(QWidget *parent)
     m_lab_icon->setPixmap(fitpixmap);
 
     m_lab_border->setParent(this);
-    m_lab_border->setGeometry(5,5,ConfigSingle::Instance()->getItemW()-10,ConfigSingle::Instance()->getItemH()-10);
+    m_lab_border->setGeometry(5,5,ConfigSingle::Instance()->getItemW()-25,ConfigSingle::Instance()->getItemH()-10);
     m_lab_border->setStyleSheet("border: 2px solid white;border-radius: 10px;padding: 2px;");
     m_lab_border->setHidden(true);
 

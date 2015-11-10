@@ -76,10 +76,10 @@ void Show::initLayout()
     QPixmap fitpixmap=pixmap.scaled(120,120, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     m_lab_icon.setPixmap(fitpixmap);
 
-    m_btn_one->initParameter(160,70,":/images/softbutton_mfd.png",":/images/softbutton_mfd.png");
-    m_btn_two->initParameter(160,70,":/images/softbutton_mfd_left.png",":/images/softbutton_mfd_left.png");
-    m_btn_thr->initParameter(160,70,":/images/softbutton_mfd_right.png",":/images/softbutton_mfd_right.png");
-    m_btn_fou->initParameter(160,70,":/images/softbutton_mfd.png",":/images/softbutton_mfd.png");
+    m_btn_one->initParameter(ConfigSingle::Instance()->getShowBtnW(),ConfigSingle::Instance()->getShowBtnH(),":/images/softbutton_mfd.png",":/images/softbutton_mfd.png");
+    m_btn_two->initParameter(ConfigSingle::Instance()->getShowBtnW(),ConfigSingle::Instance()->getShowBtnH(),":/images/softbutton_mfd_left.png",":/images/softbutton_mfd_left.png");
+    m_btn_thr->initParameter(ConfigSingle::Instance()->getShowBtnW(),ConfigSingle::Instance()->getShowBtnH(),":/images/softbutton_mfd_right.png",":/images/softbutton_mfd_right.png");
+    m_btn_fou->initParameter(ConfigSingle::Instance()->getShowBtnW(),ConfigSingle::Instance()->getShowBtnH(),":/images/softbutton_mfd.png",":/images/softbutton_mfd.png");
     m_btn_one->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btn_two->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btn_thr->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
@@ -113,7 +113,7 @@ void Show::initLayout()
     m_lab_mediaTrack.setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
     m_lab_mediaClock.setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
 
-    m_scrollBar.init(1, 220);
+    m_scrollBar.init(1, ConfigSingle::Instance()->getShowScrollH());
     m_scrollBar.flushScroll(1,2);
     m_scrollBar.hide();
     connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));

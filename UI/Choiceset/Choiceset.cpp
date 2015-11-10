@@ -48,7 +48,7 @@ void Choiceset::initLayout()
     connect(&m_listWidget,SIGNAL(clicked(QModelIndex)),this,SLOT(listWidgetClickedSlots(QModelIndex)));
     connect(&m_listWidget,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(listWidgetDoubleClickedSlots(QModelIndex)));
 
-    m_scrollBar.init(4, 280);
+    m_scrollBar.init(4, ConfigSingle::Instance()->getCommandScrollH());
     connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
     connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
     m_scrollBar.hide();

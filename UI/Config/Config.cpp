@@ -28,6 +28,12 @@ void Config::loadResolution(int resolution)
             m_i_showListW = 400;
             m_i_showListH = 150;
 
+            m_i_showBtnW = 160;
+            m_i_showBtnH = 70;
+
+            m_i_showScrollH = 220;
+            m_i_commandScrollH = 280;
+
             m_i_alertBtnW = 122;
             m_i_alertBtnH = 60;
 
@@ -46,6 +52,12 @@ void Config::loadResolution(int resolution)
 
         m_i_showListW = 600;
         m_i_showListH = 210;
+
+        m_i_showBtnW = 190;
+        m_i_showBtnH = 80;
+
+        m_i_showScrollH = 240;
+        m_i_commandScrollH = 350;
 
         m_i_alertBtnW = 170;
         m_i_alertBtnH = 75;

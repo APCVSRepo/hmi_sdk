@@ -79,8 +79,8 @@ CUIManager::~CUIManager()
 
 void CUIManager::init()
 {
-    this->AppShowSlot(ID_APPLINK);
-//    m_pShow->testShow();
+//    this->AppShowSlot(ID_APPLINK);
+    m_pShow->testShow();
 
 //    m_pAlertUI->setParent(m_pShow);
 //    m_pAlertUI->testShow();

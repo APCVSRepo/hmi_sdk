@@ -21,8 +21,14 @@ public:
     int getItemH(){return m_i_itemH;}
     int getMainWindowW(){return m_i_mainWindowW;}
     int getMainWindowH(){return m_i_mainWindowH;}
+
     int getShowListW(){return m_i_showListW;}
     int getShowListH(){return m_i_showListH;}
+    int getShowBtnW(){return m_i_showBtnW;}
+    int getShowBtnH(){return m_i_showBtnH;}
+    int getShowScrollH(){return m_i_showScrollH;}
+
+    int getCommandScrollH(){return m_i_commandScrollH;}
 
     int getAlertBtnW(){return m_i_alertBtnW;}
     int getAlertBtnH(){return m_i_alertBtnH;}
@@ -38,6 +44,12 @@ private:
 
     int m_i_showListW;
     int m_i_showListH;
+
+    int m_i_showBtnW;
+    int m_i_showBtnH;
+
+    int m_i_showScrollH;
+    int m_i_commandScrollH;
 
     int m_i_alertBtnW;
     int m_i_alertBtnH;

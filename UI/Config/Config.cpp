@@ -42,12 +42,8 @@ void Config::loadResolution(int resolution)
         case W1024_H600:
     {
         m_i_mainWindowW = 1024;
-#ifdef ANDROID
-        m_i_mainWindowH = 480-60;
-#else
         m_i_mainWindowH = 600;
-#endif
-        m_i_itemW = 800;
+        m_i_itemW = 768;
         m_i_itemH = 100;
 
         m_i_showListW = 600;

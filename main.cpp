@@ -5,9 +5,18 @@
 #include "AppData/AppList.h"
 #include "UI/UIManager.h"
 #include "UI/Config/Config.h"
+#include <pthread.h>
 
+#ifdef ANDROID
+#include "main.h"
+void *SdlStartThread(void *arg);
+#endif
 int main(int argc, char *argv[])
 {
+#ifdef ANDROID
+    pthread_t  sdlthread;
+    pthread_create(&sdlthread,NULL,SdlStartThread,NULL);
+#endif
     QApplication a(argc, argv);
 
 //    ConfigSingle::Instance()->loadResolution(W800_H480);
@@ -31,3 +40,15 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
+
+#ifdef ANDROID
+void *SdlStartThread(void *arg)
+{
+    char* argv[2]={"smartDeviceLinkCore","/data/data/org.qtproject.example.AppLinkDevice/files/smartDeviceLink.ini"};
+    sdl_start(2,argv);
+    while(true){
+        sleep(5);
+    }
+    return NULL;
+}
+#endif

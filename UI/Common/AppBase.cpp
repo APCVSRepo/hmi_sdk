@@ -59,6 +59,11 @@ AppBase::AppBase(QWidget *parent) : QWidget(parent)
     m_btn_CD.setStyleSheet("border:0px");
     m_btn_List.setStyleSheet("border:0px");
 
+    m_btn_FM.hide();
+    m_btn_Tel.hide();
+    m_btn_Msg.hide();
+    m_btn_CD.hide();
+    m_btn_List.hide();
     connect(&m_btn_FM,SIGNAL(clicked()),this,SLOT(btnFMClickedSlots()));
     connect(&m_btn_Tel,SIGNAL(clicked()),this,SLOT(btnTelClickedSlots()));
     connect(&m_btn_Msg,SIGNAL(clicked()),this,SLOT(btnMsgClickedSlots()));

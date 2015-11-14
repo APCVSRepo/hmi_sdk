@@ -152,7 +152,7 @@ bool VideoStream::Init()
 #ifdef VIDEO_STREM_NET
     //打开视频流
     showTestLog("avformat_open_input");
-    int result=avformat_open_input(&pAVFormatContext,m_str_url.toUtf8().data(),NULL,NULL);//m_str_url.toUtf8().data()
+    int result=avformat_open_input(&pAVFormatContext,"tcp://127.0.0.1:5050",NULL,NULL);//m_str_url.toUtf8().data()
     if (result<0){
 //        qDebug()<<"打开视频流失败";
         char errbuf[1024]={0};
@@ -191,8 +191,12 @@ bool VideoStream::Init()
     //获取视频流的分辨率大小
     pAVCodecContext = pAVFormatContext->streams[videoStreamIndex]->codec;
    // pAVCodecContext->width=1333;
-    videoWidth=pAVCodecContext->width;
-    videoHeight=pAVCodecContext->height;
+    videoWidth=800;//pAVCodecContext->width;
+    videoHeight=480;//pAVCodecContext->height;
+//    if(videoWidth<=0)
+//        videoWidth=1024;
+//    if(videoHeight<=0)
+//        videoHeight=600;
 
     QRect rect=this->geometry();
     int left=(rect.width()-videoWidth)/2;

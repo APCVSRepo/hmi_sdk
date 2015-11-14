@@ -6,7 +6,7 @@
 #ifdef ANDROID
 #include <pthread.h>
 #else
-#include "pthread.h"
+#include <pthread.h>
 #endif
 #include "IMessageInterface.h"
 

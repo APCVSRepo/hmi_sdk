@@ -9,7 +9,7 @@ win32:CONFIG += qaxcontainer
 
 #CONFIG  += wince  ##非wince 平台需要屏�?
 
-TARGET = AppLinkEmulater
+TARGET = AppLinkDevice
 TEMPLATE = app
 
 MOC_DIR=temp/moc
@@ -18,8 +18,14 @@ UI_DIR=temp/ui
 OBJECTS_DIR=temp/obj
 DESTDIR=bin
 
-target.path=$$DESTDIR
+target.path=$$OUT_PWD/bin
 INSTALLS+=target
+
+qtdll.path=$$OUT_PWD/bin
+qtdll.files=$$QMAKE_LIBDIR/*.dll
+INSTALLS +=qtdll
+
+
 
 SOURCES += \
     main.cpp \
@@ -170,9 +176,9 @@ LIBS +=  $$PWD/Library/ce/pthread.lib
 #LIBS += -L$$PWD/lib/ce/ffmpeg -lavcodec -lavfilter -lavformat -lavutil -lswscale
 #LIBS += $$PWD/ffmpeg/ce/libavcodec.dll.a  $$PWD/ffmpeg/ce/libavfilter.dll.a  $$PWD/ffmpeg/ce/libavformat.dll.a  $$PWD/ffmpeg/ce/libswscale.dll.a  $$PWD/ffmpeg/ce/libavutil.dll.a
 LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
-pthread.path=$$DESTDIR
+pthread.path=$$OUT_PWD/bin
 pthread.files=$$PWD/Library/ce/*.dll
-ffmpeg.path=$$DESTDIR
+ffmpeg.path=$$OUT_PWD/bin
 ffmpeg.files=$$PWD/Library/ce/ffmpeg/*.dll
 
 INSTALLS +=pthread
@@ -181,7 +187,14 @@ INSTALLS+=ffmpeg
 
 
 ################################for android
-android:LIBS += -L$$PWD/Library/android/ffmpeg -lffmpeg
+android{
+DEFINES +=ANDROID
+LIBS += -L$$PWD/Library/android/ffmpeg -lffmpeg
+LIBS += -L$$PWD/Library/android/sdl -lsmartDeviceLinkCore
+#sdlcfg.path=$$OUT_PWD/android_build/assets
+#sdlcfg.files=$$PWD/Library/android/sdl/config/*
+#INSTALLS +=sdlcfg
+}
 !android{
 configfile.path=$$DESTDIR/Config
 configfile.files=$$PWD/Config/*
@@ -190,6 +203,18 @@ INSTALLS +=configfile
 
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_EXTRA_LIBS = \
-        $$PWD/Library/android/ffmpeg/libffmpeg.so
+        $$PWD/Library/android/ffmpeg/libffmpeg.so \
+        $$PWD/Library/android/sdl/libsmartDeviceLinkCore.so
 }
 
+#DISTFILES += \
+#    Library/android/apk/gradle/wrapper/gradle-wrapper.jar \
+#    Library/android/apk/AndroidManifest.xml \
+#    Library/android/apk/res/values/libs.xml \
+#    Library/android/apk/build.gradle \
+#    Library/android/apk/gradle/wrapper/gradle-wrapper.properties \
+#    Library/android/apk/gradlew \
+#    Library/android/apk/gradlew.bat
+
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/Library/android/apk
+DISTFILES +=android/assets/*

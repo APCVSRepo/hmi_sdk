@@ -7,19 +7,23 @@
 
 //必须加以下内容,否则编译不能通过,为了兼容C和C99标准
 #ifndef INT64_C
-//#define INT64_C
-//#define UINT64_C
+#define INT64_C
+#define UINT64_C
 #endif
 
 ////引入ffmpeg头文件
+#ifdef __cplusplus
 extern "C"
 {
+#endif
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libavfilter/avfilter.h>
 #include <libswscale/swscale.h>
 #include <libavutil/frame.h>
+#ifdef __cplusplus
 }
+#endif
 
 
 

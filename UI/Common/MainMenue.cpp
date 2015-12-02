@@ -1,11 +1,11 @@
-#include "MainMenue.h"
+﻿#include "MainMenue.h"
 #include "../Config/Config.h"
 #include "AppBase.h"
 #include "PopBase.h"
 #include <QTime>
 MainMenue::MainMenue(QWidget *parent) : BaseWidght(0,0,ui_res_width,ui_res_height,parent)
 {
-    this->setBackGroundImge(":/images/mainbkg.png");
+    this->setBackGroundImge((char *)":/images/mainbkg.png");
 
     labelTitle=new QLabel(this);
     labelTitle->setGeometry(ui_res_width*1/3.0,5,ui_res_width*1/3.0,ui_res_height*ui_menu_udmargin-10);
@@ -27,17 +27,17 @@ MainMenue::MainMenue(QWidget *parent) : BaseWidght(0,0,ui_res_width,ui_res_heigh
 
 
     widgetLeftMenu=new BaseWidght(ui_content_lr,ui_content_ud,ui_leftMenu_Width,ui_content_height,this);
-    widgetLeftMenu->setBackGroundImge(":/images/leftmenu.png");
+    widgetLeftMenu->setBackGroundImge((char *)":/images/leftmenu.png");
 
     widgetCenter=new BaseWidght(ui_content_lr+ui_leftMenu_Width,ui_content_ud,ui_content_width,ui_content_height,this);
-    widgetCenter->setBackGroundImge(":/images/centerbkg.png");
+    widgetCenter->setBackGroundImge((char *)":/images/centerbkg.png");
 
     btnUpScroll=new QPushButton(widgetLeftMenu);
     btnUpScroll->setGeometry(1,2,ui_leftMenu_SizeW,ui_leftMenu_SizeH);
-    btnUpScroll->setStyleSheet("border-image:url(:/images/muparray.png)");
+    btnUpScroll->setStyleSheet((char *)"border-image:url(:/images/muparray.png)");
     btnUpScroll->setFlat(true);
     btnUpScroll->setFocusPolicy(Qt::NoFocus);
-    char*  btnImg[ID_MENU_MAX]={":/images/mf.png",":/images/tel.png",":/images/msg.png",":/images/cd.png",":/images/cmdlist.png"};
+    char*  btnImg[ID_MENU_MAX]={(char *)":/images/mf.png",(char *)":/images/tel.png",(char *)":/images/msg.png",(char *)":/images/cd.png",(char *)":/images/cmdlist.png"};
     for(int i=0;i<ID_MENU_MAX;i++)
     {
         btnMenuList[i]=new QPushButton(widgetLeftMenu);

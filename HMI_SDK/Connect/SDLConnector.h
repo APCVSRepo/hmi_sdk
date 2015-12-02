@@ -9,7 +9,7 @@
 #include "Connect/uiclient.h"
 #include "Connect/vehicleinfoclient.h"
 #include "Connect/vrclient.h"
-#include "Connect/sockectstosdl.h"
+#include "Connect/socketstosdl.h"
 #include <string>
 #include "json/json.h"
 #include <stdio.h>

@@ -3,10 +3,6 @@
 
 Show::Show(QWidget *parent) : AppBase(parent)
 {
-    this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
-
-    connect(this,SIGNAL(moveBack()),this,SLOT(moveBackSlots()));
-
     m_btn_one = new CButton;
     m_btn_two = new CButton;
     m_btn_thr = new CButton;
@@ -31,8 +27,9 @@ Show::~Show()
 
 void Show::initLayout()
 {
-
+    m_listWidget.setVerticalScrollBar(&m_scrollBar);
     QHBoxLayout *hhLayout = new QHBoxLayout;
+    hhLayout->addStretch(1);
     hhLayout->addWidget(&m_lab_mediaTrack,2,Qt::AlignLeft|Qt::AlignBottom);
     hhLayout->addStretch(1);
     hhLayout->addWidget(&m_lab_mediaClock,1,Qt::AlignRight|Qt::AlignBottom);
@@ -45,7 +42,7 @@ void Show::initLayout()
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(&m_lab_icon,22,Qt::AlignLeft);
     hLayout->addLayout(vLayout,68);
-    hLayout->addWidget(&m_scrollBar,10);
+   // hLayout->addWidget(&m_scrollBar,10);
 
     QHBoxLayout *btnLayout = new QHBoxLayout;
     btnLayout->addWidget(m_btn_one,1,Qt::AlignCenter);
@@ -53,40 +50,34 @@ void Show::initLayout()
     btnLayout->addWidget(m_btn_thr,1,Qt::AlignCenter);
     btnLayout->addWidget(m_btn_fou,1,Qt::AlignCenter);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(hLayout,3);
     mainLayout->addLayout(btnLayout,1);
 
-    QHBoxLayout *midLayout = new QHBoxLayout;
+//    QHBoxLayout *midLayout = new QHBoxLayout(this);
 //    midLayout->addStretch(12);
-    midLayout->addLayout(menuLayout,12);
-    midLayout->addLayout(mainLayout,65);
-    midLayout->addStretch(3);
+//    //midLayout->addLayout(menuLayout,12);
+//    midLayout->addLayout(mainLayout,65);
+//    midLayout->addStretch(3);
 
-    QVBoxLayout *mLayout = new QVBoxLayout(this);
-    mLayout->addWidget(&m_lab_title,1, Qt::AlignCenter);
-    mLayout->addLayout(midLayout, 4);
-    mLayout->addWidget(&m_lab_time,1, Qt::AlignRight);
-
-    mLayout->setMargin(0); //边框无缝
-    mLayout->setSpacing(0);
 
 
     QPixmap pixmap(":/images/sync.png");
     QPixmap fitpixmap=pixmap.scaled(120,120, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     m_lab_icon.setPixmap(fitpixmap);
 
-    m_btn_one->initParameter(ConfigSingle::Instance()->getShowBtnW(),ConfigSingle::Instance()->getShowBtnH(),":/images/softbutton_mfd.png",":/images/softbutton_mfd.png");
-    m_btn_two->initParameter(ConfigSingle::Instance()->getShowBtnW(),ConfigSingle::Instance()->getShowBtnH(),":/images/softbutton_mfd_left.png",":/images/softbutton_mfd_left.png");
-    m_btn_thr->initParameter(ConfigSingle::Instance()->getShowBtnW(),ConfigSingle::Instance()->getShowBtnH(),":/images/softbutton_mfd_right.png",":/images/softbutton_mfd_right.png");
-    m_btn_fou->initParameter(ConfigSingle::Instance()->getShowBtnW(),ConfigSingle::Instance()->getShowBtnH(),":/images/softbutton_mfd.png",":/images/softbutton_mfd.png");
+    m_btn_one->initParameter(ui_btn_width,ui_btn_height,":/images/softbutton_mfd.png",":/images/softbutton_mfd.png");
+    m_btn_two->initParameter(ui_btn_width,ui_btn_height,":/images/softbutton_mfd_left.png",":/images/softbutton_mfd_left.png");
+    m_btn_thr->initParameter(ui_btn_width,ui_btn_height,":/images/softbutton_mfd_right.png",":/images/softbutton_mfd_right.png");
+    m_btn_fou->initParameter(ui_btn_width,ui_btn_height,":/images/softbutton_mfd.png",":/images/softbutton_mfd.png");
     m_btn_one->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btn_two->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btn_thr->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btn_fou->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
 
 
-
+    m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //m_listWidget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     connect(&m_listWidget, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onListSelect(QModelIndex)));
 
 #ifndef ANDROID
@@ -94,7 +85,7 @@ void Show::initLayout()
     pll.setBrush(QPalette::Base,QBrush(QColor(255,255,255,0)));
     m_listWidget.setPalette(pll);
 #endif
-    m_listWidget.setFixedSize(ConfigSingle::Instance()->getShowListW(),ConfigSingle::Instance()->getShowListH());
+    m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);
     m_listWidget.setFrameShape(QFrame::NoFrame); //设置无边框
     m_listWidget.setFocusPolicy(Qt::NoFocus); //去除选中虚线框
     m_listWidget.setEditTriggers(QAbstractItemView::NoEditTriggers); //设置不可编辑
@@ -103,7 +94,7 @@ void Show::initLayout()
 #else
     m_listWidget.setStyleSheet("QListWidget:item:hover{border: 0px;}"); //鼠标移上去不响应突出
 #endif
-    m_listWidget.verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 0px;}");
+  //  m_listWidget.verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 0px;}");
 
     addListItem();
     addListItem();
@@ -113,11 +104,11 @@ void Show::initLayout()
     m_lab_mediaTrack.setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
     m_lab_mediaClock.setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
 
-    m_scrollBar.init(1, ConfigSingle::Instance()->getShowScrollH());
+    m_scrollBar.init(1,ui_app_height*3.0/4.0);
     m_scrollBar.flushScroll(1,2);
     m_scrollBar.hide();
-    connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
-    connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
+//    connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
+//    connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
 
 
 
@@ -158,7 +149,7 @@ void Show::initLayout()
 void Show::addListItem()
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(ConfigSingle::Instance()->getShowListW()-10,ConfigSingle::Instance()->getShowListH()/2));
+    item->setSizeHint(QSize(ui_list_width-10,ui_list_height/2.0));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
     QLabel *label = new QLabel;
@@ -352,8 +343,9 @@ void Show::downArrowSlots()
 
 void Show::moveBackSlots()
 {
-    this->close();
-    emit returnAppLink();
+    //this->close();
+    DataManager::ListInterface()->OnApplicationOut(DataManager::AppId());
+    this->showCurUI(ID_APPLINK);
 }
 
 void Show::onListSelect(const QModelIndex &index)
@@ -366,7 +358,7 @@ void Show::btnFourClickedSlots()
     if(m_i_totalNum == 1 && m_i_currentNo == 1)
     {
         //clicked More;
-        emit moreClicked();
+        this->showCurUI(ID_COMMAND);
     }
     else
     {
@@ -439,11 +431,11 @@ void Show::btnThrClickedSlots(int btID)
     if(m_i_totalNum == m_i_currentNo && m_i_totalNum != 1)
     {
         //clicked More;
-        emit moreClicked();
+        this->showCurUI(ID_COMMAND);
     }
     else
     {
-        emit softButtonClicked(btID, 0);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -451,7 +443,7 @@ void Show::btnTwoClickedSlots(int btID)
 {
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 0);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -459,7 +451,7 @@ void Show::btnOneClickedSlots(int btID)
 {
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 0);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -467,7 +459,7 @@ void Show::btnThrClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 1);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -475,7 +467,7 @@ void Show::btnTwoClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 1);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -483,11 +475,11 @@ void Show::btnOneClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 1);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
-void Show::execShow(AppDataInterface* pAppInterface)
+void Show::execShow()
 {
     Json::Value pObj;
     std::vector <SSoftButton > vec_softButtons;
@@ -498,9 +490,9 @@ void Show::execShow(AppDataInterface* pAppInterface)
     this->setMainField4(true,"");
     this->setMediaTrack(true,"");
     this->setMediaClock(true,"");
-    if (pAppInterface)
+    if (DataManager::DataInterface())
     {
-        pObj = pAppInterface->getShowData();
+        pObj = DataManager::DataInterface()->getShowData();
         for(int i = 0; i < pObj["params"]["showStrings"].size(); i++)
         {
             if("mainField1" == pObj["params"]["showStrings"][i]["fieldName"].asString())
@@ -564,6 +556,12 @@ void Show::execShow(AppDataInterface* pAppInterface)
 //      "updateMode" : "COUNTUP"
 //   }
 //}
+
+void Show::receiveJson(Json::Value json)
+{
+    setMediaColckTimer(json);
+}
+
 void Show::setMediaColckTimer(Json::Value jsonObj)
 {
     m_i_startH = jsonObj["params"]["startTime"]["hours"].asInt();

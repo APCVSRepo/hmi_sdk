@@ -5,17 +5,21 @@
 enum ShowType
 {
     ID_APPLINK = 0,
+    ID_CHOICESET,
+    ID_COMMAND,
     ID_SHOW,
     ID_ALERT,
     ID_AUDIOPASSTHRU,
-    ID_CHOICESET,
     ID_CHOICESETVR,
     ID_SCROLLMSG,
-    ID_COMMAND,
     ID_SLIDER,
-    ID_NOTIFY
+    ID_NOTIFY,
+    ID_APP_MAX
 };
-
+#define MIN_APP_BASE  ID_APPLINK
+#define MAX_APP_BASE  (ID_SHOW+1)
+#define MIN_POP_BASE  ID_ALERT
+#define MAX_POP_BASE  (ID_APP_MAX)
 enum VRID
 {
     ID_DEFAULT = 0,

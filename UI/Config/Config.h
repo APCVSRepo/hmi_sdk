@@ -1,7 +1,19 @@
 #ifndef CONFIG_H
 #define CONFIG_H
-#include "../AppInclude.h"
 #include "../Singleton.h"
+#include <stdarg.h>
+#ifdef ANDROID
+#include <android/log.h>
+#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,"SDL",__VA_ARGS__)
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,"SDL",__VA_ARGS__)
+#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,"SDL",__VA_ARGS__)
+#define  CONFIG_DIR   "/sdcard/sdlconfig"
+
+#else
+#define  LOGI(...)  {printf(__VA_ARGS__);fflush(stdout);}while(0)
+#define  LOGD(...)  {printf(__VA_ARGS__);fflush(stdout);}while(0)
+#define  LOGE(...)  {printf(__VA_ARGS__);fflush(stderr);}while(0)
+#endif
 
 enum
 {
@@ -9,52 +21,37 @@ enum
     W1024_H600=1
 };
 
-class Config
+extern int ui_res_width;
+extern int ui_res_height;
+extern float ui_menu_udmargin;//menu up and down ratio:up height=ui_res_width*ui_menu_udmargin
+extern int ui_content_ud;
+extern int ui_content_lr;
+extern int ui_content_width;
+extern int ui_content_height;
+extern int ui_content_left;
+extern int  ui_content_right;
+extern int ui_leftMenu_SizeW;
+extern int ui_leftMenu_SizeH;
+extern int ui_leftMenu_Width;
+extern int ui_aler_width;
+extern int ui_aler_height;
+extern int ui_showScroll_height;
+extern int ui_commandScroll_height;
+extern int ui_item_width;
+extern int ui_item_height;
+extern int ui_btn_width;
+extern int ui_btn_height;
+extern int ui_list_width;
+extern int ui_list_height;
+
+extern int ui_app_width;
+extern int ui_app_height;
+class UIConfig
 {
 public:
-    Config();
-    ~Config();
 
-    void loadResolution(int resolution);
-
-    int getItemW(){return m_i_itemW;}
-    int getItemH(){return m_i_itemH;}
-    int getMainWindowW(){return m_i_mainWindowW;}
-    int getMainWindowH(){return m_i_mainWindowH;}
-
-    int getShowListW(){return m_i_showListW;}
-    int getShowListH(){return m_i_showListH;}
-    int getShowBtnW(){return m_i_showBtnW;}
-    int getShowBtnH(){return m_i_showBtnH;}
-    int getShowScrollH(){return m_i_showScrollH;}
-
-    int getCommandScrollH(){return m_i_commandScrollH;}
-
-    int getAlertBtnW(){return m_i_alertBtnW;}
-    int getAlertBtnH(){return m_i_alertBtnH;}
-
-
-
-private:
-    int m_i_mainWindowW;
-    int m_i_mainWindowH;
-
-    int m_i_itemW;
-    int m_i_itemH;
-
-    int m_i_showListW;
-    int m_i_showListH;
-
-    int m_i_showBtnW;
-    int m_i_showBtnH;
-
-    int m_i_showScrollH;
-    int m_i_commandScrollH;
-
-    int m_i_alertBtnW;
-    int m_i_alertBtnH;
-
+    static void loadResolution(int res_w,int res_h);
 };
-typedef Singleton<Config> ConfigSingle;
+
 
 #endif // CONFIG_H

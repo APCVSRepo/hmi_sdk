@@ -9,7 +9,7 @@ class AppItemWidget : public QWidget
     Q_OBJECT
 
 public:
-    AppItemWidget(QWidget *parent = 0);
+    AppItemWidget(int w,int h,QWidget *parent = 0);
     ~AppItemWidget();
 
     void setText(QString text);

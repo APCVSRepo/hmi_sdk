@@ -2,14 +2,12 @@
 #include "vector"
 using std::vector;
 
-extern Config g_config;
 Command::Command(QWidget *parent) : AppBase(parent)
 {
-
-    connect(this,SIGNAL(moveBack()),this,SLOT(moveBackSlots()));
-
-
     initLayout();
+   // connect(this,SIGNAL(returnShow()),this,SLOT(returnShowSlots()));
+    connect(this,SIGNAL(exitApp()),this,SLOT(exitAppSlots()));
+    connect(this,SIGNAL(commandClick(int)),this,SLOT(commandClickSlots(int)));
 }
 
 Command::~Command()
@@ -18,22 +16,16 @@ Command::~Command()
 
 void Command::initLayout()
 {
-    QHBoxLayout *midLayout = new QHBoxLayout;
+    m_listWidget.setVerticalScrollBar(&m_scrollBar);
+    QHBoxLayout *midLayout = new QHBoxLayout(this);
 //    midLayout->addWidget(&m_btn_backIcon,12,Qt::AlignLeft);
-    midLayout->addLayout(menuLayout,12);
+    midLayout->addStretch(3);
     midLayout->addWidget(&m_listWidget,60);
-    midLayout->addWidget(&m_scrollBar,5);
+//    midLayout->addWidget(&m_scrollBar,5);
     midLayout->addStretch(3);
 
-    QVBoxLayout *mLayout = new QVBoxLayout(this);
-    mLayout->addWidget(&m_lab_title,1, Qt::AlignCenter);
-    mLayout->addLayout(midLayout, 4);
-    mLayout->addWidget(&m_lab_time,1, Qt::AlignRight);
-
-    mLayout->setMargin(0); //边框无缝
-    mLayout->setSpacing(0);
-
-
+m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//m_listWidget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_btn_backIcon.setFlat(true);//就是这句能够实现按钮透明，用png图片时很有用
     m_btn_backIcon.setStyleSheet("border: 0px");//消除边框，取消点击效果
     connect(&m_btn_backIcon,SIGNAL(clicked()),this,SLOT(backBtnClickSlots()));
@@ -52,13 +44,13 @@ void Command::initLayout()
 #else
     m_listWidget.setStyleSheet("QListWidget:item:hover{border: 0px;}"); //鼠标移上去不响应突出
 #endif
-    m_listWidget.verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 0px;}");
+    //m_listWidget.verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 0px;}");
     connect(&m_listWidget,SIGNAL(clicked(QModelIndex)),this,SLOT(listWidgetClickedSlots(QModelIndex)));
     connect(&m_listWidget,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(listWidgetDoubleClickedSlots(QModelIndex)));
 
-    m_scrollBar.init(4, ConfigSingle::Instance()->getCommandScrollH());
-    connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
-    connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
+    m_scrollBar.init(4, ui_app_height-30);
+//    connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
+//    connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
     m_scrollBar.hide();
 
     SCmdID tmpCmdId;
@@ -119,10 +111,10 @@ void Command::showBackIcon()
 void Command::addListItemWidget(QString text, bool isMenu)
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-25,ConfigSingle::Instance()->getItemH()));
+    item->setSizeHint(QSize(ui_app_width*2/3.0,ui_app_height/4.0));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
-    AppItemWidget *itemWidget = new AppItemWidget;
+    AppItemWidget *itemWidget = new AppItemWidget(ui_app_width*2/3.0,ui_app_height/4.0);
     m_listWidget.addItem(item);
     m_listWidget.setItemWidget(item,itemWidget);
     itemWidget->setIsMenu(isMenu);
@@ -214,6 +206,19 @@ void Command::listWidgetDoubleClickedSlots(QModelIndex index)
         emit commandClick(m_vec_subStrList.at(no).at(index.row()+1).i_cmdID);
     }
 }
+
+void Command::exitAppSlots()
+{
+    DataManager::ListInterface()->OnApplicationExit(DataManager::AppId());
+    this->showCurUI(ID_APPLINK);
+}
+
+void Command::commandClickSlots(int cmdID)
+{
+    //_D("appID = %d:%d\n",m_i_appID,cmdID);
+    DataManager::DataInterface()->OnCommandClick(DataManager::AppId(), cmdID);
+}
+
 
 void Command::clearAllCommand()
 {
@@ -421,18 +426,18 @@ void Command::moveBackSlots()
     }
     else
     {
-        emit returnShow();
+        this->showCurUI(ID_SHOW);
     }
 }
 
-void Command::execShow(AppDataInterface* pAppInterface)
+void Command::execShow()
 {
 
-    if (pAppInterface)
+    if (DataManager::DataInterface())
     {
         this->clearAllCommand();
         vector<SMenuCommand> CmdList;
-        CmdList = pAppInterface->getCommandList();
+        CmdList = DataManager::DataInterface()->getCommandList();
         for(int i = 0; i < CmdList.size(); i++)
         {
             if(0 != CmdList.at(i).i_cmdID && 0 == CmdList.at(i).i_menuID)
@@ -448,7 +453,7 @@ void Command::execShow(AppDataInterface* pAppInterface)
 //                this->setAppID(CmdList.at(i).i_appID);
 
                 vector<SMenuCommand> TmpCmdList;
-                TmpCmdList = pAppInterface->getCommandList(CmdList.at(i).i_menuID);
+                TmpCmdList = DataManager::DataInterface()->getCommandList(CmdList.at(i).i_menuID);
                 for(int j = 0; j < TmpCmdList.size(); j++)
                 {
                     this->addSubCommand(CmdList.at(i).str_menuName.data()

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "UI/Config/Config.h"
-
+#include <QLabel>
 
 //必须加以下内容,否则编译不能通过,为了兼容C和C99标准
 #ifndef INT64_C
@@ -25,8 +25,6 @@ extern "C"
 }
 #endif
 
-
-
 #include <QObject>
 #include <QMutex>
 #include <QImage>
@@ -34,10 +32,25 @@ extern "C"
 #include <QByteArray>
 #include <QMutex>
 
+#ifdef VIDEO_STREAM_WIDGET
+#include <QVideoWidget>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
+#endif
+
+#ifndef VIDEO_STREAM_WIDGET
 //#define     VIDEO_STREAM_FILE    // 2//1:NET  2:FILE
 #define     VIDEO_STREM_NET
-//#define     VIDEO_STREAM_PIPE
-class VideoStream : public QWidget
+//#define     VIDEO_STREAM_MEM
+#define     AV_BUFFER_SIZE    (1024*1024)
+#endif
+
+class VideoStream :
+        #ifdef VIDEO_STREAM_WIDGET
+        public QVideoWidget
+        #else
+        public QWidget
+        #endif
 {
     Q_OBJECT
 public:
@@ -47,42 +60,51 @@ public:
     void setUrl(QString url);
     void startStream();
     void stopStream();
+#ifdef VIDEO_STREM_MEM
+    static void callBack_send_data(const char *data,int size);
+    static int read_buffer(void *opaque,uint8_t *buf,int buf_size);
+#endif
     static void av_log_default_callback(void* ptr, int level, const char* fmt, va_list vl);
-
+#ifndef VIDEO_STREAM_WIDGET
     static void* ReadVideoFrame(void* arg);
-
-    void showTestLog(char *info,...);
-
+    void paintEvent(QPaintEvent *e);
+#endif
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
 
+#ifndef VIDEO_STREAM_WIDGET
 signals:
-    void GetImage(const QImage &image);
-    
+    void GetImage(const QImage &image); 
 public slots:
-    void SetImageSlots(const QImage &image);
     void PlayImageSlots();
+#endif
 private:
-
-  //  QLabel *m_label;
     int m_i_w;
     int m_i_h;
     QString m_str_url;
+#ifdef VIDEO_STREAM_WIDGET
+    QMediaPlayer  *m_VideoPlayer;
+    QMediaPlaylist *m_playList;
+#else
+  //  QLabel *m_label;
     QTimer *m_timerPlay;
     QImage m_image;
     bool   m_Stop;
-    bool   m_streamOpenSucess;
-    QLabel  *m_Screen;
-    QByteArray  videobuffer;
+   // QLabel  *m_Screen;
+    QImage    m_VideoImage;
     QMutex mutex;
     AVPicture  pAVPicture;
     AVFormatContext *pAVFormatContext;
     AVCodecContext *pAVCodecContext;
+#ifdef VIDEO_STREAM_MEM
+    AVIOContext  *pAVIOContext;
+#endif
 
     AVFrame *pAVFrame;
     SwsContext * pSwsContext;
-    AVPacket pAVPacket;
+
+    bool     isGetPacket;
 
     int videoWidth;
     int videoHeight;
@@ -90,6 +112,7 @@ private:
     int m_i_frameFinished;
 
     bool Init();
+#endif
     
 };
 

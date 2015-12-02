@@ -5,19 +5,19 @@
 #include "QTextEdit"
 #include "UI/Common/Button.h"
 
-
+class CPopBase;
 class CScrollMsg : public CPopBase
 {
     Q_OBJECT
 public:
-    explicit CScrollMsg(CPopBase *parent = 0);
+    explicit CScrollMsg(QWidget *parent = 0);
     ~CScrollMsg();
 
-    void execShow(AppDataInterface* pAppInterface);
+    void execShow();
     void testShow();
 
 signals:
-    void softButtonClicked(int btID, int mode);
+    //void softButtonClicked(int btID, int mode);
     void scrollMsgAbort(int scrollMsgId, int reason);
 
 public slots:
@@ -33,7 +33,7 @@ public slots:
     void onButtonTwoClickedLongSlots(int btID);
     void onButtonThrClickedLongSlots(int btID);
     void onButtonFouClickedLongSlots(int btID);
-
+    void scrollMsgAbortSlots(int scrollMsgID, int reason);
 private:
     void setMessage(QString msg);
     void setBtnText(int btnIdx, QString text, bool highLight);

@@ -2,7 +2,7 @@
 #define SINGLETON_H
 
 #include <assert.h>
-
+#include <stdio.h>
 template <class T>
 class Singleton
 {

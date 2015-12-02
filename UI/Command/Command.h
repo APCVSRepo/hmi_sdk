@@ -10,7 +10,7 @@ typedef struct commandID
     QString str_command;
     int i_cmdID;
 }SCmdID;
-
+class AppBase;
 class Command : public AppBase
 {
     Q_OBJECT
@@ -18,7 +18,7 @@ public:
     explicit Command(QWidget *parent = 0);
     ~Command();
 
-    void execShow(AppDataInterface* pAppInterface);
+    void execShow();
 
 signals:
     void returnShow();
@@ -32,6 +32,9 @@ public slots:
     void downArrowSlots();
     void backBtnClickSlots();
     void moveBackSlots();
+    void exitAppSlots();
+   // void softButtonClickedSlots(int btID, int mode);
+    void commandClickSlots(int cmdID);
 
 private:
     void clearAllCommand();

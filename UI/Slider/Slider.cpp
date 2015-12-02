@@ -2,23 +2,24 @@
 #include "QHBoxLayout"
 #include "QVBoxLayout"
 #include "UI/Config/Config.h"
+#include "Common/PopBase.h"
 
-extern Config g_config;
 Slider::Slider(QWidget *parent) :
   CPopBase(parent),
     m_iPos(0)
 {
     InitLayout();
+    connect(this,SIGNAL(sliderClicked(int,int,int)),this,SLOT(sliderClickedSlots(int,int,int)));
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(onButtonCancelClicked()));
 }
 
 void Slider::InitLayout()
 {
-    int iW = 540 * ConfigSingle::Instance()->getMainWindowW() / 630;
-    int iH = 240 * ConfigSingle::Instance()->getMainWindowH() / 378;
+    int iW = ui_app_width;
+    int iH = ui_app_height;
 
-    m_labelBackground.setParent(this);
-    m_labelFrame.setParent(this);
+//    m_labelBackground.setParent(this);
+//    m_labelFrame.setParent(this);
 
     m_labelText1 = new QLabel;
     m_labelText2 = new QLabel;
@@ -33,8 +34,8 @@ void Slider::InitLayout()
     connect(m_btnSoft3, SIGNAL(clicked()), this, SLOT(onMoveRightSlot()));
     connect(m_btnSoft4, SIGNAL(clicked()), this, SLOT(onButtonCancelClicked()));
 
-    m_labelBackground.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
-    m_labelFrame.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
+//    m_labelBackground.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
+//    m_labelFrame.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
 
     m_labelText1->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:rgb(255,255,254)");
     m_labelText2->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:rgb(255,255,254)");
@@ -49,12 +50,12 @@ void Slider::InitLayout()
 //    setSliderTitle("Test string.");
 //    setPosition(3);
 
-    m_btnSoft1->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Close");
-    m_btnSoft2->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "");
+    m_btnSoft1->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Close");
+    m_btnSoft2->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "");
     m_btnSoft2->setIconExtra(":/images/leftarrow.png");
-    m_btnSoft3->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "");
+    m_btnSoft3->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "");
     m_btnSoft3->setIconExtra(":/images/rightarrow.png");
-    m_btnSoft4->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Cancel");
+    m_btnSoft4->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Cancel");
 
     m_btnSoft1->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btnSoft2->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
@@ -76,8 +77,16 @@ void Slider::InitLayout()
     mLayout->addStretch(5);
     mLayout->setMargin(0);
 
-    m_labelFrame.setLayout(mLayout);
+//    m_labelFrame.setLayout(mLayout);
+    this->setLayout(mLayout);
     m_btnSoft1->setText("Save");
+}
+
+void Slider::sliderClickedSlots( int code, int sliderid, int sliderPosition)
+{
+    //_D("code=%d:%d:%d\n",code,sliderid,sliderPosition);
+    DataManager::DataInterface()->OnSliderResponse(code, sliderid,sliderPosition);
+    this->showCurUI(ID_SHOW);
 }
 
 void Slider::onMoveLeftSlot()
@@ -183,11 +192,11 @@ void Slider::onButtonCancelClicked()
     this->hide();
 }
 
-void Slider::execShow(AppDataInterface* pAppInterface)
+void Slider::execShow()
 {
-    if (pAppInterface)
+    if (DataManager::DataInterface())
     {
-        m_jsonData = pAppInterface->getSlider();
+        m_jsonData = DataManager::DataInterface()->getSlider();
 //        this->setAppID(m_jsonData["params"]["appID"].asInt());
         this->setSliderID(m_jsonData["id"].asInt());
         this->setTimeOut(m_jsonData["params"]["timeout"].asInt());

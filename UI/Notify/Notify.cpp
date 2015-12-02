@@ -1,7 +1,8 @@
 #include "Notify.h"
 #include "UI/Config/Config.h"
-
-extern Config g_config;
+#include "Common/PopBase.h"
+#include <QTime>
+#include <QApplication>
 Notify::Notify(QWidget *parent) :
     CPopBase(parent)
 {
@@ -11,12 +12,12 @@ Notify::Notify(QWidget *parent) :
 
 void Notify::InitLayout()
 {
-//    this->setFixedWidth(540 * ConfigSingle::Instance()->getMainWindowW() / 630);
+    this->setFixedWidth(ui_app_width);
 
-    m_labelBackground.setParent(this);
-    m_labelBackground.setFixedWidth(540 * ConfigSingle::Instance()->getMainWindowW() / 630);
-    m_labelFrame.setParent(this);
-    m_labelFrame.setFixedWidth(540 * ConfigSingle::Instance()->getMainWindowW() / 630);
+//    m_labelBackground.setParent(this);
+//    m_labelBackground.setFixedWidth(ui_app_width);
+//    m_labelFrame.setParent(this);
+//    m_labelFrame.setFixedWidth(ui_app_width);
 
 //    m_labelBackground.setStyleSheet("border: 1px solid black;border-radius:10px;background-color:rgb(36,43,61)");
 
@@ -27,7 +28,8 @@ void Notify::InitLayout()
     mLayout = new QVBoxLayout;
     mLayout->addWidget(&m_labelText, Qt::AlignCenter);
 
-    m_labelFrame.setLayout(mLayout);
+//    m_labelFrame.setLayout(mLayout);
+    this->setLayout(mLayout);
 
 }
 
@@ -36,8 +38,8 @@ void Notify::setText(QString text)
     m_labelText.setText(text);
     m_labelText.adjustSize();
 
-    m_labelFrame.setGeometry((this->width() - m_labelFrame.width()) / 2, 0.85 * this->height() - m_labelText.height() - 35, m_labelFrame.width(), m_labelText.height() + 35);
-    m_labelBackground.setGeometry((this->width() - m_labelBackground.width()) / 2, 0.85 * this->height() - m_labelText.height() - 35, m_labelBackground.width(), m_labelText.height() + 35);;
+//    m_labelFrame.setGeometry((this->width() - m_labelFrame.width()) / 2, 0.85 * this->height() - m_labelText.height() - 35, m_labelFrame.width(), m_labelText.height() + 35);
+//    m_labelBackground.setGeometry((this->width() - m_labelBackground.width()) / 2, 0.85 * this->height() - m_labelText.height() - 35, m_labelBackground.width(), m_labelText.height() + 35);;
 }
 
 #include <QCoreApplication>
@@ -52,20 +54,22 @@ void Notify::waitSec(int s)
     QTime t;
     t.start();
     while(t.elapsed()<1000*s)
-        QCoreApplication::processEvents();
+        QApplication::processEvents();
 }
 
-void Notify::execShow(AppDataInterface* pAppInterface)
+void Notify::execShow()
 {
     this->show();
-
+    LOGD("Notify....\n");
     this->setText("Searching...");
 
     waitSec(1);
     this->setText("No additional\nApps found.");
 
     waitSec(1);
-    this->hide();
+//    this->hide();
+    LOGD("Notify goBack\n");
+    goBack();
 }
 
 void Notify::testShow()

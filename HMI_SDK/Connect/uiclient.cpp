@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include "json/json.h"
-
+#include "Config/Config.h"
 uiClient::uiClient() : Channel("UI")
 {
     m_iIDStart = 400;
@@ -197,7 +197,10 @@ void uiClient::getCapabilities(int id)
     result["code"] = 0;
     result["method"] = "UI.GetCapabilities";
 
-    root["result"] = m_StaticConfigJson["uiGetCapabilitiesResult"];;
+    m_StaticConfigJson["uiGetCapabilitiesResult"]["displayCapabilities"]["screenParams"]["resolution"]["resolutionWidth"]=ui_res_width;
+    m_StaticConfigJson["uiGetCapabilitiesResult"]["displayCapabilities"]["screenParams"]["resolution"]["resolutionHeight"]=ui_res_height;
+    root["result"] = m_StaticConfigJson["uiGetCapabilitiesResult"];
+    LOGI(root.toStyledString().data());
     SendJson(root);
 }
 

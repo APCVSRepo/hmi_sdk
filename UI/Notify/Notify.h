@@ -3,16 +3,16 @@
 
 #include <QWidget>
 #include "QLabel"
-#include "../Common/PopBase.h"
 #include "QVBoxLayout"
-
+#include "Common/PopBase.h"
+class CPopBase;
 class Notify : public CPopBase
 {
     Q_OBJECT
 public:
     explicit Notify(QWidget *parent = 0);
 
-    void execShow(AppDataInterface* pAppInterface);
+    void execShow();
     void testShow();
 
 signals:

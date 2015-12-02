@@ -1,9 +1,9 @@
 #include "AppItemWidget.h"
-extern Config g_config;
-AppItemWidget::AppItemWidget(QWidget *parent)
+
+AppItemWidget::AppItemWidget(int w,int h,QWidget *parent)
     : QWidget(parent)
 {
-    this->setFixedSize(ConfigSingle::Instance()->getItemW(),ConfigSingle::Instance()->getItemH());
+    this->setFixedSize(w,h);
 
   //  this->setStyleSheet("background-color: transparent;");
 
@@ -24,7 +24,7 @@ AppItemWidget::AppItemWidget(QWidget *parent)
     m_lab_icon->setPixmap(fitpixmap);
 
     m_lab_border->setParent(this);
-    m_lab_border->setGeometry(5,5,ConfigSingle::Instance()->getItemW()-25,ConfigSingle::Instance()->getItemH()-10);
+    m_lab_border->setGeometry(2,2,w-4,h-4);
     m_lab_border->setStyleSheet("border: 2px solid white;border-radius: 10px;padding: 2px;");
     m_lab_border->setHidden(true);
 

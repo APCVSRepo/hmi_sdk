@@ -46,8 +46,8 @@ void ttsClient::onRequest(Json::Value request)
     {
         if (method == "TTS.Speak")
         {
-            // ttsHandler action start
-            // sendTTSResult(request["id"].asInt(), method);
+             //ttsHandler action start
+             //sendTTSResult(request["id"].asInt(), method);
         }
         else if(method == "TTS.StopSpeaking")
         {

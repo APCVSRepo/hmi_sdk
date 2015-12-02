@@ -208,7 +208,7 @@ bool SocketsToSDL::ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * 
 	sockaddr_in toLocal;
 	memset(&toLocal, 0, sizeof(toLocal));
 	toLocal.sin_family = AF_INET;
-    toLocal.sin_addr.s_addr = inet_addr("0.0.0.0");//127.0.0.1
+	toLocal.sin_addr.s_addr = inet_addr("127.0.0.1");
 	toLocal.sin_port = htons(12346);
 
     size_t namelen = sizeof(toLocal);
@@ -338,16 +338,18 @@ void SocketsToSDL::RunThread()
 {
 #ifdef WIN32
     FD_SET fdRead;
-	FD_SET fdWrite;
+    int fd_max = -1;
 #else
     fd_set fdRead;
     fd_set fdWrite;
-#endif
     int fd_max = m_Read_Sign;
+#endif
 	while (!m_bTerminate)
 	{
 		FD_ZERO(&fdRead);
+#ifndef WIN32
 		FD_ZERO(&fdWrite);
+#endif
 
 		int iNum = m_SocketHandles.size();
         for (int i = 0; i < iNum; i++)
@@ -355,12 +357,18 @@ void SocketsToSDL::RunThread()
 			SOCK_HANDLE * pHandle = m_SocketHandles[i];
 			int socket = pHandle->socket;
 			FD_SET(socket, &fdRead);
+#ifndef WIN32
 			FD_SET(socket, &fdWrite);
+#endif
             fd_max = fd_max > socket? fd_max : socket;
 		}
 		FD_SET(m_Read_Sign, &fdRead);
 
+#ifdef WIN32
+        if (select(0, &fdRead, NULL, NULL, NULL) == SOCKET_ERROR)
+#else
         if (select(fd_max+1, &fdRead, &fdWrite, NULL, NULL) == SOCKET_ERROR)
+#endif
 		{
             goto SOCKET_WRONG;
 		}
@@ -374,20 +382,20 @@ void SocketsToSDL::RunThread()
 			{
 				bytes_read = recv(m_Read_Sign, (char *)buffer, sizeof(buffer), 0);
 			} while (bytes_read > 0);
+            for (int i = 0; i < iNum; i++)
+            {
+                SOCK_HANDLE * pHandle = m_SocketHandles[i];
+                if(!Send(pHandle))
+                    goto SOCKET_WRONG;
+            }
 		}
 
-		iNum = m_SocketHandles.size();
         for (int i = 0; i < iNum; i++)
 		{
 			SOCK_HANDLE * pHandle = m_SocketHandles[i];
 			if (FD_ISSET(pHandle->socket, &fdRead))
 			{
                 if(!Receive(pHandle))
-                    goto SOCKET_WRONG;
-            }
-			else if (bSend)
-			{
-                if(!Send(pHandle))
                     goto SOCKET_WRONG;
             }
 		}

@@ -21,7 +21,7 @@ public:
     AppLink(QWidget *parent = 0);
     ~AppLink();
 
-    void execShow(AppListInterface* pAppInterface);
+    void execShow();
 signals:
     void inAppSignals(int appID);
     void appSetting();
@@ -32,10 +32,13 @@ private slots:
     void listWidgetClickedSlots(QModelIndex);
     void listWidgetDoubleClickedSlots(QModelIndex);
 
-    void upArrowSlots();
-    void downArrowSlots();
+    void onScrollTo(int v);
+//    void upArrowSlots();
+//    void downArrowSlots();
 
     void moveBackSlots();
+    void inAppSlots(int appID);
+    void findNewAppSlots();
 
 private:
     void addNewApp(QString appName,int appID);

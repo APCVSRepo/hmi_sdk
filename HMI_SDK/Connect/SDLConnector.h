@@ -61,10 +61,13 @@ public:
 
     bool ConnectToSDL(IMessageInterface * pMsgHandler, INetworkStatus * pNetwork = NULL);
     void ChangeMsgHandler(IMessageInterface * pMsgHandler);
+    bool IsSDLConnected();
 
 private:
     bool m_bReleased;
     SocketsToSDL m_Sockets;
+    std::vector<IChannel*> m_channels;
+    bool    m_sdl_is_connected;
 
     vrClient m_VR;
     baseCommunicationClient m_Base;
@@ -80,6 +83,8 @@ private:
 public:
     virtual void onConnected();
     virtual void onNetworkBroken();
+    static void* onSetupConnection(void*);
+    void setUpConnecteion();
 
 // API
 public:

@@ -1,19 +1,19 @@
 #ifndef CALERTUI_H
 #define CALERTUI_H
 
-#include "UI/Common/PopBase.h"
+#include "Common/PopBase.h"
 #include "QLabel"
-#include "UI/Common/Button.h"
+#include "Common/Button.h"
 
 class CAlertUI : public CPopBase
 {
     Q_OBJECT
 public:
-    explicit CAlertUI(CPopBase *parent = 0);
+    explicit CAlertUI(QWidget *parent = 0);
     ~CAlertUI();
 
 public:
-    void execShow(AppDataInterface* pAppInterface);
+    void execShow();
     void testShow();
 
 
@@ -32,7 +32,7 @@ public slots:
     void onButtonTwoClickedLongSlots(int btID);
     void onButtonThrClickedLongSlots(int btID);
     void onButtonFouClickedLongSlots(int btID);
-
+    void alertAbortSlots(int alertID, int reason);
 private:
     void setAlertText(int textIdx, QString text);
     void setBtnText(int btnIdx, QString text, bool highLight);

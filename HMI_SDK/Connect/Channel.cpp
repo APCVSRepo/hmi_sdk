@@ -20,6 +20,7 @@
 //#include <unistd.h>
 #endif
 #include<stdlib.h>
+#include "Config/Config.h"
 
 JsonBuffer::JsonBuffer()
 {
@@ -91,20 +92,25 @@ void Channel::ReadConfigure()
 #else
     _getcwd(szPath,1024);
 #endif
+#elif ANDROID
+    sprintf(szPath,"%s",CONFIG_DIR);
 #else
     getcwd(szPath,1024);
 #endif
     char szDB[1024]={0};
 #ifdef WIN32
     ::sprintf(szDB, "%s\\%s", szPath, "Config\\staticConfigDB.json");//..\\hmi-sdk-plus\\HMISDK\\
-     printf("szDB=%s\n",szDB);
+     LOGD("szDB=%s\n",szDB);
+#elif ANDROID
+    ::sprintf(szDB, "%s/%s", szPath, "staticConfigDB.json");
+     LOGD("szDB=%s\n",szDB);
 #else
     ::sprintf(szDB, "%s/%s", szPath, "Config/staticConfigDB.json");
-     printf("szDB=%s\n",szDB);
+     LOGD("szDB=%s\n",szDB);
 #endif
 
 
-#ifdef ANDROID
+#if    0
     const char* str ="{\
     \"vehicleData\": {\
       \"bodyInformation\": {\
@@ -359,8 +365,8 @@ void Channel::ReadConfigure()
         \"textFields\": [\
           \"mainField1\", \
           \"mainField2\", \
-          \"mainField1\", \
-          \"mainField2\", \
+          \"mainField3\", \
+          \"mainField4\", \
           \"statusBar\", \
           \"mediaClock\", \
           \"mediaTrack\", \
@@ -397,6 +403,14 @@ void Channel::ReadConfigure()
       \"hmiZoneCapabilities\": [\
         \"FRONT\"\
       ], \
+      \"screenParams\":\
+        {\
+           \"resolution\":\
+           {\"resolutionWidth\":800,\"resolutionHeight\":480\"},\
+          \"touchEventAvailable\":\
+           {\"pressAvailable\":true,\"multiTouchAvailable\":true,\"doublePressAvailable\":false}\
+        }\
+     \"audioPassThruCapabilities\":{\"samplingRate\":\"44KHZ\",\"bitsPerSample\":\"8_BIT\",\"audioType\":\"PCM\"},\
       \"code\": 0\
     }\
   }";
@@ -496,6 +510,7 @@ void Channel::SendJson(Json::Value data)
 
 void Channel::onMessage(Json::Value jsonObj)
 {
+    LOGI("onMessage:%s",jsonObj.toStyledString().data());
     std::string _methon = "";
     if (jsonObj.isMember("method") && jsonObj["method"].asString() == "BasicCommunication.SDLLog")
     {
@@ -514,6 +529,7 @@ void Channel::onMessage(Json::Value jsonObj)
     {
         if (jsonObj["id"].asInt() == m_iRegisterRequestId)
         {
+            LOGI("REGISTER");
             if (!jsonObj.isMember("error"))
             {
                 if (jsonObj.isMember("result"))
@@ -527,6 +543,7 @@ void Channel::onMessage(Json::Value jsonObj)
         // handle component unregistration
         else if (jsonObj["id"].asInt() == m_iUnregisterRequestId)
         {
+            LOGI("UNREGISTER");
             if (!jsonObj.isMember("error"))
             {
                 onUnregistered();
@@ -535,16 +552,20 @@ void Channel::onMessage(Json::Value jsonObj)
         // handle result, error, notification, requests
         else
         {
+            LOGI("OTHER");
             if (jsonObj.isMember("result"))
             {
+                LOGI("result");
                 onResult(jsonObj);
             }
             else if (jsonObj.isMember("error"))
             {
+                LOGI("error");
                 onError(jsonObj["error"].asString());
             }
             else
             {
+                LOGI("request");
                 onRequest(jsonObj);
             }
         }

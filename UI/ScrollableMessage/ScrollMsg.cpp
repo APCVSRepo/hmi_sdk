@@ -4,13 +4,10 @@
 #include "UI/Config/Config.h"
 #include <QTextLayout>
 #include <QTextBlock>
-extern Config g_config;
 
-
-
-CScrollMsg::CScrollMsg(CPopBase *parent) : CPopBase(parent)
+CScrollMsg::CScrollMsg(QWidget *parent) : CPopBase(parent)
 {
-    m_labelBackground.setParent(this);
+//    m_labelBackground.setParent(this);
     m_editText = new QTextEdit;
     m_btn_up = new CButton;
     m_btn_down = new CButton;
@@ -21,6 +18,7 @@ CScrollMsg::CScrollMsg(CPopBase *parent) : CPopBase(parent)
 
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(onSpaceClicedSlots()));
+    connect(this,SIGNAL(scrollMsgAbort(int,int)),this,SLOT(scrollMsgAbortSlots(int,int)));
 }
 
 CScrollMsg::~CScrollMsg()
@@ -30,14 +28,14 @@ CScrollMsg::~CScrollMsg()
 
 void CScrollMsg::InitLayout()
 {
-    int iW = ConfigSingle::Instance()->getMainWindowW()*6/7;
-    int iH = ConfigSingle::Instance()->getMainWindowH()*5/6;
+    int iW = ui_app_width;
+    int iH = ui_app_height;
 
-    m_labelBackground.setParent(this);
-    m_labelFrame.setParent(this);
+//    m_labelBackground.setParent(this);
+//    m_labelFrame.setParent(this);
 
-    m_labelBackground.setGeometry((this->width() - iW) / 2, 0.9 * this->height() - iH, iW, iH);
-    m_labelFrame.setGeometry((this->width() - iW) / 2, 0.9 * this->height() - iH, iW, iH);
+//    m_labelBackground.setGeometry((this->width() - iW) / 2, 0.9 * this->height() - iH, iW, iH);
+//    m_labelFrame.setGeometry((this->width() - iW) / 2, 0.9 * this->height() - iH, iW, iH);
 
 //    m_btn_up->initParameter(30, 30, ":/images/uparrow.png", ":/images/uparrow.png", "", "");
 //    m_btn_down->initParameter(30, 30, ":/images/downarrow.png", ":/images/downarrow.png", "", "");
@@ -50,10 +48,10 @@ void CScrollMsg::InitLayout()
     connect(m_btn_down,SIGNAL(clicked()),this,SLOT(downClickedSlots()));
 
 
-    m_btnSoft1->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft1");
-    m_btnSoft2->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "Soft2");
-    m_btnSoft3->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "Soft3");
-    m_btnSoft4->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft4");
+    m_btnSoft1->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft1");
+    m_btnSoft2->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "Soft2");
+    m_btnSoft3->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "Soft3");
+    m_btnSoft4->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft4");
 
     m_btnSoft1->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btnSoft2->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
@@ -118,7 +116,8 @@ void CScrollMsg::InitLayout()
     mLayout->addStretch(1);
     mLayout->setMargin(0);
 
-    m_labelFrame.setLayout(mLayout);
+//    m_labelFrame.setLayout(mLayout);
+    this->setLayout(mLayout);
 
     // Test
     setMessage("hello world!");
@@ -144,7 +143,7 @@ void CScrollMsg::timeoutSlots()
 {
     m_timer->stop();
     emit scrollMsgAbort(m_i_scrollMsgID, 0);
-    this->hide();
+    goBack();
 }
 
 void CScrollMsg::setMessage(QString msg)
@@ -242,17 +241,17 @@ void CScrollMsg::onSpaceClicedSlots()
 {
     m_timer->stop();
     emit scrollMsgAbort(m_i_scrollMsgID, 2);
-    this->hide();
+    goBack();
 }
 
 void CScrollMsg::onButtonOneClickedSlots(int btID)
 {
     m_timer->stop();
     emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    this->hide();
+    goBack();
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 0);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -260,10 +259,10 @@ void CScrollMsg::onButtonTwoClickedSlots(int btID)
 {
     m_timer->stop();
     emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    this->hide();
+    goBack();
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 0);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -271,10 +270,10 @@ void CScrollMsg::onButtonThrClickedSlots(int btID)
 {
     m_timer->stop();
     emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    this->hide();
+    goBack();
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 0);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -282,10 +281,10 @@ void CScrollMsg::onButtonFouClickedSlots(int btID)
 {
     m_timer->stop();
     emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    this->hide();
+    goBack();
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 0);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -293,10 +292,10 @@ void CScrollMsg::onButtonOneClickedLongSlots(int btID)
 {
     m_timer->stop();
     emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    this->hide();
+    goBack();
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 1);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -304,10 +303,10 @@ void CScrollMsg::onButtonTwoClickedLongSlots(int btID)
 {
     m_timer->stop();
     emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    this->hide();
+    goBack();
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 1);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -315,10 +314,10 @@ void CScrollMsg::onButtonThrClickedLongSlots(int btID)
 {
     m_timer->stop();
     emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    this->hide();
+    goBack();
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 1);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -326,18 +325,25 @@ void CScrollMsg::onButtonFouClickedLongSlots(int btID)
 {
     m_timer->stop();
     emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    this->hide();
+    goBack();
     if(btID != 0)
     {
-        emit softButtonClicked(btID, 1);
+        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
-void CScrollMsg::execShow(AppDataInterface* pAppInterface)
+void CScrollMsg::scrollMsgAbortSlots(int smID, int reason)
 {
-    if (pAppInterface)
+    //_D("smID=%d, reason=%d\n",smID,reason);
+    DataManager::DataInterface()->OnScrollMessageResponse(smID, reason);
+}
+
+
+void CScrollMsg::execShow()
+{
+    if (DataManager::DataInterface())
     {
-        m_jsonData = pAppInterface->getScrollableMsgJson()["params"];
+        m_jsonData = DataManager::DataInterface()->getScrollableMsgJson()["params"];
 
         this->setTimeOut(m_jsonData["timeout"].asInt());
         this->setBtnText(0, "-", false);

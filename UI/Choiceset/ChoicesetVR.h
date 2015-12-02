@@ -1,21 +1,20 @@
 #ifndef CCHOICESETVR_H
 #define CCHOICESETVR_H
 
-#include "UI/Common/PopBase.h"
 #include "QLabel"
 #include "UI/Common/Button.h"
-
+#include "Common/PopBase.h"
 #define PERFORMINTERACTION_TIMEOUT      10
 #define PERFORMINTERACTION_CHOICE       0
-
+class CPopBase;
 class CChoicesetVR : public CPopBase
 {
     Q_OBJECT
 public:
-    explicit CChoicesetVR(CPopBase *parent = 0);
+    explicit CChoicesetVR(QWidget *parent = 0);
     ~CChoicesetVR();
 
-    void execShow(AppDataInterface* pAppInterface);
+    void execShow();
     void testShow();
 
 signals:
@@ -27,6 +26,7 @@ public slots:
     void label2ClickedSlots(int id);
     void label3ClickedSlots(int id);
     void label4ClickedSlots(int id);
+    void VRmenuClickedSlots(int code, int performInteractionID, int choiceID);
 
 private:
     void setChoicesetVRText(int textIdx, QString text);

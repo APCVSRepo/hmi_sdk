@@ -3,20 +3,19 @@
 
 #include <QWidget>
 #include "QLabel"
-#include "../Common/PopBase.h"
 #include "../Common/Button.h"
-
+#include "Common/PopBase.h"
 #define SLIDER_OK                       0
 #define SLIDER_TIMEOUT                  10
 #define SLIDER_ABORTED                  5
-
+class CPopBase;
 class Slider : public CPopBase
 {
     Q_OBJECT
 public:
     explicit Slider(QWidget *parent = 0);
     
-    void execShow(AppDataInterface* pAppInterface);
+    void execShow();
     void testShow();
 
 
@@ -29,6 +28,7 @@ public slots:
     void onButtonSaveClicked();
     void onButtonCancelClicked();
     void timeoutSlots();
+    void sliderClickedSlots( int code, int sliderid, int sliderPosition);
 
 private:
     void setSliderID(int id);

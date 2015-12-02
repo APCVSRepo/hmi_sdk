@@ -5,10 +5,16 @@
 #include<QString>
 #include<QDateTime>
 #include <QTime>
+#include <QTimer>
+#include <pthread.h>
+#include "Config/Config.h"
+
+
 static SDLConnector * g_SingleConnector = 0;
 
 SDLConnector::SDLConnector() : m_bReleased(false), m_Sockets(), m_VR(), m_Base(), m_Buttons(), m_Navi(), m_TTS(), m_Vehicle(), m_UI()
 {
+    m_sdl_is_connected=false;
 }
 
 SDLConnector::~SDLConnector()
@@ -41,7 +47,7 @@ void SDLConnector::onNetworkBroken()
 #else
         usleep(1000000);
 #endif
-        if(ConnectToSDL(m_pMsgHandler, m_pNetwork))
+        if(!ConnectToSDL(m_pMsgHandler,m_pNetwork))
         {
             if(m_pNetwork)
                 m_pNetwork->onConnected();
@@ -50,31 +56,41 @@ void SDLConnector::onNetworkBroken()
     }
 }
 
+bool SDLConnector::IsSDLConnected()
+{
+    return m_sdl_is_connected;
+}
+
 bool SDLConnector::ConnectToSDL(IMessageInterface * pMsgHandler, INetworkStatus * pNetwork)
 {
     m_pNetwork = pNetwork;
     m_pMsgHandler = pMsgHandler;
 
     ChangeMsgHandler(pMsgHandler);
-    std::vector<IChannel*> channels;
-    channels.push_back(&m_VR);
-    channels.push_back(&m_Vehicle);
-    channels.push_back(&m_UI);
-    channels.push_back(&m_TTS);
-    channels.push_back(&m_Navi);
-    channels.push_back(&m_Buttons);
-    channels.push_back(&m_Base);
+    //std::vector<IChannel*> m_channels;
+    m_channels.push_back(&m_VR);
+    m_channels.push_back(&m_Vehicle);
+    m_channels.push_back(&m_UI);
+    m_channels.push_back(&m_TTS);
+    m_channels.push_back(&m_Navi);
+    m_channels.push_back(&m_Buttons);
+    m_channels.push_back(&m_Base);
 
-    bool bRet = m_Sockets.ConnectTo(channels, this);
+    pthread_t  thread_connect;
+    pthread_create(&thread_connect,NULL,SDLConnector::onSetupConnection,this);
+    return m_sdl_is_connected;
+}
 
-    if (bRet)
-    {
-        m_VR.onOpen();
-        m_Vehicle.onOpen();
-        m_UI.onOpen();
-        m_TTS.onOpen();
-        m_Navi.onOpen();
-        m_Buttons.onOpen();
+void SDLConnector::setUpConnecteion()
+{
+    m_sdl_is_connected = m_Sockets.ConnectTo(m_channels, this);
+    if(m_sdl_is_connected){
+    m_VR.onOpen();
+    m_Vehicle.onOpen();
+    m_UI.onOpen();
+    m_TTS.onOpen();
+    m_Navi.onOpen();
+    m_Buttons.onOpen();
 
 #ifdef WIN32
         Sleep(100);
@@ -84,8 +100,27 @@ bool SDLConnector::ConnectToSDL(IMessageInterface * pMsgHandler, INetworkStatus 
 
         m_Base.onOpen();
     }
+}
 
-    return bRet;
+void* SDLConnector::onSetupConnection(void* arg)
+{
+    SDLConnector *cly=(SDLConnector*)arg;
+    if(cly==NULL){
+        LOGE("onSetupConnection is null");
+        return NULL;
+    }
+
+    while(true){
+        if(!cly->IsSDLConnected()){
+             cly->setUpConnecteion();
+        }
+#ifdef WIN32
+        Sleep(2000);
+#else
+        sleep(2);
+#endif
+    }
+    return NULL;
 }
 
 void SDLConnector::ChangeMsgHandler(IMessageInterface * pMsgHandler)
@@ -464,11 +499,14 @@ void SDLConnector::OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y)
      Json::Value coord;
      Json::Value event;
      Json::Value ts;
+     static int id=0;
 //     [{"c":[{"x":103,"y":247}]
+
      switch(touch){
      case TOUCH_START:
+         id++;
          params["type"] = "BEGIN";
-         event[0]["id"]=1;
+         event[0]["id"]=id;
          break;
      case TOUCH_END:
          params["type"] = "END";
@@ -476,24 +514,36 @@ void SDLConnector::OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y)
          break;
      case TOUCH_MOVE:
          params["type"] = "MOVE";
+         event[0]["id"]=id;
          break;
      }
      coord[0]["x"]=x;
      coord[0]["y"]=y;
      event[0]["c"]=coord;
 
+#ifdef WIN32
      QTime time=QTime::currentTime();
-     ts[0]=time.second()+time.minute()*60;+time.hour()*60*60;
+     int   t = (time.hour()*3600+time.minute()*60+time.second())%1000*1000+time.msec();
+#else
+     timeval val;
+     gettimeofday(&val,NULL);
+     int t=(int)(val.tv_sec%1000*1000+val.tv_usec/1000);
+#endif
+     ts[0]=t;
      event[0]["ts"]=ts;
      params["event"] =event;
      root["jsonrpc"] = "2.0";
      root["method"] = "UI.OnTouchEvent";
      root["params"] = params;
 
+     LOGI("%s",root.toStyledString().data());
+
    //  std::cout<<root.asString();
-  //   m_UI.SendJson(root);
+     m_UI.SendJson(root);
 
  }
+
+
 //{
 //    "jsonrpc":"2.0",
 //    "method":"UI.OnTouchEvent",

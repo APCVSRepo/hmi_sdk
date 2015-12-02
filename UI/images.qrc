@@ -22,5 +22,15 @@
         <file>images/uparrow.png</file>
         <file>LiberationSerif-Regular.ttf</file>
         <file>images/leftarrow.png</file>
+        <file>images/mainbkg.png</file>
+        <file>images/centerbkg.png</file>
+        <file>images/leftmenu.png</file>
+        <file>images/cmdlist.png</file>
+        <file>images/cd.png</file>
+        <file>images/msg.png</file>
+        <file>images/tel.png</file>
+        <file>images/muparray.png</file>
+        <file>images/mf.png</file>
+        <file>images/Screen.png</file>
     </qresource>
 </RCC>

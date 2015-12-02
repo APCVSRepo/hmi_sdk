@@ -22,16 +22,26 @@
 #include "UI/VideoStream/VideoStream.h"
 #endif
 
-extern Config g_config;
+#include "Common/MainMenue.h"
+
 
 class CUIManager : public QWidget, public UIInterface
 {
     Q_OBJECT
 public:
-    explicit CUIManager(QWidget *parent = 0);
+    explicit CUIManager(QWidget *parent = NULL);
     ~CUIManager();
 
-    void init();
+    //start sdl
+    void  initSDL();
+#ifdef SDL_SUPPORT_LIB
+    static void *SDLStartThread(void *arg);
+    static void SDLKillThread();
+    static bool FileCopyToConfigdir(const char *dir);
+#endif
+    //hmi
+    void initAppHMI();
+    void showMainUI();
     void onAppShow(int type);
     void onAppActivated(AppDataInterface* pInterface);
     void onAppClose();
@@ -42,12 +52,11 @@ public:
 
     void setMediaColckTimer(Json::Value jsonObj);
 
-    void setAppListInterface(AppListInterface* pInterface);
-
     void tsSpeak(int VRID, std::string strText);
     void switchNewApp(int newAppID);
 
 signals:
+    void finishMainHMI();
     void onAppShowSignal(int type);
     void onAppActivatedSignal(AppDataInterface* pInterface);
     void onAppCloseSignal();
@@ -56,60 +65,25 @@ signals:
     void onTestStartSignal();
     void onTestStopSignal();
 public slots:
-
+    void onMainHMIStart();
     void AppShowSlot(int type);
     void AppCloseSlot();
     void AppRefreshSlot();
 
-    void inAppSlots(int appID);
-    void findNewAppSlots();
-    void moreClickedSlots();
-
-    void returnAppLinkSlots();
-    void returnShowSlots();
-    void exitAppSlots();
-
-    void softButtonClickedSlots(int btID, int mode);
-    void commandClickSlots(int cmdID);
-
-    void alertAbortSlots(int alertID, int reason);
-    void scrollMsgAbortSlots(int scrollMsgID, int reason);
-    void audioPassThruHideSlots(int audioPassThruId, int code);
-    void menuClickedSlots(int code, int performInteractionID, int choiceID);
-    void VRmenuClickedSlots(int code, int performInteractionID, int choiceID);
-    void sliderClickedSlots( int code, int sliderid, int sliderPosition);
 
     void onTestStartSlots();
     void onTestStopSlots();
 
-    void menuBtnClickedSlots(QString btnText);
 
 private:
-    AppLink *m_pAppLink;
-    CAlertUI *m_pAlertUI;
-    CAudioPassThru *m_pAudioPassThru;
-    CChoicesetVR   *m_pChoicesetVR;
-    Choiceset *m_pChoiceset;
-    Command *m_pCommand;
-    CScrollMsg *m_pScrollMsg;
-    Show *m_pShow;
-    Slider *m_pSlider;
-    Notify *m_pNotify;
-    AppBase *m_pCurUI;
-    CPopBase *m_pCurPop;
-
-    AppDataInterface* m_pAppDataInterface;
-    AppListInterface* m_pAppListInterface;
+    MainMenue *m_MainMenu;
+    DataManager *manager;
 
 #ifdef VIDEO_TEST
     VideoStream m_videoStreamWidget;
 #endif
-    int m_i_appID;
-
     TextSpeech ts;
     void waitMSec(int ms);
-
-
 };
 
 #endif // CUIMANAGER_H

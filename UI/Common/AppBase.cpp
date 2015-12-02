@@ -1,75 +1,13 @@
 #include "AppBase.h"
-extern Config g_config;
+#include "MainMenue.h"
+#include <QMouseEvent>
 
 AppBase::AppBase(QWidget *parent) : QWidget(parent)
 {
-
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
-    this->setGeometry(0,0,ConfigSingle::Instance()->getMainWindowW(),ConfigSingle::Instance()->getMainWindowH());
+    this->setGeometry(0,0,parent->width(),parent->height());
 //    this->setFixedSize(ConfigSingle::Instance()->getMainWindowW(),ConfigSingle::Instance()->getMainWindowH());
-    this->setAutoFillBackground(true);    //Widget增加背景图片时，这句一定要。
-    QPixmap pixmap(":/images/mfd5main.png");
-    QPixmap fitpixmap=pixmap.scaled(ConfigSingle::Instance()->getMainWindowW(),ConfigSingle::Instance()->getMainWindowH(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    QPalette palette;
-    palette.setBrush(QPalette::Background, QBrush(fitpixmap));
-    this->setPalette(palette);
-
-    //显示日期时间
-    m_timer=new QTimer(this);
-    m_timer->start(1000);
-    GetDateTime();
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(GetDateTime()));
-
-    m_lab_title.setText("Mobile Apps");
-    m_lab_title.setStyleSheet("font: 75 40pt \"Liberation Serif\";color:rgb(13,193,226);border: 0px");
-    m_lab_time.setStyleSheet("font: 75 40pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
-
-    m_i_leftRight = 2;
-    m_i_count = 0;
-
-
-    btnLayout = new QVBoxLayout;
-    btnLayout->addStretch(2);
-    btnLayout->addWidget(&m_btn_FM,3, Qt::AlignCenter);
-    btnLayout->addWidget(&m_btn_Tel,3, Qt::AlignCenter);
-    btnLayout->addWidget(&m_btn_Msg,3, Qt::AlignCenter);
-    btnLayout->addWidget(&m_btn_CD,3, Qt::AlignCenter);
-    btnLayout->addWidget(&m_btn_List,3, Qt::AlignCenter);
-    btnLayout->addStretch(1);
-
-    menuLayout = new QHBoxLayout;
-    menuLayout->addLayout(btnLayout,80);
-    menuLayout->addStretch(20);
-
-    m_btn_FM.setFixedSize(50,50);
-    m_btn_Tel.setFixedSize(50,50);
-    m_btn_Msg.setFixedSize(50,50);
-    m_btn_CD.setFixedSize(50,50);
-    m_btn_List.setFixedSize(50,50);
-
-    m_btn_FM.setFlat(true);
-    m_btn_Tel.setFlat(true);
-    m_btn_Msg.setFlat(true);
-    m_btn_CD.setFlat(true);
-    m_btn_List.setFlat(true);
-
-    m_btn_FM.setStyleSheet("border:0px");
-    m_btn_Tel.setStyleSheet("border:0px");
-    m_btn_Msg.setStyleSheet("border:0px");
-    m_btn_CD.setStyleSheet("border:0px");
-    m_btn_List.setStyleSheet("border:0px");
-
-    m_btn_FM.hide();
-    m_btn_Tel.hide();
-    m_btn_Msg.hide();
-    m_btn_CD.hide();
-    m_btn_List.hide();
-    connect(&m_btn_FM,SIGNAL(clicked()),this,SLOT(btnFMClickedSlots()));
-    connect(&m_btn_Tel,SIGNAL(clicked()),this,SLOT(btnTelClickedSlots()));
-    connect(&m_btn_Msg,SIGNAL(clicked()),this,SLOT(btnMsgClickedSlots()));
-    connect(&m_btn_CD,SIGNAL(clicked()),this,SLOT(btnCDClickedSlots()));
-    connect(&m_btn_List,SIGNAL(clicked()),this,SLOT(btnListClickedSlots()));
-
+    this->setBkgImage(":/images/mainbkg.png");
 }
 
 AppBase::~AppBase()
@@ -77,12 +15,16 @@ AppBase::~AppBase()
 
 }
 
-//获取当前时间的时和分;
-void AppBase::GetDateTime()
+void AppBase::setBkgImage(char *img)
 {
-    QTime timeNow=QTime::currentTime();
-    m_lab_time.setText(tr("%1").arg(timeNow.toString()).left(5)+"  ");
+    this->setAutoFillBackground(true);    //Widget增加背景图片时，这句一定要。
+    QPixmap pixmap(img);
+    QPixmap fitpixmap=pixmap.scaled(this->width(),this->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, QBrush(fitpixmap));
+    this->setPalette(palette);
 }
+
 
 void AppBase::mouseMoveEvent(QMouseEvent *event)
 {
@@ -133,30 +75,19 @@ void AppBase::mouseReleaseEvent(QMouseEvent *event)
     m_i_count = 0;
 }
 
-void AppBase::execShow(AppDataInterface* pAppInterface)
+void AppBase::execShow()
 {
 
 }
 
-void AppBase::btnFMClickedSlots()
+void AppBase::receiveJson(Json::Value json)
 {
-    emit menuBtnClicked("FMButton");
+
 }
-void AppBase::btnTelClickedSlots()
+
+void AppBase::moveBackSlots()
 {
-    emit menuBtnClicked("TelButton");
+
 }
-void AppBase::btnMsgClickedSlots()
-{
-    emit moveBack();
-//    emit menuBtnClicked("MsgButton");
-}
-void AppBase::btnCDClickedSlots()
-{
-    emit menuBtnClicked("CDButton");
-}
-void AppBase::btnListClickedSlots()
-{
-    emit menuBtnClicked("ListButton");
-}
+
 

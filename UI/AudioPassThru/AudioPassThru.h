@@ -2,22 +2,22 @@
 #define CAUDIOPASSTHRU_H
 
 #include "UI/Common/PopBase.h"
-#include "QLabel"
+#include <QLabel>
 #include "UI/Common/Button.h"
 
 #define PERFORMAUDIOPASSTHRU_TIMEOUT    0
 #define PERFORMAUDIOPASSTHRU_RETYP      7
 #define PERFORMAUDIOPASSTHRU_DONE       0
 #define PERFORMAUDIOPASSTHRU_CANCEL     5
-
+class CPopBase;
 class CAudioPassThru : public CPopBase
 {
     Q_OBJECT
 public:
-    explicit CAudioPassThru(CPopBase *parent = 0);
+    explicit CAudioPassThru(QWidget *parent = 0);
     ~CAudioPassThru();
 
-    void execShow(AppDataInterface* pAppInterface);
+    void execShow();
     void testShow();
 
 signals:
@@ -26,6 +26,7 @@ signals:
 public slots:
     void timeoutSlots();
     void onButtonClickedSlots(int);
+    void audioPassThruHideSlots(int audioPassThruId, int code);
 
 private:
     void setAudioText(int textIdx, QString text);

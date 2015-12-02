@@ -2,12 +2,12 @@
 #include "QHBoxLayout"
 #include "QVBoxLayout"
 #include "UI/Config/Config.h"
-
-extern Config g_config;
-CAudioPassThru::CAudioPassThru(CPopBase *parent) : CPopBase(parent)
+#include "Common/PopBase.h"
+CAudioPassThru::CAudioPassThru(QWidget *parent) : CPopBase(parent)
 {
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(hide()));
+    connect(this,SIGNAL(audioPassThruHide(int,int)),this,SLOT(audioPassThruHideSlots(int,int)));
     m_i_performaudiopassthruID = 0;
 }
 
@@ -20,12 +20,12 @@ void CAudioPassThru::InitLayout()
 {
 //    this->setFixedSize(550 * ConfigSingle::Instance()->getMainWindowW() / 630, 265 * ConfigSingle::Instance()->getMainWindowH() / 378);
 
-    int iW = 550 * ConfigSingle::Instance()->getMainWindowW() / 630;
-    int iH = 265 * ConfigSingle::Instance()->getMainWindowH() / 378;
+    int iW = ui_app_width;
+    int iH = ui_app_height;
 
     // Initlialize instance.
-    m_labelBackground.setParent(this);
-    m_labelFrame.setParent(this);
+//    m_labelBackground.setParent(this);
+//    m_labelFrame.setParent(this);
     m_labelAppName = new QLabel;
     m_labelText1 = new QLabel;
     m_labelText2 = new QLabel;
@@ -41,8 +41,8 @@ void CAudioPassThru::InitLayout()
     connect(m_btn3, SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
     connect(m_btn4, SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
 
-    m_labelBackground.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
-    m_labelFrame.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
+//    m_labelBackground.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
+//    m_labelFrame.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
 
     m_labelAppName->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:#EFEF33;qproperty-alignment:AlignCenter;");
     m_labelText1->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:white;qproperty-alignment:AlignCenter;");
@@ -54,10 +54,10 @@ void CAudioPassThru::InitLayout()
 
 
     // Set button parameter. Like size, normal background image, text, etc.
-    m_btn1->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "-");
-    m_btn2->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "-");
-    m_btn3->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "-");
-    m_btn4->initParameter(ConfigSingle::Instance()->getAlertBtnW(), ConfigSingle::Instance()->getAlertBtnH(), ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "-");
+    m_btn1->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "-");
+    m_btn2->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "-");
+    m_btn3->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "-");
+    m_btn4->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "-");
 
     m_btn1->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btn2->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
@@ -101,7 +101,8 @@ void CAudioPassThru::InitLayout()
     mLayout->addStretch(5);
     mLayout->setMargin(0);
 
-    m_labelFrame.setLayout(mLayout);
+//    m_labelFrame.setLayout(mLayout);
+    this->setLayout(mLayout);
 
     setBtnText(0,"Retry");
     setBtnText(1,"-");
@@ -165,7 +166,7 @@ void CAudioPassThru::timeoutSlots()
     m_timer->stop();
     if(m_i_performaudiopassthruID != 0)
         audioPassThruHide(m_i_performaudiopassthruID, PERFORMAUDIOPASSTHRU_TIMEOUT);
-    this->hide();
+    goBack();
 }
 
 void CAudioPassThru::setAudioPassThruID(int id)
@@ -190,15 +191,23 @@ void CAudioPassThru::onButtonClickedSlots(int id)
         m_timer->stop();
         if(m_i_performaudiopassthruID != 0)
             emit audioPassThruHide(m_i_performaudiopassthruID, id);
-        this->hide();
+       // this->hide();
+        goBack();
     }
 }
 
-void CAudioPassThru::execShow(AppDataInterface* pAppInterface)
+void CAudioPassThru::audioPassThruHideSlots(int audioPassThruId, int code)
 {
-    if (pAppInterface)
+    //_D("appID=%d:%d:%d\n",m_i_appID,audioPassThruId,code);
+    DataManager::DataInterface()->OnPerformAudioPassThru(DataManager::AppId(), audioPassThruId, code);
+    DataManager::DataInterface()->OnVRCancelRecord();
+}
+
+void CAudioPassThru::execShow()
+{
+    if (DataManager::DataInterface())
     {
-        m_jsonData = pAppInterface->getAudioPassThruJson();
+        m_jsonData = DataManager::DataInterface()->getAudioPassThruJson();
         if(!m_jsonData.isMember("id") || !m_jsonData.isMember("params"))
         {
             this->show();

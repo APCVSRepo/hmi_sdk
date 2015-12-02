@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/config">
+        <file>staticConfigDB.json</file>
+        <file>VehicleInfo.json</file>
+    </qresource>
+</RCC>

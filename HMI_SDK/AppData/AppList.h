@@ -1,14 +1,13 @@
 #ifndef APPLIST_H
 #define APPLIST_H
 
-
 #include "Connect/connect.h"
 #include "Connect/SDLConnector.h"
 
-#include "AppData/AppListInterface.h"
-#include "AppData/AppData.h"
+#include "AppListInterface.h"
+#include "AppData.h"
 #include "UI/UIInterface.h"
-
+class AppData;
 class AppList : public IMessageInterface, public AppListInterface
 {
 public:
@@ -40,8 +39,9 @@ private:
     void appUnregistered(Json::Value jsonObj);
 
     UIInterface *m_pUIManager;
-    AppData m_AppData;
+    AppData *m_AppData;
     int m_i_currentAppID;
 };
 
+//extern AppList *m_gAppList;
 #endif // APPLIST_H

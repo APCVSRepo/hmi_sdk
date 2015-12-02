@@ -1,13 +1,12 @@
 #include "Choiceset.h"
-extern Config g_config;
+
 Choiceset::Choiceset(QWidget *parent) : AppBase(parent)
 {
 
     m_timerHide = new QTimer;
 
-    connect(this,SIGNAL(moveBack()),this,SLOT(moveBackSlots()));
-
     initLayout();
+    connect(this,SIGNAL(menuClicked(int,int,int)),this,SLOT(menuClickedSlots(int,int,int)));
 }
 
 Choiceset::~Choiceset()
@@ -17,16 +16,18 @@ Choiceset::~Choiceset()
 
 void Choiceset::initLayout()
 {
+    m_listWidget.setVerticalScrollBar(&m_scrollBar);
     QHBoxLayout *midLayout = new QHBoxLayout;
-    midLayout->addStretch(12);
-    midLayout->addWidget(&m_listWidget,60);
-    midLayout->addWidget(&m_scrollBar,5);
+    midLayout->addStretch(2);
+    midLayout->addWidget(&m_listWidget,65);
+//    midLayout->addWidget(&m_scrollBar,5);
     midLayout->addStretch(3);
-
+m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//m_listWidget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     QVBoxLayout *mLayout = new QVBoxLayout(this);
-    mLayout->addWidget(&m_lab_title,1, Qt::AlignCenter);
+    //mLayout->addWidget(&m_lab_title,1, Qt::AlignCenter);
     mLayout->addLayout(midLayout, 4);
-    mLayout->addWidget(&m_lab_time,1, Qt::AlignRight);
+   // mLayout->addWidget(&m_lab_time,1, Qt::AlignRight);
 
     mLayout->setMargin(0); //边框无缝
     mLayout->setSpacing(0);
@@ -44,13 +45,13 @@ void Choiceset::initLayout()
 #else
     m_listWidget.setStyleSheet("QListWidget:item:hover{border: 0px;}"); //鼠标移上去不响应突出
 #endif
-    m_listWidget.verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 0px;}");
+    //m_listWidget.verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 0px;}");
     connect(&m_listWidget,SIGNAL(clicked(QModelIndex)),this,SLOT(listWidgetClickedSlots(QModelIndex)));
     connect(&m_listWidget,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(listWidgetDoubleClickedSlots(QModelIndex)));
 
-    m_scrollBar.init(4, ConfigSingle::Instance()->getCommandScrollH());
-    connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
-    connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
+    m_scrollBar.init(4, ui_app_height-30);
+//    connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
+//    connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
     m_scrollBar.hide();
 
 
@@ -70,7 +71,7 @@ void Choiceset::initLayout()
         m_scrollBar.hide();
 
 
-    setChoicesetName("Choice Name");
+
 
 //    addNewMenu("Command1");
 
@@ -81,10 +82,10 @@ void Choiceset::initLayout()
 void Choiceset::addListItemWidget(QString text, bool isMenu)
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-25,ConfigSingle::Instance()->getItemH()));
+    item->setSizeHint(QSize(ui_item_width,ui_item_height));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
-    AppItemWidget *itemWidget = new AppItemWidget;
+    AppItemWidget *itemWidget = new AppItemWidget(ui_item_width,ui_item_height);
     m_listWidget.addItem(item);
     m_listWidget.setItemWidget(item,itemWidget);
     itemWidget->setIsMenu(isMenu);
@@ -216,15 +217,23 @@ void Choiceset::downArrowSlots()
     }
 }
 
+void Choiceset::menuClickedSlots(int code, int performInteractionID, int choiceID)
+{
+    //_D("code=%d:%d:%d\n",code,performInteractionID,choiceID);
+    DataManager::DataInterface()->OnPerformInteraction(code, performInteractionID, choiceID);
+    this->showCurUI(ID_SHOW);
+}
+
 void Choiceset::setChoicesetName(QString title)
 {
-    m_lab_title.setText(title);
+    this->setTitle(title);
 }
 
 
 void Choiceset::moveBackSlots()
 {
-    this->close();
+    //this->close();
+    goBack();
 }
 
 void Choiceset::setTimeOut(int duration)
@@ -239,11 +248,12 @@ void Choiceset::timeHideOutSlots()
     this->hide();
     emit menuClicked(PERFORMINTERACTION_TIMEOUT, m_i_interactionID, m_vec_choiceMenu.at(0).i_choiceID);
 }
-void Choiceset::execShow(AppDataInterface* pAppInterface)
+void Choiceset::execShow()
 {
-    if (pAppInterface)
+    setChoicesetName("Choice Name");
+    if (DataManager::DataInterface())
     {
-        m_jsonData = pAppInterface->getInteractionJson();
+        m_jsonData = DataManager::DataInterface()->getInteractionJson();
         this->setTimeOut(m_jsonData["params"]["timeout"].asInt());
 //        this->setAppID(m_jsonData["params"]["appID"].asInt());
         this->setInteractionID(m_jsonData["id"].asInt());

@@ -3,8 +3,6 @@
 
 #include "Connect/connect.h"
 #include "Connect/SDLConnector.h"
-
-
 #include "AppData/AppDataInterface.h"
 #include "UI/UIManager.h"
 

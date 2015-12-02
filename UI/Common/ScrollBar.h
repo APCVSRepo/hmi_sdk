@@ -2,8 +2,9 @@
 #define SCROLLBAR_H
 
 #include "UI/AppInclude.h"
+#include <QScrollBar>
 
-class ScrollBar : public QWidget
+class ScrollBar : public QScrollBar
 {
     Q_OBJECT
 public:
@@ -14,15 +15,13 @@ public:
     void flushScroll(int currentNo, int totalNum);
 
 signals:
-    void upClicked();
-    void downClicked();
+//    void upClicked();
+//    void downClicked();
 
 public slots:
 
 private:
-    void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *event);
+
 
     int m_i_rowNo;
     int m_i_totalNum;

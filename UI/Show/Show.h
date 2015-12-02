@@ -24,16 +24,17 @@ public:
     explicit Show(QWidget *parent = 0);
     ~Show();
 
-    void execShow(AppDataInterface* pAppInterface);
+    void execShow();
     void setMediaColckTimer(Json::Value jsonObj);
     void testShow();
+    virtual void receiveJson(Json::Value json);
 
 signals:
     void moreClicked();
 
     void returnAppLink();
 
-    void softButtonClicked(int btID, int mode);
+    //void softButtonClicked(int btID, int mode);
 
 public slots:
     void upArrowSlots();

@@ -2,57 +2,49 @@
 #include "Alert/AlertUI.h"
 #include "ScrollableMessage/ScrollMsg.h"
 #include "Show/Show.h"
-
+#include "Common/AppBase.h"
 AppLink::AppLink(QWidget *parent)
     : AppBase(parent)
 {
+    m_scrollWidget.init(4, ui_app_height-30);
 
-    this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
-
-    m_scrollWidget.init(4, 280);
-    connect(&m_scrollWidget,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
-    connect(&m_scrollWidget,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
-
-    connect(this,SIGNAL(moveBack()),this,SLOT(moveBackSlots()));
-
+//    connect(&m_scrollWidget,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
+//    connect(&m_scrollWidget,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
+    //connect(&m_scrollWidget,SIGNAL(valueChanged(int)),SLOT());
+    connect(this,SIGNAL(inAppSignals(int)),this,SLOT(inAppSlots(int)));
+    connect(this,SIGNAL(findNewApp()),this,SLOT(findNewAppSlots()));
     initLayout();
 }
 
 AppLink::~AppLink()
 {
-    delete m_timer;
 }
 
 void AppLink::initLayout()
 {
-//    QVBoxLayout *btnLayout = new QVBoxLayout;
-//    btnLayout->addStretch(1);
-//    btnLayout->addWidget(&m_btn_FM,2, Qt::AlignCenter);
-//    btnLayout->addWidget(&m_btn_Tel,2, Qt::AlignCenter);
-//    btnLayout->addWidget(&m_btn_Msg,2, Qt::AlignCenter);
-//    btnLayout->addWidget(&m_btn_CD,2, Qt::AlignCenter);
-//    btnLayout->addWidget(&m_btn_List,2, Qt::AlignCenter);
-//    btnLayout->addStretch(1);
+    m_listWidget.setVerticalScrollBar(&m_scrollWidget);
+    m_listWidget.setParent(this);
+    m_listWidget.setGeometry(ui_app_width*0.1,0,ui_app_width*0.8,ui_app_height);
+//    QHBoxLayout *midLayout = new QHBoxLayout(this);
+//    midLayout->addStretch(2);
+//    midLayout->addWidget(&m_listWidget,65);
+//    //midLayout->addWidget(&m_scrollWidget,5);
+//    midLayout->addStretch(3);
+//    QVBoxLayout *mLayout = new QVBoxLayout(this);
+//    //mLayout->addWidget(&((AppBase*)parent())->m_l,1, Qt::AlignCenter);
+//    mLayout->addLayout(midLayout, 4);
+//   // mLayout->addWidget(&m_lab_time,1, Qt::AlignRight);
 
-    QHBoxLayout *midLayout = new QHBoxLayout;
-    midLayout->addLayout(menuLayout,12);
-    midLayout->addWidget(&m_listWidget,60);
-    midLayout->addWidget(&m_scrollWidget,5);
-    midLayout->addStretch(3);
-
-    QVBoxLayout *mLayout = new QVBoxLayout(this);
-    mLayout->addWidget(&m_lab_title,1, Qt::AlignCenter);
-    mLayout->addLayout(midLayout, 4);
-    mLayout->addWidget(&m_lab_time,1, Qt::AlignRight);
-
-    mLayout->setMargin(0); //边框无缝
-    mLayout->setSpacing(0);
-
+//    mLayout->setMargin(0); //边框无缝
+//    mLayout->setSpacing(0);
+m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//m_listWidget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 #ifndef ANDROID
     QPalette pll = m_listWidget.palette();
     pll.setBrush(QPalette::Base,QBrush(QColor(255,255,255,0)));
     m_listWidget.setPalette(pll);
 #endif
+    //m_listWidget.setFixedHeight(ui_app_height-10);
     m_listWidget.setFrameShape(QFrame::NoFrame); //设置无边框
     m_listWidget.setFocusPolicy(Qt::NoFocus); //去除选中虚线框
     m_listWidget.setEditTriggers(QAbstractItemView::NoEditTriggers); //设置不可编辑
@@ -61,7 +53,7 @@ void AppLink::initLayout()
 #else
     m_listWidget.setStyleSheet("QListWidget:item:hover{border: 0px;}"); //鼠标移上去不响应突出
 #endif
-    m_listWidget.verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 0px;}");
+   // m_listWidget.verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 0px;}");
     connect(&m_listWidget,SIGNAL(clicked(QModelIndex)),this,SLOT(listWidgetClickedSlots(QModelIndex)));
     connect(&m_listWidget,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(listWidgetDoubleClickedSlots(QModelIndex)));
 
@@ -84,10 +76,10 @@ void AppLink::initLayout()
 void AppLink::addListItemWidget(QString text)
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(ConfigSingle::Instance()->getItemW()-25,ConfigSingle::Instance()->getItemH()));
+    item->setSizeHint(QSize(m_listWidget.width(),ui_app_height/4.0));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
-    AppItemWidget *itemWidget = new AppItemWidget;
+    AppItemWidget *itemWidget = new AppItemWidget(m_listWidget.width(),ui_app_height/4.0);
     m_listWidget.addItem(item);
     m_listWidget.setItemWidget(item,itemWidget);
 
@@ -212,73 +204,46 @@ void AppLink::flushListWidget()
 }
 
 //向上滚动
-void AppLink::upArrowSlots()
+void AppLink::onScrollTo(int v)
 {
-    if(!m_b_downUp)
-    {
-        m_b_downUp = true;
-        m_i_showRow -= 3;
-    }
 
-    if(m_i_currentRow > 1)
-    {
-        m_i_currentRow--;
-        flushAllItems(m_i_currentRow);
-
-        if(m_i_showRow > m_i_currentRow)
-        {
-            m_i_showRow -= 4;
-            if(m_i_showRow <= 1)
-                m_i_showRow = 1;
-        }
-        m_listWidget.setCurrentRow(m_i_showRow-1);
-        m_scrollWidget.flushScroll(m_i_showRow,m_listWidget.count());
-    }
 }
 
-//向下滚动
-void AppLink::downArrowSlots()
+
+
+void AppLink::inAppSlots(int appID)
 {
-    if(m_b_downUp)
-    {
-        m_b_downUp = false;
-        m_i_showRow += 3;
-    }
-
-    if(m_i_currentRow < m_listWidget.count())
-    {
-        m_i_currentRow++;
-        flushAllItems(m_i_currentRow);
-
-        if(m_i_currentRow > m_i_showRow)
-        {
-            m_i_showRow +=4;
-            if(m_i_showRow > m_listWidget.count())
-                m_i_showRow = m_listWidget.count();
-        }
-
-        m_listWidget.setCurrentRow(m_i_showRow-1);
-        m_scrollWidget.flushScroll(m_i_showRow-3,m_listWidget.count());
-    }
+    DataManager::setAppId(appID);
+    this->showCurUI(ID_SHOW);
 }
+
+
+
+void AppLink::findNewAppSlots()
+{
+    this->showCurUI(ID_NOTIFY);
+}
+
+
 
 void AppLink::moveBackSlots()
 {
-    this->close();
+    //this->close();
+    goBack();
 }
 
-void AppLink::execShow(AppListInterface* pAppInterface)
+void AppLink::execShow()
 {
     // TODO: getData();
-
     this->clearNewApp();
-    if(NULL == pAppInterface)
+    this->setTitle("Mobile Apps");
+    if(NULL == DataManager::ListInterface())
     {
         this->show();
         return;
     }
     std::vector <Json::Value > pVecNewApp;
-    pVecNewApp = pAppInterface->getNewAppJsonVector();
+    pVecNewApp = DataManager::ListInterface()->getNewAppJsonVector();
     for (int i = 0; i < pVecNewApp.size(); i++)
     {
         this->addNewApp(pVecNewApp.at(i)["params"]["application"]["appName"].asString().data()

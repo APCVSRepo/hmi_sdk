@@ -285,11 +285,30 @@
       ], 
       "imageCapabilities": [
         "DYNAMIC"
-      ]
+      ],
+
+    "screenParams":
+   {
+       "resolution":
+        {
+		"resolutionWidth":800,
+		"resolutionHeight":480
+        },
+	 "touchEventAvailable":
+	 {
+		"pressAvailable":true,
+		"multiTouchAvailable":false,
+		"doublePressAvailable":false
+	 }
+  }
     }, 
-    "hmiZoneCapabilities": [
-      "FRONT"
-    ], 
+"audioPassThruCapabilities":
+{
+	"samplingRate":"44KHZ",
+	"bitsPerSample":"8_BIT",
+	"audioType":"PCM"
+},
+    "hmiZoneCapabilities": "FRONT", 
     "code": 0
   }
 }

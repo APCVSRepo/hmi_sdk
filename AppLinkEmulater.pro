@@ -7,8 +7,8 @@ QT       += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 win32:CONFIG += qaxcontainer
 
-#CONFIG  += wince  ##非wince 平台需要屏�?
-
+#CONFIG  += wince  ##wince
+#CONFIG  += linksdllibrary
 TARGET = AppLinkDevice
 TEMPLATE = app
 
@@ -21,9 +21,9 @@ DESTDIR=bin
 target.path=$$OUT_PWD/bin
 INSTALLS+=target
 
-qtdll.path=$$OUT_PWD/bin
-qtdll.files=$$QMAKE_LIBDIR/*.dll
-INSTALLS +=qtdll
+#qtdll.path=$$OUT_PWD/bin
+#qtdll.files=$$QMAKE_LIBDIR/*.dll
+#INSTALLS +=qtdll
 
 
 
@@ -39,6 +39,7 @@ SOURCES += \
     HMI_SDK/Connect/Channel.cpp \
     HMI_SDK/Connect/buttonsclient.cpp \
     HMI_SDK/Connect/basecommunicationclient.cpp \
+    HMI_SDK/AppData/DataManager.cpp \
     Tools/json/json_writer.cpp \
     Tools/json/json_valueiterator.inl \
     Tools/json/json_value.cpp \
@@ -54,8 +55,10 @@ SOURCES += \
     UI/Common/ScrollBar.cpp \
     UI/Common/PopBase.cpp \
     UI/Common/Button.cpp \
-    UI/Common/AppItemWidget.cpp \
+    UI/Common/MainMenue.cpp \
+    UI/Common/BaseWidght.cpp \
     UI/Common/AppBase.cpp \
+    UI/Common/AppItemWidget.cpp \
     UI/Config/Config.cpp \
     UI/ScrollableMessage/ScrollMsg.cpp \
     UI/Show/Show.cpp \
@@ -66,13 +69,18 @@ SOURCES += \
     UI/VideoStream/VideoStream.cpp \
     UI/TextSpeech/textspeech.cpp
 
+
+
 INCLUDEPATH += $$PWD/   \
-              $$PWD/HMI_SDK  \
-              $$PWD/Tools
+              $$PWD/HMI_SDK \
+              $$PWD/Tools  \
+              $$PWD/UI
 
 HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     HMI_SDK/AppData/AppDataInterface.h \
     HMI_SDK/AppData/AppData.h \
+    HMI_SDK/AppData/AppList.h \
+    HMI_SDK/AppData/DataManager.h \
     HMI_SDK/Connect/vrclient.h \
     HMI_SDK/Connect/vehicleinfoclient.h \
     HMI_SDK/Connect/uiclient.h \
@@ -99,6 +107,9 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     Tools/json/config.h \
     Tools/json/autolink.h \
     Tools/json/assertions.h \
+    UI/Common/MainMenue.h \
+    UI/Common/BaseWidght.h \
+    UI/Common/AppBase.h \
     UI/AppLink.h \
     UI/AppInclude.h \
     UI/UIInterface.h \
@@ -112,7 +123,6 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/Common/PopBase.h \
     UI/Common/Button.h \
     UI/Common/AppItemWidget.h \
-    UI/Common/AppBase.h \
     UI/Config/Config.h \
     UI/ScrollableMessage/ScrollMsg.h \
     UI/Show/Show.h \
@@ -120,7 +130,8 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/Notify/Notify.h \
     UI/Common/Background.h \
     UI/VideoStream/VideoStream.h \
-    UI/TextSpeech/textspeech.h
+    UI/TextSpeech/textspeech.h \
+    UI/Singleton.h
 
 
 RESOURCES += \
@@ -148,9 +159,9 @@ $$PWD/Library/win32/ffmpeg/libavformat.a  \
 $$PWD/Library/win32/ffmpeg/libavutil.a  \
 $$PWD/Library/win32/ffmpeg/libswscale.a
 
-pthread.path=$$DESTDIR
+pthread.path=$$OUT_PWD/bin
 pthread.files=$$PWD/Library/win32/*.dll
-ffmpeg.path=$$DESTDIR
+ffmpeg.path=$$OUT_PWD/bin
 ffmpeg.files=$$PWD/Library/win32/ffmpeg/*.dll  \
 $$PWD/Library/win32/pthread/*.dll
 INSTALLS+=pthread
@@ -188,15 +199,19 @@ INSTALLS+=ffmpeg
 
 ################################for android
 android{
-DEFINES +=ANDROID
+DEFINES +=ANDROID \
+          SDL_SUPPORT_LIB
 LIBS += -L$$PWD/Library/android/ffmpeg -lffmpeg
 LIBS += -L$$PWD/Library/android/sdl -lsmartDeviceLinkCore
-#sdlcfg.path=$$OUT_PWD/android_build/assets
-#sdlcfg.files=$$PWD/Library/android/sdl/config/*
-#INSTALLS +=sdlcfg
+RESOURCES += \
+    Library/android/sdl/config/android.qrc \
+    Config/config.qrc
+SUBDIRS += AudioRecorder
 }
+
+
 !android{
-configfile.path=$$DESTDIR/Config
+configfile.path=$$OUT_PWD/bin/Config
 configfile.files=$$PWD/Config/*
 INSTALLS +=configfile
 }
@@ -207,14 +222,6 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
         $$PWD/Library/android/sdl/libsmartDeviceLinkCore.so
 }
 
-#DISTFILES += \
-#    Library/android/apk/gradle/wrapper/gradle-wrapper.jar \
-#    Library/android/apk/AndroidManifest.xml \
-#    Library/android/apk/res/values/libs.xml \
-#    Library/android/apk/build.gradle \
-#    Library/android/apk/gradle/wrapper/gradle-wrapper.properties \
-#    Library/android/apk/gradlew \
-#    Library/android/apk/gradlew.bat
 
 #ANDROID_PACKAGE_SOURCE_DIR = $$PWD/Library/android/apk
-DISTFILES +=android/assets/*
+

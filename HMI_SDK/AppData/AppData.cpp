@@ -72,9 +72,10 @@ bool IsTextUTF8(char* str, unsigned long long length)
         return FALSE;
     if( bAllAscii ) //如果全部都是ASCII, 说明不是UTF-8
         return FALSE;
-#endif
     return true;
-
+#else
+    return false;
+#endif
 }
 
 
@@ -116,10 +117,7 @@ void AppData::setCurrentAppName(std::string appName)
 
 void AppData::recvFromServer(Json::Value jsonObj)
 {
-    std::cout << "AppData+++++recvFromServer+++++\n";
-    std::cout << jsonObj.toStyledString() << std::endl;
-    std::cout << "---------\n";
-
+    LOGI("AppData::recvFromServer");
     int appID = jsonObj["params"]["appID"].asInt();
     if(m_i_currentAppID != appID)
     {
@@ -129,7 +127,10 @@ void AppData::recvFromServer(Json::Value jsonObj)
     {
         std::string str_method = jsonObj["method"].asString();
 
-        if (str_method == "UI.Show")
+        if(str_method == "UI.GetCapabilities"){
+            LOGI("UI.GetCapabilities");
+        }
+        else if(str_method == "UI.Show")
         {
             uiShow(jsonObj);
             m_i_currentUIID = ID_SHOW;
@@ -162,24 +163,28 @@ void AppData::recvFromServer(Json::Value jsonObj)
         }
         else if (str_method == "UI.Alert")
         {
+            LOGI("UI.Alert");
             alert(jsonObj);
             m_i_currentUIID = ID_ALERT;
             m_pUIManager->onAppShow(m_i_currentUIID);
         }
         else if (str_method == "UI.ScrollableMessage")
         {
+            LOGI("UI.ScrollableMessage");
             scrollableMessage(jsonObj);
             m_i_currentUIID = ID_SCROLLMSG;
             m_pUIManager->onAppShow(m_i_currentUIID);
         }
         else if (str_method == "UI.Slider")
         {
+            LOGI("UI.Slider");
             slider(jsonObj);
             m_i_currentUIID = ID_SLIDER;
             m_pUIManager->onAppShow(m_i_currentUIID);
         }
         else if(str_method == "UI.PerformAudioPassThru")
         {
+            LOGI("UI.PerformAudioPassThru");
             performAudioPassThru(jsonObj);
             m_i_currentUIID = ID_AUDIOPASSTHRU;
             m_pUIManager->onAppShow(m_i_currentUIID);
@@ -305,6 +310,15 @@ void AppData::recvFromServer(Json::Value jsonObj)
 
             m_pUIManager->tsSpeak(ID_CANCEL, strVRName);
             SDLConnector::getSDLConnectore()->OnVRCommand(m_i_currentAppID, jsonObj["params"]["cmdID"].asInt());
+        }
+        else if(str_method=="TTS.Speak")
+        {
+            LOGI("TTS.Speak");
+            std::string speakType = jsonObj["params"]["ttsChunks"][0]["type"].asString();
+            if(!IsTextUTF8((char *)speakType.data(),speakType.size()))
+                speakType = string_To_UTF8(speakType);
+            LOGI("tts text:%s",speakType.data());
+            m_pUIManager->tsSpeak(ID_DEFAULT, speakType);
         }
     }
 }

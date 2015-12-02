@@ -5,6 +5,9 @@
 #ifdef WIN32
 #include<QAxObject>
 #endif
+//#include <QAudioOutput>
+#include <QIODevice>
+//#include <
 
 class TextSpeech : public QObject
 {
@@ -23,6 +26,12 @@ public:
 private:
 #ifdef WIN32
     QAxObject _voice;
+#else
+//    QAudioDeviceInfo deviceInfo;
+//    QIODevice   *audioDevice;
+//    QAudioFormat audioFormat;
+//    QAudioOutput *audioOut;
+
 #endif
     bool _binit;
     bool _bReading;

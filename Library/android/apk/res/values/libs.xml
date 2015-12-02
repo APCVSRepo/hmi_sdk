@@ -9,6 +9,7 @@
 
     <array name="bundled_libs">
         <item>ffmpeg</item>
+<item>smartDeviceLinkCore</item>
 
     </array>
 

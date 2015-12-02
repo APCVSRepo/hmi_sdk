@@ -2,12 +2,13 @@
 #include "QHBoxLayout"
 #include "QVBoxLayout"
 #include "UI/Config/Config.h"
-
-extern Config g_config;
-CChoicesetVR::CChoicesetVR(CPopBase *parent) : CPopBase(parent)
+#include "Common/PopBase.h"
+CChoicesetVR::CChoicesetVR(QWidget *parent) : CPopBase(parent)
 {
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(hide()));
+    connect(this,SIGNAL(VRmenuClicked(int,int,int)),this,SLOT(VRmenuClickedSlots(int,int,int)));
+
 }
 
 CChoicesetVR::~CChoicesetVR()
@@ -19,11 +20,11 @@ void CChoicesetVR::InitLayout()
 {
 //    this->setFixedSize(550 * ConfigSingle::Instance()->getMainWindowW() / 630, 265 * ConfigSingle::Instance()->getMainWindowH() / 378);
 
-    int iW = 550 * ConfigSingle::Instance()->getMainWindowW() / 630;
-    int iH = 265 * ConfigSingle::Instance()->getMainWindowH() / 378;
+    int iW = ui_app_width;
+    int iH = ui_app_height;
 
-    m_labelBackground.setParent(this);
-    m_labelFrame.setParent(this);
+//    m_labelBackground.setParent(this);
+//    m_labelFrame.setParent(this);
     m_labelVRIcon = new QLabel;
     m_labelText = new QLabel;
     m_labelSet1 = new CButton;
@@ -31,8 +32,8 @@ void CChoicesetVR::InitLayout()
     m_labelSet3 = new CButton;
     m_labelSet4 = new CButton;
 
-    m_labelBackground.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
-    m_labelFrame.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
+//    m_labelBackground.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
+//    m_labelFrame.setGeometry((this->width() - iW) / 2, 0.85 * this->height() - iH, iW, iH);
 
     m_labelText->setStyleSheet("border: 2px solid white;color:white;font: 42px \"Liberation Serif\";border-radius:8px;border-top:2px solid black;background-color: #121122;"); //qproperty-alignment:AlignLeft;");
     m_labelText->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -63,7 +64,8 @@ void CChoicesetVR::InitLayout()
     mLayout->addStretch(10);
     mLayout->setMargin(8);
 
-    m_labelFrame.setLayout(mLayout);
+//    m_labelFrame.setLayout(mLayout);
+    this->setLayout(mLayout);
 
     connect(m_labelSet1,SIGNAL(clicked(int)),SLOT(label1ClickedSlots(int)));
     connect(m_labelSet2,SIGNAL(clicked(int)),SLOT(label2ClickedSlots(int)));
@@ -176,11 +178,18 @@ void CChoicesetVR::label4ClickedSlots(int id)
     this->hide();
 }
 
-void CChoicesetVR::execShow(AppDataInterface* pAppInterface)
+void CChoicesetVR::VRmenuClickedSlots(int code, int performInteractionID, int choiceID)
 {
-    if (pAppInterface)
+    //_D("code=%d:%d:%d\n",code,performInteractionID,choiceID);
+    DataManager::DataInterface()->OnPerformInteraction(code, performInteractionID, choiceID);
+    this->showCurUI(ID_SHOW);
+}
+
+void CChoicesetVR::execShow()
+{
+    if (DataManager::DataInterface())
     {
-        m_jsonData = pAppInterface->getInteractionJson();
+        m_jsonData = DataManager::DataInterface()->getInteractionJson();
         this->setTimeOut(m_jsonData["params"]["timeout"].asInt());
 
         for(int i = 0; i < m_jsonData["params"]["vrHelp"].size(); i++)

@@ -13,7 +13,7 @@ typedef struct ChoiceMenu
     int i_choiceID;
     std::string str_menuName;
 }SChoiceMenu;
-
+class AppBase;
 class Choiceset : public AppBase
 {
     Q_OBJECT
@@ -21,7 +21,7 @@ public:
     explicit Choiceset(QWidget *parent = 0);
     ~Choiceset();
 
-    void execShow(AppDataInterface* pAppInterface);
+    void execShow();
     void testShow();
 
 signals:
@@ -34,6 +34,7 @@ public slots:
     void downArrowSlots();
     void moveBackSlots();
     void timeHideOutSlots();
+    void menuClickedSlots(int code, int performInteractionID, int choiceID);
 
 private:
     void addNewMenu(int choiceID, std::string menuName);

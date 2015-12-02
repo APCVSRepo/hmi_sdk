@@ -3,6 +3,7 @@
 
 AppList::AppList()
 {
+    m_AppData=new AppData();
 }
 
 void AppList::start()
@@ -13,12 +14,12 @@ void AppList::start()
 void AppList::setUIManager(UIInterface *pUIManager)
 {
     m_pUIManager = pUIManager;
-    m_AppData.setUIManager(pUIManager);
+    m_AppData->setUIManager(pUIManager);
 }
 
 AppDataInterface* AppList::getAppDataInterface()
 {
-    return &m_AppData;
+    return m_AppData;
 }
 
 int AppList::getCurrentAppID()
@@ -53,31 +54,27 @@ void AppList::onError(std::string)
 
 void AppList::recvFromServer(Json::Value jsonObj)
 {
+    LOGI("AppList::recvFromServer");
     if(jsonObj.isMember("method"))
     {
+        LOGI("+++++recvFromServer+++++");
+        LOGI(jsonObj.toStyledString().data());
+        LOGI("--------");
         std::string str_method = jsonObj["method"].asString();
 
         if (str_method == "BasicCommunication.OnAppRegistered")
         {
-            std::cout << "+++++recvFromServer+++++\n";
-            std::cout << jsonObj.toStyledString() << std::endl;
-            std::cout << "---------\n";
-
             newAppRegistered(jsonObj);
             m_pUIManager->onAppShow(ID_APPLINK);
         }
         else if (str_method == "BasicCommunication.OnAppUnregistered")
         {
-            std::cout << "+++++recvFromServer+++++\n";
-            std::cout << jsonObj.toStyledString() << std::endl;
-            std::cout << "---------\n";
-
             appUnregistered(jsonObj);
             m_pUIManager->onAppShow(ID_APPLINK);
         }
         else
         {
-            m_AppData.recvFromServer(jsonObj);
+            m_AppData->recvFromServer(jsonObj);
         }
 
     }
@@ -148,12 +145,12 @@ void AppList::newAppRegistered(Json::Value jsonObj)
 void AppList::OnAppActivated(int appID)
 {
     m_i_currentAppID = appID;
-    m_AppData.setCurrentAppID(m_i_currentAppID);
+    m_AppData->setCurrentAppID(m_i_currentAppID);
     for(int i = 0; i < m_vec_json_newApp.size(); i++)
     {
         if(m_i_currentAppID == m_vec_json_newApp.at(i)["params"]["application"]["appID"].asInt())
         {
-            m_AppData.setCurrentAppName(m_vec_json_newApp.at(i)["params"]["application"]["appName"].asString());
+            m_AppData->setCurrentAppName(m_vec_json_newApp.at(i)["params"]["application"]["appName"].asString());
         }
     }
 

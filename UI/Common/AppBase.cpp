@@ -1,4 +1,4 @@
-#include "AppBase.h"
+﻿#include "AppBase.h"
 #include "MainMenue.h"
 #include <QMouseEvent>
 
@@ -7,7 +7,7 @@ AppBase::AppBase(QWidget *parent) : QWidget(parent)
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
     this->setGeometry(0,0,parent->width(),parent->height());
 //    this->setFixedSize(ConfigSingle::Instance()->getMainWindowW(),ConfigSingle::Instance()->getMainWindowH());
-    this->setBkgImage(":/images/mainbkg.png");
+    this->setBkgImage((char *)":/images/mainbkg.png");
 }
 
 AppBase::~AppBase()

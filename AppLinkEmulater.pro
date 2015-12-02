@@ -85,7 +85,7 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     HMI_SDK/Connect/vehicleinfoclient.h \
     HMI_SDK/Connect/uiclient.h \
     HMI_SDK/Connect/ttsclient.h \
-    HMI_SDK/Connect/sockectstosdl.h \
+    HMI_SDK/Connect/socketstosdl.h \
     HMI_SDK/Connect/SDLConnector.h \
     HMI_SDK/Connect/navigationclient.h \
     HMI_SDK/Connect/connect.h \

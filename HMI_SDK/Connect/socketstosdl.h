@@ -1,13 +1,9 @@
-﻿#ifndef SOCKECTSTOSDL
-#define SOCKECTSTOSDL
+﻿#ifndef SOCKETSTOSDL
+#define SOCKETSTOSDL
 #include "ISocketManager.h"
 #include <vector>
 #include <queue>
-#ifdef ANDROID
 #include <pthread.h>
-#else
-#include <pthread.h>
-#endif
 #include "IMessageInterface.h"
 
 #ifdef WIN32

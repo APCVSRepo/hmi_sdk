@@ -27,6 +27,7 @@ private:
     void allowDeviceToConnect(int id);
     void sendBCResult(int id, std::string method);
     void sendActiveteApp(int id);
+    void sendSystemInfo(int id);
 
 };
 

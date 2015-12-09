@@ -208,8 +208,8 @@ bool SocketsToSDL::ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * 
 	sockaddr_in toLocal;
 	memset(&toLocal, 0, sizeof(toLocal));
 	toLocal.sin_family = AF_INET;
-	toLocal.sin_addr.s_addr = inet_addr("127.0.0.1");
-	toLocal.sin_port = htons(12346);
+    toLocal.sin_addr.s_addr = inet_addr("127.0.0.1");
+    toLocal.sin_port = htons(m_iPort);
 
     size_t namelen = sizeof(toLocal);
 	if (!CreateSignal())

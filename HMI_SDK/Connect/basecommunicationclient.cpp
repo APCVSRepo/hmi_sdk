@@ -1,4 +1,4 @@
-#include "Include/global_first.h"
+﻿#include "Include/global_first.h"
 #include "Connect/basecommunicationclient.h"
 
 #include <iostream>
@@ -78,10 +78,32 @@ void baseCommunicationClient::onRequest(Json::Value request)
     {
         isReady(request["id"].asInt());
     }
+    else if (method == "BasicCommunication.GetSystemInfo")
+    {
+        sendSystemInfo(request["id"].asInt());
+    }
     else
     {
 		m_pCallback->onRequest(request);
     }
+}
+
+void baseCommunicationClient::sendSystemInfo(int id)
+{
+    Json::Value root;
+    Json::Value result;
+
+    root["jsonrpc"] = "2.0";
+    root["id"] = id;
+
+    result["code"] = 0;
+    result["method"] = "BasicCommunication.GetSystemInfo";
+    result["ccpu_version"] = "ccpu_version";
+    result["language"] = "EN-US";
+    result["wersContryCode"] = "wersContryCode";
+
+    root["result"] = result;
+    SendJson(root);
 }
 
 void baseCommunicationClient::isReady(int id)

@@ -112,7 +112,8 @@ void AppList::recvFromServer(Json::Value jsonObj)
         }
         else
         {
-            m_pCurApp->recvFromServer(jsonObj);
+            if(m_pCurApp)
+                m_pCurApp->recvFromServer(jsonObj);
         }
 
     }
@@ -178,6 +179,7 @@ void AppList::recvFromServer(Json::Value jsonObj)
 void AppList::newAppRegistered(Json::Value jsonObj)
 {
     AppData * pData = new AppData();
+    pData->setUIManager(m_pUIManager);
     pData->m_iAppID = jsonObj["params"]["application"]["appID"].asInt();
     pData->m_szAppName = jsonObj["params"]["application"]["appName"].asString();
     m_AppDatas.push_back(pData);

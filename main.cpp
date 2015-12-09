@@ -91,9 +91,10 @@ int main(int argc, char *argv[])
     initSDL();
 #endif
 
-    AppList AppList;
-    CUIManager  uiManager(&AppList);
-    SDLConnector::getSDLConnectore()->ConnectToSDL(&AppList);
+    AppList Apps;
+    CUIManager  uiManager(&Apps);
+    Apps.setUIManager(&uiManager);
+    SDLConnector::getSDLConnectore()->ConnectToSDL(&Apps);
 
     //QTimer timer; //定时
     QObject::connect(&uiManager,SIGNAL(finishMainHMI()),&diaStart, SLOT(accept()));

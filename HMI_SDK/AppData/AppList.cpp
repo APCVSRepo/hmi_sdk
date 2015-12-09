@@ -1,30 +1,34 @@
 ﻿#include "Include/global_first.h"
 #include "AppList.h"
 
+extern std::string string_To_UTF8(const std::string & str);
+extern bool IsTextUTF8(char* str, unsigned long long length);
+
+
 AppList::AppList()
 {
-    m_AppData=new AppData();
+    m_pCurApp = NULL;
 }
 
-void AppList::start()
+AppList::~AppList()
 {
-    SDLConnector::getSDLConnectore()->ConnectToSDL(this);
+    int i;
+    for(i = 0; i < m_AppDatas.size(); i++)
+    {
+        delete m_AppDatas[i];
+    }
 }
 
 void AppList::setUIManager(UIInterface *pUIManager)
 {
     m_pUIManager = pUIManager;
-    m_AppData->setUIManager(pUIManager);
+    if(m_pCurApp)
+        m_pCurApp->setUIManager(pUIManager);
 }
 
 AppDataInterface* AppList::getAppDataInterface()
 {
-    return m_AppData;
-}
-
-int AppList::getCurrentAppID()
-{
-    return m_i_currentAppID;
+    return m_pCurApp;
 }
 
 void AppList::onRequest(Json::Value jsonObj)
@@ -57,9 +61,7 @@ void AppList::recvFromServer(Json::Value jsonObj)
     LOGI("AppList::recvFromServer");
     if(jsonObj.isMember("method"))
     {
-        LOGI("+++++recvFromServer+++++");
         LOGI(jsonObj.toStyledString().data());
-        LOGI("--------");
         std::string str_method = jsonObj["method"].asString();
 
         if (str_method == "BasicCommunication.OnAppRegistered")
@@ -72,9 +74,45 @@ void AppList::recvFromServer(Json::Value jsonObj)
             appUnregistered(jsonObj);
             m_pUIManager->onAppShow(ID_APPLINK);
         }
+        else if (str_method == "VR.VRExitApp")
+        {
+            m_pUIManager->tsSpeak(ID_EXIT, "退出"+ m_pCurApp->m_szAppName);
+            m_pUIManager->onAppShow(ID_APPLINK);
+        }
+        else if(str_method == "VR.VRSwitchApp")
+        {
+//            {
+//               "jsonrpc" : "2.0",
+//               "method" : "VR.VRSwitchApp",
+//               "params" : {
+//                  "appID" : 18467,
+//                  "appVRName" : "百度 "
+//               }
+//            }
+            std::string strAppVRName = jsonObj["params"]["appVRName"].asString();
+            if(!IsTextUTF8((char *)strAppVRName.data(),strAppVRName.size()))
+                strAppVRName = string_To_UTF8(strAppVRName);
+
+            m_pUIManager->tsSpeak(ID_SWITCHAPP, strAppVRName);
+
+            int iNewID = jsonObj["params"]["appID"].asInt();
+            if(m_pCurApp->m_iAppID != iNewID)
+            {
+                std::vector <AppData *>::iterator i;
+                for(i = m_AppDatas.begin(); i != m_AppDatas.end(); i++)
+                {
+                    if(iNewID == (*i)->m_iAppID)
+                    {
+                        m_pCurApp = *i;
+                        m_pUIManager->onAppShow(m_pCurApp->getCurUI());
+                        break;
+                    }
+                }
+            }
+        }
         else
         {
-            m_AppData->recvFromServer(jsonObj);
+            m_pCurApp->recvFromServer(jsonObj);
         }
 
     }
@@ -139,48 +177,66 @@ void AppList::recvFromServer(Json::Value jsonObj)
 //}
 void AppList::newAppRegistered(Json::Value jsonObj)
 {
-    m_vec_json_newApp.push_back(jsonObj);
+    AppData * pData = new AppData();
+    pData->m_iAppID = jsonObj["params"]["application"]["appID"].asInt();
+    pData->m_szAppName = jsonObj["params"]["application"]["appName"].asString();
+    m_AppDatas.push_back(pData);
 }
 
-void AppList::OnAppActivated(int appID)
+void AppList::OnAppActivated(int iAppID)
 {
-    m_i_currentAppID = appID;
-    m_AppData->setCurrentAppID(m_i_currentAppID);
-    for(int i = 0; i < m_vec_json_newApp.size(); i++)
+    AppData * pData;
+    int i;
+    for(i = 0; i < m_AppDatas.size(); i++)
     {
-        if(m_i_currentAppID == m_vec_json_newApp.at(i)["params"]["application"]["appID"].asInt())
-        {
-            m_AppData->setCurrentAppName(m_vec_json_newApp.at(i)["params"]["application"]["appName"].asString());
-        }
+        pData = m_AppDatas[i];
+        if(pData->m_iAppID == iAppID)
+            break;
     }
 
-    SDLConnector::getSDLConnectore()->OnAppActivated(appID);
+    if(i >= m_AppDatas.size())  // not found
+    {
+        return;
+    }
+
+    if(m_pCurApp != NULL)
+        OnApplicationOut(m_pCurApp->m_iAppID);
+    m_pCurApp = pData;
+    SDLConnector::getSDLConnectore()->OnAppActivated(iAppID);
 }
 
 void AppList::OnApplicationOut(int appID)
 {
-    SDLConnector::getSDLConnectore()->OnApplicationExit(appID);
-}
-
-void AppList::OnApplicationExit(int appID)
-{
     SDLConnector::getSDLConnectore()->OnApplicationOut(appID);
 }
 
-std::vector <Json::Value > AppList::getNewAppJsonVector()
+void AppList::OnApplicationExit()
 {
-    return m_vec_json_newApp;
+    SDLConnector::getSDLConnectore()->OnApplicationExit(m_pCurApp->m_iAppID);
+    m_pUIManager->onAppShow(ID_APPLINK);
+}
+
+void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames)
+{
+    for(int i = 0; i < m_AppDatas.size(); i++)
+    {
+        vAppIDs.push_back(m_AppDatas[i]->m_iAppID);
+        vAppNames.push_back(m_AppDatas[i]->m_szAppName);
+    }
 }
 
 void AppList::appUnregistered(Json::Value jsonObj)
 {
     int appID = jsonObj["params"]["appID"].asInt();
 
-    for(int i = 0; i < m_vec_json_newApp.size(); i++)
+    std::vector <AppData *>::iterator i;
+    for(i = m_AppDatas.begin(); i != m_AppDatas.end(); i++)
     {
-        if(appID == m_vec_json_newApp.at(i)["params"]["application"]["appID"].asInt())
+        if(appID == (*i)->m_iAppID)
         {
-            m_vec_json_newApp.erase(m_vec_json_newApp.begin()+i);
+            delete *i;
+            m_AppDatas.erase(i);
+            break;
         }
     }
 }

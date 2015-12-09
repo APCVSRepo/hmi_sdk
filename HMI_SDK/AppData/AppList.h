@@ -1,8 +1,7 @@
-#ifndef APPLIST_H
+﻿#ifndef APPLIST_H
 #define APPLIST_H
 
 #include "Connect/connect.h"
-#include "Connect/SDLConnector.h"
 
 #include "AppListInterface.h"
 #include "AppData.h"
@@ -12,19 +11,16 @@ class AppList : public IMessageInterface, public AppListInterface
 {
 public:
     AppList();
+    ~AppList();
 
-    void start();
-    void setUIManager(UIInterface *pcallBack);
+    void setUIManager(UIInterface *pUI);
 
     AppDataInterface* getAppDataInterface();
+    void getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames);
 
     void OnAppActivated(int appID);
     void OnApplicationOut(int appID);
-    void OnApplicationExit(int appID);
-
-    std::vector <Json::Value > getNewAppJsonVector();
-    int getCurrentAppID();
-
+    void OnApplicationExit();
 
 private:
     void onRequest(Json::Value);
@@ -34,14 +30,13 @@ private:
     void onError(std::string error);
     void recvFromServer(Json::Value);
 
-    std::vector <Json::Value > m_vec_json_newApp;
     void newAppRegistered(Json::Value jsonObj);
     void appUnregistered(Json::Value jsonObj);
 
+private:
     UIInterface *m_pUIManager;
-    AppData *m_AppData;
-    int m_i_currentAppID;
+    std::vector <AppData *> m_AppDatas;
+    AppData * m_pCurApp;
 };
 
-//extern AppList *m_gAppList;
 #endif // APPLIST_H

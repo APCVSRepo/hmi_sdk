@@ -1,4 +1,4 @@
-#ifndef MAINMENUE_H
+﻿#ifndef MAINMENUE_H
 #define MAINMENUE_H
 
 #include <QWidget>
@@ -20,12 +20,12 @@ typedef enum
     ID_MENU_LIST,
     ID_MENU_MAX
 }ID_MENU_TYPE;
-class MainMenue : public BaseWidght
+class MainMenu : public BaseWidght
 {
     Q_OBJECT
 public:
-    explicit MainMenue(QWidget *parent = 0);
-    ~MainMenue();
+    explicit MainMenu(AppListInterface * pList, QWidget *parent = 0);
+    ~MainMenu();
     void InserWidget(int id,QWidget *wdiget);
     void SetCurWidget(int id,bool history=true);
     void SetTitle(QString title);
@@ -56,7 +56,7 @@ private:
     QHash<int,int> stackKeys;
     QList<int>     stackHistory;
 
-
+    AppListInterface * m_pList;
 };
 
 #endif // MAINMENUE_H

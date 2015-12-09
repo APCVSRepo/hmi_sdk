@@ -1,9 +1,9 @@
-#include "AudioPassThru.h"
+﻿#include "AudioPassThru.h"
 #include "QHBoxLayout"
 #include "QVBoxLayout"
 #include "UI/Config/Config.h"
 #include "Common/PopBase.h"
-CAudioPassThru::CAudioPassThru(QWidget *parent) : CPopBase(parent)
+CAudioPassThru::CAudioPassThru(AppListInterface * pList, QWidget *parent) : CPopBase(pList, parent)
 {
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(hide()));
@@ -18,14 +18,6 @@ CAudioPassThru::~CAudioPassThru()
 
 void CAudioPassThru::InitLayout()
 {
-//    this->setFixedSize(550 * ConfigSingle::Instance()->getMainWindowW() / 630, 265 * ConfigSingle::Instance()->getMainWindowH() / 378);
-
-    int iW = ui_app_width;
-    int iH = ui_app_height;
-
-    // Initlialize instance.
-//    m_labelBackground.setParent(this);
-//    m_labelFrame.setParent(this);
     m_labelAppName = new QLabel;
     m_labelText1 = new QLabel;
     m_labelText2 = new QLabel;
@@ -199,44 +191,44 @@ void CAudioPassThru::onButtonClickedSlots(int id)
 void CAudioPassThru::audioPassThruHideSlots(int audioPassThruId, int code)
 {
     //_D("appID=%d:%d:%d\n",m_i_appID,audioPassThruId,code);
-    DataManager::DataInterface()->OnPerformAudioPassThru(DataManager::AppId(), audioPassThruId, code);
-    DataManager::DataInterface()->OnVRCancelRecord();
+    m_pList->getAppDataInterface()->OnPerformAudioPassThru(audioPassThruId, code);
+    m_pList->getAppDataInterface()->OnVRCancelRecord();
 }
 
 void CAudioPassThru::execShow()
 {
-    if (DataManager::DataInterface())
+    if (m_pList->getAppDataInterface())
     {
-        m_jsonData = DataManager::DataInterface()->getAudioPassThruJson();
+        m_jsonData = m_pList->getAppDataInterface()->getAudioPassThruJson();
         if(!m_jsonData.isMember("id") || !m_jsonData.isMember("params"))
         {
-            this->show();
+            show();
             return;
         }
-        this->setAudioPassThruID(m_jsonData["id"].asInt());
-        this->setTimeOut(m_jsonData["params"]["maxDuration"].asInt());
+        setAudioPassThruID(m_jsonData["id"].asInt());
+        setTimeOut(m_jsonData["params"]["maxDuration"].asInt());
 
 
         for (int i = 0; i < m_jsonData["params"]["audioPassThruDisplayTexts"].size(); i++)
         {
             if ("audioPassThruDisplayText1" == m_jsonData["params"]["audioPassThruDisplayTexts"][i]["fieldName"].asString())
             {
-                this->setAudioPassThruDisplayText1(m_jsonData["params"]["audioPassThruDisplayTexts"][i]["fieldText"].asString().c_str());
+                setAudioPassThruDisplayText1(m_jsonData["params"]["audioPassThruDisplayTexts"][i]["fieldText"].asString().c_str());
             }
             else if ("audioPassThruDisplayText2" == m_jsonData["params"]["audioPassThruDisplayTexts"][i]["fieldName"].asString())
             {
-                this->setAudioPassThruDisplayText2(m_jsonData["params"]["audioPassThruDisplayTexts"][i]["fieldText"].asString().c_str());
+                setAudioPassThruDisplayText2(m_jsonData["params"]["audioPassThruDisplayTexts"][i]["fieldText"].asString().c_str());
             }
         }
     }
-    this->show();
+    show();
 }
 
 void CAudioPassThru::testShow()
 {
-    this->setAudioPassThruDisplayText1("audioPassThruDisplayText1");
-    this->setAudioPassThruDisplayText2("audioPassThruDisplayText2");
-    this->setAudioPassThruID(3);
-    this->setTimeOut(20000);
-    this->show();
+    setAudioPassThruDisplayText1("audioPassThruDisplayText1");
+    setAudioPassThruDisplayText2("audioPassThruDisplayText2");
+    setAudioPassThruID(3);
+    setTimeOut(20000);
+    show();
 }

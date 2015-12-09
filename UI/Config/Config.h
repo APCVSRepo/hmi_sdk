@@ -1,19 +1,6 @@
-#ifndef CONFIG_H
+﻿#ifndef CONFIG_H
 #define CONFIG_H
 #include "../Singleton.h"
-#include <stdarg.h>
-#ifdef ANDROID
-#include <android/log.h>
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,"SDL",__VA_ARGS__)
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,"SDL",__VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,"SDL",__VA_ARGS__)
-#define  CONFIG_DIR   "/sdcard/sdlconfig"
-
-#else
-#define  LOGI(...)  {printf(__VA_ARGS__);fflush(stdout);}while(0)
-#define  LOGD(...)  {printf(__VA_ARGS__);fflush(stdout);}while(0)
-#define  LOGE(...)  {printf(__VA_ARGS__);fflush(stderr);}while(0)
-#endif
 
 enum
 {

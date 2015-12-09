@@ -1,8 +1,10 @@
-﻿#ifdef WINCE
-#include "global_first.h"
+﻿#include "global_first.h"
+
+#ifdef WINCE
 #else
 #include <sys/stat.h>
 #endif
+
 #include <iostream>
 #include <stdio.h>
 #include <string>

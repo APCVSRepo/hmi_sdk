@@ -39,7 +39,6 @@ SOURCES += \
     HMI_SDK/Connect/Channel.cpp \
     HMI_SDK/Connect/buttonsclient.cpp \
     HMI_SDK/Connect/basecommunicationclient.cpp \
-    HMI_SDK/AppData/DataManager.cpp \
     Tools/json/json_writer.cpp \
     Tools/json/json_valueiterator.inl \
     Tools/json/json_value.cpp \
@@ -55,7 +54,7 @@ SOURCES += \
     UI/Common/ScrollBar.cpp \
     UI/Common/PopBase.cpp \
     UI/Common/Button.cpp \
-    UI/Common/MainMenue.cpp \
+    UI/Common/MainMenu.cpp \
     UI/Common/BaseWidght.cpp \
     UI/Common/AppBase.cpp \
     UI/Common/AppItemWidget.cpp \
@@ -80,7 +79,6 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     HMI_SDK/AppData/AppDataInterface.h \
     HMI_SDK/AppData/AppData.h \
     HMI_SDK/AppData/AppList.h \
-    HMI_SDK/AppData/DataManager.h \
     HMI_SDK/Connect/vrclient.h \
     HMI_SDK/Connect/vehicleinfoclient.h \
     HMI_SDK/Connect/uiclient.h \
@@ -107,7 +105,7 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     Tools/json/config.h \
     Tools/json/autolink.h \
     Tools/json/assertions.h \
-    UI/Common/MainMenue.h \
+    UI/Common/MainMenu.h \
     UI/Common/BaseWidght.h \
     UI/Common/AppBase.h \
     UI/AppLink.h \
@@ -131,7 +129,8 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/Common/Background.h \
     UI/VideoStream/VideoStream.h \
     UI/TextSpeech/textspeech.h \
-    UI/Singleton.h
+    UI/Singleton.h \
+    UI/Common/MainMenu.h
 
 
 RESOURCES += \

@@ -1,5 +1,4 @@
-﻿#include "Include/global_first.h"
-#include "AppData.h"
+﻿#include "AppData.h"
 
 std::string string_To_UTF8(const std::string & str)
 {
@@ -88,41 +87,13 @@ void AppData::setUIManager(UIInterface *pUIManager)
     m_pUIManager = pUIManager;
 }
 
-void AppData::setCurrentAppID(int appID)
-{
-    if(m_i_currentAppID != appID)
-    {
-        //show json need clear
-        {
-            for(int i = 0; i < m_json_show["params"]["showStrings"].size(); i++)
-                m_json_show["params"]["showStrings"][i]["fieldText"] = "";
-            if(m_json_show["params"].isMember("softButtons"))
-            {
-                for(int i = 0; i < m_json_show["params"]["softButtons"].size(); i++)
-                {
-                    m_json_show["params"]["softButtons"][i]["isHighlighted"] = false;
-                    m_json_show["params"]["softButtons"][i]["softButtonID"] = 0;
-                    m_json_show["params"]["softButtons"][i]["text"] = "";
-                }
-            }
-        }
-        m_vec_scommand.clear();
-        m_i_currentAppID = appID;
-    }
-}
-void AppData::setCurrentAppName(std::string appName)
-{
-    m_str_currentAppName = appName;
-}
-
 void AppData::recvFromServer(Json::Value jsonObj)
 {
     LOGI("AppData::recvFromServer");
     int appID = jsonObj["params"]["appID"].asInt();
-    if(m_i_currentAppID != appID)
-    {
-//        m_i_currentAppID = appID;
-    }
+    if(m_iAppID != appID)
+        return;
+
     if(jsonObj.isMember("method"))
     {
         std::string str_method = jsonObj["method"].asString();
@@ -133,79 +104,70 @@ void AppData::recvFromServer(Json::Value jsonObj)
         else if(str_method == "UI.Show")
         {
             uiShow(jsonObj);
-            m_i_currentUIID = ID_SHOW;
-            m_pUIManager->onAppShow(m_i_currentUIID);
+            m_iCurUI = ID_SHOW;
+            m_pUIManager->onAppShow(m_iCurUI);
 
         }
         else if (str_method == "UI.SubscribeButton")
         {
-            //
         }
         else if (str_method == "UI.AddCommand")
         {
             addCommand(jsonObj);
-//            m_pUIManager->onAppRefresh();
         }
         else if (str_method == "UI.AddSubMenu")
         {
             addSubMenu(jsonObj);
-//            m_pUIManager->onAppRefresh();
         }
         else if (str_method == "UI.DeleteCommand")
         {
             delCommand(jsonObj);
-//            m_pUIManager->onAppRefresh();
         }
         else if (str_method == "UI.DeleteSubMenu")
         {
             delSubMenu(jsonObj);
-//            m_pUIManager->onAppRefresh();
         }
         else if (str_method == "UI.Alert")
         {
             LOGI("UI.Alert");
             alert(jsonObj);
-            m_i_currentUIID = ID_ALERT;
-            m_pUIManager->onAppShow(m_i_currentUIID);
+            m_iCurUI = ID_ALERT;
+            m_pUIManager->onAppShow(m_iCurUI);
         }
         else if (str_method == "UI.ScrollableMessage")
         {
             LOGI("UI.ScrollableMessage");
             scrollableMessage(jsonObj);
-            m_i_currentUIID = ID_SCROLLMSG;
-            m_pUIManager->onAppShow(m_i_currentUIID);
+            m_iCurUI = ID_SCROLLMSG;
+            m_pUIManager->onAppShow(m_iCurUI);
         }
         else if (str_method == "UI.Slider")
         {
             LOGI("UI.Slider");
             slider(jsonObj);
-            m_i_currentUIID = ID_SLIDER;
-            m_pUIManager->onAppShow(m_i_currentUIID);
+            m_iCurUI = ID_SLIDER;
+            m_pUIManager->onAppShow(m_iCurUI);
         }
         else if(str_method == "UI.PerformAudioPassThru")
         {
             LOGI("UI.PerformAudioPassThru");
             performAudioPassThru(jsonObj);
-            m_i_currentUIID = ID_AUDIOPASSTHRU;
-            m_pUIManager->onAppShow(m_i_currentUIID);
+
+            m_iCurUI = ID_AUDIOPASSTHRU;
+            m_pUIManager->onAppShow(m_iCurUI);
         }
         else if(str_method == "UI.PerformInteraction")
         {
             performInteraction(jsonObj);
             if(jsonObj["params"].isMember("vrHelp"))
-            {
-                m_i_currentUIID = ID_CHOICESETVR;
-                m_pUIManager->onAppShow(m_i_currentUIID);
-            }
+                m_iCurUI = ID_CHOICESETVR;
             else if(jsonObj["params"].isMember("choiceSet"))
-            {
-                m_i_currentUIID = ID_CHOICESET;
-                m_pUIManager->onAppShow(m_i_currentUIID);
-            }
+                m_iCurUI = ID_CHOICESET;
+
+            m_pUIManager->onAppShow(m_iCurUI);
         }
         else if(str_method == "Navigation.StartStream")
         {
-            std::cout<<"onTestVideoStreamStart"<<endl;
             videoStreamStart(jsonObj);
             m_pUIManager->onTestVideoStreamStart();
         }
@@ -216,10 +178,6 @@ void AppData::recvFromServer(Json::Value jsonObj)
         }
         else if(str_method == "UI.SetMediaClockTimer")
         {
-//            setMediaClockTimer(jsonObj);
-//            m_i_currentUIID = ID_SHOW;
-//            m_pUIManager->onAppShow(m_i_currentUIID);
-
             m_pUIManager->setMediaColckTimer(jsonObj);
         }
 
@@ -266,34 +224,6 @@ void AppData::recvFromServer(Json::Value jsonObj)
                 m_pUIManager->tsSpeak(ID_HELP, jsonObj["params"]["vrCommands"][i].asString());
             }
         }
-        else if(str_method == "VR.VRExitApp")
-        {
-            m_pUIManager->tsSpeak(ID_EXIT, "退出"+m_str_currentAppName);
-        }
-        else if(str_method == "VR.VRSwitchApp")
-        {
-//            {
-//               "jsonrpc" : "2.0",
-//               "method" : "VR.VRSwitchApp",
-//               "params" : {
-//                  "appID" : 18467,
-//                  "appVRName" : "百度 "
-//               }
-//            }
-            std::string strAppVRName = jsonObj["params"]["appVRName"].asString();
-            if(!IsTextUTF8((char *)strAppVRName.data(),strAppVRName.size()))
-                strAppVRName = string_To_UTF8(strAppVRName);
-
-            m_pUIManager->tsSpeak(ID_SWITCHAPP, strAppVRName);
-
-            if(m_i_currentAppID != jsonObj["params"]["appID"].asInt())
-            {
-                m_i_currentAppID = jsonObj["params"]["appID"].asInt();
-                m_str_currentAppName = jsonObj["params"]["appVRName"].asString();
-
-                m_pUIManager->switchNewApp(jsonObj["params"]["appID"].asInt());
-            }
-        }
         else if(str_method == "VR.VRResult")
         {
 //            {
@@ -309,7 +239,7 @@ void AppData::recvFromServer(Json::Value jsonObj)
                 strVRName = string_To_UTF8(strVRName);
 
             m_pUIManager->tsSpeak(ID_CANCEL, strVRName);
-            SDLConnector::getSDLConnectore()->OnVRCommand(m_i_currentAppID, jsonObj["params"]["cmdID"].asInt());
+            SDLConnector::getSDLConnectore()->OnVRCommand(m_iAppID, jsonObj["params"]["cmdID"].asInt());
         }
         else if(str_method=="TTS.Speak")
         {
@@ -323,17 +253,22 @@ void AppData::recvFromServer(Json::Value jsonObj)
     }
 }
 
+int AppData::getCurUI()
+{
+    return m_iCurUI;
+}
+
 //////////////////////////////////////////
 void AppData::OnMenuBtnClick(std::string btnText)
 {
     if("FMButton" == btnText)
-        SDLConnector::getSDLConnectore()->OnCommandClick(m_i_currentAppID, 101);
+        SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, 101);
     else if("TelButton" == btnText)
-        SDLConnector::getSDLConnectore()->OnCommandClick(m_i_currentAppID, 102);
+        SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, 102);
     else if("MsgButton" == btnText)
-        SDLConnector::getSDLConnectore()->OnCommandClick(m_i_currentAppID, 103);
+        SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, 103);
     else if("CDButton" == btnText)
-        SDLConnector::getSDLConnectore()->OnCommandClick(m_i_currentAppID, 104);
+        SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, 104);
     else if("ListButton" == btnText)
     {
 //        SDLConnector::getSDLConnectore()->OnCommandClick(m_i_currentAppID, 105);
@@ -356,9 +291,9 @@ void AppData::OnSoftButtonClick(int sbID, int mode)
     SDLConnector::getSDLConnectore()->OnSoftButtonClick(sbID, mode);
 }
 
-void AppData::OnCommandClick(int appID,int cmdID)
+void AppData::OnCommandClick(int cmdID)
 {
-    SDLConnector::getSDLConnectore()->OnCommandClick(appID, cmdID);
+    SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, cmdID);
 }
 
 void AppData::OnAlertResponse(int alertID, int reason)
@@ -376,15 +311,16 @@ void AppData::OnSliderResponse( int code, int sliderid, int sliderPosition)
     SDLConnector::getSDLConnectore()->OnSliderResponse(code, sliderid, sliderPosition);
 }
 
-void AppData::OnTTSSpeek(int speekID, int code)
+void AppData::OnTTSSpeek(int code)
 {
-    SDLConnector::getSDLConnectore()->OnTTSSpeek(speekID, code);
+    SDLConnector::getSDLConnectore()->OnTTSSpeek(m_iAppID, code);
 }
 
-void AppData::OnPerformAudioPassThru(int appID, int performaudiopassthruID, int code)
+void AppData::OnPerformAudioPassThru(int performaudiopassthruID, int code)
 {
-    SDLConnector::getSDLConnectore()->OnPerformAudioPassThru(appID, performaudiopassthruID, code);
-
+    SDLConnector::getSDLConnectore()->OnPerformAudioPassThru(m_iAppID, performaudiopassthruID, code);
+    m_iCurUI = ID_SHOW;
+    m_pUIManager->onAppShow(m_iCurUI);
 }
 
 void AppData::OnPerformInteraction(int code, int performInteractionID, int choiceID)

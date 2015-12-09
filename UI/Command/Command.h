@@ -1,4 +1,4 @@
-#ifndef COMMAND_H
+﻿#ifndef COMMAND_H
 #define COMMAND_H
 
 #include "UI/Common/AppBase.h"
@@ -15,7 +15,7 @@ class Command : public AppBase
 {
     Q_OBJECT
 public:
-    explicit Command(QWidget *parent = 0);
+    explicit Command(AppListInterface * pList, QWidget *parent = 0);
     ~Command();
 
     void execShow();
@@ -31,7 +31,6 @@ public slots:
     void upArrowSlots();
     void downArrowSlots();
     void backBtnClickSlots();
-    void moveBackSlots();
     void exitAppSlots();
    // void softButtonClickedSlots(int btID, int mode);
     void commandClickSlots(int cmdID);

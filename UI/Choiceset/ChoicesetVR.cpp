@@ -1,9 +1,9 @@
-#include "ChoicesetVR.h"
+﻿#include "ChoicesetVR.h"
 #include "QHBoxLayout"
 #include "QVBoxLayout"
 #include "UI/Config/Config.h"
 #include "Common/PopBase.h"
-CChoicesetVR::CChoicesetVR(QWidget *parent) : CPopBase(parent)
+CChoicesetVR::CChoicesetVR(AppListInterface * pList, QWidget *parent) : CPopBase(pList, parent)
 {
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(hide()));
@@ -18,13 +18,6 @@ CChoicesetVR::~CChoicesetVR()
 
 void CChoicesetVR::InitLayout()
 {
-//    this->setFixedSize(550 * ConfigSingle::Instance()->getMainWindowW() / 630, 265 * ConfigSingle::Instance()->getMainWindowH() / 378);
-
-    int iW = ui_app_width;
-    int iH = ui_app_height;
-
-//    m_labelBackground.setParent(this);
-//    m_labelFrame.setParent(this);
     m_labelVRIcon = new QLabel;
     m_labelText = new QLabel;
     m_labelSet1 = new CButton;
@@ -143,7 +136,7 @@ void CChoicesetVR::timeoutSlots()
     m_timer->stop();
 
     emit VRmenuClicked(PERFORMINTERACTION_TIMEOUT, m_i_interactionID, m_i_defaultID);
-    this->hide();
+    hide();
 }
 
 void CChoicesetVR::label1ClickedSlots(int id)
@@ -151,7 +144,7 @@ void CChoicesetVR::label1ClickedSlots(int id)
     m_timer->stop();
 
     emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    this->hide();
+    hide();
 }
 
 void CChoicesetVR::label2ClickedSlots(int id)
@@ -159,7 +152,7 @@ void CChoicesetVR::label2ClickedSlots(int id)
     m_timer->stop();
 
     emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    this->hide();
+    hide();
 }
 
 void CChoicesetVR::label3ClickedSlots(int id)
@@ -167,7 +160,7 @@ void CChoicesetVR::label3ClickedSlots(int id)
     m_timer->stop();
 
     emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    this->hide();
+    hide();
 }
 
 void CChoicesetVR::label4ClickedSlots(int id)
@@ -175,26 +168,26 @@ void CChoicesetVR::label4ClickedSlots(int id)
     m_timer->stop();
 
     emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    this->hide();
+    hide();
 }
 
 void CChoicesetVR::VRmenuClickedSlots(int code, int performInteractionID, int choiceID)
 {
     //_D("code=%d:%d:%d\n",code,performInteractionID,choiceID);
-    DataManager::DataInterface()->OnPerformInteraction(code, performInteractionID, choiceID);
-    this->showCurUI(ID_SHOW);
+    m_pList->getAppDataInterface()->OnPerformInteraction(code, performInteractionID, choiceID);
+    showCurUI(ID_SHOW);
 }
 
 void CChoicesetVR::execShow()
 {
-    if (DataManager::DataInterface())
+    if (m_pList->getAppDataInterface())
     {
-        m_jsonData = DataManager::DataInterface()->getInteractionJson();
-        this->setTimeOut(m_jsonData["params"]["timeout"].asInt());
+        m_jsonData = m_pList->getAppDataInterface()->getInteractionJson();
+        setTimeOut(m_jsonData["params"]["timeout"].asInt());
 
         for(int i = 0; i < m_jsonData["params"]["vrHelp"].size(); i++)
         {
-            this->setChoicesetVRText(i+1,m_jsonData["params"]["vrHelp"][i]["text"].asString().data());
+            setChoicesetVRText(i+1,m_jsonData["params"]["vrHelp"][i]["text"].asString().data());
         }
 
         if(m_jsonData["params"].isMember("choiceSet"))
@@ -206,15 +199,5 @@ void CChoicesetVR::execShow()
             }
         }
     }
-    this->show();
-}
-
-void CChoicesetVR::testShow()
-{
-
-    this->setTimeOut(20000);
-    this->setChoicesetVRText(0,"asdfd");
-    this->setChoicesetVRText(1,"dsdsdsdsdsd");
-
-    this->show();
+    show();
 }

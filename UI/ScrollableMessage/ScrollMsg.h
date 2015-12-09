@@ -1,4 +1,4 @@
-#ifndef CSCROLLMSG_H
+﻿#ifndef CSCROLLMSG_H
 #define CSCROLLMSG_H
 
 #include "UI/Common/PopBase.h"
@@ -10,11 +10,10 @@ class CScrollMsg : public CPopBase
 {
     Q_OBJECT
 public:
-    explicit CScrollMsg(QWidget *parent = 0);
+    explicit CScrollMsg(AppListInterface * pList, QWidget *parent = 0);
     ~CScrollMsg();
 
     void execShow();
-    void testShow();
 
 signals:
     //void softButtonClicked(int btID, int mode);

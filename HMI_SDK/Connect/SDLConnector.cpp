@@ -1,4 +1,4 @@
-#include "Include/global_first.h"
+﻿#include "Include/global_first.h"
 #include <Connect/SDLConnector.h>
 #include <vector>
 #include <iostream>

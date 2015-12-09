@@ -1,4 +1,4 @@
-#ifndef CAUDIOPASSTHRU_H
+﻿#ifndef CAUDIOPASSTHRU_H
 #define CAUDIOPASSTHRU_H
 
 #include "UI/Common/PopBase.h"
@@ -14,7 +14,7 @@ class CAudioPassThru : public CPopBase
 {
     Q_OBJECT
 public:
-    explicit CAudioPassThru(QWidget *parent = 0);
+    explicit CAudioPassThru(AppListInterface * pList, QWidget *parent = 0);
     ~CAudioPassThru();
 
     void execShow();

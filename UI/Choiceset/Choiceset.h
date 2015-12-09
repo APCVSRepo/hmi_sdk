@@ -1,4 +1,4 @@
-#ifndef CHOICESET_H
+﻿#ifndef CHOICESET_H
 #define CHOICESET_H
 
 #include "UI/Common/AppBase.h"
@@ -18,11 +18,10 @@ class Choiceset : public AppBase
 {
     Q_OBJECT
 public:
-    explicit Choiceset(QWidget *parent = 0);
+    explicit Choiceset(AppListInterface * pList, QWidget *parent = 0);
     ~Choiceset();
 
     void execShow();
-    void testShow();
 
 signals:
     void menuClicked(int code, int id, int choiceID);
@@ -32,7 +31,6 @@ public slots:
     void listWidgetDoubleClickedSlots(QModelIndex);
     void upArrowSlots();
     void downArrowSlots();
-    void moveBackSlots();
     void timeHideOutSlots();
     void menuClickedSlots(int code, int performInteractionID, int choiceID);
 

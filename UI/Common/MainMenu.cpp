@@ -1,10 +1,11 @@
-﻿#include "MainMenue.h"
+﻿#include "MainMenu.h"
 #include "../Config/Config.h"
 #include "AppBase.h"
 #include "PopBase.h"
 #include <QTime>
-MainMenue::MainMenue(QWidget *parent) : BaseWidght(0,0,ui_res_width,ui_res_height,parent)
+MainMenu::MainMenu(AppListInterface * pList, QWidget *parent) : BaseWidght(0,0,ui_res_width,ui_res_height,parent)
 {
+    m_pList = pList;
     this->setBackGroundImge((char *)":/images/mainbkg.png");
 
     labelTitle=new QLabel(this);
@@ -55,18 +56,18 @@ MainMenue::MainMenue(QWidget *parent) : BaseWidght(0,0,ui_res_width,ui_res_heigh
 
 }
 
-MainMenue::~MainMenue()
+MainMenu::~MainMenu()
 {
 
 }
 
-void MainMenue::SetTitle(QString title)
+void MainMenu::SetTitle(QString title)
 {
     this->labelTitle->setText(title);
 }
 
 //param: histroy,是否加入历史记录
-void MainMenue::SetCurWidget(int id,bool history)
+void MainMenu::SetCurWidget(int id,bool history)
 {
     LOGD("cur widght:id=%d,index=%d\n",id,stackKeys.key(id));
     stackWidget->setCurrentIndex(stackKeys.key(id));
@@ -91,25 +92,25 @@ void MainMenue::SetCurWidget(int id,bool history)
     }
 }
 
-void MainMenue::InserWidget(int id,QWidget *widget)
+void MainMenu::InserWidget(int id,QWidget *widget)
 {
     stackKeys.insert(stackWidget->count(),id);
     stackWidget->addWidget(widget);
 }
 
-QWidget* MainMenue::CenterWidght()
+QWidget* MainMenu::CenterWidght()
 {
     return stackWidget;
 }
 
-void MainMenue::ReceiveJson(int id, Json::Value json)
+void MainMenu::ReceiveJson(int id, Json::Value json)
 {
     AppBase *app=static_cast<AppBase*>(stackWidget->widget(stackKeys.key(id)));
     if(app)
         app->receiveJson(json);
 }
 
-void MainMenue::ExitWidget(int id)
+void MainMenu::ExitWidget(int id)
 {
     int index=stackKeys.key(id);
     if(stackWidget->currentIndex()==index){
@@ -117,12 +118,12 @@ void MainMenue::ExitWidget(int id)
     }
 }
 
-void MainMenue::GetDateTime()
+void MainMenu::GetDateTime()
 {
     this->labelTime->setText(QTime::currentTime().toString("HH:mm:ss"));
 }
 
-void MainMenue::onMenuButtonClick()
+void MainMenu::onMenuButtonClick()
 {
     QPushButton *btn=static_cast<QPushButton*>(sender());
     if(btn==NULL)
@@ -156,12 +157,12 @@ void MainMenue::onMenuButtonClick()
     }
 }
 
-void MainMenue::menuBtnClickedSlots(QString btnText)
+void MainMenu::menuBtnClickedSlots(QString btnText)
 {
 
     //_D("%s\n",btnText.toUtf8().data());
 
-    DataManager::DataInterface()->OnMenuBtnClick(btnText.toUtf8().data());
+    m_pList->getAppDataInterface()->OnMenuBtnClick(btnText.toUtf8().data());
 
     if("ListButton" == btnText)
     {
@@ -169,11 +170,11 @@ void MainMenue::menuBtnClickedSlots(QString btnText)
         //ts.speak("请说一个指令");
         //while(ts.isSpeaking())
            // waitMSec(100);
-        DataManager::DataInterface()->OnVRStartRecord();
+        m_pList->getAppDataInterface()->OnVRStartRecord();
     }
 }
 
-void MainMenue::onMoveBack()
+void MainMenu::onMoveBack()
 {
     LOGD("onMoveBack");
     if(stackHistory.isEmpty()){
@@ -201,7 +202,7 @@ void MainMenue::onMoveBack()
 }
 
 
-void MainMenue::keyPressEvent(QKeyEvent *e)
+void MainMenu::keyPressEvent(QKeyEvent *e)
 {
     if(e->key()==Qt::Key_Back){
         this->onMoveBack();

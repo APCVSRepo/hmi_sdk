@@ -1,4 +1,4 @@
-#ifndef SLIDER_H
+﻿#ifndef SLIDER_H
 #define SLIDER_H
 
 #include <QWidget>
@@ -13,10 +13,9 @@ class Slider : public CPopBase
 {
     Q_OBJECT
 public:
-    explicit Slider(QWidget *parent = 0);
+    explicit Slider(AppListInterface * pList, QWidget *parent = 0);
     
     void execShow();
-    void testShow();
 
 
 signals:

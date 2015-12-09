@@ -1,4 +1,4 @@
-#ifndef SHOW_H
+﻿#ifndef SHOW_H
 #define SHOW_H
 
 #include "UI/Common/AppBase.h"
@@ -21,13 +21,11 @@ class Show : public AppBase
 {
     Q_OBJECT
 public:
-    explicit Show(QWidget *parent = 0);
+    explicit Show(AppListInterface * pList, QWidget *parent = 0);
     ~Show();
 
     void execShow();
     void setMediaColckTimer(Json::Value jsonObj);
-    void testShow();
-    virtual void receiveJson(Json::Value json);
 
 signals:
     void moreClicked();
@@ -39,8 +37,6 @@ signals:
 public slots:
     void upArrowSlots();
     void downArrowSlots();
-
-    void moveBackSlots();
 
     void onListSelect(const QModelIndex &index);
 

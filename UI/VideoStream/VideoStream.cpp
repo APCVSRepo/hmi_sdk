@@ -1,4 +1,4 @@
-#include "VideoStream.h"
+﻿#include "VideoStream.h"
 #include <string>
 #include <stdio.h>
 #include <stdarg.h>
@@ -6,6 +6,7 @@
 //#include <windows.h>
 #include <QMouseEvent>
 #include <QPainter>
+#include "Include/global_first.h"
 
 #include "Connect/SDLConnector.h"
 #include "main.h"

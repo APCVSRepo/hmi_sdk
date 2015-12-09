@@ -1,4 +1,4 @@
-#ifndef CUIMANAGER_H
+﻿#ifndef CUIMANAGER_H
 #define CUIMANAGER_H
 #include "UI/AppLink.h"
 #include "UI/Alert/AlertUI.h"
@@ -22,28 +22,19 @@
 #include "UI/VideoStream/VideoStream.h"
 #endif
 
-#include "Common/MainMenue.h"
+#include "Common/MainMenu.h"
 
 
 class CUIManager : public QWidget, public UIInterface
 {
     Q_OBJECT
 public:
-    explicit CUIManager(QWidget *parent = NULL);
+    explicit CUIManager(AppListInterface * pList, QWidget *parent = NULL);
     ~CUIManager();
 
-    //start sdl
-    void  initSDL();
-#ifdef SDL_SUPPORT_LIB
-    static void *SDLStartThread(void *arg);
-    static void SDLKillThread();
-    static bool FileCopyToConfigdir(const char *dir);
-#endif
     //hmi
-    void initAppHMI();
     void showMainUI();
     void onAppShow(int type);
-    void onAppActivated(AppDataInterface* pInterface);
     void onAppClose();
     void onAppRefresh();
 
@@ -53,7 +44,6 @@ public:
     void setMediaColckTimer(Json::Value jsonObj);
 
     void tsSpeak(int VRID, std::string strText);
-    void switchNewApp(int newAppID);
 
 signals:
     void finishMainHMI();
@@ -64,8 +54,9 @@ signals:
 
     void onTestStartSignal();
     void onTestStopSignal();
+
 public slots:
-    void onMainHMIStart();
+    void initAppHMI();
     void AppShowSlot(int type);
     void AppCloseSlot();
     void AppRefreshSlot();
@@ -76,8 +67,8 @@ public slots:
 
 
 private:
-    MainMenue *m_MainMenu;
-    DataManager *manager;
+    MainMenu *m_MainMenu;
+    AppListInterface * m_pAppList;
 
 #ifdef VIDEO_TEST
     VideoStream m_videoStreamWidget;

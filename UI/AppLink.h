@@ -1,4 +1,4 @@
-#ifndef APPLINK_H
+﻿#ifndef APPLINK_H
 #define APPLINK_H
 
 #include "AppInclude.h"
@@ -18,7 +18,7 @@ class AppLink : public AppBase
     Q_OBJECT
 
 public:
-    AppLink(QWidget *parent = 0);
+    AppLink(AppListInterface * pList, QWidget *parent = 0);
     ~AppLink();
 
     void execShow();
@@ -36,7 +36,6 @@ private slots:
 //    void upArrowSlots();
 //    void downArrowSlots();
 
-    void moveBackSlots();
     void inAppSlots(int appID);
     void findNewAppSlots();
 

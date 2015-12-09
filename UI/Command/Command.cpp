@@ -1,8 +1,8 @@
-#include "Command.h"
+﻿#include "Command.h"
 #include "vector"
 using std::vector;
 
-Command::Command(QWidget *parent) : AppBase(parent)
+Command::Command(AppListInterface * pList, QWidget *parent) : AppBase(pList, parent)
 {
     initLayout();
    // connect(this,SIGNAL(returnShow()),this,SLOT(returnShowSlots()));
@@ -209,14 +209,13 @@ void Command::listWidgetDoubleClickedSlots(QModelIndex index)
 
 void Command::exitAppSlots()
 {
-    DataManager::ListInterface()->OnApplicationExit(DataManager::AppId());
-    this->showCurUI(ID_APPLINK);
+    m_pList->OnApplicationExit();
 }
 
 void Command::commandClickSlots(int cmdID)
 {
     //_D("appID = %d:%d\n",m_i_appID,cmdID);
-    DataManager::DataInterface()->OnCommandClick(DataManager::AppId(), cmdID);
+    m_pList->getAppDataInterface()->OnCommandClick(cmdID);
 }
 
 
@@ -417,27 +416,14 @@ void Command::backBtnClickSlots()
     }
 }
 
-void Command::moveBackSlots()
-{
-    if(m_b_backIcon)
-    {
-        hideBackIcon();
-        flushListWidget();
-    }
-    else
-    {
-        this->showCurUI(ID_SHOW);
-    }
-}
-
 void Command::execShow()
 {
 
-    if (DataManager::DataInterface())
+    if (m_pList->getAppDataInterface())
     {
         this->clearAllCommand();
         vector<SMenuCommand> CmdList;
-        CmdList = DataManager::DataInterface()->getCommandList();
+        CmdList = m_pList->getAppDataInterface()->getCommandList();
         for(int i = 0; i < CmdList.size(); i++)
         {
             if(0 != CmdList.at(i).i_cmdID && 0 == CmdList.at(i).i_menuID)
@@ -453,7 +439,7 @@ void Command::execShow()
 //                this->setAppID(CmdList.at(i).i_appID);
 
                 vector<SMenuCommand> TmpCmdList;
-                TmpCmdList = DataManager::DataInterface()->getCommandList(CmdList.at(i).i_menuID);
+                TmpCmdList = m_pList->getAppDataInterface()->getCommandList(CmdList.at(i).i_menuID);
                 for(int j = 0; j < TmpCmdList.size(); j++)
                 {
                     this->addSubCommand(CmdList.at(i).str_menuName.data()

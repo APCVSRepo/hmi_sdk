@@ -1,13 +1,14 @@
 ﻿#include "AppBase.h"
-#include "MainMenue.h"
+#include "MainMenu.h"
 #include <QMouseEvent>
 
-AppBase::AppBase(QWidget *parent) : QWidget(parent)
+AppBase::AppBase(AppListInterface * pList, QWidget *parent) : QWidget(parent)
 {
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
     this->setGeometry(0,0,parent->width(),parent->height());
 //    this->setFixedSize(ConfigSingle::Instance()->getMainWindowW(),ConfigSingle::Instance()->getMainWindowH());
     this->setBkgImage((char *)":/images/mainbkg.png");
+    m_pList = pList;
 }
 
 AppBase::~AppBase()
@@ -84,10 +85,3 @@ void AppBase::receiveJson(Json::Value json)
 {
 
 }
-
-void AppBase::moveBackSlots()
-{
-
-}
-
-

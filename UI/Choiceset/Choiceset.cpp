@@ -1,6 +1,6 @@
-#include "Choiceset.h"
+﻿#include "Choiceset.h"
 
-Choiceset::Choiceset(QWidget *parent) : AppBase(parent)
+Choiceset::Choiceset(AppListInterface * pList, QWidget *parent) : AppBase(pList, parent)
 {
 
     m_timerHide = new QTimer;
@@ -220,8 +220,7 @@ void Choiceset::downArrowSlots()
 void Choiceset::menuClickedSlots(int code, int performInteractionID, int choiceID)
 {
     //_D("code=%d:%d:%d\n",code,performInteractionID,choiceID);
-    DataManager::DataInterface()->OnPerformInteraction(code, performInteractionID, choiceID);
-    this->showCurUI(ID_SHOW);
+    m_pList->getAppDataInterface()->OnPerformInteraction(code, performInteractionID, choiceID);
 }
 
 void Choiceset::setChoicesetName(QString title)
@@ -229,12 +228,6 @@ void Choiceset::setChoicesetName(QString title)
     this->setTitle(title);
 }
 
-
-void Choiceset::moveBackSlots()
-{
-    //this->close();
-    goBack();
-}
 
 void Choiceset::setTimeOut(int duration)
 {
@@ -251,31 +244,16 @@ void Choiceset::timeHideOutSlots()
 void Choiceset::execShow()
 {
     setChoicesetName("Choice Name");
-    if (DataManager::DataInterface())
+    if (m_pList->getAppDataInterface())
     {
-        m_jsonData = DataManager::DataInterface()->getInteractionJson();
-        this->setTimeOut(m_jsonData["params"]["timeout"].asInt());
+        m_jsonData = m_pList->getAppDataInterface()->getInteractionJson();
+        setTimeOut(m_jsonData["params"]["timeout"].asInt());
 //        this->setAppID(m_jsonData["params"]["appID"].asInt());
-        this->setInteractionID(m_jsonData["id"].asInt());
+        setInteractionID(m_jsonData["id"].asInt());
         for(int i = 0; i < m_jsonData["params"]["choiceSet"].size(); i++)
         {
-            this->addNewMenu(m_jsonData["params"]["choiceSet"][i]["choiceID"].asInt(),m_jsonData["params"]["choiceSet"][i]["menuName"].asString());
+            addNewMenu(m_jsonData["params"]["choiceSet"][i]["choiceID"].asInt(),m_jsonData["params"]["choiceSet"][i]["menuName"].asString());
         }
     }
-    this->show();
-}
-
-void Choiceset::testShow()
-{
-
-    this->setTimeOut(20000);
-    this->setInteractionID(5);
-
-    this->addNewMenu(1,"MenuName1");
-    this->addNewMenu(2,"MenuName2");
-    this->addNewMenu(3,"MenuName3");
-    this->addNewMenu(4,"MenuName4");
-    this->addNewMenu(5,"MenuName5");
-
-    this->show();
+    show();
 }

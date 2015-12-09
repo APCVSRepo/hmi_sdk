@@ -1,11 +1,11 @@
-#include "ScrollMsg.h"
+﻿#include "ScrollMsg.h"
 #include "QVBoxLayout"
 #include "QHBoxLayout"
 #include "UI/Config/Config.h"
 #include <QTextLayout>
 #include <QTextBlock>
 
-CScrollMsg::CScrollMsg(QWidget *parent) : CPopBase(parent)
+CScrollMsg::CScrollMsg(AppListInterface * pList, QWidget *parent) : CPopBase(pList, parent)
 {
 //    m_labelBackground.setParent(this);
     m_editText = new QTextEdit;
@@ -251,7 +251,7 @@ void CScrollMsg::onButtonOneClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -262,7 +262,7 @@ void CScrollMsg::onButtonTwoClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -273,7 +273,7 @@ void CScrollMsg::onButtonThrClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -284,7 +284,7 @@ void CScrollMsg::onButtonFouClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -295,7 +295,7 @@ void CScrollMsg::onButtonOneClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -306,7 +306,7 @@ void CScrollMsg::onButtonTwoClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -317,7 +317,7 @@ void CScrollMsg::onButtonThrClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -328,54 +328,41 @@ void CScrollMsg::onButtonFouClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
 void CScrollMsg::scrollMsgAbortSlots(int smID, int reason)
 {
     //_D("smID=%d, reason=%d\n",smID,reason);
-    DataManager::DataInterface()->OnScrollMessageResponse(smID, reason);
+    m_pList->getAppDataInterface()->OnScrollMessageResponse(smID, reason);
 }
 
 
 void CScrollMsg::execShow()
 {
-    if (DataManager::DataInterface())
+    if (m_pList->getAppDataInterface())
     {
-        m_jsonData = DataManager::DataInterface()->getScrollableMsgJson()["params"];
+        m_jsonData = m_pList->getAppDataInterface()->getScrollableMsgJson()["params"];
 
-        this->setTimeOut(m_jsonData["timeout"].asInt());
-        this->setBtnText(0, "-", false);
-        this->setBtnText(1, "-", false);
-        this->setBtnText(2, "-", false);
-        this->setBtnText(3, "-", false);
+        setTimeOut(m_jsonData["timeout"].asInt());
+        setBtnText(0, "-", false);
+        setBtnText(1, "-", false);
+        setBtnText(2, "-", false);
+        setBtnText(3, "-", false);
 
         if (m_jsonData.isMember("messageText"))
         {
-            this->setMessage(m_jsonData["messageText"]["fieldText"].asString().data());
+            setMessage(m_jsonData["messageText"]["fieldText"].asString().data());
         }
         if (m_jsonData.isMember("softButtons"))
         {
             for (int i = 0; i < m_jsonData["softButtons"].size(); i++)
             {
-                this->setBtnText(i, m_jsonData["softButtons"][i]["text"].asString().c_str(),m_jsonData["softButtons"][i]["isHighlighted"].asBool());
-                this->setBtnID(i, m_jsonData["softButtons"][i]["softButtonID"].asInt());
+                setBtnText(i, m_jsonData["softButtons"][i]["text"].asString().c_str(),m_jsonData["softButtons"][i]["isHighlighted"].asBool());
+                setBtnID(i, m_jsonData["softButtons"][i]["softButtonID"].asInt());
             }
         }
     }
-    this->show();
-}
-
-void CScrollMsg::testShow()
-{
-    this->setTimeOut(20000);
-    this->setBtnText(0, "button1", true);
-    this->setBtnText(1, "OK", true);
-    this->setBtnText(2, "Save", true);
-    this->setBtnText(3, "Close", true);
-
-    this->setMessage("messageText, ksi jfd l name l ive oidf lsfj,messageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfjmessageText, ksi jfd l name l ive oidf lsfj");
-
-    this->show();
+    show();
 }

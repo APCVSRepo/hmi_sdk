@@ -1,11 +1,11 @@
-#include "Slider.h"
+﻿#include "Slider.h"
 #include "QHBoxLayout"
 #include "QVBoxLayout"
 #include "UI/Config/Config.h"
 #include "Common/PopBase.h"
 
-Slider::Slider(QWidget *parent) :
-  CPopBase(parent),
+Slider::Slider(AppListInterface * pList, QWidget *parent) :
+  CPopBase(pList, parent),
     m_iPos(0)
 {
     InitLayout();
@@ -85,7 +85,7 @@ void Slider::InitLayout()
 void Slider::sliderClickedSlots( int code, int sliderid, int sliderPosition)
 {
     //_D("code=%d:%d:%d\n",code,sliderid,sliderPosition);
-    DataManager::DataInterface()->OnSliderResponse(code, sliderid,sliderPosition);
+    m_pList->getAppDataInterface()->OnSliderResponse(code, sliderid,sliderPosition);
     this->showCurUI(ID_SHOW);
 }
 
@@ -194,9 +194,9 @@ void Slider::onButtonCancelClicked()
 
 void Slider::execShow()
 {
-    if (DataManager::DataInterface())
+    if (m_pList->getAppDataInterface())
     {
-        m_jsonData = DataManager::DataInterface()->getSlider();
+        m_jsonData = m_pList->getAppDataInterface()->getSlider();
 //        this->setAppID(m_jsonData["params"]["appID"].asInt());
         this->setSliderID(m_jsonData["id"].asInt());
         this->setTimeOut(m_jsonData["params"]["timeout"].asInt());
@@ -222,29 +222,5 @@ void Slider::execShow()
 
         this->setSliderStrings(vec_strSliter,position);
     }
-    this->show();
-}
-
-void Slider::testShow()
-{
-
-//  this->setSliderID(22);
-    this->setTimeOut(20000);
-
-    int numTicks =7;
-    int position = 2;
-
-    this->setSliderTitle("ford hmi");
-
-    std::vector <std::string > vec_strSliter;
-    vec_strSliter.clear();
-    vec_strSliter.push_back("lk1");
-
-    while(vec_strSliter.size() < numTicks)
-    {
-        vec_strSliter.push_back("-");
-    }
-
-    this->setSliderStrings(vec_strSliter,position);
     this->show();
 }

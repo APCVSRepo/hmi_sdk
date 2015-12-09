@@ -1,8 +1,8 @@
-#include "PopBase.h"
+﻿#include "PopBase.h"
 #include "UI/Config/Config.h"
 
 
-CPopBase::CPopBase(QWidget *parent) :
+CPopBase::CPopBase(AppListInterface * pList, QWidget *parent) :
     QWidget(parent)
 {
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
@@ -21,6 +21,7 @@ CPopBase::CPopBase(QWidget *parent) :
 //    connect(&m_labelBackspace, SIGNAL(clicked()), this, SIGNAL(onSpaceCliced()));
 
     m_timer = new QTimer;
+    m_pList = pList;
 }
 
 void CPopBase::execShow()

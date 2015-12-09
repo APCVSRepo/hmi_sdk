@@ -1,9 +1,10 @@
-#ifndef APPDATAINTERFACE_H
+﻿#ifndef APPDATAINTERFACE_H
 #define APPDATAINTERFACE_H
 
 #include "json/json.h"
 #include <string.h>
 #include <vector>
+#include "Include/global_first.h"
 
 typedef struct command{
     int i_appID;
@@ -36,13 +37,15 @@ public:
     virtual Json::Value getInteractionJson() = 0;
     virtual std::string getUrlString() = 0;
 
+    virtual int getCurUI() = 0;
+
     virtual void OnSoftButtonClick(int sbID, int mode) = 0;
-    virtual void OnCommandClick(int appID,int cmdID) = 0;
+    virtual void OnCommandClick(int cmdID) = 0;
     virtual void OnAlertResponse(int alertID, int reason) = 0;
     virtual void OnScrollMessageResponse(int smID, int reason) = 0;
     virtual void OnSliderResponse( int code, int sliderid, int sliderPosition) = 0;
-    virtual void OnTTSSpeek(int speekID, int code) = 0;
-    virtual void OnPerformAudioPassThru(int appID, int performaudiopassthruID, int code) = 0;
+    virtual void OnTTSSpeek(int code) = 0;
+    virtual void OnPerformAudioPassThru(int performaudiopassthruID, int code) = 0;
     virtual void OnPerformInteraction(int code, int performInteractionID, int choiceID) = 0;
 
     virtual void OnMenuBtnClick(std::string btnText) = 0;

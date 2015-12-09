@@ -1,4 +1,4 @@
-#ifndef CCHOICESETVR_H
+﻿#ifndef CCHOICESETVR_H
 #define CCHOICESETVR_H
 
 #include "QLabel"
@@ -11,11 +11,10 @@ class CChoicesetVR : public CPopBase
 {
     Q_OBJECT
 public:
-    explicit CChoicesetVR(QWidget *parent = 0);
+    explicit CChoicesetVR(AppListInterface * pList, QWidget *parent = 0);
     ~CChoicesetVR();
 
     void execShow();
-    void testShow();
 
 signals:
     void VRmenuClicked(int code, int id, int choiceID);

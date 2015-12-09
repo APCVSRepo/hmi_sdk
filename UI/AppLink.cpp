@@ -1,16 +1,12 @@
-#include "AppLink.h"
+﻿#include "AppLink.h"
 #include "Alert/AlertUI.h"
 #include "ScrollableMessage/ScrollMsg.h"
 #include "Show/Show.h"
 #include "Common/AppBase.h"
-AppLink::AppLink(QWidget *parent)
-    : AppBase(parent)
+AppLink::AppLink(AppListInterface * pList, QWidget *parent)
+    : AppBase(pList, parent)
 {
     m_scrollWidget.init(4, ui_app_height-30);
-
-//    connect(&m_scrollWidget,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
-//    connect(&m_scrollWidget,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
-    //connect(&m_scrollWidget,SIGNAL(valueChanged(int)),SLOT());
     connect(this,SIGNAL(inAppSignals(int)),this,SLOT(inAppSlots(int)));
     connect(this,SIGNAL(findNewApp()),this,SLOT(findNewAppSlots()));
     initLayout();
@@ -25,26 +21,14 @@ void AppLink::initLayout()
     m_listWidget.setVerticalScrollBar(&m_scrollWidget);
     m_listWidget.setParent(this);
     m_listWidget.setGeometry(ui_app_width*0.1,0,ui_app_width*0.8,ui_app_height);
-//    QHBoxLayout *midLayout = new QHBoxLayout(this);
-//    midLayout->addStretch(2);
-//    midLayout->addWidget(&m_listWidget,65);
-//    //midLayout->addWidget(&m_scrollWidget,5);
-//    midLayout->addStretch(3);
-//    QVBoxLayout *mLayout = new QVBoxLayout(this);
-//    //mLayout->addWidget(&((AppBase*)parent())->m_l,1, Qt::AlignCenter);
-//    mLayout->addLayout(midLayout, 4);
-//   // mLayout->addWidget(&m_lab_time,1, Qt::AlignRight);
+    m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-//    mLayout->setMargin(0); //边框无缝
-//    mLayout->setSpacing(0);
-m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//m_listWidget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 #ifndef ANDROID
     QPalette pll = m_listWidget.palette();
     pll.setBrush(QPalette::Base,QBrush(QColor(255,255,255,0)));
     m_listWidget.setPalette(pll);
 #endif
-    //m_listWidget.setFixedHeight(ui_app_height-10);
+
     m_listWidget.setFrameShape(QFrame::NoFrame); //设置无边框
     m_listWidget.setFocusPolicy(Qt::NoFocus); //去除选中虚线框
     m_listWidget.setEditTriggers(QAbstractItemView::NoEditTriggers); //设置不可编辑
@@ -53,7 +37,7 @@ m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 #else
     m_listWidget.setStyleSheet("QListWidget:item:hover{border: 0px;}"); //鼠标移上去不响应突出
 #endif
-   // m_listWidget.verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 0px;}");
+
     connect(&m_listWidget,SIGNAL(clicked(QModelIndex)),this,SLOT(listWidgetClickedSlots(QModelIndex)));
     connect(&m_listWidget,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(listWidgetDoubleClickedSlots(QModelIndex)));
 
@@ -213,45 +197,29 @@ void AppLink::onScrollTo(int v)
 
 void AppLink::inAppSlots(int appID)
 {
-    DataManager::setAppId(appID);
-    this->showCurUI(ID_SHOW);
+    m_pList->OnAppActivated(appID);
+    showCurUI(ID_SHOW);
 }
 
 
 
 void AppLink::findNewAppSlots()
 {
-    this->showCurUI(ID_NOTIFY);
-}
-
-
-
-void AppLink::moveBackSlots()
-{
-    //this->close();
-    goBack();
+    showCurUI(ID_NOTIFY);
 }
 
 void AppLink::execShow()
 {
     // TODO: getData();
-    this->clearNewApp();
-    this->setTitle("Mobile Apps");
-    if(NULL == DataManager::ListInterface())
-    {
-        this->show();
-        return;
-    }
-    std::vector <Json::Value > pVecNewApp;
-    pVecNewApp = DataManager::ListInterface()->getNewAppJsonVector();
-    for (int i = 0; i < pVecNewApp.size(); i++)
-    {
-        this->addNewApp(pVecNewApp.at(i)["params"]["application"]["appName"].asString().data()
-                              ,pVecNewApp.at(i)["params"]["application"]["appID"].asInt());
-    }
+    clearNewApp();
+    setTitle("Mobile Apps");
 
-//    addNewApp("Sina",1);
-//    addNewApp("Baidu",2);
-//    addNewApp("Gaode",3);
-    this->show();
+    std::vector<int> vAppIDs;
+    std::vector<std::string> vAppNames;
+    m_pList->getAppList(vAppIDs, vAppNames);
+    for (int i = 0; i < vAppIDs.size(); i++)
+    {
+        addNewApp(vAppNames[i].data(), vAppIDs[i]);
+    }
+    show();
 }

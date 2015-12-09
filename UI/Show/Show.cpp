@@ -1,7 +1,7 @@
-#include "Show.h"
+﻿#include "Show.h"
 #include "UI/Command/Command.h"
 
-Show::Show(QWidget *parent) : AppBase(parent)
+Show::Show(AppListInterface * pList, QWidget *parent) : AppBase(pList, parent)
 {
     m_btn_one = new CButton;
     m_btn_two = new CButton;
@@ -341,13 +341,6 @@ void Show::downArrowSlots()
     m_listWidget.setCurrentRow(3);
 }
 
-void Show::moveBackSlots()
-{
-    //this->close();
-    DataManager::ListInterface()->OnApplicationOut(DataManager::AppId());
-    this->showCurUI(ID_APPLINK);
-}
-
 void Show::onListSelect(const QModelIndex &index)
 {
     emit this->onListClicked(index.row());
@@ -431,11 +424,11 @@ void Show::btnThrClickedSlots(int btID)
     if(m_i_totalNum == m_i_currentNo && m_i_totalNum != 1)
     {
         //clicked More;
-        this->showCurUI(ID_COMMAND);
+        showCurUI(ID_COMMAND);
     }
     else
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -443,7 +436,7 @@ void Show::btnTwoClickedSlots(int btID)
 {
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -451,7 +444,7 @@ void Show::btnOneClickedSlots(int btID)
 {
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -459,7 +452,7 @@ void Show::btnThrClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -467,7 +460,7 @@ void Show::btnTwoClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -475,7 +468,7 @@ void Show::btnOneClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        DataManager::DataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -490,9 +483,9 @@ void Show::execShow()
     this->setMainField4(true,"");
     this->setMediaTrack(true,"");
     this->setMediaClock(true,"");
-    if (DataManager::DataInterface())
+    if (m_pList->getAppDataInterface())
     {
-        pObj = DataManager::DataInterface()->getShowData();
+        pObj = m_pList->getAppDataInterface()->getShowData();
         for(int i = 0; i < pObj["params"]["showStrings"].size(); i++)
         {
             if("mainField1" == pObj["params"]["showStrings"][i]["fieldName"].asString())
@@ -557,11 +550,6 @@ void Show::execShow()
 //   }
 //}
 
-void Show::receiveJson(Json::Value json)
-{
-    setMediaColckTimer(json);
-}
-
 void Show::setMediaColckTimer(Json::Value jsonObj)
 {
     m_i_startH = jsonObj["params"]["startTime"]["hours"].asInt();
@@ -617,36 +605,4 @@ void Show::mediaClockSlots()
         m_timer_mediaClock->stop();
 
     this->setMediaClock(true,nowMeidaClockTime.toString());
-}
-
-void Show::testShow()
-{
-    std::vector <SSoftButton > vec_softButtons;
-    vec_softButtons.clear();
-    this->setMainField1(true,"");
-    this->setMainField2(true,"");
-    this->setMainField3(true,"");
-    this->setMainField4(true,"");
-    this->setMediaTrack(true,"");
-    this->setMediaClock(true,"");
-
-    this->setMainField1(true,"lklklklk1");
-    this->setMainField2(true,"lklklklk2");
-    this->setMainField3(true,"lklklklk3");
-    this->setMainField4(true,"lklklklk4");
-    this->setMediaTrack(true,"aadkk");
-    this->setMediaClock(true,"12:59");
-
-    for(int i = 0; i < 5; i++)
-    {
-        SSoftButton tmpSoftButton;
-        tmpSoftButton.b_isHighlighted = true;
-        tmpSoftButton.i_softButtonID = 1;
-        tmpSoftButton.str_text = "buttona";
-        vec_softButtons.push_back(tmpSoftButton);
-    }
-    this->setSoftButtons(vec_softButtons);
-
-
-    this->show();
 }

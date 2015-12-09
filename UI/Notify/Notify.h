@@ -1,4 +1,4 @@
-#ifndef NOTIFY_H
+﻿#ifndef NOTIFY_H
 #define NOTIFY_H
 
 #include <QWidget>
@@ -13,7 +13,6 @@ public:
     explicit Notify(QWidget *parent = 0);
 
     void execShow();
-    void testShow();
 
 signals:
     

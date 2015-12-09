@@ -1,4 +1,4 @@
-#ifndef CALERTUI_H
+﻿#ifndef CALERTUI_H
 #define CALERTUI_H
 
 #include "Common/PopBase.h"
@@ -9,7 +9,7 @@ class CAlertUI : public CPopBase
 {
     Q_OBJECT
 public:
-    explicit CAlertUI(QWidget *parent = 0);
+    explicit CAlertUI(AppListInterface * pData, QWidget *parent = 0);
     ~CAlertUI();
 
 public:

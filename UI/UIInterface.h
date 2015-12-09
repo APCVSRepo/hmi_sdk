@@ -1,4 +1,4 @@
-#ifndef UIINTERFACE_H
+﻿#ifndef UIINTERFACE_H
 #define UIINTERFACE_H
 #include "AppData/AppDataInterface.h"
 
@@ -16,6 +16,7 @@ enum ShowType
     ID_NOTIFY,
     ID_APP_MAX
 };
+
 #define MIN_APP_BASE  ID_APPLINK
 #define MAX_APP_BASE  (ID_SHOW+1)
 #define MIN_POP_BASE  ID_ALERT
@@ -33,7 +34,6 @@ class UIInterface
 {
 public:
     virtual void onAppShow(int type) = 0;
-    virtual void onAppActivated(AppDataInterface* pInterface) = 0;
     virtual void onAppClose() = 0;
     virtual void onAppRefresh() = 0;
 
@@ -42,8 +42,6 @@ public:
 
     virtual void setMediaColckTimer(Json::Value jsonObj) = 0;
     virtual void tsSpeak(int VRID, std::string strText) = 0;
-
-    virtual void switchNewApp(int newAppID) = 0;
 };
 
 #endif // UIINTERFACE_H

@@ -1,10 +1,10 @@
-#include "Notify.h"
+﻿#include "Notify.h"
 #include "UI/Config/Config.h"
 #include "Common/PopBase.h"
 #include <QTime>
 #include <QApplication>
 Notify::Notify(QWidget *parent) :
-    CPopBase(parent)
+    CPopBase(NULL, parent)
 {
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(hide()));
@@ -70,17 +70,4 @@ void Notify::execShow()
 //    this->hide();
     LOGD("Notify goBack\n");
     goBack();
-}
-
-void Notify::testShow()
-{
-    this->show();
-
-    this->setText("Searching...");
-
-    waitSec(1);
-    this->setText("No additional\nApps found.");
-
-    waitSec(1);
-    this->hide();
 }

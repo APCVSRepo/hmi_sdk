@@ -2,10 +2,6 @@
 #include <Connect/SDLConnector.h>
 #include <vector>
 #include <iostream>
-#include<QString>
-#include<QDateTime>
-#include <QTime>
-#include <QTimer>
 #include <pthread.h>
 #include "Config/Config.h"
 
@@ -522,8 +518,9 @@ void SDLConnector::OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y)
      event[0]["c"]=coord;
 
 #ifdef WIN32
-     QTime time=QTime::currentTime();
-     int   t = (time.hour()*3600+time.minute()*60+time.second())%1000*1000+time.msec();
+     SYSTEMTIME  time;
+     GetSystemTime(&time);
+     int   t = (time.wHour*3600+time.wMinute*60+time.wSecond)%1000*1000+time.wMilliseconds;
 #else
      timeval val;
      gettimeofday(&val,NULL);

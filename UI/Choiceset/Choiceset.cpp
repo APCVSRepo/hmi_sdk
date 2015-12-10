@@ -220,7 +220,7 @@ void Choiceset::downArrowSlots()
 void Choiceset::menuClickedSlots(int code, int performInteractionID, int choiceID)
 {
     //_D("code=%d:%d:%d\n",code,performInteractionID,choiceID);
-    m_pList->getAppDataInterface()->OnPerformInteraction(code, performInteractionID, choiceID);
+    m_pList->getActiveApp()->OnPerformInteraction(code, performInteractionID, choiceID);
 }
 
 void Choiceset::setChoicesetName(QString title)
@@ -244,9 +244,9 @@ void Choiceset::timeHideOutSlots()
 void Choiceset::execShow()
 {
     setChoicesetName("Choice Name");
-    if (m_pList->getAppDataInterface())
+    if (m_pList->getActiveApp())
     {
-        m_jsonData = m_pList->getAppDataInterface()->getInteractionJson();
+        m_jsonData = m_pList->getActiveApp()->getInteractionJson();
         setTimeOut(m_jsonData["params"]["timeout"].asInt());
 //        this->setAppID(m_jsonData["params"]["appID"].asInt());
         setInteractionID(m_jsonData["id"].asInt());

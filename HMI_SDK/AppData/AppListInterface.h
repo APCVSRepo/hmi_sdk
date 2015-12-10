@@ -13,9 +13,8 @@ class AppListInterface
 public:
     virtual void getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames) = 0;
     virtual void OnAppActivated(int appID) = 0;
-    virtual void OnApplicationOut(int appID) = 0;
-    virtual void OnApplicationExit() = 0;
-    virtual AppDataInterface* getAppDataInterface() = 0;
+    virtual void OnAppExit() = 0;
+    virtual AppDataInterface* getActiveApp() = 0;
     virtual void setUIManager(UIInterface *pUI) = 0;
 };
 

@@ -252,7 +252,7 @@ void CAlertUI::onButtonOneClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID,0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID,0);
     }
 }
 
@@ -263,7 +263,7 @@ void CAlertUI::onButtonTwoClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -274,7 +274,7 @@ void CAlertUI::onButtonThrClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -285,7 +285,7 @@ void CAlertUI::onButtonFouClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -296,7 +296,7 @@ void CAlertUI::onButtonOneClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -307,7 +307,7 @@ void CAlertUI::onButtonTwoClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -318,7 +318,7 @@ void CAlertUI::onButtonThrClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -329,7 +329,7 @@ void CAlertUI::onButtonFouClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -390,7 +390,7 @@ void CAlertUI::onButtonFouClickedLongSlots(int btID)
 void CAlertUI::alertAbortSlots(int alertID, int reason)
 {
     //_D("alertID=%d, reason=%d\n",alertID,reason);
-    m_pList->getAppDataInterface()->OnAlertResponse(alertID,reason);
+    m_pList->getActiveApp()->OnAlertResponse(alertID,reason);
 }
 
 void CAlertUI::execShow()
@@ -398,9 +398,9 @@ void CAlertUI::execShow()
     Json::Value pObj;
     int itemCnt = 0;
 
-    if (m_pList->getAppDataInterface())
+    if (m_pList->getActiveApp())
     {
-        pObj = m_pList->getAppDataInterface()->getAlertJson();
+        pObj = m_pList->getActiveApp()->getAlertJson();
 
         m_i_alertID = pObj["id"].asInt();
 

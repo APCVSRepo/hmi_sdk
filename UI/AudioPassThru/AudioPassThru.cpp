@@ -191,15 +191,15 @@ void CAudioPassThru::onButtonClickedSlots(int id)
 void CAudioPassThru::audioPassThruHideSlots(int audioPassThruId, int code)
 {
     //_D("appID=%d:%d:%d\n",m_i_appID,audioPassThruId,code);
-    m_pList->getAppDataInterface()->OnPerformAudioPassThru(audioPassThruId, code);
-    m_pList->getAppDataInterface()->OnVRCancelRecord();
+    m_pList->getActiveApp()->OnPerformAudioPassThru(audioPassThruId, code);
+    m_pList->getActiveApp()->OnVRCancelRecord();
 }
 
 void CAudioPassThru::execShow()
 {
-    if (m_pList->getAppDataInterface())
+    if (m_pList->getActiveApp())
     {
-        m_jsonData = m_pList->getAppDataInterface()->getAudioPassThruJson();
+        m_jsonData = m_pList->getActiveApp()->getAudioPassThruJson();
         if(!m_jsonData.isMember("id") || !m_jsonData.isMember("params"))
         {
             show();

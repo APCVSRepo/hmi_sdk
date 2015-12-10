@@ -251,7 +251,7 @@ void CScrollMsg::onButtonOneClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -262,7 +262,7 @@ void CScrollMsg::onButtonTwoClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -273,7 +273,7 @@ void CScrollMsg::onButtonThrClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -284,7 +284,7 @@ void CScrollMsg::onButtonFouClickedSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -295,7 +295,7 @@ void CScrollMsg::onButtonOneClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -306,7 +306,7 @@ void CScrollMsg::onButtonTwoClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -317,7 +317,7 @@ void CScrollMsg::onButtonThrClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -328,22 +328,22 @@ void CScrollMsg::onButtonFouClickedLongSlots(int btID)
     goBack();
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
 void CScrollMsg::scrollMsgAbortSlots(int smID, int reason)
 {
     //_D("smID=%d, reason=%d\n",smID,reason);
-    m_pList->getAppDataInterface()->OnScrollMessageResponse(smID, reason);
+    m_pList->getActiveApp()->OnScrollMessageResponse(smID, reason);
 }
 
 
 void CScrollMsg::execShow()
 {
-    if (m_pList->getAppDataInterface())
+    if (m_pList->getActiveApp())
     {
-        m_jsonData = m_pList->getAppDataInterface()->getScrollableMsgJson()["params"];
+        m_jsonData = m_pList->getActiveApp()->getScrollableMsgJson()["params"];
 
         setTimeOut(m_jsonData["timeout"].asInt());
         setBtnText(0, "-", false);

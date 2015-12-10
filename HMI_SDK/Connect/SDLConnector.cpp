@@ -168,7 +168,7 @@ void SDLConnector::_onButtonClickAction(std::string name, std::string mode, int 
     m_Buttons.SendJson(root);
 }
 
-void SDLConnector::OnApplicationExit(int appID)
+void SDLConnector::OnAppExit(int appID)
 {
     Json::Value root;
     Json::Value params;
@@ -181,7 +181,7 @@ void SDLConnector::OnApplicationExit(int appID)
     m_Base.SendJson(root);
 }
 
-void SDLConnector::OnApplicationOut(int appID)
+void SDLConnector::OnAppOut(int appID)
 {
     Json::Value root;
     Json::Value params;

@@ -85,7 +85,7 @@ void Slider::InitLayout()
 void Slider::sliderClickedSlots( int code, int sliderid, int sliderPosition)
 {
     //_D("code=%d:%d:%d\n",code,sliderid,sliderPosition);
-    m_pList->getAppDataInterface()->OnSliderResponse(code, sliderid,sliderPosition);
+    m_pList->getActiveApp()->OnSliderResponse(code, sliderid,sliderPosition);
     this->showCurUI(ID_SHOW);
 }
 
@@ -194,9 +194,9 @@ void Slider::onButtonCancelClicked()
 
 void Slider::execShow()
 {
-    if (m_pList->getAppDataInterface())
+    if (m_pList->getActiveApp())
     {
-        m_jsonData = m_pList->getAppDataInterface()->getSlider();
+        m_jsonData = m_pList->getActiveApp()->getSlider();
 //        this->setAppID(m_jsonData["params"]["appID"].asInt());
         this->setSliderID(m_jsonData["id"].asInt());
         this->setTimeOut(m_jsonData["params"]["timeout"].asInt());

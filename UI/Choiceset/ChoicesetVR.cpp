@@ -174,15 +174,15 @@ void CChoicesetVR::label4ClickedSlots(int id)
 void CChoicesetVR::VRmenuClickedSlots(int code, int performInteractionID, int choiceID)
 {
     //_D("code=%d:%d:%d\n",code,performInteractionID,choiceID);
-    m_pList->getAppDataInterface()->OnPerformInteraction(code, performInteractionID, choiceID);
+    m_pList->getActiveApp()->OnPerformInteraction(code, performInteractionID, choiceID);
     showCurUI(ID_SHOW);
 }
 
 void CChoicesetVR::execShow()
 {
-    if (m_pList->getAppDataInterface())
+    if (m_pList->getActiveApp())
     {
-        m_jsonData = m_pList->getAppDataInterface()->getInteractionJson();
+        m_jsonData = m_pList->getActiveApp()->getInteractionJson();
         setTimeOut(m_jsonData["params"]["timeout"].asInt());
 
         for(int i = 0; i < m_jsonData["params"]["vrHelp"].size(); i++)

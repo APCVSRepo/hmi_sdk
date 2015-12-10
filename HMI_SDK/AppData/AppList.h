@@ -15,12 +15,11 @@ public:
 
     void setUIManager(UIInterface *pUI);
 
-    AppDataInterface* getAppDataInterface();
+    AppDataInterface* getActiveApp();
     void getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames);
 
     void OnAppActivated(int appID);
-    void OnApplicationOut(int appID);
-    void OnApplicationExit();
+    void OnAppExit();
 
 private:
     void onRequest(Json::Value);

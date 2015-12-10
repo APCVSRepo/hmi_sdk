@@ -428,7 +428,7 @@ void Show::btnThrClickedSlots(int btID)
     }
     else
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -436,7 +436,7 @@ void Show::btnTwoClickedSlots(int btID)
 {
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -444,7 +444,7 @@ void Show::btnOneClickedSlots(int btID)
 {
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 0);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -452,7 +452,7 @@ void Show::btnThrClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -460,7 +460,7 @@ void Show::btnTwoClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -468,7 +468,7 @@ void Show::btnOneClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        m_pList->getAppDataInterface()->OnSoftButtonClick(btID, 1);
+        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -483,9 +483,9 @@ void Show::execShow()
     this->setMainField4(true,"");
     this->setMediaTrack(true,"");
     this->setMediaClock(true,"");
-    if (m_pList->getAppDataInterface())
+    if (m_pList->getActiveApp())
     {
-        pObj = m_pList->getAppDataInterface()->getShowData();
+        pObj = m_pList->getActiveApp()->getShowData();
         for(int i = 0; i < pObj["params"]["showStrings"].size(); i++)
         {
             if("mainField1" == pObj["params"]["showStrings"][i]["fieldName"].asString())

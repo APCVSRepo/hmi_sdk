@@ -76,7 +76,7 @@ void CUIManager::onTestStartSlots()
 {
     printf("onTestStartSlots");
     fflush(stdout);
-    std::string str_url = m_pAppList->getAppDataInterface()->getUrlString();
+    std::string str_url = m_pAppList->getActiveApp()->getUrlString();
     //_D("%s\n",str_url.data());
 #ifdef VIDEO_TEST
     m_videoStreamWidget.setUrl(str_url.data());
@@ -145,30 +145,30 @@ void CUIManager::tsSpeak(int VRID, std::string strText)
     {
     case ID_DEFAULT:
         if(ret)
-            m_pAppList->getAppDataInterface()->OnTTSSpeek(0);
+            m_pAppList->getActiveApp()->OnTTSSpeek(0);
         else
-            m_pAppList->getAppDataInterface()->OnTTSSpeek(5);
+            m_pAppList->getActiveApp()->OnTTSSpeek(5);
         break;
     case ID_CANCEL:
-        m_pAppList->getAppDataInterface()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_CANCEL);
-        m_pAppList->getAppDataInterface()->OnVRCancelRecord();
+        m_pAppList->getActiveApp()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_CANCEL);
+        m_pAppList->getActiveApp()->OnVRCancelRecord();
         //m_pAudioPassThru->hide();
         m_MainMenu->ExitWidget(ID_AUDIOPASSTHRU);
         break;
     case ID_HELP:
-        m_pAppList->getAppDataInterface()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_DONE);
-        m_pAppList->getAppDataInterface()->OnVRCancelRecord();
+        m_pAppList->getActiveApp()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_DONE);
+        m_pAppList->getActiveApp()->OnVRCancelRecord();
         m_MainMenu->ExitWidget(ID_AUDIOPASSTHRU);
         break;
     case ID_EXIT:
-        m_pAppList->getAppDataInterface()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_DONE);
-        m_pAppList->getAppDataInterface()->OnVRCancelRecord();
+        m_pAppList->getActiveApp()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_DONE);
+        m_pAppList->getActiveApp()->OnVRCancelRecord();
         m_MainMenu->ExitWidget(ID_AUDIOPASSTHRU);
-        m_pAppList->OnApplicationExit();
+        m_pAppList->OnAppExit();
         break;
     case ID_SWITCHAPP:
-        m_pAppList->getAppDataInterface()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_DONE);
-        m_pAppList->getAppDataInterface()->OnVRCancelRecord();
+        m_pAppList->getActiveApp()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_DONE);
+        m_pAppList->getActiveApp()->OnVRCancelRecord();
         m_MainMenu->ExitWidget(ID_AUDIOPASSTHRU);
         break;
     default:

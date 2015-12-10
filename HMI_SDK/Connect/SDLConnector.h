@@ -89,8 +89,8 @@ public:
 // API
 public:
     void OnAppActivated(int appID);
-    void OnApplicationExit(int appID);
-    void OnApplicationOut(int appID);
+    void OnAppExit(int appID);
+    void OnAppOut(int appID);
 
     // mode: SHORT or LONG
     void OnSoftButtonClick(int sbID, int mode);

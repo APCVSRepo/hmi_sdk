@@ -209,13 +209,13 @@ void Command::listWidgetDoubleClickedSlots(QModelIndex index)
 
 void Command::exitAppSlots()
 {
-    m_pList->OnApplicationExit();
+    m_pList->OnAppExit();
 }
 
 void Command::commandClickSlots(int cmdID)
 {
     //_D("appID = %d:%d\n",m_i_appID,cmdID);
-    m_pList->getAppDataInterface()->OnCommandClick(cmdID);
+    m_pList->getActiveApp()->OnCommandClick(cmdID);
 }
 
 
@@ -419,11 +419,11 @@ void Command::backBtnClickSlots()
 void Command::execShow()
 {
 
-    if (m_pList->getAppDataInterface())
+    if (m_pList->getActiveApp())
     {
         this->clearAllCommand();
         vector<SMenuCommand> CmdList;
-        CmdList = m_pList->getAppDataInterface()->getCommandList();
+        CmdList = m_pList->getActiveApp()->getCommandList();
         for(int i = 0; i < CmdList.size(); i++)
         {
             if(0 != CmdList.at(i).i_cmdID && 0 == CmdList.at(i).i_menuID)
@@ -439,7 +439,7 @@ void Command::execShow()
 //                this->setAppID(CmdList.at(i).i_appID);
 
                 vector<SMenuCommand> TmpCmdList;
-                TmpCmdList = m_pList->getAppDataInterface()->getCommandList(CmdList.at(i).i_menuID);
+                TmpCmdList = m_pList->getActiveApp()->getCommandList(CmdList.at(i).i_menuID);
                 for(int j = 0; j < TmpCmdList.size(); j++)
                 {
                     this->addSubCommand(CmdList.at(i).str_menuName.data()

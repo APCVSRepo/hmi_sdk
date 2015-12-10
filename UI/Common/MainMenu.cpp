@@ -162,7 +162,7 @@ void MainMenu::menuBtnClickedSlots(QString btnText)
 
     //_D("%s\n",btnText.toUtf8().data());
 
-    m_pList->getAppDataInterface()->OnMenuBtnClick(btnText.toUtf8().data());
+    m_pList->getActiveApp()->OnMenuBtnClick(btnText.toUtf8().data());
 
     if("ListButton" == btnText)
     {
@@ -170,7 +170,7 @@ void MainMenu::menuBtnClickedSlots(QString btnText)
         //ts.speak("请说一个指令");
         //while(ts.isSpeaking())
            // waitMSec(100);
-        m_pList->getAppDataInterface()->OnVRStartRecord();
+        m_pList->getActiveApp()->OnVRStartRecord();
     }
 }
 

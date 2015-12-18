@@ -7,7 +7,7 @@ AppBase::AppBase(AppListInterface * pList, QWidget *parent) : QWidget(parent)
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
     this->setGeometry(0,0,parent->width(),parent->height());
 //    this->setFixedSize(ConfigSingle::Instance()->getMainWindowW(),ConfigSingle::Instance()->getMainWindowH());
-    this->setBkgImage((char *)":/images/mainbkg.png");
+    this->setBkgImage(":/images/mainbkg.png");
     m_pList = pList;
 }
 
@@ -16,7 +16,7 @@ AppBase::~AppBase()
 
 }
 
-void AppBase::setBkgImage(char *img)
+void AppBase::setBkgImage(const char *img)
 {
     this->setAutoFillBackground(true);    //Widget增加背景图片时，这句一定要。
     QPixmap pixmap(img);

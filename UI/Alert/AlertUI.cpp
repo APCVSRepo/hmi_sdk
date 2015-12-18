@@ -8,6 +8,7 @@ CAlertUI::CAlertUI(AppListInterface * pList, QWidget *parent) : CPopBase(pList, 
 {
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(onSpaceClicedSlots()));
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
     //connect(this,SIGNAL(alertAbort(int,int)),this,SLOT(alertAbortSlots(int,int)));
     //connect(this,SIGNAL(softButtonClicked(int,int)),this,SLOT(softButtonClickedSlots(int,int)));
 }
@@ -145,7 +146,8 @@ void CAlertUI::updateLayout()
 void CAlertUI::setTimeOut(int duration)
 {
     m_timer->start(duration);
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
+
+   // QTimer::singleShot(duration,this,SLOT(timeoutSlots()));
 }
 
 void CAlertUI::setAlertText(int textIdx, QString text)

@@ -252,8 +252,8 @@
       "textFields": [
         "mainField1", 
         "mainField2", 
-        "mainField1", 
-        "mainField2", 
+        "mainField3", 
+        "mainField4", 
         "statusBar", 
         "mediaClock", 
         "mediaTrack", 

@@ -1,4 +1,4 @@
-﻿#include "global_first.h"
+﻿#include "Include/global_first.h"
 
 #ifdef WINCE
 #else
@@ -111,318 +111,6 @@ void Channel::ReadConfigure()
      LOGD("szDB=%s\n",szDB);
 #endif
 
-
-#if    0
-    const char* str ="{\
-    \"vehicleData\": {\
-      \"bodyInformation\": {\
-        \"parkBrakeActive\": false, \
-        \"ignitionStableStatus\": \"MISSING_FROM_TRANSMITTER\", \
-        \"ignitionStatus\": \"UNKNOWN\"\
-      },\
-      \"engineTorque\": 650, \
-      \"vin\": \"52-452-52-752\", \
-      \"batteryPackCurrent\": 7.0, \
-      \"deviceStatus\": {\
-        \"battLevelStatus\": \"NOT_PROVIDED\", \
-        \"signalLevelStatus\": \"NOT_PROVIDED\", \
-        \"primaryAudioSource\": \"NO_SOURCE_SELECTED\", \
-        \"voiceRecOn\": false, \
-        \"monoAudioOutputMuted\": false, \
-        \"callActive\": false, \
-        \"phoneRoaming\": false, \
-        \"btIconOn\": false, \
-        \"stereoAudioOutputMuted\": false, \
-        \"textMsgAvailable\": false, \
-        \"eCallEventActive\": false\
-      }, \
-      \"satRadioESN\": \"165165650\", \
-      \"tripOdometer\": 0, \
-      \"rpm\": 5000, \
-      \"prndl\": \"PARK\", \
-      \"fuelLevel_State\": \"UNKNOWN\", \
-      \"batteryPackTemperature\": 30, \
-      \"genericbinary\": \"165165650\", \
-      \"wiperStatus\": \"NO_DATA_EXISTS\", \
-      \"fuelLevel\": 0.2, \
-      \"speed\": 80.0, \
-      \"beltStatus\": {\
-        \"passengerBuckleBelted\": \"NOT_SUPPORTED\", \
-        \"middleRow1BeltDeployed\": \"NOT_SUPPORTED\", \
-        \"middleRow1BuckleBelted\": \"NOT_SUPPORTED\", \
-        \"passengerChildDetected\": \"NOT_SUPPORTED\", \
-        \"rightRearInflatableBelted\": \"NOT_SUPPORTED\", \
-        \"middleRow2BuckleBelted\": \"NOT_SUPPORTED\", \
-        \"middleRow3BuckleBelted\": \"NOT_SUPPORTED\", \
-        \"driverBeltDeployed\": \"NOT_SUPPORTED\", \
-        \"leftRearInflatableBelted\": \"NOT_SUPPORTED\", \
-        \"passengerBeltDeployed\": \"NOT_SUPPORTED\", \
-        \"driverBuckleBelted\": \"NOT_SUPPORTED\", \
-        \"rightRow3BuckleBelted\": \"NOT_SUPPORTED\", \
-        \"leftRow2BuckleBelted\": \"NOT_SUPPORTED\", \
-        \"leftRow3BuckleBelted\": \"NOT_SUPPORTED\", \
-        \"rightRow2BuckleBelted\": \"NOT_SUPPORTED\"\
-      }, \
-      \"steeringWheelAngle\": 1.2, \
-      \"driverBraking\": \"NOT_SUPPORTED\", \
-      \"batteryPackVoltage\": 12.5, \
-      \"gps\": {\
-        \"compassDirection\": \"SOUTHWEST\", \
-        \"actual\": false, \
-        \"hdop\": 5, \
-        \"utcMonth\": 2, \
-        \"speed\": 2, \
-        \"utcDay\": 14, \
-        \"utcSeconds\": 54, \
-        \"latitudeDegrees\": -830464, \
-        \"pdop\": 15, \
-        \"utcYear\": 2013, \
-        \"utcHours\": 13, \
-        \"vdop\": 30, \
-        \"satellites\": 8, \
-        \"altitude\": 7, \
-        \"longitudeDegrees\": 423293, \
-        \"utcMinutes\": 16, \
-        \"heading\": 173, \
-        \"dimension\": \"2D\"\
-      }, \
-      \"batteryVoltage\": 12.5, \
-      \"externalTemperature\": 40.0, \
-      \"instantFuelConsumption\": 2.2, \
-      \"headLampStatus\": {\
-        \"highBeamsOn\": false, \
-        \"lowBeamsOn\": false\
-      }, \
-      \"tirePressure\": \"UNKNOWN\", \
-      \"avgFuelEconomy\": 0.1, \
-      \"myKey\": {\
-        \"e911Override\": \"NO_DATA_EXISTS\"\
-      }, \
-      \"rainSensor\": 165165650, \
-      \"accPedalPosition\": 0.5\
-    }, \
-    \"vehicleType\": {\
-      \"trim\": \"SE\", \
-      \"make\": \"Ford\", \
-      \"model\": \"Fiesta\", \
-      \"modelYear\": \"2015\"\
-    }, \
-    \"sdlLanguagesList\": [\
-      \"EN-US\", \
-      \"ES-MX\", \
-      \"FR-CA\", \
-      \"DE-DE\", \
-      \"ES-ES\", \
-      \"EN-GB\", \
-      \"RU-RU\", \
-      \"TR-TR\", \
-      \"PL-PL\", \
-      \"FR-FR\", \
-      \"IT-IT\", \
-      \"SV-SE\", \
-      \"PT-PT\", \
-      \"NL-NL\", \
-      \"ZH-TW\", \
-      \"JA-JP\", \
-      \"AR-SA\", \
-      \"KO-KR\", \
-      \"PT-BR\", \
-      \"CS-CZ\", \
-      \"DA-DK\", \
-      \"NO-NO\"\
-    ], \
-    \"capabilities\": [\
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"PRESET_0\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"PRESET_1\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"PRESET_2\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"PRESET_3\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"PRESET_4\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"PRESET_5\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"PRESET_6\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"PRESET_7\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"PRESET_8\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"PRESET_9\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"OK\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"SEEKLEFT\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"SEEKRIGHT\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"TUNEUP\", \
-        \"shortPressAvailable\": true\
-      }, \
-      {\
-        \"longPressAvailable\": true, \
-        \"upDownAvailable\": true, \
-        \"name\": \"TUNEDOWN\", \
-        \"shortPressAvailable\": true\
-      }\
-    ], \
-    \"hmiTTSVRLanguage\": \"EN-US\", \
-    \"hmiUILanguage\": \"EN-US\", \
-    \"hmiVRLanguage\": \"EN-US\", \
-    \"capabilities_tts\":[\"TEXT\"],\
-    \"resultCode\": {\
-      \"INVALID_ID\": 13, \
-      \"RETRY\": 7, \
-      \"WRONG_LANGUAGE\": 16, \
-      \"IGNORED\": 6, \
-      \"IN_USE\": 8, \
-      \"CHAR_LIMIT_EXCEEDED\": 12, \
-      \"USER_DISALLOWED\": 23, \
-      \"GENERIC_ERROR\": 22, \
-      \"DISALLOWED\": 3, \
-      \"APPLICATION_NOT_REGISTERED\": 15, \
-      \"SUCCESS\": 0, \
-      \"WARNINGS\": 21, \
-      \"UNSUPPORTED_RESOURCE\": 2, \
-      \"TOO_MANY_PENDING_REQUESTS\": 18, \
-      \"REJECTED\": 4, \
-      \"INVALID_DATA\": 11, \
-      \"DUPLICATE_NAME\": 14, \
-      \"DATA_NOT_AVAILABLE\": 9, \
-      \"UNSUPPORTED_REQUEST\": 1, \
-      \"TIMED_OUT\": 10, \
-      \"OUT_OF_MEMORY\": 17, \
-      \"ABORTED\": 5, \
-      \"NO_APPS_REGISTERED\": 19, \
-      \"NO_DEVICES_CONNECTED\": 20\
-    },\
-    \"uiGetCapabilitiesResult\": {\
-      \"softButtonCapabilities\": [\
-        {\
-          \"longPressAvailable\": true, \
-          \"upDownAvailable\": true, \
-          \"imageSupported\": true, \
-          \"shortPressAvailable\": true\
-        }\
-      ], \
-      \"method\": \"UI.GetCapabilities\", \
-      \"displayCapabilities\": {\
-        \"textFields\": [\
-          \"mainField1\", \
-          \"mainField2\", \
-          \"mainField3\", \
-          \"mainField4\", \
-          \"statusBar\", \
-          \"mediaClock\", \
-          \"mediaTrack\", \
-          \"alertText1\", \
-          \"alertText2\", \
-          \"alertText3\", \
-          \"scrollableMessageBody\", \
-          \"initialInteractionText\", \
-          \"navigationText1\", \
-          \"navigationText2\", \
-          \"ETA\", \
-          \"totalDistance\", \
-          \"navigationText\", \
-          \"audioPassThruDisplayText1\", \
-          \"audioPassThruDisplayText2\", \
-          \"sliderHeader\", \
-          \"sliderFooter\", \
-          \"notificationText\"\
-        ], \
-        \"displayType\": \"GEN2_8_DMA\", \
-        \"mediaClockFormats\": [\
-          \"CLOCK1\", \
-          \"CLOCK2\", \
-          \"CLOCK3\", \
-          \"CLOCKTEXT1\", \
-          \"CLOCKTEXT2\", \
-          \"CLOCKTEXT3\", \
-          \"CLOCKTEXT4\"\
-        ], \
-        \"imageCapabilities\": [\
-          \"DYNAMIC\"\
-        ]\
-      }, \
-      \"hmiZoneCapabilities\": [\
-        \"FRONT\"\
-      ], \
-      \"screenParams\":\
-        {\
-           \"resolution\":\
-           {\"resolutionWidth\":800,\"resolutionHeight\":480\"},\
-          \"touchEventAvailable\":\
-           {\"pressAvailable\":true,\"multiTouchAvailable\":true,\"doublePressAvailable\":false}\
-        }\
-     \"audioPassThruCapabilities\":{\"samplingRate\":\"44KHZ\",\"bitsPerSample\":\"8_BIT\",\"audioType\":\"PCM\"},\
-      \"code\": 0\
-    }\
-  }";
-
-     Json::Reader reader;
-     if (reader.parse(str, m_StaticConfigJson))  // reader将Json字符串解析到root，root将包含Json里所有子元素
-     {
-        m_ResultCodeJson = m_StaticConfigJson["resultCode"];
-     }
-#else
     std::cout << szDB <<"\n";
     std::cout<<szPath<<"\n";
     ifs.open(szDB);
@@ -439,7 +127,7 @@ void Channel::ReadConfigure()
         m_ResultCodeJson = m_StaticConfigJson["resultCode"];
     }
     ifs.close();
-#endif
+
 }
 
 void Channel::unRegisterComponent()
@@ -521,9 +209,9 @@ void Channel::onMessage(Json::Value jsonObj)
 
     if (jsonObj.isMember("params"))
     {
-        if (jsonObj["params"].isMember("app_id"))
+        if (jsonObj["params"].isMember("appID"))
         {
-            m_iAppID = jsonObj["params"]["app_id"].asInt();
+            m_iAppID = jsonObj["params"]["appID"].asInt();
         }
     }
     // id
@@ -531,7 +219,6 @@ void Channel::onMessage(Json::Value jsonObj)
     {
         if (jsonObj["id"].asInt() == m_iRegisterRequestId)
         {
-            LOGI("REGISTER");
             if (!jsonObj.isMember("error"))
             {
                 if (jsonObj.isMember("result"))
@@ -545,7 +232,6 @@ void Channel::onMessage(Json::Value jsonObj)
         // handle component unregistration
         else if (jsonObj["id"].asInt() == m_iUnregisterRequestId)
         {
-            LOGI("UNREGISTER");
             if (!jsonObj.isMember("error"))
             {
                 onUnregistered();
@@ -554,20 +240,16 @@ void Channel::onMessage(Json::Value jsonObj)
         // handle result, error, notification, requests
         else
         {
-            LOGI("OTHER");
             if (jsonObj.isMember("result"))
             {
-                LOGI("result");
                 onResult(jsonObj);
             }
             else if (jsonObj.isMember("error"))
             {
-                LOGI("error");
                 onError(jsonObj["error"].asString());
             }
             else
             {
-                LOGI("request");
                 onRequest(jsonObj);
             }
         }

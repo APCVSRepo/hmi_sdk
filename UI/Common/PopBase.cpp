@@ -8,22 +8,19 @@ CPopBase::CPopBase(AppListInterface * pList, QWidget *parent) :
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
 //    this->setFixedSize(ui_content_width,ui_content_height);
     this->setGeometry(0,0,ui_app_width,ui_app_height);
-//    this->setAttribute(Qt::WA_TranslucentBackground);
-//    m_labelBackspace.setFixedSize(this->width(),this->height());
-//    m_labelBackspace.setAttribute(Qt::WA_TranslucentBackground, false);
-////    m_labelBackspace.setStyleSheet("border: 1px solid white;border-radius:10px;background-color:rgb(255,43,61)");
-//    m_labelBackspace.setParent(this);
-
-//    m_labelFrame.setAttribute(Qt::WA_TranslucentBackground, false);
-//    m_labelBackground.setStyleSheet("border: 1px solid black;border-radius:10px;background-color:rgb(36,43,61)");
-////    m_labelBackground.setWindowFlags(Qt::WindowStaysOnBottomHint);
-
-//    connect(&m_labelBackspace, SIGNAL(clicked()), this, SIGNAL(onSpaceCliced()));
-
+    this->setBkgImage(":images/mainbkg.png");
     m_timer = new QTimer;
     m_pList = pList;
 }
-
+void CPopBase::setBkgImage(const char *img)
+{
+    this->setAutoFillBackground(true);    //Widget增加背景图片时，这句一定要。
+    QPixmap pixmap(img);
+    QPixmap fitpixmap=pixmap.scaled(this->width(),this->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, QBrush(fitpixmap));
+    this->setPalette(palette);
+}
 void CPopBase::execShow()
 {
 

@@ -41,8 +41,7 @@ private:
 
 private:
     QTextEdit *m_editText;
-    CButton *m_btn_up;
-    CButton *m_btn_down;
+
 
     CButton    *m_btnSoft1;
     CButton    *m_btnSoft2;

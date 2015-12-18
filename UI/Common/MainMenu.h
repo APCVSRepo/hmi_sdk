@@ -11,6 +11,7 @@
 #include "BaseWidght.h"
 #include "AppData/AppListInterface.h"
 #include "AppData/AppDataInterface.h"
+#include "VideoStream/VideoStream.h"
 typedef enum
 {
     ID_MENU_MF=0,
@@ -33,6 +34,9 @@ public:
     void ReceiveJson(int id,Json::Value json);
     void ExitWidget(int id);
 
+    void StartVideoStream(const char* url);
+    void StopVideoStream();
+
     virtual void keyPressEvent(QKeyEvent *e);
 private:
 
@@ -44,6 +48,7 @@ public slots:
     void menuBtnClickedSlots(QString btnText);
     void onMoveBack();
 private:
+    VideoStream* videoWidget;
     QLabel *labelTitle;
     QLabel *labelTime;
     QTimer *m_timer;
@@ -55,6 +60,7 @@ private:
     QStackedWidget *stackWidget;
     QHash<int,int> stackKeys;
     QList<int>     stackHistory;
+    int            closeCount;
 
     AppListInterface * m_pList;
 };

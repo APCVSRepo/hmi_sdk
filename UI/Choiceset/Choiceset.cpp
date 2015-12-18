@@ -53,9 +53,6 @@ m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
 //    connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
     m_scrollBar.hide();
-
-
-
     m_i_currentRow = 1;
     flushAllItems(m_i_currentRow);
 
@@ -69,14 +66,6 @@ m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
     else
         m_scrollBar.hide();
-
-
-
-
-//    addNewMenu("Command1");
-
-//    addNewMenu("Command2");
-
 }
 
 void Choiceset::addListItemWidget(QString text, bool isMenu)
@@ -221,6 +210,7 @@ void Choiceset::menuClickedSlots(int code, int performInteractionID, int choiceI
 {
     //_D("code=%d:%d:%d\n",code,performInteractionID,choiceID);
     m_pList->getActiveApp()->OnPerformInteraction(code, performInteractionID, choiceID);
+    showCurUI(ID_SHOW);
 }
 
 void Choiceset::setChoicesetName(QString title)
@@ -232,7 +222,7 @@ void Choiceset::setChoicesetName(QString title)
 void Choiceset::setTimeOut(int duration)
 {
     m_timerHide->start(duration);
-    connect(m_timerHide,SIGNAL(timeout()),this,SLOT(timeHideOutSlots()));
+
 }
 
 void Choiceset::timeHideOutSlots()

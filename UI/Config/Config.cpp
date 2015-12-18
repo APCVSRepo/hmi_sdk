@@ -60,5 +60,5 @@ void UIConfig::loadResolution(int res_w,int res_h)
     ui_btn_height=ui_app_height*0.18;
 
     ui_list_width=ui_app_width*2.0/3.0;
-    ui_list_height=ui_app_height*3.0/4.0;
+    ui_list_height=ui_app_height*1.0/4.0;
 }

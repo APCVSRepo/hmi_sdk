@@ -11,10 +11,13 @@ Show::Show(AppListInterface * pList, QWidget *parent) : AppBase(pList, parent)
     initLayout();
     m_i_totalNum = 1;
     m_i_currentNo = 1;
+    m_timerId=0;
 
-    m_timer_mediaClock = new QTimer;
-    m_timer_mediaClock->setInterval(1000);
-    connect(m_timer_mediaClock,SIGNAL(timeout()),this,SLOT(mediaClockSlots()));
+    connect(this,SIGNAL(startMediaClock(bool)),SLOT(mediaClockSlots(bool)));
+
+   // m_timer_mediaClock = new QTimer;
+    //m_timer_mediaClock->setInterval(1000);
+   // connect(m_timer_mediaClock,SIGNAL(timeout()),this,SLOT(mediaClockSlots()));
 }
 
 Show::~Show()
@@ -29,26 +32,25 @@ void Show::initLayout()
 {
     m_listWidget.setVerticalScrollBar(&m_scrollBar);
     QHBoxLayout *hhLayout = new QHBoxLayout;
-    hhLayout->addStretch(1);
-    hhLayout->addWidget(&m_lab_mediaTrack,2,Qt::AlignLeft|Qt::AlignBottom);
-    hhLayout->addStretch(1);
-    hhLayout->addWidget(&m_lab_mediaClock,1,Qt::AlignRight|Qt::AlignBottom);
+    //hhLayout->addStretch(1);
+    hhLayout->addWidget(&m_lab_mediaTrack,4,Qt::AlignLeft|Qt::AlignBottom);
+    hhLayout->addWidget(&m_lab_mediaClock,4,Qt::AlignRight|Qt::AlignBottom);
+    hhLayout->addStretch(2);
 
     QVBoxLayout *vLayout = new QVBoxLayout;
-    vLayout->addStretch(20);
-    vLayout->addWidget(&m_listWidget,60,Qt::AlignCenter);
-    vLayout->addLayout(hhLayout,40);
+    vLayout->addWidget(&m_listWidget,80,Qt::AlignCenter);
+    vLayout->addLayout(hhLayout,20);
 
     QHBoxLayout *hLayout = new QHBoxLayout;
-    hLayout->addWidget(&m_lab_icon,22,Qt::AlignLeft);
-    hLayout->addLayout(vLayout,68);
+    hLayout->addWidget(&m_lab_icon,25,Qt::AlignLeft);
+    hLayout->addLayout(vLayout,75);
    // hLayout->addWidget(&m_scrollBar,10);
-
     QHBoxLayout *btnLayout = new QHBoxLayout;
     btnLayout->addWidget(m_btn_one,1,Qt::AlignCenter);
     btnLayout->addWidget(m_btn_two,1,Qt::AlignCenter);
     btnLayout->addWidget(m_btn_thr,1,Qt::AlignCenter);
     btnLayout->addWidget(m_btn_fou,1,Qt::AlignCenter);
+
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(hLayout,3);
@@ -104,15 +106,11 @@ void Show::initLayout()
     m_lab_mediaTrack.setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
     m_lab_mediaClock.setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
 
-    m_scrollBar.init(1,ui_app_height*3.0/4.0);
-    m_scrollBar.flushScroll(1,2);
+    m_scrollBar.init(4,m_listWidget.height());
+    m_scrollBar.flushScroll(1,4);
     m_scrollBar.hide();
 //    connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
 //    connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
-
-
-
-
 
     m_btn_one->setText("-");
     m_btn_two->setText("-");
@@ -130,17 +128,14 @@ void Show::initLayout()
     connect(m_btn_two,SIGNAL(clickedLong(int)),this,SLOT(btnTwoClickedLongSlots(int)));
     connect(m_btn_thr,SIGNAL(clickedLong(int)),this,SLOT(btnThrClickedLongSlots(int)));
 
-
    // m_btn_one->changeToPressed();
-
-
 
     setMainField1(true,"");
     setMainField2(true,"");
     setMainField3(true,"");
     setMainField4(false,"");
-    setMediaTrack(true,"");
-    setMediaClock(true,"");
+    setMediaTrack(false,"");
+    setMediaClock(false,"");
 //    setSoftButtons(std::vector<SSoftButton> vec_softButtons);
     m_vec_softButtons.clear();
 
@@ -149,14 +144,14 @@ void Show::initLayout()
 void Show::addListItem()
 {
     QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(ui_list_width-10,ui_list_height/2.0));
+    item->setSizeHint(QSize(ui_list_width-10,ui_list_height));
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
 
     QLabel *label = new QLabel;
     m_listWidget.addItem(item);
     m_listWidget.setItemWidget(item,label);
 
-    label->setAlignment(Qt::AlignCenter);
+    label->setAlignment(Qt::AlignLeading);
     label->setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
 
     m_vec_listItem.append(item);
@@ -234,17 +229,30 @@ void Show::setAlignment(int type)
 
 void Show::setMediaTrack(bool isShow, QString text)
 {
-    if(isShow)
+    if(isShow){
+        m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*2.0/4.0);
+        m_scrollBar.init(4,m_listWidget.height());
         m_lab_mediaTrack.setText(text);
-    else
+    }
+    else{
+        m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);
+        m_scrollBar.init(4,m_listWidget.height());
         m_lab_mediaTrack.clear();
+    }
 }
 void Show::setMediaClock(bool isShow, QString text)
 {
-    if(isShow)
+    LOGI(text.toStdString().data());
+    if(isShow){
+        m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*2.0/4.0);
+        m_scrollBar.init(4,m_listWidget.height());
         m_lab_mediaClock.setText(text);
-    else
-        m_lab_mediaClock.clear();
+    }
+    else{
+        m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);
+        m_scrollBar.init(4,m_listWidget.height());
+        m_lab_mediaClock.setText("");
+    }
 }
 
 void Show::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
@@ -481,36 +489,37 @@ void Show::execShow()
     this->setMainField2(true,"");
     this->setMainField3(true,"");
     this->setMainField4(true,"");
-    this->setMediaTrack(true,"");
-    this->setMediaClock(true,"");
+    this->setMediaTrack(false,"");
+    this->setMediaClock(false,"");
     if (m_pList->getActiveApp())
     {
         pObj = m_pList->getActiveApp()->getShowData();
         for(int i = 0; i < pObj["params"]["showStrings"].size(); i++)
         {
-            if("mainField1" == pObj["params"]["showStrings"][i]["fieldName"].asString())
+            Json::Value  fieldName=pObj["params"]["showStrings"][i];
+            if("mainField1" == fieldName["fieldName"].asString())
             {
-                this->setMainField1(true,pObj["params"]["showStrings"][i]["fieldText"].asString().data());
+                this->setMainField1(true,fieldName["fieldText"].asString().data());
             }
-            else if("mainField2" == pObj["params"]["showStrings"][i]["fieldName"].asString())
+            else if("mainField2" == fieldName["fieldName"].asString())
             {
-                this->setMainField2(true,pObj["params"]["showStrings"][i]["fieldText"].asString().data());
+                this->setMainField2(true,fieldName["fieldText"].asString().data());
             }
-            else if("mainField3" == pObj["params"]["showStrings"][i]["fieldName"].asString())
+            else if("mainField3" == fieldName["fieldName"].asString())
             {
-                this->setMainField3(true,pObj["params"]["showStrings"][i]["fieldText"].asString().data());
+                this->setMainField3(true,fieldName["fieldText"].asString().data());
             }
-            else if("mainField4" == pObj["params"]["showStrings"][i]["fieldName"].asString())
+            else if("mainField4" == fieldName["fieldName"].asString())
             {
-                this->setMainField4(true,pObj["params"]["showStrings"][i]["fieldText"].asString().data());
+                this->setMainField4(true,fieldName["fieldText"].asString().data());
             }
-            else if("mediaTrack" == pObj["params"]["showStrings"][i]["fieldName"].asString())
+            else if("mediaTrack" == fieldName["fieldName"].asString())
             {
-                this->setMediaTrack(true,pObj["params"]["showStrings"][i]["fieldText"].asString().data());
+                this->setMediaTrack(true,fieldName["fieldText"].asString().data());
             }
-            else if("mediaClock" == pObj["params"]["showStrings"][i]["fieldName"].asString())
+            else if("mediaClock" == fieldName["fieldName"].asString())
             {
-                this->setMediaClock(true,pObj["params"]["showStrings"][i]["fieldText"].asString().data());
+                this->setMediaClock(true,fieldName["fieldText"].asString().data());
             }
         }
         if(pObj["params"].isMember("softButtons"))
@@ -550,6 +559,12 @@ void Show::execShow()
 //   }
 //}
 
+void Show::receiveJson(Json::Value json)
+{
+   // this->moveToThread(this->thread());
+    setMediaColckTimer(json);
+}
+
 void Show::setMediaColckTimer(Json::Value jsonObj)
 {
     m_i_startH = jsonObj["params"]["startTime"]["hours"].asInt();
@@ -563,32 +578,30 @@ void Show::setMediaColckTimer(Json::Value jsonObj)
     {
         nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS);
         m_b_countup = true;
-        m_timer_mediaClock->start();
+        emit startMediaClock(true);
     }
     else if(jsonObj["params"]["updateMode"].asString() == "COUNTDOWN")
     {
         m_b_countup = false;
         nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS);
-        m_timer_mediaClock->start();
+        emit startMediaClock(true);
     }
     else if(jsonObj["params"]["updateMode"].asString() == "PAUSE")
     {
-        m_timer_mediaClock->stop();
-
+        emit startMediaClock(false);
     }
     else if(jsonObj["params"]["updateMode"].asString() == "RESUME")
     {
-        m_timer_mediaClock->start();
-
+        emit startMediaClock(true);
     }
     else if(jsonObj["params"]["updateMode"].asString() == "CLEAR")
     {
-        m_timer_mediaClock->stop();
+        emit startMediaClock(false);
         this->setMediaClock(true,"");
     }
 }
 
-void Show::mediaClockSlots()
+void Show::timerEvent(QTimerEvent *e)
 {
     if(m_b_countup)
     {
@@ -602,7 +615,20 @@ void Show::mediaClockSlots()
     if(nowMeidaClockTime.hour() == m_i_endH
             && nowMeidaClockTime.minute() == m_i_endM
             && nowMeidaClockTime.second() == m_i_endS)
-        m_timer_mediaClock->stop();
+        this->killTimer(m_timerId);
 
-    this->setMediaClock(true,nowMeidaClockTime.toString());
+    this->setMediaClock(true,nowMeidaClockTime.toString("HH:mm:ss"));
+}
+
+void Show::mediaClockSlots(bool isStart)
+{
+  if(isStart){
+    if(m_timerId!=0)
+      this->killTimer(m_timerId);
+    m_timerId=this->startTimer(1000);
+  }
+  else{
+      if(m_timerId!=0)
+        this->killTimer(m_timerId);
+  }
 }

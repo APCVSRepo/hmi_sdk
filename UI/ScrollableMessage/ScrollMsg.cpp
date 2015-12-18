@@ -4,19 +4,21 @@
 #include "UI/Config/Config.h"
 #include <QTextLayout>
 #include <QTextBlock>
+#include "Common/ScrollBar.h"
 
 CScrollMsg::CScrollMsg(AppListInterface * pList, QWidget *parent) : CPopBase(pList, parent)
 {
 //    m_labelBackground.setParent(this);
     m_editText = new QTextEdit;
-    m_btn_up = new CButton;
-    m_btn_down = new CButton;
+//    m_btn_up = new CButton;
+//    m_btn_down = new CButton;
     m_btnSoft1 = new CButton;
     m_btnSoft2 = new CButton;
     m_btnSoft3 = new CButton;
     m_btnSoft4 = new CButton;
 
     InitLayout();
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(onSpaceClicedSlots()));
     connect(this,SIGNAL(scrollMsgAbort(int,int)),this,SLOT(scrollMsgAbortSlots(int,int)));
 }
@@ -39,13 +41,13 @@ void CScrollMsg::InitLayout()
 
 //    m_btn_up->initParameter(30, 30, ":/images/uparrow.png", ":/images/uparrow.png", "", "");
 //    m_btn_down->initParameter(30, 30, ":/images/downarrow.png", ":/images/downarrow.png", "", "");
-    m_btn_up->setSize(24, 20);
-    m_btn_down->setSize(24, 20);
-    m_btn_up->setIconExtra(":/images/uparrow.png");
-    m_btn_down->setIconExtra(":/images/downarrow.png");
+//    m_btn_up->setSize(24, 20);
+//    m_btn_down->setSize(24, 20);
+//    m_btn_up->setIconExtra(":/images/uparrow.png");
+//    m_btn_down->setIconExtra(":/images/downarrow.png");
 
-    connect(m_btn_up,SIGNAL(clicked()),this,SLOT(upClickedSlots()));
-    connect(m_btn_down,SIGNAL(clicked()),this,SLOT(downClickedSlots()));
+//    connect(m_btn_up,SIGNAL(clicked()),this,SLOT(upClickedSlots()));
+//    connect(m_btn_down,SIGNAL(clicked()),this,SLOT(downClickedSlots()));
 
 
     m_btnSoft1->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft1");
@@ -76,22 +78,23 @@ void CScrollMsg::InitLayout()
     m_editText->setAttribute(Qt::WA_TranslucentBackground, true);
     //m_editText->setReadOnly(true); //设置不可编辑
     m_editText->setFrameShape(QFrame::NoFrame); //设置无边框
-    m_editText->setStyleSheet("border:0px;color:white;font: 36px Liberation Serif;");
-    m_editText->verticalScrollBar()->setStyleSheet(
-                "QScrollBar{background:#3F4657; width: 20px;}"
-                "QScrollBar::handle{background:#6C717D;}"
-                "QScrollBar::handle:vertical {background: rgb(0, 0, 0);"
-    );
-    m_editText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    m_editText->setStyleSheet("border:1px;background-color:white;color:grey;font:36px \"Liberation Serif\";");
+//    m_editText->verticalScrollBar()->setStyleSheet(
+//                "QScrollBar{background:#3F4657; width: 20px;}"
+//                "QScrollBar::handle{background:#6C717D;}"
+//                "QScrollBar::handle:vertical {background: rgb(0, 0, 0);"
+//    );
+    m_editText->setStyleSheet(ScrollBar::cssString());
+    m_editText->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     QHBoxLayout *upLayout = new QHBoxLayout;
     upLayout->addStretch(90);
-    upLayout->addWidget(m_btn_up, 3);
+    //upLayout->addWidget(m_btn_up, 3);
     upLayout->addStretch(10);
 
     QHBoxLayout *downLayout = new QHBoxLayout;
     downLayout->addStretch(90);
-    downLayout->addWidget(m_btn_down, 3);
+    //downLayout->addWidget(m_btn_down, 3);
     downLayout->addStretch(10);
 
     QHBoxLayout *midLayout = new QHBoxLayout;
@@ -136,7 +139,7 @@ void CScrollMsg::downClickedSlots()
 void CScrollMsg::setTimeOut(int duration)
 {
     m_timer->start(duration);
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
+
 }
 
 void CScrollMsg::timeoutSlots()

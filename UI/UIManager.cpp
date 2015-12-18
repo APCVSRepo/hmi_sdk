@@ -11,6 +11,7 @@
 #include <QDir>
 #ifdef SDL_SUPPORT_LIB
 #include "main.h"
+#include "AudioTrans/MspVRAudio.h"
 #endif
 
 CUIManager::CUIManager(AppListInterface * pList, QWidget *parent) :
@@ -21,17 +22,14 @@ CUIManager::CUIManager(AppListInterface * pList, QWidget *parent) :
 
 CUIManager::~CUIManager()
 {
-
+    delete m_MainMenu;
+#ifdef SDL_SUPPORT_LIB
+    delete m_MspVR;
+#endif
 }
 
 void CUIManager::initAppHMI()
 {
-#ifdef ANDROID
-    UIConfig::loadResolution(QApplication::desktop()->width(),QApplication::desktop()->height()-30);
-#else
-    UIConfig::loadResolution(800,480);
-#endif
-
     m_MainMenu=new MainMenu(m_pAppList);
     m_MainMenu->InserWidget(ID_APPLINK,new AppLink(m_pAppList, m_MainMenu->CenterWidght()));//
     m_MainMenu->InserWidget(ID_ALERT,new CAlertUI(m_pAppList));
@@ -43,6 +41,10 @@ void CUIManager::initAppHMI()
     m_MainMenu->InserWidget(ID_SHOW,new Show(m_pAppList, m_MainMenu->CenterWidght()));//
     m_MainMenu->InserWidget(ID_NOTIFY,new Notify);
     m_MainMenu->InserWidget(ID_SLIDER,new Slider(m_pAppList));
+
+#ifdef SDL_SUPPORT_LIB
+    m_MspVR = new msp_vr_audio;
+#endif
 //
     connect(this,SIGNAL(onAppShowSignal(int)),this,SLOT(AppShowSlot(int)));
     connect(this,SIGNAL(onAppCloseSignal()),this,SLOT(AppCloseSlot()));
@@ -51,7 +53,7 @@ void CUIManager::initAppHMI()
     connect(this,SIGNAL(onTestStartSignal()),this,SLOT(onTestStartSlots()));
     connect(this,SIGNAL(onTestStopSignal()),this,SLOT(onTestStopSlots()));
 
-    emit finishMainHMI();
+    //emit finishMainHMI();
 }
 
 void CUIManager::showMainUI()
@@ -78,10 +80,7 @@ void CUIManager::onTestStartSlots()
     fflush(stdout);
     std::string str_url = m_pAppList->getActiveApp()->getUrlString();
     //_D("%s\n",str_url.data());
-#ifdef VIDEO_TEST
-    m_videoStreamWidget.setUrl(str_url.data());
-    m_videoStreamWidget.startStream();
-#endif
+    m_MainMenu->StartVideoStream(str_url.c_str());
 }
 void CUIManager::onTestVideoStreamStop()
 {
@@ -89,10 +88,7 @@ void CUIManager::onTestVideoStreamStop()
 }
 void CUIManager::onTestStopSlots()
 {
-#ifdef VIDEO_TEST
-    m_videoStreamWidget.stopStream();
-    m_videoStreamWidget.hide();
-#endif
+    m_MainMenu->StopVideoStream();
 }
 
 void CUIManager::onAppClose()

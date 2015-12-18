@@ -17,13 +17,12 @@
 #include "UIInterface.h"
 #include "AppData/AppListInterface.h"
 #include "QMessageBox"
-#define VIDEO_TEST
-#ifdef VIDEO_TEST
-#include "UI/VideoStream/VideoStream.h"
-#endif
+
 
 #include "Common/MainMenu.h"
-
+#ifdef SDL_SUPPORT_LIB
+#include "AudioTrans/MspVRAudio.h"
+#endif
 
 class CUIManager : public QWidget, public UIInterface
 {
@@ -46,7 +45,7 @@ public:
     void tsSpeak(int VRID, std::string strText);
 
 signals:
-    void finishMainHMI();
+    //void finishMainHMI();
     void onAppShowSignal(int type);
     void onAppActivatedSignal(AppDataInterface* pInterface);
     void onAppCloseSignal();
@@ -70,8 +69,8 @@ private:
     MainMenu *m_MainMenu;
     AppListInterface * m_pAppList;
 
-#ifdef VIDEO_TEST
-    VideoStream m_videoStreamWidget;
+#ifdef SDL_SUPPORT_LIB
+    msp_vr_audio *m_MspVR;
 #endif
     TextSpeech ts;
     void waitMSec(int ms);

@@ -4,11 +4,15 @@
 #
 #-------------------------------------------------
 QT       += core gui network
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia
 win32:CONFIG += qaxcontainer
 
+#QT += multimediawidgets
+#DEFINES +=VIDEO_STREAM_WIDGET
+
+DEFINES += __STDINT_MACROS  #for ffmpeg
 #CONFIG  += wince  ##wince
-#CONFIG  += linksdllibrary
+
 TARGET = AppLinkDevice
 TEMPLATE = app
 
@@ -66,7 +70,13 @@ SOURCES += \
     UI/Notify/Notify.cpp \
     UI/Common/Background.cpp \
     UI/VideoStream/VideoStream.cpp \
-    UI/TextSpeech/textspeech.cpp
+    UI/TextSpeech/textspeech.cpp \
+    UI/AudioTrans/AudioInput.cpp \
+    UI/AudioTrans/MspVRAudio.cpp \
+    UI/TextSpeech/TextToSpeech.cpp \
+    UI/AudioTrans/AudioOutput.cpp \
+    AppManager.cpp
+
 
 
 
@@ -130,7 +140,11 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/VideoStream/VideoStream.h \
     UI/TextSpeech/textspeech.h \
     UI/Singleton.h \
-    UI/Common/MainMenu.h
+    UI/AudioTrans/AudioInput.h \
+    UI/AudioTrans/MspVRAudio.h \
+    UI/TextSpeech/TextToSpeech.h \
+    UI/AudioTrans/AudioOutput.h \
+    AppManager.h
 
 
 RESOURCES += \
@@ -139,7 +153,8 @@ RESOURCES += \
 OTHER_FILES += \
     UI/LiberationSerif-Regular.ttf
 
-INCLUDEPATH +=  $$PWD/Include/ffmpeg
+INCLUDEPATH +=  $$PWD/Include/ffmpeg \
+                $$PWD/Include/msp
 
 ###############################for windows
 win32:!wince{
@@ -183,8 +198,6 @@ HEADERS += \
 INCLUDEPATH += $$PWD/Include/pthread \
                $$PWD/Include
 LIBS +=  $$PWD/Library/ce/pthread.lib
-#LIBS += -L$$PWD/lib/ce/ffmpeg -lavcodec -lavfilter -lavformat -lavutil -lswscale
-#LIBS += $$PWD/ffmpeg/ce/libavcodec.dll.a  $$PWD/ffmpeg/ce/libavfilter.dll.a  $$PWD/ffmpeg/ce/libavformat.dll.a  $$PWD/ffmpeg/ce/libswscale.dll.a  $$PWD/ffmpeg/ce/libavutil.dll.a
 LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
 pthread.path=$$OUT_PWD/bin
 pthread.files=$$PWD/Library/ce/*.dll
@@ -198,14 +211,44 @@ INSTALLS+=ffmpeg
 
 ################################for android
 android{
+
+#CONFIG += msc
+#CONFIG += pico
+CONFIG  += espeak
+INCLUDEPATH +=  $$PWD/Include/msp \
+                $$PWD/Include/msp/android
+
 DEFINES +=ANDROID \
-          SDL_SUPPORT_LIB
+          SDL_SUPPORT_LIB \
+          SDL_SUPPORT_VR
+
 LIBS += -L$$PWD/Library/android/ffmpeg -lffmpeg
 LIBS += -L$$PWD/Library/android/sdl -lsmartDeviceLinkCore
+LIBS += -L$$PWD/Library/android/msp  -llib_msp_vr
+ANDROID_EXTRA_LIBS = \
+        $$PWD/Library/android/ffmpeg/libffmpeg.so \
+        $$PWD/Library/android/sdl/libsmartDeviceLinkCore.so
+msc{
+DEFINES += TTS_FLY_MSC
+LIBS += -L$$PWD/Library/android/msp  -lmsc
+#RESOURCES += Library/android/sdl/tts/msctts.qrc
+ANDROID_EXTRA_LIBS +=$$PWD/Library/android/msp/libmsc.so
+}
+pico{
+DEFINES +=TTS_ANDROID_SELF
+LIBS += -L$$PWD/Library/android/msp  -lttspico -lttscompat
+ANDROID_EXTRA_LIBS +=$$PWD/Library/android/msp/libttspico.so \
+       $$PWD/Library/android/msp/libttscompat.so
+}
+espeak{
+DEFINES += TTS_ESPEAK
+LIBS += -L$$PWD/Library/android/msp -lttsespeak
+ANDROID_EXTRA_LIBS +=$$PWD/Library/android/msp/libttsespeak.so
+}
+
 RESOURCES += \
     Library/android/sdl/config/android.qrc \
     Config/config.qrc
-SUBDIRS += AudioRecorder
 }
 
 
@@ -215,11 +258,6 @@ configfile.files=$$PWD/Config/*
 INSTALLS +=configfile
 }
 
-contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-    ANDROID_EXTRA_LIBS = \
-        $$PWD/Library/android/ffmpeg/libffmpeg.so \
-        $$PWD/Library/android/sdl/libsmartDeviceLinkCore.so
-}
 
 
 #ANDROID_PACKAGE_SOURCE_DIR = $$PWD/Library/android/apk

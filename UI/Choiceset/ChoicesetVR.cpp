@@ -8,7 +8,7 @@ CChoicesetVR::CChoicesetVR(AppListInterface * pList, QWidget *parent) : CPopBase
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(hide()));
     connect(this,SIGNAL(VRmenuClicked(int,int,int)),this,SLOT(VRmenuClickedSlots(int,int,int)));
-
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
 }
 
 CChoicesetVR::~CChoicesetVR()
@@ -128,7 +128,7 @@ void CChoicesetVR::setTimeOut(int duration)
 {
     m_timer->setInterval(duration);
     m_timer->start();
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
+
 }
 
 void CChoicesetVR::timeoutSlots()
@@ -136,7 +136,7 @@ void CChoicesetVR::timeoutSlots()
     m_timer->stop();
 
     emit VRmenuClicked(PERFORMINTERACTION_TIMEOUT, m_i_interactionID, m_i_defaultID);
-    hide();
+    goBack();
 }
 
 void CChoicesetVR::label1ClickedSlots(int id)
@@ -144,7 +144,7 @@ void CChoicesetVR::label1ClickedSlots(int id)
     m_timer->stop();
 
     emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    hide();
+    goBack();
 }
 
 void CChoicesetVR::label2ClickedSlots(int id)
@@ -152,7 +152,7 @@ void CChoicesetVR::label2ClickedSlots(int id)
     m_timer->stop();
 
     emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    hide();
+    goBack();
 }
 
 void CChoicesetVR::label3ClickedSlots(int id)
@@ -160,7 +160,7 @@ void CChoicesetVR::label3ClickedSlots(int id)
     m_timer->stop();
 
     emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    hide();
+    goBack();
 }
 
 void CChoicesetVR::label4ClickedSlots(int id)
@@ -168,7 +168,7 @@ void CChoicesetVR::label4ClickedSlots(int id)
     m_timer->stop();
 
     emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    hide();
+    goBack();
 }
 
 void CChoicesetVR::VRmenuClickedSlots(int code, int performInteractionID, int choiceID)

@@ -210,6 +210,7 @@ void Command::listWidgetDoubleClickedSlots(QModelIndex index)
 void Command::exitAppSlots()
 {
     m_pList->OnAppExit();
+    showCurUI(ID_APPLINK);
 }
 
 void Command::commandClickSlots(int cmdID)

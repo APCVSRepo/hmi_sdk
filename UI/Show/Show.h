@@ -26,12 +26,13 @@ public:
 
     void execShow();
     void setMediaColckTimer(Json::Value jsonObj);
+    virtual void receiveJson(Json::Value json);
 
 signals:
     void moreClicked();
 
     void returnAppLink();
-
+    void startMediaClock(bool);
     //void softButtonClicked(int btID, int mode);
 
 public slots:
@@ -49,7 +50,8 @@ public slots:
     void btnTwoClickedLongSlots(int btID);
     void btnOneClickedLongSlots(int btID);
 
-    void mediaClockSlots();
+    void mediaClockSlots(bool);
+    void timerEvent(QTimerEvent *e);
 
 private:
     void setMainField1(bool isShow, QString text);
@@ -83,7 +85,8 @@ private:
     int m_i_totalNum;
     int m_i_currentNo;
 
-    QTimer *m_timer_mediaClock;
+    int  m_timerId;
+//    QTimer *m_timer_mediaClock;
     QTime nowMeidaClockTime;
     int m_i_startH;
     int m_i_startM;

@@ -16,7 +16,7 @@ MainMenu::MainMenu(AppListInterface * pList, QWidget *parent) : BaseWidght(0,0,u
    // labelTitle->setStyleSheet("font: 75 40pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
 
     labelTime=new QLabel(this);
-    labelTime->setGeometry(ui_res_width*(5.0/6.0)-ui_content_lr,ui_res_height*(1-ui_menu_udmargin)+3,ui_res_width*1/6.0,ui_res_height*ui_menu_udmargin-5);
+    labelTime->setGeometry(ui_res_width*(4.0/5.0)-ui_content_lr,ui_res_height*(1-ui_menu_udmargin)+3,ui_res_width*1/5.0,ui_res_height*ui_menu_udmargin-5);
     //labelTime->setText("Mobile Apps");
    // labelTime->setStyleSheet("font: 75 40pt \"Liberation Serif\";color:rgb(13,193,226);border: 0px");
     labelTime->setStyleSheet("font: 55 30pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
@@ -52,13 +52,16 @@ MainMenu::MainMenu(AppListInterface * pList, QWidget *parent) : BaseWidght(0,0,u
     stackWidget->setGeometry(ui_content_left,5,ui_app_width,ui_app_height);
     stackWidget->setWindowFlags(Qt::FramelessWindowHint);
 
+    videoWidget = new VideoStream(ui_res_width,ui_res_height);
+    closeCount = 0 ;
     connect(this,SIGNAL(menuBtnClicked(QString)),this,SLOT(menuBtnClickedSlots(QString)));
 
 }
 
 MainMenu::~MainMenu()
 {
-
+    delete stackWidget;
+    delete videoWidget;
 }
 
 void MainMenu::SetTitle(QString title)
@@ -70,6 +73,7 @@ void MainMenu::SetTitle(QString title)
 void MainMenu::SetCurWidget(int id,bool history)
 {
     LOGD("cur widght:id=%d,index=%d\n",id,stackKeys.key(id));
+    videoWidget->stopStream();
     stackWidget->setCurrentIndex(stackKeys.key(id));
     if(id>=MIN_APP_BASE && id<MAX_APP_BASE){
         LOGD("cur widght:AppBase\n");
@@ -83,6 +87,7 @@ void MainMenu::SetCurWidget(int id,bool history)
         pop->execShow();
     }
     if(history){
+       closeCount=0;
        if(stackHistory.isEmpty())
           stackHistory.append(id);
        else{
@@ -116,6 +121,17 @@ void MainMenu::ExitWidget(int id)
     if(stackWidget->currentIndex()==index){
         this->onMoveBack();
     }
+}
+
+void MainMenu::StartVideoStream(const char *url)
+{
+    videoWidget->setUrl(url);
+    videoWidget->startStream();
+}
+
+void MainMenu::StopVideoStream()
+{
+    videoWidget->stopStream();
 }
 
 void MainMenu::GetDateTime()
@@ -166,12 +182,12 @@ void MainMenu::menuBtnClickedSlots(QString btnText)
 
     if("ListButton" == btnText)
     {
-        this->SetCurWidget(ID_AUDIOPASSTHRU);
         //ts.speak("请说一个指令");
         //while(ts.isSpeaking())
            // waitMSec(100);
         m_pList->getActiveApp()->OnVRStartRecord();
-    }
+		this->SetCurWidget(ID_AUDIOPASSTHRU);
+	}
 }
 
 void MainMenu::onMoveBack()
@@ -179,11 +195,11 @@ void MainMenu::onMoveBack()
     LOGD("onMoveBack");
     if(stackHistory.isEmpty()){
         LOGD("onMoveBack:close()\n");
-        if(stackKeys.value(stackWidget->currentIndex())==ID_APPLINK)
-               this->close();
-        else{
-            this->SetCurWidget(ID_APPLINK);
+        if(++closeCount>=3){
+            this->close();
         }
+        else
+          this->SetCurWidget(ID_APPLINK);
     }
     else{
         stackHistory.removeLast();

@@ -48,7 +48,7 @@ class VideoStream :
 {
     Q_OBJECT
 public:
-    explicit VideoStream(QWidget *parent = 0);
+    explicit VideoStream(int w,int h,QWidget *parent = 0);
     ~VideoStream();
     
     void setUrl(QString url);
@@ -77,9 +77,10 @@ private:
     int m_i_w;
     int m_i_h;
     QString m_str_url;
+    int videoWidth;
+    int videoHeight;
 #ifdef VIDEO_STREAM_WIDGET
     QMediaPlayer  *m_VideoPlayer;
-    QMediaPlaylist *m_playList;
 #else
   //  QLabel *m_label;
     QTimer *m_timerPlay;
@@ -100,8 +101,7 @@ private:
 
     bool     isGetPacket;
 
-    int videoWidth;
-    int videoHeight;
+
     int videoStreamIndex;
     int m_i_frameFinished;
 

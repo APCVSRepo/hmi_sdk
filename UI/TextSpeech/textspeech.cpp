@@ -1,5 +1,8 @@
 #include "textspeech.h"
 #include "Config/Config.h"
+
+
+
 TextSpeech::TextSpeech(QObject *parent) :
     QObject(parent),_binit(0),_bReading(0)
 {
@@ -73,45 +76,23 @@ void TextSpeech::dealevent(QString name, int arc , void* argv)
 //初始化语音函数
 bool TextSpeech::initSpeech()
 {
-    return false;
-//    if(_binit)
-//        return true;
-//    audioFormat.setSampleRate(44100);
-//    audioFormat.setChannelCount(1);
-//    audioFormat.setCodec("audio/pcm");
-//    audioFormat.setSampleType(QAudioFormat::SignedInt);
-//    audioFormat.setSampleSize(8);
-//    audioFormat.setByteOrder(QAudioFormat::LittleEndian);
-//    deviceInfo=QAudioDeviceInfo::defaultOutputDevice();
-//    if(deviceInfo.isNull()){
-//        LOGE("there is no availiable device");
-//        return false;
-//    }
-//    LOGI("default audio output device:%s",deviceInfo.deviceName().toUtf8().data());
-//    if(!deviceInfo.isFormatSupported(audioFormat)){
-//        audioFormat=deviceInfo.nearestFormat(audioFormat);
-//    }
-//    LOGI("audio output format: smpl rate=%d,chn=%d,codec=%s",
-//         audioFormat.sampleRate(),audioFormat.channelCount(),
-//         audioFormat.codec().toUtf8().data());
-//    audioOut=new QAudioOutput(deviceInfo,audioFormat);
-//    audioDevice=audioOut->start();
-//    if(audioDevice==NULL)
-//        return false;
-//    _binit=true;
-//    return true;
+    if(_binit)
+        return true;
+    _voice=new TextToSpeech(TTS_MODE_SPEAK);
+    _binit=true;
+    return true;
 }
 
 //文本转语音朗读函数
 bool TextSpeech::speak(QString txt)
 {
-    LOGI("speak:%s",txt.toUtf8().data());
-    return false;
-//    if(audioDevice==NULL)
-//        return false;
-//    _bReading = true;
-//    audioDevice->write(txt.toUtf8());
-//     return true;
+    LOGI("speak:voice");
+    if(_voice==NULL)
+        return false;
+    _bReading = true;
+    bool ret= _voice->TextToVoice(txt.toUtf8().data());
+    _bReading = false;
+    return ret;
 }
 
 //判断语音系统是否运行函数
@@ -119,6 +100,7 @@ bool TextSpeech::isSpeaking()
 {
     return _bReading;
 }
+
 
 //设置语音朗读速度-10到10
 void TextSpeech::setRate(int rate)
@@ -136,10 +118,10 @@ void TextSpeech::setVolume(int value)
 
 void TextSpeech::dealevent(QString name, int arc , void* argv)
 {
-//    if(name == "EndStream(int,QVariant)")
-//    {
-//        _bReading = false;
-//        emit speakComplete();
-//    }
+    if(name == "EndStream(int,QVariant)")
+    {
+        _bReading = false;
+        emit speakComplete();
+    }
 }
 #endif

@@ -19,9 +19,9 @@
 #define  CONFIG_DIR   "/sdcard/sdlconfig"
 
 #else
-#define  LOGI(...)  {printf(__VA_ARGS__);fflush(stdout);}while(0)
-#define  LOGD(...)  {printf(__VA_ARGS__);fflush(stdout);}while(0)
-#define  LOGE(...)  {printf(__VA_ARGS__);fflush(stderr);}while(0)
+#define  LOGI(...)  {printf(__VA_ARGS__);printf("\n");fflush(stdout);}while(0)
+#define  LOGD(...)  {printf(__VA_ARGS__);printf("\n");fflush(stdout);}while(0)
+#define  LOGE(...)  {printf(__VA_ARGS__);printf("\n");fflush(stderr);}while(0)
 #endif
 
 #endif

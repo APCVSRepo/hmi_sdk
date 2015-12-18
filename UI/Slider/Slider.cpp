@@ -9,6 +9,7 @@ Slider::Slider(AppListInterface * pList, QWidget *parent) :
     m_iPos(0)
 {
     InitLayout();
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
     connect(this,SIGNAL(sliderClicked(int,int,int)),this,SLOT(sliderClickedSlots(int,int,int)));
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(onButtonCancelClicked()));
 }
@@ -169,7 +170,7 @@ void Slider::setTimeOut(int duration)
 {
     m_timer->setInterval(duration);
     m_timer->start();
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
+
 }
 
 void Slider::timeoutSlots()

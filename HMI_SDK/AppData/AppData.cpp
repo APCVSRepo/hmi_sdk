@@ -26,6 +26,8 @@ std::string string_To_UTF8(const std::string & str)
     pBuf  = NULL;
 
     return retStr;
+#else
+    return str;
 #endif
 }
 bool IsTextUTF8(char* str, unsigned long long length)
@@ -73,7 +75,7 @@ bool IsTextUTF8(char* str, unsigned long long length)
         return FALSE;
     return true;
 #else
-    return false;
+    return true;
 #endif
 }
 
@@ -98,10 +100,7 @@ void AppData::recvFromServer(Json::Value jsonObj)
     {
         std::string str_method = jsonObj["method"].asString();
 
-        if(str_method == "UI.GetCapabilities"){
-            LOGI("UI.GetCapabilities");
-        }
-        else if(str_method == "UI.Show")
+        if(str_method == "UI.Show")
         {
             uiShow(jsonObj);
             m_iCurUI = ID_SHOW;
@@ -244,11 +243,17 @@ void AppData::recvFromServer(Json::Value jsonObj)
         else if(str_method=="TTS.Speak")
         {
             LOGI("TTS.Speak");
-            std::string speakType = jsonObj["params"]["ttsChunks"][0]["type"].asString();
-            if(!IsTextUTF8((char *)speakType.data(),speakType.size()))
-                speakType = string_To_UTF8(speakType);
-            LOGI("tts text:%s",speakType.data());
-            m_pUIManager->tsSpeak(ID_DEFAULT, speakType);
+            Json::Value ttsSpeeks = jsonObj["params"]["ttsChunks"];
+            int size=ttsSpeeks.size();
+            for(int i=0;i<size;i++){
+                std::string speek=ttsSpeeks[i]["text"].asString();
+                if(ttsSpeeks[i]["type"].asString()!="TEXT")
+                    continue;
+                if(!IsTextUTF8((char *)speek.data(),speek.size()))
+                    speek = string_To_UTF8(speek);
+                LOGI("tts text:%s",speek.data());
+                m_pUIManager->tsSpeak(ID_DEFAULT, speek);
+            }
         }
     }
 }

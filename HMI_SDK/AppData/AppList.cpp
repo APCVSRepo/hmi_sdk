@@ -38,7 +38,9 @@ void AppList::onRequest(Json::Value jsonObj)
 
 void AppList::onNotification(Json::Value jsonObj)
 {
-    if (jsonObj.isMember("method") && jsonObj["method"].asString() != "BasicCommunication.SDLLog"){
+    //
+    if (jsonObj.isMember("method") && jsonObj["method"].asString() != "BasicCommunication.SDLLog")
+    {
         recvFromServer(jsonObj);
     }
 }

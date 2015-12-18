@@ -28,6 +28,8 @@ public:
         ((MainMenu*)parent()->parent()->parent())->onMoveBack();
     }
 
+    void setBkgImage(const char *img);
+
     virtual void mouseReleaseEvent(QMouseEvent *event);
 
 signals:

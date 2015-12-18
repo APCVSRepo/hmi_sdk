@@ -17,15 +17,15 @@ using namespace std;
 QByteArray  arrayBuffer;
 pthread_mutex_t  _mutex_video_buffer;
 #endif
-VideoStream::VideoStream(QWidget *parent) :
+VideoStream::VideoStream(int w,int h,QWidget *parent) :
 #ifdef VIDEO_STREAM_WIDGET
     QVideoWidget(parent)
 #else
     QWidget(parent)
 #endif
 {
-    m_i_w =ui_res_width;
-    m_i_h = ui_res_height;
+    m_i_w = w;
+    m_i_h = h;
 
     this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
     this->setGeometry(0,0,m_i_w,m_i_h);
@@ -33,7 +33,7 @@ VideoStream::VideoStream(QWidget *parent) :
 #ifdef VIDEO_STREAM_WIDGET
     m_VideoPlayer=new QMediaPlayer;
     m_VideoPlayer->setVideoOutput(this);
-    m_playList=new QMediaPlaylist();
+
 #else
     av_register_all();//注册库中所有可用的文件格式和解码器
     avcodec_register_all();
@@ -62,7 +62,6 @@ VideoStream::~VideoStream()
 {
 #ifdef VIDEO_STREAM_WIDGET
     delete m_VideoPlayer;
-    delete m_playList;
 #else
     avformat_free_context(pAVFormatContext);
     av_frame_free(&pAVFrame);
@@ -73,12 +72,11 @@ VideoStream::~VideoStream()
 
 void VideoStream::setUrl(QString url)
 {
+    LOGI("setUrl");
+    LOGI("url:%s",url.toUtf8().data());
     m_str_url = url;
 #ifdef VIDEO_STREAM_WIDGET
-    m_playList->clear();
-    m_playList->addMedia(QUrl(url));
-    m_playList->setCurrentIndex(0);
-    m_VideoPlayer->setPlaylist(m_playList);
+    m_VideoPlayer->setMedia(QMediaContent(QNetworkRequest(QUrl(url))));
 #endif
 }
 
@@ -129,6 +127,7 @@ void VideoStream::startStream()
 {
     LOGD("\n startStream");
     this->show();
+
     m_VideoPlayer->play();
 }
 
@@ -216,17 +215,20 @@ bool VideoStream::Init()
    // pAVCodecContext->width=1333;
     videoWidth=pAVCodecContext->width;
     videoHeight=pAVCodecContext->height;
+    if(videoWidth*videoHeight==0){
+        videoWidth=800;
+        videoHeight=480;
+    }
 
     LOGD("Screen resolution:width:%d,height:%d",videoWidth,videoHeight);
-    avpicture_alloc(&pAVPicture,PIX_FMT_RGB24,videoWidth,videoHeight);
+    avpicture_alloc(&pAVPicture,AV_PIX_FMT_RGBA,videoWidth,videoHeight);
 
     AVCodec *pAVCodec;
-
     //获取视频流解码器
     LOGD("avcodec_find_decoder");
     pAVCodec = avcodec_find_decoder(pAVCodecContext->codec_id);
     LOGD("sws_getContext");
-    pSwsContext = sws_getContext(videoWidth,videoHeight,PIX_FMT_YUV420P,videoWidth,videoHeight,PIX_FMT_RGB24,SWS_BICUBIC,0,0,0);
+    pSwsContext = sws_getContext(videoWidth,videoHeight,PIX_FMT_YUV420P,videoWidth,videoHeight,AV_PIX_FMT_RGBA,SWS_BICUBIC,0,0,0);
 
     LOGD("avcodec_open2");
     //打开对应解码器
@@ -253,17 +255,27 @@ void* VideoStream::ReadVideoFrame(void *arg)
 #endif
 void VideoStream::stopStream()
 {
-    m_Stop=true;
-    isGetPacket=false;
-    this->hide();
 #ifdef VIDEO_STREAM_WIDGET
     m_VideoPlayer->stop();
 #endif
 #ifdef VIDEO_STREM_NET
+    LOGI("stop stream:%d",(int)m_Stop);
+    if(m_Stop)
+        return;
+    LOGI("avcodec_close");
+    m_Stop=true;
+    isGetPacket=false;
+    avcodec_close(pAVCodecContext);
+    LOGI("avformat_close_input");
+    avformat_close_input(&pAVFormatContext);
+    LOGI("avformat_free_context");
     avformat_free_context(pAVFormatContext);
+    LOGI("av_frame_free");
     av_frame_free(&pAVFrame);
+    LOGI("sws_freeContext");
     sws_freeContext(pSwsContext);
 #endif
+    this->hide();
 }
 
 #ifndef VIDEO_STREAM_WIDGET
@@ -278,7 +290,8 @@ void VideoStream::PlayImageSlots()
                 if(m_i_frameFinished){
                     sws_scale(pSwsContext,(const uint8_t* const *)pAVFrame->data,pAVFrame->linesize,0,videoHeight,pAVPicture.data,pAVPicture.linesize);
                     //发送获取一帧图像信号
-                    m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_RGB888);
+                    m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_RGBA8888);
+                    //m_VideoImage=QImage(pAVFrame->data[0],pAVFrame->width,pAVFrame->height,QImage::Format_RGB888);
                     update();
                 }
             }
@@ -296,6 +309,7 @@ void VideoStream::paintEvent(QPaintEvent *e)
     if(m_VideoImage.isNull())
         return;
     QPainter painter(this);
+   // painter.drawImage(0,0,QImage(pAVPicture.data[0],width(),height(),QImage::Format_RGB888));
     painter.drawImage(QRect(0,0,this->width(),this->height()),m_VideoImage,QRect(0,0,m_VideoImage.width(),m_VideoImage.height()));
 }
 #endif
@@ -305,7 +319,8 @@ void VideoStream::mousePressEvent(QMouseEvent *e)
 {
     int x=e->x();
     int y=e->y();
-
+    x= x*videoWidth/width();
+    y= y*videoHeight/height();
     LOGD("Touch Event:type=BEGIN,x=%d,y=%d",x,y);
     SDLConnector::getSDLConnectore()->OnVideoScreenTouch(TOUCH_START,x,y);
 }
@@ -315,6 +330,8 @@ void VideoStream::mouseMoveEvent(QMouseEvent *e)
 {
     int x=e->x();
     int y=e->y();
+    x= x*videoWidth/width();
+    y= y*videoHeight/height();
     LOGD("Touch Event:type=MOVE,x=%d,y=%d",x,y);
 
     SDLConnector::getSDLConnectore()->OnVideoScreenTouch(TOUCH_MOVE,x,y);
@@ -324,6 +341,8 @@ void VideoStream::mouseReleaseEvent(QMouseEvent *e)
 {
     int x=e->x();
     int y=e->y();
+    x= x*videoWidth/width();
+    y= y*videoHeight/height();
     LOGD("Touch Event:type=END,x=%d,y=%d",x,y);
 
     SDLConnector::getSDLConnectore()->OnVideoScreenTouch(TOUCH_END,x,y);

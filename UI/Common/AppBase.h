@@ -11,7 +11,7 @@ public:
     explicit AppBase(AppListInterface * pList, QWidget *parent = 0);
     ~AppBase();
 
-    virtual void setBkgImage(char *img);
+    virtual void setBkgImage(const char *img);
 
     virtual void execShow();
     virtual void receiveJson(Json::Value json);

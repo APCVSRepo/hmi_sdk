@@ -22,14 +22,6 @@
  * @file
  * common internal and external API header
  */
-
-#ifndef AVUTIL_COMMON_H
-#define AVUTIL_COMMON_H
-
-#if defined(__cplusplus) && !defined(__STDC_CONSTANT_MACROS) && !defined(UINT64_C)
-#error missing -D__STDC_CONSTANT_MACROS / #define __STDC_CONSTANT_MACROS
-#endif
-
 #ifdef WINCE
 #include "stdint.h"
 #include "global_first.h"
@@ -37,6 +29,14 @@
 //#include <inttypes.h>
 #include <stdint.h>
 #endif
+#ifndef AVUTIL_COMMON_H
+#define AVUTIL_COMMON_H
+
+#if defined(__cplusplus) && !defined(__STDC_CONSTANT_MACROS) && !defined(UINT64_C)
+#error missing -D__STDC_CONSTANT_MACROS / #define __STDC_CONSTANT_MACROS
+#endif
+
+
 
 #include <errno.h>
 #include <limits.h>

@@ -6,6 +6,7 @@
 CAudioPassThru::CAudioPassThru(AppListInterface * pList, QWidget *parent) : CPopBase(pList, parent)
 {
     InitLayout();
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(hide()));
     connect(this,SIGNAL(audioPassThruHide(int,int)),this,SLOT(audioPassThruHideSlots(int,int)));
     m_i_performaudiopassthruID = 0;
@@ -150,7 +151,7 @@ void CAudioPassThru::setAudioText(int textIdx, QString text)
 void CAudioPassThru::setTimeOut(int duration)
 {
     m_timer->start(duration);
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
+
 }
 
 void CAudioPassThru::timeoutSlots()

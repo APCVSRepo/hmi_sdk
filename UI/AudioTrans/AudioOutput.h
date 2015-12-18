@@ -1,6 +1,6 @@
-#ifndef AUDIOOUTPUT_H
+﻿#ifndef AUDIOOUTPUT_H
 #define AUDIOOUTPUT_H
-#include <QAudioOutput>
+#include <QTMultiMedia/QAudioOutput>
 #include <QIODevice>
 #include <QMutex>
 #include <QTimerEvent>

@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     AppManager appManager;
     QDialog diaStart;
     diaStart.setGeometry(0,0,ui_res_width,ui_res_height);
-    diaStart.setStyleSheet("background-image:url(:/images/Screen.png);");
+    diaStart.setStyleSheet("border-image:url(:/images/Screen.png);");
     QObject::connect(&appManager,SIGNAL(finishMainHMI()),&diaStart, SLOT(accept()));
     diaStart.exec();
     appManager.ShowUI();

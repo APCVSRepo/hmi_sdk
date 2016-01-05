@@ -6,7 +6,7 @@
 #include <QTextBlock>
 #include "Common/ScrollBar.h"
 
-CScrollMsg::CScrollMsg(AppListInterface * pList, QWidget *parent) : CPopBase(pList, parent)
+CScrollMsg::CScrollMsg(AppListInterface * pList, QWidget *parent) : AppBase(pList, parent)
 {
 //    m_labelBackground.setParent(this);
     m_editText = new QTextEdit;
@@ -18,7 +18,7 @@ CScrollMsg::CScrollMsg(AppListInterface * pList, QWidget *parent) : CPopBase(pLi
     m_btnSoft4 = new CButton;
 
     InitLayout();
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
+    connect(&m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(onSpaceClicedSlots()));
     connect(this,SIGNAL(scrollMsgAbort(int,int)),this,SLOT(scrollMsgAbortSlots(int,int)));
 }
@@ -60,15 +60,15 @@ void CScrollMsg::InitLayout()
     m_btnSoft3->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btnSoft4->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
 
-    connect(m_btnSoft1, SIGNAL(clicked(int)), this, SLOT(onButtonOneClickedSlots(int)));
-    connect(m_btnSoft2, SIGNAL(clicked(int)), this, SLOT(onButtonTwoClickedSlots(int)));
-    connect(m_btnSoft3, SIGNAL(clicked(int)), this, SLOT(onButtonThrClickedSlots(int)));
-    connect(m_btnSoft4, SIGNAL(clicked(int)), this, SLOT(onButtonFouClickedSlots(int)));
+    connect(m_btnSoft1, SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
+    connect(m_btnSoft2, SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
+    connect(m_btnSoft3, SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
+    connect(m_btnSoft4, SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
 
-    connect(m_btnSoft1, SIGNAL(clickedLong(int)), this, SLOT(onButtonOneClickedLongSlots(int)));
-    connect(m_btnSoft2, SIGNAL(clickedLong(int)), this, SLOT(onButtonTwoClickedLongSlots(int)));
-    connect(m_btnSoft3, SIGNAL(clickedLong(int)), this, SLOT(onButtonThrClickedLongSlots(int)));
-    connect(m_btnSoft4, SIGNAL(clickedLong(int)), this, SLOT(onButtonFouClickedLongSlots(int)));
+    connect(m_btnSoft1, SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
+    connect(m_btnSoft2, SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
+    connect(m_btnSoft3, SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
+    connect(m_btnSoft4, SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
 
 
     QPalette pll = m_editText->palette();
@@ -138,15 +138,14 @@ void CScrollMsg::downClickedSlots()
 
 void CScrollMsg::setTimeOut(int duration)
 {
-    m_timer->start(duration);
+    m_timer.start(duration);
 
 }
 
 void CScrollMsg::timeoutSlots()
 {
-    m_timer->stop();
-    emit scrollMsgAbort(m_i_scrollMsgID, 0);
-    goBack();
+    m_timer.stop();
+    emit scrollMsgAbort(0);
 }
 
 void CScrollMsg::setMessage(QString msg)
@@ -242,111 +241,42 @@ void CScrollMsg::setBtnID(int btnIdx, int id)
 
 void CScrollMsg::onSpaceClicedSlots()
 {
-    m_timer->stop();
-    emit scrollMsgAbort(m_i_scrollMsgID, 2);
-    goBack();
+    m_timer.stop();
+    emit scrollMsgAbort(2);
 }
 
-void CScrollMsg::onButtonOneClickedSlots(int btID)
+void CScrollMsg::onButtonClickedSlots(int btID)
 {
-    m_timer->stop();
-    emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    goBack();
+    m_timer.stop();
+    emit scrollMsgAbort(1);
     if(btID != 0)
     {
         m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
-void CScrollMsg::onButtonTwoClickedSlots(int btID)
+void CScrollMsg::onButtonClickedLongSlots(int btID)
 {
-    m_timer->stop();
-    emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
-    }
-}
-
-void CScrollMsg::onButtonThrClickedSlots(int btID)
-{
-    m_timer->stop();
-    emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
-    }
-}
-
-void CScrollMsg::onButtonFouClickedSlots(int btID)
-{
-    m_timer->stop();
-    emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
-    }
-}
-
-void CScrollMsg::onButtonOneClickedLongSlots(int btID)
-{
-    m_timer->stop();
-    emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    goBack();
+    m_timer.stop();
+    emit scrollMsgAbort(1);
     if(btID != 0)
     {
         m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
     }
 }
 
-void CScrollMsg::onButtonTwoClickedLongSlots(int btID)
-{
-    m_timer->stop();
-    emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
-    }
-}
-
-void CScrollMsg::onButtonThrClickedLongSlots(int btID)
-{
-    m_timer->stop();
-    emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
-    }
-}
-
-void CScrollMsg::onButtonFouClickedLongSlots(int btID)
-{
-    m_timer->stop();
-    emit scrollMsgAbort(m_i_scrollMsgID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
-    }
-}
-
-void CScrollMsg::scrollMsgAbortSlots(int smID, int reason)
+void CScrollMsg::scrollMsgAbortSlots(int reason)
 {
     //_D("smID=%d, reason=%d\n",smID,reason);
-    m_pList->getActiveApp()->OnScrollMessageResponse(smID, reason);
+    m_pList->getActiveApp()->OnScrollMessageResponse(reason);
 }
 
 
-void CScrollMsg::execShow()
+void CScrollMsg::showEvent(QShowEvent * e)
 {
     if (m_pList->getActiveApp())
     {
-        m_jsonData = m_pList->getActiveApp()->getScrollableMsgJson()["params"];
+        Json::Value m_jsonData = m_pList->getActiveApp()->getScrollableMsgJson()["params"];
 
         setTimeOut(m_jsonData["timeout"].asInt());
         setBtnText(0, "-", false);
@@ -367,5 +297,4 @@ void CScrollMsg::execShow()
             }
         }
     }
-    show();
 }

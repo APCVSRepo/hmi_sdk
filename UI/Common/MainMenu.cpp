@@ -1,7 +1,6 @@
 ﻿#include "MainMenu.h"
 #include "../Config/Config.h"
 #include "AppBase.h"
-#include "PopBase.h"
 #include <QTime>
 MainMenu::MainMenu(AppListInterface * pList, QWidget *parent) : BaseWidght(0,0,ui_res_width,ui_res_height,parent)
 {
@@ -23,9 +22,7 @@ MainMenu::MainMenu(AppListInterface * pList, QWidget *parent) : BaseWidght(0,0,u
     //显示日期时间
     m_timer=new QTimer(this);
     m_timer->start(1000);
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(GetDateTime()));
-
-
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(ShowDateTime()));
 
     widgetLeftMenu=new BaseWidght(ui_content_lr,ui_content_ud,ui_leftMenu_Width,ui_content_height,this);
     widgetLeftMenu->setBackGroundImge((char *)":/images/leftmenu.png");
@@ -53,9 +50,7 @@ MainMenu::MainMenu(AppListInterface * pList, QWidget *parent) : BaseWidght(0,0,u
     stackWidget->setWindowFlags(Qt::FramelessWindowHint);
 
     videoWidget = new VideoStream(ui_res_width,ui_res_height);
-    closeCount = 0 ;
     connect(this,SIGNAL(menuBtnClicked(QString)),this,SLOT(menuBtnClickedSlots(QString)));
-
 }
 
 MainMenu::~MainMenu()
@@ -66,61 +61,13 @@ MainMenu::~MainMenu()
 
 void MainMenu::SetTitle(QString title)
 {
-    this->labelTitle->setText(title);
+    labelTitle->setText(title);
 }
 
-//param: histroy,是否加入历史记录
-void MainMenu::SetCurWidget(int id,bool history)
-{
-    LOGD("cur widght:id=%d,index=%d\n",id,stackKeys.key(id));
-    videoWidget->stopStream();
-    stackWidget->setCurrentIndex(stackKeys.key(id));
-    if(id>=MIN_APP_BASE && id<MAX_APP_BASE){
-        LOGD("cur widght:AppBase\n");
-        AppBase *app=static_cast<AppBase*>(stackWidget->currentWidget());
-        app->execShow();
-    }
-    else
-    {
-        LOGD("cur widght:PopBase\n");
-        CPopBase *pop=static_cast<CPopBase*>(stackWidget->currentWidget());
-        pop->execShow();
-    }
-    if(history){
-       closeCount=0;
-       if(stackHistory.isEmpty())
-          stackHistory.append(id);
-       else{
-           if(stackHistory.back()!=id)
-               stackHistory.append(id);
-       }
-    }
-}
 
-void MainMenu::InserWidget(int id,QWidget *widget)
-{
-    stackKeys.insert(stackWidget->count(),id);
-    stackWidget->addWidget(widget);
-}
-
-QWidget* MainMenu::CenterWidght()
+QWidget* MainMenu::CenterWidget()
 {
     return stackWidget;
-}
-
-void MainMenu::ReceiveJson(int id, Json::Value json)
-{
-    AppBase *app=static_cast<AppBase*>(stackWidget->widget(stackKeys.key(id)));
-    if(app)
-        app->receiveJson(json);
-}
-
-void MainMenu::ExitWidget(int id)
-{
-    int index=stackKeys.key(id);
-    if(stackWidget->currentIndex()==index){
-        this->onMoveBack();
-    }
 }
 
 void MainMenu::StartVideoStream(const char *url)
@@ -134,9 +81,9 @@ void MainMenu::StopVideoStream()
     videoWidget->stopStream();
 }
 
-void MainMenu::GetDateTime()
+void MainMenu::ShowDateTime()
 {
-    this->labelTime->setText(QTime::currentTime().toString("HH:mm:ss"));
+    labelTime->setText(QTime::currentTime().toString("HH:mm:ss"));
 }
 
 void MainMenu::onMenuButtonClick()
@@ -156,8 +103,7 @@ void MainMenu::onMenuButtonClick()
                 break;
             case ID_MENU_MSG:
                 {
-                stackHistory.clear();
-                this->SetCurWidget(ID_APPLINK);
+                m_pList->ShowAppList();
                 }
                 break;
             case ID_MENU_CD:
@@ -182,49 +128,11 @@ void MainMenu::menuBtnClickedSlots(QString btnText)
 
     if("ListButton" == btnText)
     {
-        //ts.speak("请说一个指令");
-        //while(ts.isSpeaking())
-           // waitMSec(100);
         m_pList->getActiveApp()->OnVRStartRecord();
-		this->SetCurWidget(ID_AUDIOPASSTHRU);
 	}
 }
 
-void MainMenu::onMoveBack()
-{
-    LOGD("onMoveBack");
-    if(stackHistory.isEmpty()){
-        LOGD("onMoveBack:close()\n");
-        if(++closeCount>=3){
-            this->close();
-        }
-        else
-          this->SetCurWidget(ID_APPLINK);
-    }
-    else{
-        stackHistory.removeLast();
-        if(stackHistory.isEmpty())
-        {
-            LOGD("stackHistory is empty\n");
-            this->SetCurWidget(ID_APPLINK,false);
-        }
-        else
-        {
-           int id=stackHistory.back();
-           LOGD("stackHistory is id=%d\n",id);
-           SetCurWidget(id,false);
-        }
-    }
-}
-
-
 void MainMenu::keyPressEvent(QKeyEvent *e)
 {
-    if(e->key()==Qt::Key_Back){
-        this->onMoveBack();
-    }
-    else{
-        QWidget::keyPressEvent(e);
-    }
 }
 

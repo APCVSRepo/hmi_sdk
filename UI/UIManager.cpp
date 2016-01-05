@@ -22,7 +22,9 @@ CUIManager::CUIManager(AppListInterface * pList, QWidget *parent) :
 
 CUIManager::~CUIManager()
 {
-    delete m_MainMenu;
+    for(int i = 0; i < ID_UI_MAX; i++)
+        if(m_vUIWidgets[i])
+            delete m_vUIWidgets[i];
 #ifdef SDL_SUPPORT_LIB
     delete m_MspVR;
 #endif
@@ -30,96 +32,87 @@ CUIManager::~CUIManager()
 
 void CUIManager::initAppHMI()
 {
-    m_MainMenu=new MainMenu(m_pAppList);
-    m_MainMenu->InserWidget(ID_APPLINK,new AppLink(m_pAppList, m_MainMenu->CenterWidght()));//
-    m_MainMenu->InserWidget(ID_ALERT,new CAlertUI(m_pAppList));
-    m_MainMenu->InserWidget(ID_AUDIOPASSTHRU,new CAudioPassThru(m_pAppList));
-    m_MainMenu->InserWidget(ID_CHOICESETVR,new CChoicesetVR(m_pAppList));
-    m_MainMenu->InserWidget(ID_CHOICESET,new Choiceset(m_pAppList, m_MainMenu->CenterWidght()));//
-    m_MainMenu->InserWidget(ID_COMMAND,new Command(m_pAppList, m_MainMenu->CenterWidght()));//
-    m_MainMenu->InserWidget(ID_SCROLLMSG,new CScrollMsg(m_pAppList));
-    m_MainMenu->InserWidget(ID_SHOW,new Show(m_pAppList, m_MainMenu->CenterWidght()));//
-    m_MainMenu->InserWidget(ID_NOTIFY,new Notify);
-    m_MainMenu->InserWidget(ID_SLIDER,new Slider(m_pAppList));
+    MainMenu * pMain = new MainMenu(m_pAppList);
+    QWidget* pParent = pMain->CenterWidget();
+    m_vUIWidgets[ID_MAIN]= pMain;
+    m_vUIWidgets[ID_APPLINK]=new AppLink(m_pAppList, pParent);
+    m_vUIWidgets[ID_ALERT]=new CAlertUI(m_pAppList);
+    m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pAppList);
+    m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pAppList);
+    m_vUIWidgets[ID_CHOICESET]=new Choiceset(m_pAppList, pParent);
+    m_vUIWidgets[ID_COMMAND]=new Command(m_pAppList, pParent);
+    m_vUIWidgets[ID_SCROLLMSG]=new CScrollMsg(m_pAppList);
+    m_vUIWidgets[ID_SHOW]=new Show(m_pAppList, pParent);
+    m_vUIWidgets[ID_NOTIFY]=new Notify;
+    m_vUIWidgets[ID_SLIDER]=new Slider(m_pAppList);
+    m_vUIWidgets[ID_MEDIACLOCK] = NULL;
+
+    for(int i = 0; i < ID_UI_MAX; i++)
+        if(m_vUIWidgets[i])
+            m_vUIWidgets[i]->hide();
+
+    m_iCurUI = ID_MAIN;
 
 #ifdef SDL_SUPPORT_LIB
     m_MspVR = new msp_vr_audio;
 #endif
 //
     connect(this,SIGNAL(onAppShowSignal(int)),this,SLOT(AppShowSlot(int)));
-    connect(this,SIGNAL(onAppCloseSignal()),this,SLOT(AppCloseSlot()));
-    connect(this,SIGNAL(onAppRefreshSignal()),this,SLOT(AppRefreshSlot()));
+    connect(this,SIGNAL(onCloseUISignal()),this,SLOT(CloseUISlot()));
 
-    connect(this,SIGNAL(onTestStartSignal()),this,SLOT(onTestStartSlots()));
-    connect(this,SIGNAL(onTestStopSignal()),this,SLOT(onTestStopSlots()));
+    connect(this,SIGNAL(onVideoStartSignal()),this,SLOT(onVideoStartSlots()));
+    connect(this,SIGNAL(onVideoStopSignal()),this,SLOT(onVideoStopSlots()));
 
     //emit finishMainHMI();
 }
-
-void CUIManager::showMainUI()
-{
-    m_MainMenu->SetCurWidget(ID_APPLINK);
-    m_MainMenu->show();
-}
-
 
 //show app
 void CUIManager::onAppShow(int type)
 {
     emit onAppShowSignal(type);
 }
-void CUIManager::onTestVideoStreamStart()
+
+void CUIManager::onVideoStreamStart()
 {
-    printf("emit onTestVideoStreamStart");
     fflush(stdout);
-    emit onTestStartSignal();
+    emit onVideoStartSignal();
 }
-void CUIManager::onTestStartSlots()
+
+void CUIManager::onVideoStartSlots()
 {
-    printf("onTestStartSlots");
     fflush(stdout);
     std::string str_url = m_pAppList->getActiveApp()->getUrlString();
     //_D("%s\n",str_url.data());
-    m_MainMenu->StartVideoStream(str_url.c_str());
-}
-void CUIManager::onTestVideoStreamStop()
-{
-    emit onTestStopSignal();
-}
-void CUIManager::onTestStopSlots()
-{
-    m_MainMenu->StopVideoStream();
+    ((MainMenu *)m_vUIWidgets[ID_MAIN])->StartVideoStream(str_url.c_str());
 }
 
-void CUIManager::onAppClose()
+void CUIManager::onVideoStreamStop()
 {
-    emit onAppCloseSignal();
+    emit onVideoStopSignal();
 }
 
-void CUIManager::onAppRefresh()
+void CUIManager::onVideoStopSlots()
 {
-    emit onAppRefresh();
+    ((MainMenu *)m_vUIWidgets[ID_MAIN])->StopVideoStream();
 }
 
 void CUIManager::AppShowSlot(int type)
 {
-    m_MainMenu->SetCurWidget(type);
-}
-
-void CUIManager::AppCloseSlot()
-{
-
-}
-
-void CUIManager::AppRefreshSlot()
-{
-
-}
-
-void CUIManager::setMediaColckTimer(Json::Value jsonObj)
-{
-    //m_pShow->setMediaColckTimer(jsonObj);
-    m_MainMenu->ReceiveJson(ID_SHOW,jsonObj);
+    if(ID_MEDIACLOCK == type)
+    {
+        if(ID_SHOW == m_iCurUI)
+        {
+            Show * pShow = (Show *)m_vUIWidgets[ID_SHOW];
+            pShow->UpdateMediaColckTimer();
+        }
+    }
+    else
+    {
+        if(m_iCurUI != ID_MAIN)
+            m_vUIWidgets[m_iCurUI]->hide();
+        m_iCurUI = type;
+        m_vUIWidgets[m_iCurUI]->show();
+    }
 }
 
 #include <QCoreApplication>
@@ -146,29 +139,20 @@ void CUIManager::tsSpeak(int VRID, std::string strText)
             m_pAppList->getActiveApp()->OnTTSSpeek(5);
         break;
     case ID_CANCEL:
-        m_pAppList->getActiveApp()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_CANCEL);
-        m_pAppList->getActiveApp()->OnVRCancelRecord();
-        //m_pAudioPassThru->hide();
-        m_MainMenu->ExitWidget(ID_AUDIOPASSTHRU);
+        m_pAppList->getActiveApp()->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_CANCEL);
         break;
     case ID_HELP:
-        m_pAppList->getActiveApp()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_DONE);
-        m_pAppList->getActiveApp()->OnVRCancelRecord();
-        m_MainMenu->ExitWidget(ID_AUDIOPASSTHRU);
+        m_pAppList->getActiveApp()->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_DONE);
         break;
     case ID_EXIT:
-        m_pAppList->getActiveApp()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_DONE);
-        m_pAppList->getActiveApp()->OnVRCancelRecord();
-        m_MainMenu->ExitWidget(ID_AUDIOPASSTHRU);
+        m_pAppList->getActiveApp()->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_DONE);
         m_pAppList->OnAppExit();
         break;
     case ID_SWITCHAPP:
-        m_pAppList->getActiveApp()->OnPerformAudioPassThru(0, PERFORMAUDIOPASSTHRU_DONE);
-        m_pAppList->getActiveApp()->OnVRCancelRecord();
-        m_MainMenu->ExitWidget(ID_AUDIOPASSTHRU);
+        m_pAppList->getActiveApp()->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_DONE);
         break;
     default:
-        m_MainMenu->ExitWidget(ID_AUDIOPASSTHRU);
+        m_pAppList->getActiveApp()->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_CANCEL);
         break;
     }
 }

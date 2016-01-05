@@ -1,4 +1,4 @@
-#include "AppManager.h"
+﻿#include "AppManager.h"
 #include <QTimer>
 #include <QDesktopWidget>
 #include "Connect/SDLConnector.h"
@@ -39,7 +39,8 @@ void AppManager::initApps()
 
 void AppManager::ShowUI()
 {
-    m_uiManager->showMainUI();
+    m_uiManager->onAppShow(ID_MAIN);
+    m_uiManager->onAppShow(ID_APPLINK);
 }
 
 #ifdef SDL_SUPPORT_LIB

@@ -14,13 +14,11 @@ enum ShowType
     ID_SCROLLMSG,
     ID_SLIDER,
     ID_NOTIFY,
-    ID_APP_MAX
+    ID_MEDIACLOCK,
+    ID_MAIN,
+    ID_UI_MAX
 };
 
-#define MIN_APP_BASE  ID_APPLINK
-#define MAX_APP_BASE  (ID_SHOW+1)
-#define MIN_POP_BASE  ID_ALERT
-#define MAX_POP_BASE  (ID_APP_MAX)
 enum VRID
 {
     ID_DEFAULT = 0,
@@ -34,13 +32,10 @@ class UIInterface
 {
 public:
     virtual void onAppShow(int type) = 0;
-    virtual void onAppClose() = 0;
-    virtual void onAppRefresh() = 0;
 
-    virtual void onTestVideoStreamStart() = 0;
-    virtual void onTestVideoStreamStop() = 0;
+    virtual void onVideoStreamStart() = 0;
+    virtual void onVideoStreamStop() = 0;
 
-    virtual void setMediaColckTimer(Json::Value jsonObj) = 0;
     virtual void tsSpeak(int VRID, std::string strText) = 0;
 };
 

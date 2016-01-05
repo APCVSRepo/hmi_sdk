@@ -2,26 +2,20 @@
 #include "QHBoxLayout"
 #include "QVBoxLayout"
 #include "UI/Config/Config.h"
-#include "Common/PopBase.h"
+#include "Common/AppBase.h"
 
 Slider::Slider(AppListInterface * pList, QWidget *parent) :
-  CPopBase(pList, parent),
+  AppBase(pList, parent),
     m_iPos(0)
 {
     InitLayout();
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
-    connect(this,SIGNAL(sliderClicked(int,int,int)),this,SLOT(sliderClickedSlots(int,int,int)));
+    connect(&m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
+    connect(this,SIGNAL(sliderClicked(int,int)),this,SLOT(sliderClickedSlots(int,int)));
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(onButtonCancelClicked()));
 }
 
 void Slider::InitLayout()
 {
-    int iW = ui_app_width;
-    int iH = ui_app_height;
-
-//    m_labelBackground.setParent(this);
-//    m_labelFrame.setParent(this);
-
     m_labelText1 = new QLabel;
     m_labelText2 = new QLabel;
     m_labelText3 = new QLabel;
@@ -83,11 +77,9 @@ void Slider::InitLayout()
     m_btnSoft1->setText("Save");
 }
 
-void Slider::sliderClickedSlots( int code, int sliderid, int sliderPosition)
+void Slider::sliderClickedSlots( int code, int sliderPosition)
 {
-    //_D("code=%d:%d:%d\n",code,sliderid,sliderPosition);
-    m_pList->getActiveApp()->OnSliderResponse(code, sliderid,sliderPosition);
-    this->showCurUI(ID_SHOW);
+    m_pList->getActiveApp()->OnSliderResponse(code, sliderPosition);
 }
 
 void Slider::onMoveLeftSlot()
@@ -142,8 +134,8 @@ bool Slider::setPosition(int iPos)
 
 void Slider::updateScreen()
 {
-    m_timer->stop();
-    m_timer->start();
+    m_timer.stop();
+    m_timer.start();
 
     m_EditText.clear();
     for (int i = 0; i < m_Strings.size(); i++)
@@ -161,45 +153,37 @@ void Slider::updateScreen()
     m_labelText3->setText(m_Strings[m_iPos]);
 }
 
-void Slider::setSliderID(int id)
-{
-    m_i_sliderID = id;
-}
-
 void Slider::setTimeOut(int duration)
 {
-    m_timer->setInterval(duration);
-    m_timer->start();
+    m_timer.setInterval(duration);
+    m_timer.start();
 
 }
 
 void Slider::timeoutSlots()
 {
-    m_timer->stop();
-    emit sliderClicked(SLIDER_TIMEOUT, m_i_sliderID, m_iPos);
-    this->hide();
+    m_timer.stop();
+    emit sliderClicked(SLIDER_TIMEOUT, m_iPos);
 }
 
 void Slider::onButtonSaveClicked()
 {
-    m_timer->stop();
-    emit sliderClicked(SLIDER_OK, m_i_sliderID, m_iPos);
-    this->hide();
-}
-void Slider::onButtonCancelClicked()
-{
-    m_timer->stop();
-    emit sliderClicked(SLIDER_ABORTED, m_i_sliderID, m_iPos);
-    this->hide();
+    m_timer.stop();
+    emit sliderClicked(SLIDER_OK, m_iPos);
 }
 
-void Slider::execShow()
+void Slider::onButtonCancelClicked()
+{
+    m_timer.stop();
+    emit sliderClicked(SLIDER_ABORTED, m_iPos);
+}
+
+void Slider::showEvent(QShowEvent * e)
 {
     if (m_pList->getActiveApp())
     {
-        m_jsonData = m_pList->getActiveApp()->getSlider();
+        Json::Value m_jsonData = m_pList->getActiveApp()->getSlider();
 //        this->setAppID(m_jsonData["params"]["appID"].asInt());
-        this->setSliderID(m_jsonData["id"].asInt());
         this->setTimeOut(m_jsonData["params"]["timeout"].asInt());
 
         int numTicks = m_jsonData["params"]["numTicks"].asInt();
@@ -223,5 +207,4 @@ void Slider::execShow()
 
         this->setSliderStrings(vec_strSliter,position);
     }
-    this->show();
 }

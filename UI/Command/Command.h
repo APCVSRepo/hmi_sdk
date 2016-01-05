@@ -11,6 +11,7 @@ typedef struct commandID
     int i_cmdID;
 }SCmdID;
 class AppBase;
+
 class Command : public AppBase
 {
     Q_OBJECT
@@ -18,7 +19,8 @@ public:
     explicit Command(AppListInterface * pList, QWidget *parent = 0);
     ~Command();
 
-    void execShow();
+protected:
+    virtual void showEvent(QShowEvent * e);
 
 signals:
     void returnShow();

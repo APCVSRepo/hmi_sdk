@@ -20,14 +20,12 @@ void Choiceset::initLayout()
     QHBoxLayout *midLayout = new QHBoxLayout;
     midLayout->addStretch(2);
     midLayout->addWidget(&m_listWidget,65);
-//    midLayout->addWidget(&m_scrollBar,5);
+
     midLayout->addStretch(3);
-m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//m_listWidget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     QVBoxLayout *mLayout = new QVBoxLayout(this);
-    //mLayout->addWidget(&m_lab_title,1, Qt::AlignCenter);
     mLayout->addLayout(midLayout, 4);
-   // mLayout->addWidget(&m_lab_time,1, Qt::AlignRight);
 
     mLayout->setMargin(0); //边框无缝
     mLayout->setSpacing(0);
@@ -104,7 +102,7 @@ void Choiceset::listWidgetClickedSlots(QModelIndex index)
 void Choiceset::listWidgetDoubleClickedSlots(QModelIndex index)
 {
     m_timerHide->stop();
-    emit menuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, m_vec_choiceMenu.at(index.row()).i_choiceID);
+    emit menuClicked(PERFORMINTERACTION_CHOICE, m_vec_choiceMenu.at(index.row()).i_choiceID);
     this->hide();
 }
 
@@ -118,11 +116,6 @@ void Choiceset::addNewMenu(int choiceID, std::string menuName)
     m_vec_isMenu.insert(0,false);
 
     flushListWidget();
-}
-
-void Choiceset::setInteractionID(int id)
-{
-    m_i_interactionID = id;
 }
 
 //刷新list列表
@@ -206,11 +199,10 @@ void Choiceset::downArrowSlots()
     }
 }
 
-void Choiceset::menuClickedSlots(int code, int performInteractionID, int choiceID)
+void Choiceset::menuClickedSlots(int code, int choiceID)
 {
     //_D("code=%d:%d:%d\n",code,performInteractionID,choiceID);
-    m_pList->getActiveApp()->OnPerformInteraction(code, performInteractionID, choiceID);
-    showCurUI(ID_SHOW);
+    m_pList->getActiveApp()->OnPerformInteraction(code, choiceID);
 }
 
 void Choiceset::setChoicesetName(QString title)
@@ -228,22 +220,19 @@ void Choiceset::setTimeOut(int duration)
 void Choiceset::timeHideOutSlots()
 {
     m_timerHide->stop();
-    this->hide();
-    emit menuClicked(PERFORMINTERACTION_TIMEOUT, m_i_interactionID, m_vec_choiceMenu.at(0).i_choiceID);
+    emit menuClicked(PERFORMINTERACTION_TIMEOUT, m_vec_choiceMenu.at(0).i_choiceID);
 }
-void Choiceset::execShow()
+
+void Choiceset::showEvent(QShowEvent * e)
 {
     setChoicesetName("Choice Name");
     if (m_pList->getActiveApp())
     {
-        m_jsonData = m_pList->getActiveApp()->getInteractionJson();
-        setTimeOut(m_jsonData["params"]["timeout"].asInt());
-//        this->setAppID(m_jsonData["params"]["appID"].asInt());
-        setInteractionID(m_jsonData["id"].asInt());
-        for(int i = 0; i < m_jsonData["params"]["choiceSet"].size(); i++)
+        Json::Value jsonData = m_pList->getActiveApp()->getInteractionJson();
+        setTimeOut(jsonData["params"]["timeout"].asInt());
+        for(int i = 0; i < jsonData["params"]["choiceSet"].size(); i++)
         {
-            addNewMenu(m_jsonData["params"]["choiceSet"][i]["choiceID"].asInt(),m_jsonData["params"]["choiceSet"][i]["menuName"].asString());
+            addNewMenu(jsonData["params"]["choiceSet"][i]["choiceID"].asInt(),jsonData["params"]["choiceSet"][i]["menuName"].asString());
         }
     }
-    show();
 }

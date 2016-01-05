@@ -4,22 +4,23 @@
 #include <QWidget>
 #include "QLabel"
 #include "../Common/Button.h"
-#include "Common/PopBase.h"
+#include "Common/AppBase.h"
 #define SLIDER_OK                       0
 #define SLIDER_TIMEOUT                  10
 #define SLIDER_ABORTED                  5
-class CPopBase;
-class Slider : public CPopBase
+
+class Slider : public AppBase
 {
     Q_OBJECT
 public:
     explicit Slider(AppListInterface * pList, QWidget *parent = 0);
     
-    void execShow();
+protected:
+    virtual void showEvent(QShowEvent * e);
 
 
 signals:
-    void sliderClicked( int code, int sliderid, int sliderPosition);
+    void sliderClicked( int code, int sliderPosition);
     
 public slots:
     void onMoveLeftSlot();
@@ -27,13 +28,13 @@ public slots:
     void onButtonSaveClicked();
     void onButtonCancelClicked();
     void timeoutSlots();
-    void sliderClickedSlots( int code, int sliderid, int sliderPosition);
+    void sliderClickedSlots( int code, int sliderPosition);
 
 private:
-    void setSliderID(int id);
     void setSliderTitle(QString text);
     void setSliderStrings(std::vector<std::string> vec_strSliter, int iPos = 0);
     void setTimeOut(int duration);
+
 private:
     QLabel *m_labelText1;
     QLabel *m_labelText2;
@@ -42,9 +43,9 @@ private:
     CButton *m_btnSoft2;
     CButton *m_btnSoft3;
     CButton *m_btnSoft4;
+    QTimer m_timer;
 
     int m_iPos;
-    int m_i_sliderID;
     QString m_EditText;
     QVector <QString> m_Strings;
     void InitLayout();

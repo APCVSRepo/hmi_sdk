@@ -210,7 +210,6 @@ void Command::listWidgetDoubleClickedSlots(QModelIndex index)
 void Command::exitAppSlots()
 {
     m_pList->OnAppExit();
-    showCurUI(ID_APPLINK);
 }
 
 void Command::commandClickSlots(int cmdID)
@@ -417,9 +416,8 @@ void Command::backBtnClickSlots()
     }
 }
 
-void Command::execShow()
+void Command::showEvent(QShowEvent * e)
 {
-
     if (m_pList->getActiveApp())
     {
         this->clearAllCommand();
@@ -451,11 +449,4 @@ void Command::execShow()
             }
         }
     }
-        addNewCommand("Command1",1);
-        addNewMenu("Menu1",1);
-        addNewCommand("Command2",1);
-        addNewMenu("Menu3",1);
-        addNewMenu("Menu4",1);
-
-    this->show();
 }

@@ -4,15 +4,17 @@
 #include <QWidget>
 #include "QLabel"
 #include "QVBoxLayout"
-#include "Common/PopBase.h"
-class CPopBase;
-class Notify : public CPopBase
+#include "Common/AppBase.h"
+
+class Notify : public AppBase
 {
     Q_OBJECT
+
 public:
     explicit Notify(QWidget *parent = 0);
 
-    void execShow();
+protected:
+    virtual void showEvent(QShowEvent * e);
 
 signals:
     

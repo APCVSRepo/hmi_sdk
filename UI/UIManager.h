@@ -12,7 +12,6 @@
 #include "UI/Slider/Slider.h"
 #include "UI/Notify/Notify.h"
 #include "UI/Common/AppBase.h"
-#include "UI/Common/PopBase.h"
 #include "UI/TextSpeech/textspeech.h"
 #include "UIInterface.h"
 #include "AppData/AppListInterface.h"
@@ -32,15 +31,10 @@ public:
     ~CUIManager();
 
     //hmi
-    void showMainUI();
     void onAppShow(int type);
-    void onAppClose();
-    void onAppRefresh();
 
-    void onTestVideoStreamStart();
-    void onTestVideoStreamStop();
-
-    void setMediaColckTimer(Json::Value jsonObj);
+    void onVideoStreamStart();
+    void onVideoStreamStop();
 
     void tsSpeak(int VRID, std::string strText);
 
@@ -48,25 +42,23 @@ signals:
     //void finishMainHMI();
     void onAppShowSignal(int type);
     void onAppActivatedSignal(AppDataInterface* pInterface);
-    void onAppCloseSignal();
-    void onAppRefreshSignal();
+    void onCloseUISignal();
 
-    void onTestStartSignal();
-    void onTestStopSignal();
+    void onVideoStartSignal();
+    void onVideoStopSignal();
 
 public slots:
     void initAppHMI();
     void AppShowSlot(int type);
-    void AppCloseSlot();
-    void AppRefreshSlot();
 
 
-    void onTestStartSlots();
-    void onTestStopSlots();
+    void onVideoStartSlots();
+    void onVideoStopSlots();
 
 
 private:
-    MainMenu *m_MainMenu;
+    QWidget * m_vUIWidgets[ID_UI_MAX];
+    int m_iCurUI;
     AppListInterface * m_pAppList;
 
 #ifdef SDL_SUPPORT_LIB

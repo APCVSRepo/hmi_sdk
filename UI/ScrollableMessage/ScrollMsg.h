@@ -1,38 +1,33 @@
 ﻿#ifndef CSCROLLMSG_H
 #define CSCROLLMSG_H
 
-#include "UI/Common/PopBase.h"
+#include "UI/Common/AppBase.h"
 #include "QTextEdit"
 #include "UI/Common/Button.h"
 
-class CPopBase;
-class CScrollMsg : public CPopBase
+class CScrollMsg : public AppBase
 {
     Q_OBJECT
 public:
     explicit CScrollMsg(AppListInterface * pList, QWidget *parent = 0);
     ~CScrollMsg();
 
-    void execShow();
+protected:
+    virtual void showEvent(QShowEvent * e);
 
 signals:
     //void softButtonClicked(int btID, int mode);
-    void scrollMsgAbort(int scrollMsgId, int reason);
+    void scrollMsgAbort(int reason);
 
 public slots:
     void upClickedSlots();
     void downClickedSlots();
     void timeoutSlots();
     void onSpaceClicedSlots();
-    void onButtonOneClickedSlots(int btID);
-    void onButtonTwoClickedSlots(int btID);
-    void onButtonThrClickedSlots(int btID);
-    void onButtonFouClickedSlots(int btID);
-    void onButtonOneClickedLongSlots(int btID);
-    void onButtonTwoClickedLongSlots(int btID);
-    void onButtonThrClickedLongSlots(int btID);
-    void onButtonFouClickedLongSlots(int btID);
-    void scrollMsgAbortSlots(int scrollMsgID, int reason);
+    void onButtonClickedSlots(int btID);
+    void onButtonClickedLongSlots(int btID);
+    void scrollMsgAbortSlots(int reason);
+
 private:
     void setMessage(QString msg);
     void setBtnText(int btnIdx, QString text, bool highLight);
@@ -47,8 +42,8 @@ private:
     CButton    *m_btnSoft2;
     CButton    *m_btnSoft3;
     CButton    *m_btnSoft4;
+    QTimer m_timer;
 
-    int m_i_scrollMsgID;
     void InitLayout();
 };
 

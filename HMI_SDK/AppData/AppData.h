@@ -23,17 +23,19 @@ public:
     Json::Value getAudioPassThruJson();
     Json::Value getInteractionJson();
     std::string getUrlString();
+    Json::Value getMediaClockJson();
 
     int getCurUI();
 
+    void OnShowCommand();
     void OnSoftButtonClick(int sbID, int mode);
     void OnCommandClick(int cmdID);
-    void OnAlertResponse(int alertID, int reason);
-    void OnScrollMessageResponse(int smID, int reason);
-    void OnSliderResponse( int code, int sliderid, int sliderPosition);
+    void OnAlertResponse(int reason);
+    void OnScrollMessageResponse(int reason);
+    void OnSliderResponse( int code, int sliderPosition);
     void OnTTSSpeek(int code);
-    void OnPerformAudioPassThru(int performaudiopassthruID, int code);
-    void OnPerformInteraction(int code, int performInteractionID, int choiceID);
+    void OnPerformAudioPassThru(int code);
+    void OnPerformInteraction(int code, int choiceID);
 
     void OnMenuBtnClick(std::string btnText);
     void OnVRStartRecord();
@@ -41,11 +43,11 @@ public:
 
     void recvFromServer(Json::Value);
 
-    void getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames);
-
 private:
     UIInterface *m_pUIManager;
-    int m_iCurUI;
+    std::vector<int> m_vecUIStack;
+    void ShowUI(int);
+    void ShowPreviousUI();
 
     Json::Value m_json_show;
 //    SShow m_struct_show;
@@ -56,8 +58,8 @@ private:
     Json::Value m_json_scrollableMessage;
     Json::Value m_json_audioPassThru;
     Json::Value m_json_interaction;
+    Json::Value m_json_mediaclock;
 
-    void uiShow(Json::Value jsonObj);
     void addCommand(Json::Value jsonObj);
     void addSubMenu(Json::Value jsonObj);
     void delCommand(Json::Value jsonObj);

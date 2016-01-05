@@ -2,13 +2,13 @@
 #include "QHBoxLayout"
 #include "QVBoxLayout"
 #include "UI/Config/Config.h"
-#include "Common/PopBase.h"
-CChoicesetVR::CChoicesetVR(AppListInterface * pList, QWidget *parent) : CPopBase(pList, parent)
+#include "Common/AppBase.h"
+CChoicesetVR::CChoicesetVR(AppListInterface * pList, QWidget *parent) : AppBase(pList, parent)
 {
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(hide()));
     connect(this,SIGNAL(VRmenuClicked(int,int,int)),this,SLOT(VRmenuClickedSlots(int,int,int)));
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
+    connect(&m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
 }
 
 CChoicesetVR::~CChoicesetVR()
@@ -60,10 +60,10 @@ void CChoicesetVR::InitLayout()
 //    m_labelFrame.setLayout(mLayout);
     this->setLayout(mLayout);
 
-    connect(m_labelSet1,SIGNAL(clicked(int)),SLOT(label1ClickedSlots(int)));
-    connect(m_labelSet2,SIGNAL(clicked(int)),SLOT(label2ClickedSlots(int)));
-    connect(m_labelSet3,SIGNAL(clicked(int)),SLOT(label3ClickedSlots(int)));
-    connect(m_labelSet4,SIGNAL(clicked(int)),SLOT(label4ClickedSlots(int)));
+    connect(m_labelSet1,SIGNAL(clicked(int)),SLOT(labelClickedSlots(int)));
+    connect(m_labelSet2,SIGNAL(clicked(int)),SLOT(labelClickedSlots(int)));
+    connect(m_labelSet3,SIGNAL(clicked(int)),SLOT(labelClickedSlots(int)));
+    connect(m_labelSet4,SIGNAL(clicked(int)),SLOT(labelClickedSlots(int)));
 
     // test
     m_labelText->setText("Search commands.");
@@ -119,70 +119,38 @@ void CChoicesetVR::setChoicesetVRID(int btnIdx, int id)
     }
 }
 
-void CChoicesetVR::setInteractionID(int id)
-{
-    m_i_interactionID = id;
-}
-
 void CChoicesetVR::setTimeOut(int duration)
 {
-    m_timer->setInterval(duration);
-    m_timer->start();
+    m_timer.setInterval(duration);
+    m_timer.start();
 
 }
 
 void CChoicesetVR::timeoutSlots()
 {
-    m_timer->stop();
+    m_timer.stop();
 
-    emit VRmenuClicked(PERFORMINTERACTION_TIMEOUT, m_i_interactionID, m_i_defaultID);
-    goBack();
+    emit VRmenuClicked(PERFORMINTERACTION_TIMEOUT, m_i_defaultID);
 }
 
-void CChoicesetVR::label1ClickedSlots(int id)
+void CChoicesetVR::labelClickedSlots(int id)
 {
-    m_timer->stop();
+    m_timer.stop();
 
-    emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    goBack();
+    emit VRmenuClicked(PERFORMINTERACTION_CHOICE, id);
 }
 
-void CChoicesetVR::label2ClickedSlots(int id)
-{
-    m_timer->stop();
-
-    emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    goBack();
-}
-
-void CChoicesetVR::label3ClickedSlots(int id)
-{
-    m_timer->stop();
-
-    emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    goBack();
-}
-
-void CChoicesetVR::label4ClickedSlots(int id)
-{
-    m_timer->stop();
-
-    emit VRmenuClicked(PERFORMINTERACTION_CHOICE, m_i_interactionID, id);
-    goBack();
-}
-
-void CChoicesetVR::VRmenuClickedSlots(int code, int performInteractionID, int choiceID)
+void CChoicesetVR::VRmenuClickedSlots(int code, int choiceID)
 {
     //_D("code=%d:%d:%d\n",code,performInteractionID,choiceID);
-    m_pList->getActiveApp()->OnPerformInteraction(code, performInteractionID, choiceID);
-    showCurUI(ID_SHOW);
+    m_pList->getActiveApp()->OnPerformInteraction(code, choiceID);
 }
 
-void CChoicesetVR::execShow()
+void CChoicesetVR::showEvent(QShowEvent * e)
 {
     if (m_pList->getActiveApp())
     {
-        m_jsonData = m_pList->getActiveApp()->getInteractionJson();
+        Json::Value m_jsonData = m_pList->getActiveApp()->getInteractionJson();
         setTimeOut(m_jsonData["params"]["timeout"].asInt());
 
         for(int i = 0; i < m_jsonData["params"]["vrHelp"].size(); i++)
@@ -199,5 +167,4 @@ void CChoicesetVR::execShow()
             }
         }
     }
-    show();
 }

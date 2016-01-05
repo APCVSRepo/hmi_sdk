@@ -56,7 +56,6 @@ SOURCES += \
     UI/Choiceset/Choiceset.cpp \
     UI/Command/Command.cpp \
     UI/Common/ScrollBar.cpp \
-    UI/Common/PopBase.cpp \
     UI/Common/Button.cpp \
     UI/Common/MainMenu.cpp \
     UI/Common/BaseWidght.cpp \
@@ -128,7 +127,6 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/Choiceset/Choiceset.h \
     UI/Command/Command.h \
     UI/Common/ScrollBar.h \
-    UI/Common/PopBase.h \
     UI/Common/Button.h \
     UI/Common/AppItemWidget.h \
     UI/Config/Config.h \

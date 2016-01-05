@@ -24,9 +24,7 @@ public:
     explicit Show(AppListInterface * pList, QWidget *parent = 0);
     ~Show();
 
-    void execShow();
-    void setMediaColckTimer(Json::Value jsonObj);
-    virtual void receiveJson(Json::Value json);
+    void UpdateMediaColckTimer();
 
 signals:
     void moreClicked();
@@ -52,6 +50,9 @@ public slots:
 
     void mediaClockSlots(bool);
     void timerEvent(QTimerEvent *e);
+
+protected:
+    virtual void showEvent(QShowEvent * e);
 
 private:
     void setMainField1(bool isShow, QString text);

@@ -1,38 +1,31 @@
 ﻿#ifndef CALERTUI_H
 #define CALERTUI_H
 
-#include "Common/PopBase.h"
+#include "Common/AppBase.h"
 #include "QLabel"
 #include "Common/Button.h"
 
-class CAlertUI : public CPopBase
+class CAlertUI : public AppBase
 {
     Q_OBJECT
 public:
     explicit CAlertUI(AppListInterface * pData, QWidget *parent = 0);
     ~CAlertUI();
 
-public:
-    void execShow();
-    void testShow();
-
+protected:
+    virtual void showEvent(QShowEvent * e);
 
 signals:
-    void alertAbort(int alertID, int reason);
+    void alertAbort(int reason);
     void softButtonClicked(int btID, int mode);
 
 public slots:
     void timeoutSlots();
     void onSpaceClicedSlots();
-    void onButtonOneClickedSlots(int btID);
-    void onButtonTwoClickedSlots(int btID);
-    void onButtonThrClickedSlots(int btID);
-    void onButtonFouClickedSlots(int btID);
-    void onButtonOneClickedLongSlots(int btID);
-    void onButtonTwoClickedLongSlots(int btID);
-    void onButtonThrClickedLongSlots(int btID);
-    void onButtonFouClickedLongSlots(int btID);
-    void alertAbortSlots(int alertID, int reason);
+    void onButtonClickedSlots(int btID);
+    void onButtonClickedLongSlots(int btID);
+    void alertAbortSlots(int reason);
+
 private:
     void setAlertText(int textIdx, QString text);
     void setBtnText(int btnIdx, QString text, bool highLight);
@@ -48,11 +41,10 @@ private:
     CButton *m_btnSoft4;
 
     QVBoxLayout *mLayout;
+    QTimer m_timer;
 
     void InitLayout();
     void updateLayout();
-
-    int m_i_alertID;
 };
 
 #endif // CALERTUI_H

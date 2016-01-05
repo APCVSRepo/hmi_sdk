@@ -4,11 +4,11 @@
 #include "UI/Config/Config.h"
 
 
-CAlertUI::CAlertUI(AppListInterface * pList, QWidget *parent) : CPopBase(pList, parent), mLayout(NULL)
+CAlertUI::CAlertUI(AppListInterface * pList, QWidget *parent) : AppBase(pList, parent), mLayout(NULL)
 {
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(onSpaceClicedSlots()));
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
+    connect(&m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
     //connect(this,SIGNAL(alertAbort(int,int)),this,SLOT(alertAbortSlots(int,int)));
     //connect(this,SIGNAL(softButtonClicked(int,int)),this,SLOT(softButtonClickedSlots(int,int)));
 }
@@ -30,15 +30,15 @@ void CAlertUI::InitLayout()
     m_btnSoft3 = new CButton;
     m_btnSoft4 = new CButton;
 
-    connect(m_btnSoft1, SIGNAL(clicked(int)), this, SLOT(onButtonOneClickedSlots(int)));
-    connect(m_btnSoft2, SIGNAL(clicked(int)), this, SLOT(onButtonTwoClickedSlots(int)));
-    connect(m_btnSoft3, SIGNAL(clicked(int)), this, SLOT(onButtonThrClickedSlots(int)));
-    connect(m_btnSoft4, SIGNAL(clicked(int)), this, SLOT(onButtonFouClickedSlots(int)));
+    connect(m_btnSoft1, SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
+    connect(m_btnSoft2, SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
+    connect(m_btnSoft3, SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
+    connect(m_btnSoft4, SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
 
-    connect(m_btnSoft1, SIGNAL(clickedLong(int)), this, SLOT(onButtonOneClickedLongSlots(int)));
-    connect(m_btnSoft2, SIGNAL(clickedLong(int)), this, SLOT(onButtonTwoClickedLongSlots(int)));
-    connect(m_btnSoft3, SIGNAL(clickedLong(int)), this, SLOT(onButtonThrClickedLongSlots(int)));
-    connect(m_btnSoft4, SIGNAL(clickedLong(int)), this, SLOT(onButtonFouClickedLongSlots(int)));
+    connect(m_btnSoft1, SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
+    connect(m_btnSoft2, SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
+    connect(m_btnSoft3, SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
+    connect(m_btnSoft4, SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
 
     m_labelText1->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:rgb(255,255,254)");
     m_labelText2->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:rgb(255,255,254)");
@@ -68,9 +68,6 @@ void CAlertUI::InitLayout()
 
 void CAlertUI::updateLayout()
 {
-    int iW = ui_app_width;
-    int iH = 0;
-
     if (mLayout)
     {
         delete mLayout;
@@ -96,7 +93,6 @@ void CAlertUI::updateLayout()
         mLayout->addWidget(m_labelText1, Qt::AlignTop);
         mLayout->addWidget(m_labelText2, Qt::AlignTop);
         mLayout->addWidget(m_labelText3, Qt::AlignTop);
-        iH = m_labelText1->height() + m_labelText2->height() + m_labelText3->height();
     }
     else if (!m_labelText2->text().isEmpty())
     {
@@ -108,13 +104,11 @@ void CAlertUI::updateLayout()
         m_labelText2->setFixedHeight(ui_aler_height);
         mLayout->addWidget(m_labelText1, Qt::AlignTop);
         mLayout->addWidget(m_labelText2, Qt::AlignTop);
-        iH = m_labelText1->height() + m_labelText2->height();
     }
     else if (!m_labelText1->text().isEmpty())
     {
         m_labelText1->setFixedHeight(ui_aler_height);
         mLayout->addWidget(m_labelText1, Qt::AlignTop);
-        iH = m_labelText1->height();
     }
     else
     {
@@ -135,17 +129,12 @@ void CAlertUI::updateLayout()
     mLayout->addSpacing(0);
     mLayout->setMargin(0);
 
-    iH += m_btnSoft1->height() + 40;
-//    m_labelBackground.setGeometry((width() - iW) / 2, 0.85 * height() - iH, iW, iH);
-//    m_labelFrame.setGeometry((width() - iW) / 2, 0.85 * height() - iH, iW, iH);
-
-//    m_labelFrame.setLayout(mLayout);
     this->setLayout(mLayout);
 }
 
 void CAlertUI::setTimeOut(int duration)
 {
-    m_timer->start(duration);
+    m_timer.start(duration);
 
    // QTimer::singleShot(duration,this,SLOT(timeoutSlots()));
 }
@@ -235,100 +224,30 @@ void CAlertUI::setBtnText(int btnIdx, QString text, bool highLight)
 
 void CAlertUI::timeoutSlots()
 {
-    m_timer->stop();
-    alertAbortSlots(m_i_alertID, 0);
-    goBack();
+    m_timer.stop();
+    alertAbortSlots(0);
 }
 
 void CAlertUI::onSpaceClicedSlots()
 {
-    m_timer->stop();
-    alertAbortSlots(m_i_alertID, 2);
-    goBack();
+    m_timer.stop();
+    alertAbortSlots(2);
 }
 
-void CAlertUI::onButtonOneClickedSlots(int btID)
+void CAlertUI::onButtonClickedSlots(int btID)
 {
-    m_timer->stop();
-    alertAbortSlots(m_i_alertID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID,0);
-    }
-}
-
-void CAlertUI::onButtonTwoClickedSlots(int btID)
-{
-    m_timer->stop();
-    alertAbortSlots(m_i_alertID, 1);
-    goBack();
+    m_timer.stop();
+    alertAbortSlots(1);
     if(btID != 0)
     {
         m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
     }
 }
 
-void CAlertUI::onButtonThrClickedSlots(int btID)
+void CAlertUI::onButtonClickedLongSlots(int btID)
 {
-    m_timer->stop();
-    alertAbortSlots(m_i_alertID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
-    }
-}
-
-void CAlertUI::onButtonFouClickedSlots(int btID)
-{
-    m_timer->stop();
-    alertAbortSlots(m_i_alertID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
-    }
-}
-
-void CAlertUI::onButtonOneClickedLongSlots(int btID)
-{
-    m_timer->stop();
-    alertAbortSlots(m_i_alertID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
-    }
-}
-
-void CAlertUI::onButtonTwoClickedLongSlots(int btID)
-{
-    m_timer->stop();
-    alertAbortSlots(m_i_alertID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
-    }
-}
-
-void CAlertUI::onButtonThrClickedLongSlots(int btID)
-{
-    m_timer->stop();
-    alertAbortSlots(m_i_alertID, 1);
-    goBack();
-    if(btID != 0)
-    {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
-    }
-}
-
-void CAlertUI::onButtonFouClickedLongSlots(int btID)
-{
-    m_timer->stop();
-    alertAbortSlots(m_i_alertID, 1);
-    goBack();
+    m_timer.stop();
+    alertAbortSlots(1);
     if(btID != 0)
     {
         m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
@@ -389,13 +308,13 @@ void CAlertUI::onButtonFouClickedLongSlots(int btID)
 //      ]
 //   }
 //}
-void CAlertUI::alertAbortSlots(int alertID, int reason)
+void CAlertUI::alertAbortSlots(int reason)
 {
     //_D("alertID=%d, reason=%d\n",alertID,reason);
-    m_pList->getActiveApp()->OnAlertResponse(alertID,reason);
+    m_pList->getActiveApp()->OnAlertResponse(reason);
 }
 
-void CAlertUI::execShow()
+void CAlertUI::showEvent(QShowEvent * e)
 {
     Json::Value pObj;
     int itemCnt = 0;
@@ -403,8 +322,6 @@ void CAlertUI::execShow()
     if (m_pList->getActiveApp())
     {
         pObj = m_pList->getActiveApp()->getAlertJson();
-
-        m_i_alertID = pObj["id"].asInt();
 
         setAlertText(0,"");
         setAlertText(1,"");
@@ -453,22 +370,4 @@ void CAlertUI::execShow()
     }
 
     updateLayout();
-    this->show();
-}
-
-void CAlertUI::testShow()
-{
-    m_i_alertID = 1;
-    setAlertText(0, "alert1");
-    setAlertText(1, "alert2");
-    setAlertText(2, "alert3");
-
-    setBtnText(0, "test1",true);
-    setBtnText(1, "test2",true);
-    setBtnText(2, "test3",true);
-    setBtnText(3, "test4",false);
-    setTimeOut(20000);
-
-    updateLayout();
-    this->show();
 }

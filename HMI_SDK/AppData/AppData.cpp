@@ -102,10 +102,8 @@ void AppData::recvFromServer(Json::Value jsonObj)
 
         if(str_method == "UI.Show")
         {
-            uiShow(jsonObj);
-            m_iCurUI = ID_SHOW;
-            m_pUIManager->onAppShow(m_iCurUI);
-
+            m_json_show = jsonObj;
+            ShowUI(ID_SHOW);
         }
         else if (str_method == "UI.SubscribeButton")
         {
@@ -130,54 +128,52 @@ void AppData::recvFromServer(Json::Value jsonObj)
         {
             LOGI("UI.Alert");
             alert(jsonObj);
-            m_iCurUI = ID_ALERT;
-            m_pUIManager->onAppShow(m_iCurUI);
+            ShowUI(ID_ALERT);
         }
         else if (str_method == "UI.ScrollableMessage")
         {
             LOGI("UI.ScrollableMessage");
             scrollableMessage(jsonObj);
-            m_iCurUI = ID_SCROLLMSG;
-            m_pUIManager->onAppShow(m_iCurUI);
+            ShowUI(ID_SCROLLMSG);
         }
         else if (str_method == "UI.Slider")
         {
             LOGI("UI.Slider");
             slider(jsonObj);
-            m_iCurUI = ID_SLIDER;
-            m_pUIManager->onAppShow(m_iCurUI);
+            ShowUI(ID_SLIDER);
         }
         else if(str_method == "UI.PerformAudioPassThru")
         {
             LOGI("UI.PerformAudioPassThru");
             performAudioPassThru(jsonObj);
 
-            m_iCurUI = ID_AUDIOPASSTHRU;
-            m_pUIManager->onAppShow(m_iCurUI);
+            ShowUI(ID_AUDIOPASSTHRU);
         }
         else if(str_method == "UI.PerformInteraction")
         {
             performInteraction(jsonObj);
+            int iUI;
             if(jsonObj["params"].isMember("vrHelp"))
-                m_iCurUI = ID_CHOICESETVR;
+                iUI = ID_CHOICESETVR;
             else if(jsonObj["params"].isMember("choiceSet"))
-                m_iCurUI = ID_CHOICESET;
+                iUI = ID_CHOICESET;
 
-            m_pUIManager->onAppShow(m_iCurUI);
+            ShowUI(iUI);
         }
         else if(str_method == "Navigation.StartStream")
         {
             videoStreamStart(jsonObj);
-            m_pUIManager->onTestVideoStreamStart();
+            m_pUIManager->onVideoStreamStart();
         }
         else if(str_method == "Navigation.StopStream")
         {
             videoStreamStop(jsonObj);
-            m_pUIManager->onTestVideoStreamStop();
+            m_pUIManager->onVideoStreamStop();
         }
         else if(str_method == "UI.SetMediaClockTimer")
         {
-            m_pUIManager->setMediaColckTimer(jsonObj);
+            m_json_mediaclock = jsonObj;
+            ShowUI(ID_MEDIACLOCK);
         }
 
         else if(str_method == "VR.VRStatus")
@@ -260,7 +256,15 @@ void AppData::recvFromServer(Json::Value jsonObj)
 
 int AppData::getCurUI()
 {
-    return m_iCurUI;
+    int iSize = m_vecUIStack.size();
+    if(iSize > 0)
+        return m_vecUIStack[iSize - 1];
+    return 0;
+}
+
+void AppData::OnShowCommand()
+{
+    ShowUI(ID_COMMAND);
 }
 
 //////////////////////////////////////////
@@ -284,6 +288,7 @@ void AppData::OnMenuBtnClick(std::string btnText)
 void AppData::OnVRStartRecord()
 {
     SDLConnector::getSDLConnectore()->OnVRStartRecord();
+    ShowUI(ID_AUDIOPASSTHRU);
 }
 
 void AppData::OnVRCancelRecord()
@@ -301,19 +306,22 @@ void AppData::OnCommandClick(int cmdID)
     SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, cmdID);
 }
 
-void AppData::OnAlertResponse(int alertID, int reason)
+void AppData::OnAlertResponse(int reason)
 {
-    SDLConnector::getSDLConnectore()->OnAlertResponse(alertID, reason);
+    SDLConnector::getSDLConnectore()->OnAlertResponse(m_json_alert["id"].asInt(), reason);
+    ShowPreviousUI();
 }
 
-void AppData::OnScrollMessageResponse(int smID, int reason)
+void AppData::OnScrollMessageResponse(int reason)
 {
-    SDLConnector::getSDLConnectore()->OnScrollMessageResponse(smID, reason);
+    SDLConnector::getSDLConnectore()->OnScrollMessageResponse(m_json_scrollableMessage["id"].asInt(), reason);
+    ShowPreviousUI();
 }
 
-void AppData::OnSliderResponse( int code, int sliderid, int sliderPosition)
+void AppData::OnSliderResponse( int code, int sliderPosition)
 {
-    SDLConnector::getSDLConnectore()->OnSliderResponse(code, sliderid, sliderPosition);
+    SDLConnector::getSDLConnectore()->OnSliderResponse(code, m_json_slider["id"].asInt(), sliderPosition);
+    ShowPreviousUI();
 }
 
 void AppData::OnTTSSpeek(int code)
@@ -321,16 +329,20 @@ void AppData::OnTTSSpeek(int code)
     SDLConnector::getSDLConnectore()->OnTTSSpeek(m_iAppID, code);
 }
 
-void AppData::OnPerformAudioPassThru(int performaudiopassthruID, int code)
+void AppData::OnPerformAudioPassThru(int code)
 {
-    SDLConnector::getSDLConnectore()->OnPerformAudioPassThru(m_iAppID, performaudiopassthruID, code);
-    m_iCurUI = ID_SHOW;
-    m_pUIManager->onAppShow(m_iCurUI);
+    if(m_json_audioPassThru == Json::Value::null)
+        return;
+
+    SDLConnector::getSDLConnectore()->OnPerformAudioPassThru(m_iAppID, m_json_audioPassThru["id"].asInt(), code);
+    SDLConnector::getSDLConnectore()->OnVRCancelRecord();
+    ShowPreviousUI();
 }
 
-void AppData::OnPerformInteraction(int code, int performInteractionID, int choiceID)
+void AppData::OnPerformInteraction(int code, int choiceID)
 {
-    SDLConnector::getSDLConnectore()->OnPerformInteraction(code, performInteractionID, choiceID);
+    SDLConnector::getSDLConnectore()->OnPerformInteraction(code, m_json_interaction["id"].asInt(), choiceID);
+    ShowPreviousUI();
 }
 
 
@@ -417,6 +429,28 @@ Json::Value AppData::getInteractionJson()
     return m_json_interaction;
 }
 
+Json::Value AppData::getMediaClockJson()
+{
+    return m_json_mediaclock;
+}
+
+void AppData::ShowUI(int iUIType)
+{
+    if(iUIType != ID_MEDIACLOCK)
+        m_vecUIStack.push_back(iUIType);
+
+    m_pUIManager->onAppShow(iUIType);
+}
+
+void AppData::ShowPreviousUI()
+{
+    m_vecUIStack.pop_back();
+    int iSize = m_vecUIStack.size();
+    if(iSize > 0)
+    {
+        m_pUIManager->onAppShow(m_vecUIStack[iSize - 1]);
+    }
+}
 
 
 //    {
@@ -459,10 +493,6 @@ Json::Value AppData::getInteractionJson()
 //          ]
 //       }
 //    }
-void AppData::uiShow(Json::Value jsonObj)
-{
-    m_json_show = jsonObj;
-}
 
 //    {
 //       "id" : 42,

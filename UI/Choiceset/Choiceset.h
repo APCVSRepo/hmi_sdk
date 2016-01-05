@@ -13,7 +13,7 @@ typedef struct ChoiceMenu
     int i_choiceID;
     std::string str_menuName;
 }SChoiceMenu;
-class AppBase;
+
 class Choiceset : public AppBase
 {
     Q_OBJECT
@@ -21,10 +21,11 @@ public:
     explicit Choiceset(AppListInterface * pList, QWidget *parent = 0);
     ~Choiceset();
 
-    void execShow();
+protected:
+    virtual void showEvent(QShowEvent * e);
 
 signals:
-    void menuClicked(int code, int id, int choiceID);
+    void menuClicked(int code, int choiceID);
 
 public slots:
     void listWidgetClickedSlots(QModelIndex);
@@ -32,11 +33,10 @@ public slots:
     void upArrowSlots();
     void downArrowSlots();
     void timeHideOutSlots();
-    void menuClickedSlots(int code, int performInteractionID, int choiceID);
+    void menuClickedSlots(int code, int choiceID);
 
 private:
     void addNewMenu(int choiceID, std::string menuName);
-    void setInteractionID(int id);
     void setChoicesetName(QString title);
     void setTimeOut(int duration);
 
@@ -57,7 +57,6 @@ private:
 
     bool m_b_backIcon;
 
-    int m_i_interactionID;
     QTimer *m_timerHide;
 
     void initLayout();

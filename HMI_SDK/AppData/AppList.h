@@ -6,6 +6,7 @@
 #include "AppListInterface.h"
 #include "AppData.h"
 #include "UI/UIInterface.h"
+
 class AppData;
 class AppList : public IMessageInterface, public AppListInterface
 {
@@ -13,22 +14,23 @@ public:
     AppList();
     ~AppList();
 
+    //AppListInterface
     void setUIManager(UIInterface *pUI);
-
     AppDataInterface* getActiveApp();
     void getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames);
-
     void OnAppActivated(int appID);
     void OnAppExit();
+    void ShowAppList();
 
-private:
+public: //IMessageInterface
     void onRequest(Json::Value);
     void onNotification(Json::Value);
     void onResult(Json::Value);
     void onRawData(void * p, int iLength);
     void onError(std::string error);
-    void recvFromServer(Json::Value);
 
+private:
+    void recvFromServer(Json::Value);
     void newAppRegistered(Json::Value jsonObj);
     void appUnregistered(Json::Value jsonObj);
 

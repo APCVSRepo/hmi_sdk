@@ -1,7 +1,5 @@
 ﻿#include "AppLink.h"
-#include "Alert/AlertUI.h"
-#include "ScrollableMessage/ScrollMsg.h"
-#include "Show/Show.h"
+#include "UI/Notify/Notify.h"
 #include "Common/AppBase.h"
 AppLink::AppLink(AppListInterface * pList, QWidget *parent)
     : AppBase(pList, parent)
@@ -198,17 +196,17 @@ void AppLink::onScrollTo(int v)
 void AppLink::inAppSlots(int appID)
 {
     m_pList->OnAppActivated(appID);
-    showCurUI(ID_SHOW);
 }
 
 
 
 void AppLink::findNewAppSlots()
 {
-    showCurUI(ID_NOTIFY);
+    Notify n;
+    n.show();
 }
 
-void AppLink::execShow()
+void AppLink::showEvent(QShowEvent * e)
 {
     // TODO: getData();
     clearNewApp();
@@ -221,5 +219,4 @@ void AppLink::execShow()
     {
         addNewApp(vAppNames[i].data(), vAppIDs[i]);
     }
-    show();
 }

@@ -2,14 +2,13 @@
 #include "QHBoxLayout"
 #include "QVBoxLayout"
 #include "UI/Config/Config.h"
-#include "Common/PopBase.h"
-CAudioPassThru::CAudioPassThru(AppListInterface * pList, QWidget *parent) : CPopBase(pList, parent)
+#include "Common/AppBase.h"
+CAudioPassThru::CAudioPassThru(AppListInterface * pList, QWidget *parent) : AppBase(pList, parent)
 {
     InitLayout();
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
+    connect(&m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(hide()));
-    connect(this,SIGNAL(audioPassThruHide(int,int)),this,SLOT(audioPassThruHideSlots(int,int)));
-    m_i_performaudiopassthruID = 0;
+    connect(this,SIGNAL(audioPassThruHide(int)),this,SLOT(audioPassThruHideSlots(int)));
 }
 
 CAudioPassThru::~CAudioPassThru()
@@ -150,21 +149,14 @@ void CAudioPassThru::setAudioText(int textIdx, QString text)
 
 void CAudioPassThru::setTimeOut(int duration)
 {
-    m_timer->start(duration);
+    m_timer.start(duration);
 
 }
 
 void CAudioPassThru::timeoutSlots()
 {
-    m_timer->stop();
-    if(m_i_performaudiopassthruID != 0)
-        audioPassThruHide(m_i_performaudiopassthruID, PERFORMAUDIOPASSTHRU_TIMEOUT);
-    goBack();
-}
-
-void CAudioPassThru::setAudioPassThruID(int id)
-{
-    m_i_performaudiopassthruID = id;
+    m_timer.stop();
+    audioPassThruHide(PERFORMAUDIOPASSTHRU_TIMEOUT);
 }
 
 void CAudioPassThru::setAudioPassThruDisplayText1(QString text)
@@ -181,34 +173,27 @@ void CAudioPassThru::onButtonClickedSlots(int id)
 {
     if(id >= 0)
     {
-        m_timer->stop();
-        if(m_i_performaudiopassthruID != 0)
-            emit audioPassThruHide(m_i_performaudiopassthruID, id);
-       // this->hide();
-        goBack();
+        m_timer.stop();
+        emit audioPassThruHide(id);
     }
 }
 
-void CAudioPassThru::audioPassThruHideSlots(int audioPassThruId, int code)
+void CAudioPassThru::audioPassThruHideSlots(int code)
 {
-    //_D("appID=%d:%d:%d\n",m_i_appID,audioPassThruId,code);
-    m_pList->getActiveApp()->OnPerformAudioPassThru(audioPassThruId, code);
-    m_pList->getActiveApp()->OnVRCancelRecord();
+    m_pList->getActiveApp()->OnPerformAudioPassThru(code);
 }
 
-void CAudioPassThru::execShow()
+void CAudioPassThru::showEvent(QShowEvent * e)
 {
     if (m_pList->getActiveApp())
     {
-        m_jsonData = m_pList->getActiveApp()->getAudioPassThruJson();
+        Json::Value m_jsonData = m_pList->getActiveApp()->getAudioPassThruJson();
         if(!m_jsonData.isMember("id") || !m_jsonData.isMember("params"))
         {
-            show();
             return;
         }
-        setAudioPassThruID(m_jsonData["id"].asInt());
-        setTimeOut(m_jsonData["params"]["maxDuration"].asInt());
 
+        setTimeOut(m_jsonData["params"]["maxDuration"].asInt());
 
         for (int i = 0; i < m_jsonData["params"]["audioPassThruDisplayTexts"].size(); i++)
         {
@@ -222,14 +207,4 @@ void CAudioPassThru::execShow()
             }
         }
     }
-    show();
-}
-
-void CAudioPassThru::testShow()
-{
-    setAudioPassThruDisplayText1("audioPassThruDisplayText1");
-    setAudioPassThruDisplayText2("audioPassThruDisplayText2");
-    setAudioPassThruID(3);
-    setTimeOut(20000);
-    show();
 }

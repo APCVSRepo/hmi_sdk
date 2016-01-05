@@ -35,18 +35,20 @@ public:
     virtual Json::Value getScrollableMsgJson() = 0;
     virtual Json::Value getAudioPassThruJson() = 0;
     virtual Json::Value getInteractionJson() = 0;
+    virtual Json::Value getMediaClockJson() = 0;
     virtual std::string getUrlString() = 0;
 
     virtual int getCurUI() = 0;
 
+    virtual void OnShowCommand() = 0;
     virtual void OnSoftButtonClick(int sbID, int mode) = 0;
     virtual void OnCommandClick(int cmdID) = 0;
-    virtual void OnAlertResponse(int alertID, int reason) = 0;
-    virtual void OnScrollMessageResponse(int smID, int reason) = 0;
-    virtual void OnSliderResponse( int code, int sliderid, int sliderPosition) = 0;
+    virtual void OnAlertResponse(int reason) = 0;
+    virtual void OnScrollMessageResponse(int reason) = 0;
+    virtual void OnSliderResponse( int code, int sliderPosition) = 0;
     virtual void OnTTSSpeek(int code) = 0;
-    virtual void OnPerformAudioPassThru(int performaudiopassthruID, int code) = 0;
-    virtual void OnPerformInteraction(int code, int performInteractionID, int choiceID) = 0;
+    virtual void OnPerformAudioPassThru(int code) = 0;
+    virtual void OnPerformInteraction(int code, int choiceID) = 0;
 
     virtual void OnMenuBtnClick(std::string btnText) = 0;
     virtual void OnVRStartRecord() = 0;

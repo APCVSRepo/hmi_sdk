@@ -21,7 +21,9 @@ public:
     AppLink(AppListInterface * pList, QWidget *parent = 0);
     ~AppLink();
 
-    void execShow();
+protected:
+    virtual void showEvent(QShowEvent * e);
+
 signals:
     void inAppSignals(int appID);
     void appSetting();

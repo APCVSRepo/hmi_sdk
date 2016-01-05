@@ -56,14 +56,6 @@ void Show::initLayout()
     mainLayout->addLayout(hLayout,3);
     mainLayout->addLayout(btnLayout,1);
 
-//    QHBoxLayout *midLayout = new QHBoxLayout(this);
-//    midLayout->addStretch(12);
-//    //midLayout->addLayout(menuLayout,12);
-//    midLayout->addLayout(mainLayout,65);
-//    midLayout->addStretch(3);
-
-
-
     QPixmap pixmap(":/images/sync.png");
     QPixmap fitpixmap=pixmap.scaled(120,120, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     m_lab_icon.setPixmap(fitpixmap);
@@ -359,7 +351,7 @@ void Show::btnFourClickedSlots()
     if(m_i_totalNum == 1 && m_i_currentNo == 1)
     {
         //clicked More;
-        this->showCurUI(ID_COMMAND);
+        AppControl->OnShowCommand();
     }
     else
     {
@@ -432,7 +424,7 @@ void Show::btnThrClickedSlots(int btID)
     if(m_i_totalNum == m_i_currentNo && m_i_totalNum != 1)
     {
         //clicked More;
-        showCurUI(ID_COMMAND);
+        m_pList->getActiveApp()->OnShowCommand();
     }
     else
     {
@@ -480,7 +472,7 @@ void Show::btnOneClickedLongSlots(int btID)
     }
 }
 
-void Show::execShow()
+void Show::showEvent(QShowEvent * e)
 {
     Json::Value pObj;
     std::vector <SSoftButton > vec_softButtons;
@@ -536,7 +528,6 @@ void Show::execShow()
             this->setSoftButtons(vec_softButtons);
         }
     }
-    this->show();
 }
 
 //{
@@ -559,14 +550,10 @@ void Show::execShow()
 //   }
 //}
 
-void Show::receiveJson(Json::Value json)
+void Show::UpdateMediaColckTimer()
 {
-   // this->moveToThread(this->thread());
-    setMediaColckTimer(json);
-}
+    Json::Value jsonObj = AppControl->getMediaClockJson();
 
-void Show::setMediaColckTimer(Json::Value jsonObj)
-{
     m_i_startH = jsonObj["params"]["startTime"]["hours"].asInt();
     m_i_startM = jsonObj["params"]["startTime"]["minutes"].asInt();
     m_i_startS = jsonObj["params"]["startTime"]["seconds"].asInt();

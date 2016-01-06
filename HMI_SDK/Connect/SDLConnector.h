@@ -83,8 +83,8 @@ private:
 public:
     virtual void onConnected();
     virtual void onNetworkBroken();
-    static void* onSetupConnection(void*);
-    void setUpConnecteion();
+    static void* ConnectThread(void*);
+    void Connect();
 
 // API
 public:

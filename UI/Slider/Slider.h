@@ -21,7 +21,8 @@ protected:
 
 signals:
     void sliderClicked( int code, int sliderPosition);
-    
+    void onSpaceCliced();
+
 public slots:
     void onMoveLeftSlot();
     void onMoveRightSlot();

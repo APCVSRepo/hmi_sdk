@@ -18,6 +18,7 @@ protected:
 signals:
     //void softButtonClicked(int btID, int mode);
     void scrollMsgAbort(int reason);
+    void onSpaceCliced();
 
 public slots:
     void upClickedSlots();

@@ -42,7 +42,6 @@ signals:
     //void finishMainHMI();
     void onAppShowSignal(int type);
     void onAppActivatedSignal(AppDataInterface* pInterface);
-    void onCloseUISignal();
 
     void onVideoStartSignal();
     void onVideoStopSignal();

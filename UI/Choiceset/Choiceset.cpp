@@ -6,7 +6,7 @@ Choiceset::Choiceset(AppListInterface * pList, QWidget *parent) : AppBase(pList,
     m_timerHide = new QTimer;
 
     initLayout();
-    connect(this,SIGNAL(menuClicked(int,int,int)),this,SLOT(menuClickedSlots(int,int,int)));
+    connect(this,SIGNAL(menuClicked(int,int)),this,SLOT(menuClickedSlots(int,int)));
 }
 
 Choiceset::~Choiceset()

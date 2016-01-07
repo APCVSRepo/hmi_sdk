@@ -19,6 +19,7 @@ public:
 
 signals:
     void audioPassThruHide(int);
+    void onSpaceCliced();
 
 protected:
     virtual void showEvent(QShowEvent * e);

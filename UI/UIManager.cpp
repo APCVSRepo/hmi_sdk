@@ -58,8 +58,6 @@ void CUIManager::initAppHMI()
 #endif
 //
     connect(this,SIGNAL(onAppShowSignal(int)),this,SLOT(AppShowSlot(int)));
-    connect(this,SIGNAL(onCloseUISignal()),this,SLOT(CloseUISlot()));
-
     connect(this,SIGNAL(onVideoStartSignal()),this,SLOT(onVideoStartSlots()));
     connect(this,SIGNAL(onVideoStopSignal()),this,SLOT(onVideoStopSlots()));
 

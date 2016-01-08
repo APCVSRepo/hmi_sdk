@@ -189,6 +189,7 @@ void AppList::newAppRegistered(Json::Value jsonObj)
     pData->setUIManager(m_pUIManager);
     pData->m_iAppID = jsonObj["params"]["application"]["appID"].asInt();
     pData->m_szAppName = jsonObj["params"]["application"]["appName"].asString();
+    pData->addExitAppCommand();
     m_AppDatas.push_back(pData);
 }
 

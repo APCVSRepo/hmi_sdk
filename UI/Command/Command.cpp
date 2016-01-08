@@ -53,11 +53,13 @@ m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
     m_scrollBar.hide();
 
+    /*
     SCmdID tmpCmdId;
     tmpCmdId.str_command = "Exit New application";
     tmpCmdId.i_cmdID = 0;
     m_vec_cmdID.insert(0,tmpCmdId);
     m_vec_isMenu.insert(0,true);
+    */
 
     for(int i = 0; i < m_vec_cmdID.size(); i++)
         addListItemWidget(m_vec_cmdID.at(i).str_command,m_vec_isMenu.at(i));
@@ -143,6 +145,7 @@ void Command::listWidgetClickedSlots(QModelIndex index)
 //双击某行，可进行某一行的子菜单;
 void Command::listWidgetDoubleClickedSlots(QModelIndex index)
 {
+    qDebug()<< 1;
     static int no = 0;
     int indexNo = index.row();
 
@@ -226,11 +229,13 @@ void Command::clearAllCommand()
     m_vec_subStrList.clear();
     flushListWidget();
 
+    /*
     SCmdID tmpCmdId;
     tmpCmdId.str_command = "Exit New application";
     tmpCmdId.i_cmdID = 0;
     m_vec_cmdID.insert(0,tmpCmdId);
     m_vec_isMenu.append(true);
+    */
 
     for(int i = 0; i < m_vec_cmdID.size(); i++)
         addListItemWidget(m_vec_cmdID.at(i).str_command, m_vec_isMenu.at(i));

@@ -6,12 +6,13 @@ Choiceset::Choiceset(AppListInterface * pList, QWidget *parent) : AppBase(pList,
     m_timerHide = new QTimer;
 
     initLayout();
+    connect(m_timerHide,SIGNAL(timeout()),this,SLOT(timeHideOutSlots()));
     connect(this,SIGNAL(menuClicked(int,int,int)),this,SLOT(menuClickedSlots(int,int,int)));
 }
 
 Choiceset::~Choiceset()
 {
-
+    delete m_timerHide;
 }
 
 void Choiceset::initLayout()
@@ -103,7 +104,6 @@ void Choiceset::listWidgetDoubleClickedSlots(QModelIndex index)
 {
     m_timerHide->stop();
     emit menuClicked(PERFORMINTERACTION_CHOICE, m_vec_choiceMenu.at(index.row()).i_choiceID);
-    this->hide();
 }
 
 //增加Command，增加显示到list的最上一行;
@@ -207,6 +207,11 @@ void Choiceset::menuClickedSlots(int code, int choiceID)
 
 void Choiceset::setChoicesetName(QString title)
 {
+    if(title.length() > 10)
+    {
+        title = title.left(8);
+        title += "...";
+    }
     this->setTitle(title);
 }
 
@@ -221,6 +226,7 @@ void Choiceset::timeHideOutSlots()
 {
     m_timerHide->stop();
     emit menuClicked(PERFORMINTERACTION_TIMEOUT, m_vec_choiceMenu.at(0).i_choiceID);
+    hide();
 }
 
 void Choiceset::showEvent(QShowEvent * e)
@@ -230,7 +236,7 @@ void Choiceset::showEvent(QShowEvent * e)
     {
         Json::Value jsonData = m_pList->getActiveApp()->getInteractionJson();
         setTimeOut(jsonData["params"]["timeout"].asInt());
-        for(int i = 0; i < jsonData["params"]["choiceSet"].size(); i++)
+        for(unsigned int i = 0; i < jsonData["params"]["choiceSet"].size(); i++)
         {
             addNewMenu(jsonData["params"]["choiceSet"][i]["choiceID"].asInt(),jsonData["params"]["choiceSet"][i]["menuName"].asString());
         }

@@ -5,6 +5,8 @@
 #include <pthread.h>
 #include "Config/Config.h"
 
+#include <qdebug.h>
+
 
 static SDLConnector * g_SingleConnector = 0;
 
@@ -175,6 +177,7 @@ void SDLConnector::OnAppExit(int appID)
 
     root["jsonrpc"] = "2.0";
     root["method"] = "BasicCommunication.OnExitApplication";
+    params["reason"] = "USER_EXIT";
     params["appID"] = appID;
     root["params"] = params;
 
@@ -304,7 +307,8 @@ void SDLConnector::OnSliderResponse(int code, int sliderid, int sliderPosition)
         Json::Value result;
         result["code"] = code;
         result["method"] = "UI.Slider";
-        result["sliderPosition"] = sliderPosition;
+        // 将sliderPosition改为sliderPosition + 1[wsw 20160104]
+        result["sliderPosition"] = sliderPosition + 1;
         root["result"] = result;
         root["id"] = sliderid;
         root["jsonrpc"] = "2.0";

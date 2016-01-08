@@ -239,6 +239,7 @@ void AppData::recvFromServer(Json::Value jsonObj)
         else if(str_method=="TTS.Speak")
         {
             LOGI("TTS.Speak");
+            tsSpeak(jsonObj);
             Json::Value ttsSpeeks = jsonObj["params"]["ttsChunks"];
             int size=ttsSpeeks.size();
             for(int i=0;i<size;i++){
@@ -326,7 +327,7 @@ void AppData::OnSliderResponse( int code, int sliderPosition)
 
 void AppData::OnTTSSpeek(int code)
 {
-    SDLConnector::getSDLConnectore()->OnTTSSpeek(m_iAppID, code);
+    SDLConnector::getSDLConnectore()->OnTTSSpeek(m_json_tsSpeak["id"].asInt(), code);
 }
 
 void AppData::OnPerformAudioPassThru(int code)
@@ -555,6 +556,24 @@ void AppData::addCommand(Json::Value jsonObj)
 
 }
 
+void AppData::addExitAppCommand()
+{
+    SMenuCommand tmpCommand;
+    tmpCommand.i_appID = m_iAppID;
+    tmpCommand.i_cmdID = 101;
+    std::string strMenuName = "Exit " + m_szAppName;
+    if(strMenuName.length() > 18)
+    {
+        strMenuName = strMenuName.substr(0,16);
+        strMenuName += "...";
+    }
+    tmpCommand.str_menuName = strMenuName;
+    tmpCommand.i_parentID = 0;
+    tmpCommand.i_position = 0;
+
+    m_vec_scommand.push_back(tmpCommand);
+}
+
 //    {
 //       "id" : 49,
 //       "jsonrpc" : "2.0",
@@ -726,6 +745,11 @@ void AppData::alert(Json::Value jsonObj)
 {
     m_json_alert = jsonObj;
 
+}
+
+void AppData::tsSpeak(Json::Value jsonObj)
+{
+    m_json_tsSpeak = jsonObj;
 }
 
 

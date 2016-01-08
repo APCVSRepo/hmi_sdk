@@ -57,13 +57,7 @@ void CAlertUI::InitLayout()
     m_btnSoft3->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btnSoft4->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
 
-    // test
-    m_labelText1->setText("Alert text 1");
-    m_labelText2->setText("Alert text 2");
-    m_labelText3->setText("Alert text 3");
-
     updateLayout();
-
 }
 
 void CAlertUI::updateLayout()
@@ -141,6 +135,12 @@ void CAlertUI::setTimeOut(int duration)
 
 void CAlertUI::setAlertText(int textIdx, QString text)
 {
+    std::string strTemp("");
+    if(text.length() > 22)
+    {
+        text = text.left(20);
+        text += "...";
+    }
     switch (textIdx)
     {
     case 0:
@@ -318,6 +318,7 @@ void CAlertUI::showEvent(QShowEvent * e)
 {
     Json::Value pObj;
     int itemCnt = 0;
+    std::string strTemp("");
 
     if (m_pList->getActiveApp())
     {
@@ -355,7 +356,13 @@ void CAlertUI::showEvent(QShowEvent * e)
             {
                 if (i < 4)
                 {
-                    setBtnText(i, pObj["params"]["softButtons"][i]["text"].asString().c_str(),pObj["params"]["softButtons"][i]["isHighlighted"].asBool());
+                    // 软按键显示文字最多5个字符[20160104 wsw]
+                    strTemp = pObj["params"]["softButtons"][i]["text"].asString();
+                    if(strTemp.length() > 5)
+                    {
+                        strTemp = strTemp.substr(0,5);
+                    }
+                    setBtnText(i, strTemp.c_str(),pObj["params"]["softButtons"][i]["isHighlighted"].asBool());
                 }
                 else
                 {

@@ -1,19 +1,78 @@
 #include "textspeech.h"
 #include "Config/Config.h"
+#include <qdebug.h>
 
+#ifdef WIN32
+#include <windows.h>
+#include <process.h>
+#endif
 
 
 TextSpeech::TextSpeech(QObject *parent) :
     QObject(parent),_binit(0),_bReading(0)
 {
-    initSpeech();//初始化语音
+    //initSpeech();//初始化语音
 }
 
 TextSpeech::~TextSpeech()
 {
+
+}
+
+void TextSpeech::MyExceptionSlot(int,QString,QString,QString)
+{
+    qDebug() << "MyExceptionSlot";
+    _bReading = false;
 }
 
 #ifdef WIN32
+unsigned int WINAPI TextSpeech::ThreadTextToSpeech(void *arg)
+{
+    CoInitialize(NULL);
+    QAxObject voiceObj;
+    bool bSuccess = voiceObj.setControl("96749377-3391-11D2-9EE3-00C04F797396");
+    if(bSuccess)
+    {
+        voiceObj.dynamicCall("SetRate(int)",-3).toInt();
+        voiceObj.dynamicCall("Speak(QString,SpeechVoiceSpeakFlags)",((TextSpeech *)arg)->m_strToSpeak.c_str(),0).toInt();
+    }
+
+    CoUninitialize();
+    ((TextSpeech *)arg)->SpeakThreadComplete();
+    return 0;
+}
+
+void TextSpeech::SpeakThreadComplete()
+{
+    _bReading = false;
+}
+
+
+bool TextSpeech::StartVoiceThread(std::string string)
+{
+
+    if(!_bReading)
+    {
+        _bReading = true;
+        unsigned int iID = 0;
+        m_strToSpeak = string;
+        m_hThread = _beginthreadex(NULL,0,ThreadTextToSpeech,(void *)this,0,&iID);
+
+        while(_bReading)
+        {
+            Sleep(100);
+        }
+
+        return true;
+    }
+    else
+    {
+        // 返回
+        return false;
+    }
+}
+
+
 //初始化语音函数
 bool TextSpeech::initSpeech()
 {
@@ -22,9 +81,11 @@ bool TextSpeech::initSpeech()
 
     _binit = this->_voice.setControl("96749377-3391-11D2-9EE3-00C04F797396");//设置COM的名称用来初始化COM的模型,返回是否加载成功
 
+
     if(_binit)
     {
         connect(&this->_voice,SIGNAL(signal(QString, int, void*)), this, SLOT(dealevent(QString, int, void*)));
+        connect(&this->_voice,SIGNAL(exception(int,QString,QString,QString)),this,SLOT(MyExceptionSlot(int,QString,QString,QString)));
     }
 
     return _binit;

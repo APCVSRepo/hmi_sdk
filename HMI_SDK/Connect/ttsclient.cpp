@@ -47,14 +47,14 @@ void ttsClient::onRequest(Json::Value request)
         if (method == "TTS.Speak")
         {
              //ttsHandler action start
-             //sendTTSResult(request["id"].asInt(), method);
+             sendTTSResult(request["id"].asInt(), method);
         }
         else if(method == "TTS.StopSpeaking")
         {
             // ttsHandler action stop
             sendTTSResult(request["id"].asInt(), method);
         }
-		m_pCallback->onRequest(request);
+        //m_pCallback->onRequest(request);
     }
 }
 

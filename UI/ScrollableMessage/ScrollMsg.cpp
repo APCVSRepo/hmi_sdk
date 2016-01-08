@@ -20,7 +20,7 @@ CScrollMsg::CScrollMsg(AppListInterface * pList, QWidget *parent) : AppBase(pLis
     InitLayout();
     connect(&m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(onSpaceClicedSlots()));
-    connect(this,SIGNAL(scrollMsgAbort(int,int)),this,SLOT(scrollMsgAbortSlots(int,int)));
+    connect(this,SIGNAL(scrollMsgAbort(int)),this,SLOT(scrollMsgAbortSlots(int)));
 }
 
 CScrollMsg::~CScrollMsg()

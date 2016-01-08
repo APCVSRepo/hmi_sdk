@@ -208,8 +208,8 @@ void AppLink::inAppSlots(int appID)
 
 void AppLink::findNewAppSlots()
 {
-    Notify n;
-    n.show();
+    Notify n(this->parentWidget());
+    n.showDlg();
 }
 
 void AppLink::showEvent(QShowEvent * e)

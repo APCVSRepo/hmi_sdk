@@ -18,6 +18,7 @@ protected:
 signals:
     void alertAbort(int reason);
     void softButtonClicked(int btID, int mode);
+    void onSpaceCliced();
 
 public slots:
     void timeoutSlots();

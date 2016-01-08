@@ -7,7 +7,7 @@ CChoicesetVR::CChoicesetVR(AppListInterface * pList, QWidget *parent) : AppBase(
 {
     InitLayout();
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(hide()));
-    connect(this,SIGNAL(VRmenuClicked(int,int,int)),this,SLOT(VRmenuClickedSlots(int,int,int)));
+    connect(this,SIGNAL(VRmenuClicked(int,int)),this,SLOT(VRmenuClickedSlots(int,int)));
     connect(&m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
 }
 

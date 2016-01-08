@@ -451,6 +451,10 @@ void AppData::ShowPreviousUI()
     {
         m_pUIManager->onAppShow(m_vecUIStack[iSize - 1]);
     }
+    else
+    {
+        ShowUI(ID_MAIN);
+    }
 }
 
 

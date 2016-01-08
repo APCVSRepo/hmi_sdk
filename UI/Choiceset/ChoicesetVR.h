@@ -19,6 +19,7 @@ protected:
 
 signals:
     void VRmenuClicked(int code, int choiceID);
+    void onSpaceCliced();
 
 public slots:
     void timeoutSlots();

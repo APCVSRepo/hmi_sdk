@@ -57,9 +57,11 @@ void Notify::waitSec(int s)
         QApplication::processEvents();
 }
 
-void Notify::showEvent(QShowEvent * e)
+void Notify::showDlg()
 {
+    show();
     this->setText("Searching...");
+
 
     waitSec(1);
     this->setText("No additional\nApps found.");

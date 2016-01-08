@@ -13,11 +13,11 @@ class Notify : public AppBase
 public:
     explicit Notify(QWidget *parent = 0);
 
-protected:
-    virtual void showEvent(QShowEvent * e);
+    void showDlg();
 
 signals:
-    
+    void onSpaceCliced();
+
 public slots:
     
 private:

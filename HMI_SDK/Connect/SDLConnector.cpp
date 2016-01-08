@@ -75,20 +75,21 @@ bool SDLConnector::ConnectToSDL(IMessageInterface * pMsgHandler, INetworkStatus 
     m_channels.push_back(&m_Base);
 
     pthread_t  thread_connect;
-    pthread_create(&thread_connect,NULL,SDLConnector::onSetupConnection,this);
+    pthread_create(&thread_connect,NULL,SDLConnector::ConnectThread,this);
     return m_sdl_is_connected;
 }
 
-void SDLConnector::setUpConnecteion()
+void SDLConnector::Connect()
 {
     m_sdl_is_connected = m_Sockets.ConnectTo(m_channels, this);
-    if(m_sdl_is_connected){
-    m_VR.onOpen();
-    m_Vehicle.onOpen();
-    m_UI.onOpen();
-    m_TTS.onOpen();
-    m_Navi.onOpen();
-    m_Buttons.onOpen();
+    if(m_sdl_is_connected)
+    {
+        m_VR.onOpen();
+        m_Vehicle.onOpen();
+        m_UI.onOpen();
+        m_TTS.onOpen();
+        m_Navi.onOpen();
+        m_Buttons.onOpen();
 
 #ifdef WIN32
         Sleep(100);
@@ -100,17 +101,16 @@ void SDLConnector::setUpConnecteion()
     }
 }
 
-void* SDLConnector::onSetupConnection(void* arg)
+void* SDLConnector::ConnectThread(void* arg)
 {
-    SDLConnector *cly=(SDLConnector*)arg;
-    if(cly==NULL){
-        LOGE("onSetupConnection is null");
+    SDLConnector * connector=(SDLConnector*)arg;
+    if(connector==NULL){
         return NULL;
     }
 
     while(true){
-        if(!cly->IsSDLConnected()){
-             cly->setUpConnecteion();
+        if(!connector->IsSDLConnected()){
+             connector->Connect();
         }
 #ifdef WIN32
         Sleep(2000);

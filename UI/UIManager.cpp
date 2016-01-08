@@ -36,15 +36,15 @@ void CUIManager::initAppHMI()
     QWidget* pParent = pMain->CenterWidget();
     m_vUIWidgets[ID_MAIN]= pMain;
     m_vUIWidgets[ID_APPLINK]=new AppLink(m_pAppList, pParent);
-    m_vUIWidgets[ID_ALERT]=new CAlertUI(m_pAppList);
-    m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pAppList);
-    m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pAppList);
+    m_vUIWidgets[ID_ALERT]=new CAlertUI(m_pAppList, pParent);
+    m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pAppList, pParent);
+    m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pAppList, pParent);
     m_vUIWidgets[ID_CHOICESET]=new Choiceset(m_pAppList, pParent);
     m_vUIWidgets[ID_COMMAND]=new Command(m_pAppList, pParent);
-    m_vUIWidgets[ID_SCROLLMSG]=new CScrollMsg(m_pAppList);
+    m_vUIWidgets[ID_SCROLLMSG]=new CScrollMsg(m_pAppList, pParent);
     m_vUIWidgets[ID_SHOW]=new Show(m_pAppList, pParent);
-    m_vUIWidgets[ID_NOTIFY]=new Notify;
-    m_vUIWidgets[ID_SLIDER]=new Slider(m_pAppList);
+    m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
+    m_vUIWidgets[ID_SLIDER]=new Slider(m_pAppList, pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;
 
     for(int i = 0; i < ID_UI_MAX; i++)

@@ -59,6 +59,8 @@ private:
 
     QTimer *m_timerHide;
 
+    // 清楚之前显示的列表项
+    void clearAllItem();
     void initLayout();
     void hideBackIcon();
     void showBackIcon();

@@ -138,8 +138,7 @@ void CAlertUI::setAlertText(int textIdx, QString text)
     std::string strTemp("");
     if(text.length() > 22)
     {
-        text = text.left(20);
-        text += "...";
+        text = text.left(20) + "...";
     }
     switch (textIdx)
     {
@@ -360,7 +359,7 @@ void CAlertUI::showEvent(QShowEvent * e)
                     strTemp = pObj["params"]["softButtons"][i]["text"].asString();
                     if(strTemp.length() > 5)
                     {
-                        strTemp = strTemp.substr(0,5);
+                        strTemp = strTemp.substr(0,3) + "...";
                     }
                     setBtnText(i, strTemp.c_str(),pObj["params"]["softButtons"][i]["isHighlighted"].asBool());
                 }

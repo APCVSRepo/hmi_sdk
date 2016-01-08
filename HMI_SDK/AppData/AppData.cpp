@@ -568,8 +568,7 @@ void AppData::addExitAppCommand()
     std::string strMenuName = "Exit " + m_szAppName;
     if(strMenuName.length() > 18)
     {
-        strMenuName = strMenuName.substr(0,16);
-        strMenuName += "...";
+        strMenuName = strMenuName.substr(0,16) + "...";
     }
     tmpCommand.str_menuName = strMenuName;
     tmpCommand.i_parentID = 0;

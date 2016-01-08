@@ -79,6 +79,10 @@ void Choiceset::addListItemWidget(QString text, bool isMenu)
     m_listWidget.setItemWidget(item,itemWidget);
     itemWidget->setIsMenu(isMenu);
 
+    if(text.length() > 17)
+    {
+        text = text.left(15) + "...";
+    }
     itemWidget->setText(text);
     m_vec_listItem.append(item);
     m_vec_appItemWidget.append(itemWidget);
@@ -210,8 +214,7 @@ void Choiceset::setChoicesetName(QString title)
 {
     if(title.length() > 10)
     {
-        title = title.left(8);
-        title += "...";
+        title = title.left(8) + "...";
     }
     this->setTitle(title);
 }
@@ -220,19 +223,24 @@ void Choiceset::setChoicesetName(QString title)
 void Choiceset::setTimeOut(int duration)
 {
     m_timerHide->start(duration);
-
 }
 
 void Choiceset::timeHideOutSlots()
 {
     m_timerHide->stop();
     emit menuClicked(PERFORMINTERACTION_TIMEOUT, m_vec_choiceMenu.at(0).i_choiceID);
-    hide();
+}
+
+void Choiceset::clearAllItem()
+{
+    m_vec_choiceMenu.clear();
+    m_vec_isMenu.clear();
 }
 
 void Choiceset::showEvent(QShowEvent * e)
 {
     setChoicesetName("Choice Name");
+    clearAllItem();
     if (m_pList->getActiveApp())
     {
         Json::Value jsonData = m_pList->getActiveApp()->getInteractionJson();

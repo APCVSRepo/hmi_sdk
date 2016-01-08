@@ -227,8 +227,7 @@ void Show::setMediaTrack(bool isShow, QString text)
         // 显示最多8个字符[20160106 wsw]
         if(text.length() > 13)
         {
-            text = text.left(12);
-            text += "...";
+            text = text.left(11) + "...";
         }
         m_lab_mediaTrack.setText(text);
     }
@@ -272,8 +271,7 @@ void Show::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
         strTemp = m_vec_softButtons.at(i).str_text;
         if(strTemp.length() > 6)
         {
-            strTemp = strTemp.substr(0,4);
-            strTemp += "...";
+            strTemp = strTemp.substr(0,4) + "...";
         }
 
         if(0 == i)

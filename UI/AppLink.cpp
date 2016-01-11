@@ -65,11 +65,6 @@ void AppLink::addListItemWidget(QString text)
     m_listWidget.addItem(item);
     m_listWidget.setItemWidget(item,itemWidget);
 
-    // 最多显示16个字符 [20160106 wsw]
-    if(text.length() > 16)
-    {
-        text = text.left(14) + "...";
-    }
     itemWidget->setText(text);
     m_vec_listItem.push_back(item);
     m_vec_appItemWidget.push_back(itemWidget);

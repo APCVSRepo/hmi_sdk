@@ -5,8 +5,6 @@
 #include <pthread.h>
 #include "Config/Config.h"
 
-#include <qdebug.h>
-
 
 static SDLConnector * g_SingleConnector = 0;
 
@@ -447,7 +445,7 @@ void SDLConnector::OnTTSSpeek(int speekID, int code)
         root["jsonrpc"] = "2.0";
         root["id"] = speekID;
 
-        result["method"] = "TTS.Speek";
+        result["method"] = "TTS.Speak";
         result["code"] = code;
 
         root["result"] = result;
@@ -458,7 +456,7 @@ void SDLConnector::OnTTSSpeek(int speekID, int code)
         Json::Value error;
         Json::Value data;
 
-        data["method"] = "TTS.Speek";
+        data["method"] = "TTS.Speak";
 
         root["jsonrpc"] = "2.0";
         root["id"] = speekID;

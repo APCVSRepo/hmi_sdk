@@ -91,7 +91,6 @@ void AppData::setUIManager(UIInterface *pUIManager)
 
 void AppData::recvFromServer(Json::Value jsonObj)
 {
-    LOGI("AppData::recvFromServer");
     int appID = jsonObj["params"]["appID"].asInt();
     if(m_iAppID != appID)
         return;
@@ -126,25 +125,21 @@ void AppData::recvFromServer(Json::Value jsonObj)
         }
         else if (str_method == "UI.Alert")
         {
-            LOGI("UI.Alert");
             alert(jsonObj);
             ShowUI(ID_ALERT);
         }
         else if (str_method == "UI.ScrollableMessage")
         {
-            LOGI("UI.ScrollableMessage");
             scrollableMessage(jsonObj);
             ShowUI(ID_SCROLLMSG);
         }
         else if (str_method == "UI.Slider")
         {
-            LOGI("UI.Slider");
             slider(jsonObj);
             ShowUI(ID_SLIDER);
         }
         else if(str_method == "UI.PerformAudioPassThru")
         {
-            LOGI("UI.PerformAudioPassThru");
             performAudioPassThru(jsonObj);
 
             ShowUI(ID_AUDIOPASSTHRU);
@@ -238,7 +233,6 @@ void AppData::recvFromServer(Json::Value jsonObj)
         }
         else if(str_method=="TTS.Speak")
         {
-            LOGI("TTS.Speak");
             tsSpeak(jsonObj);
             Json::Value ttsSpeeks = jsonObj["params"]["ttsChunks"];
             int size=ttsSpeeks.size();
@@ -248,7 +242,6 @@ void AppData::recvFromServer(Json::Value jsonObj)
                     continue;
                 if(!IsTextUTF8((char *)speek.data(),speek.size()))
                     speek = string_To_UTF8(speek);
-                LOGI("tts text:%s",speek.data());
                 m_pUIManager->tsSpeak(ID_DEFAULT, speek);
             }
         }
@@ -566,10 +559,6 @@ void AppData::addExitAppCommand()
     tmpCommand.i_appID = m_iAppID;
     tmpCommand.i_cmdID = 101;
     std::string strMenuName = "Exit " + m_szAppName;
-    if(strMenuName.length() > 18)
-    {
-        strMenuName = strMenuName.substr(0,16) + "...";
-    }
     tmpCommand.str_menuName = strMenuName;
     tmpCommand.i_parentID = 0;
     tmpCommand.i_position = 0;

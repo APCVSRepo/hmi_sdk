@@ -79,10 +79,6 @@ void Choiceset::addListItemWidget(QString text, bool isMenu)
     m_listWidget.setItemWidget(item,itemWidget);
     itemWidget->setIsMenu(isMenu);
 
-    if(text.length() > 17)
-    {
-        text = text.left(15) + "...";
-    }
     itemWidget->setText(text);
     m_vec_listItem.append(item);
     m_vec_appItemWidget.append(itemWidget);
@@ -212,10 +208,6 @@ void Choiceset::menuClickedSlots(int code, int choiceID)
 
 void Choiceset::setChoicesetName(QString title)
 {
-    if(title.length() > 10)
-    {
-        title = title.left(8) + "...";
-    }
     this->setTitle(title);
 }
 

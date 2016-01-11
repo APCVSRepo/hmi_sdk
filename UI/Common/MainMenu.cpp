@@ -61,7 +61,8 @@ MainMenu::~MainMenu()
 
 void MainMenu::SetTitle(QString title)
 {
-    labelTitle->setText(title);
+    QFontMetrics qfm(labelTitle->font());
+    labelTitle->setText(qfm.elidedText(title,Qt::ElideRight,labelTitle->width()));
 }
 
 

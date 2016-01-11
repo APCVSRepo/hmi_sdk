@@ -65,10 +65,8 @@ void AppList::onError(std::string)
 
 void AppList::recvFromServer(Json::Value jsonObj)
 {
-    LOGI("AppList::recvFromServer");
     if(jsonObj.isMember("method"))
     {
-        LOGI(jsonObj.toStyledString().data());
         std::string str_method = jsonObj["method"].asString();
 
         if (str_method == "BasicCommunication.OnAppRegistered")

@@ -24,8 +24,6 @@
 #include<stdlib.h>
 #include "Config/Config.h"
 
-#include <qdebug.h>
-
 JsonBuffer::JsonBuffer()
 {
     m_szBuffer = "";
@@ -194,16 +192,15 @@ void Channel::sendError(int resultCode, int id, std::string method, std::string 
 
 void Channel::SendJson(Json::Value data)
 {
+    LOGI("---send:%s",data.toStyledString().c_str());
     Json::FastWriter writer;
     std::string json_file = writer.write(data);
-    qDebug() << "---send:" << json_file.c_str();
     const char * pStr = json_file.c_str();
     m_pSocketManager->SendData(m_pHandle, (void *)pStr, json_file.length());
 }
 
 void Channel::onMessage(Json::Value jsonObj)
 {
-    qDebug() << "Channel::onMessage" << jsonObj.toStyledString().c_str();
     LOGI("onMessage:%s",jsonObj.toStyledString().data());
     std::string _methon = "";
     if (jsonObj.isMember("method") && jsonObj["method"].asString() == "BasicCommunication.SDLLog")

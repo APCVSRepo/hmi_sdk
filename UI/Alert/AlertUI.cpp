@@ -15,16 +15,22 @@ CAlertUI::CAlertUI(AppListInterface * pList, QWidget *parent) : AppBase(pList, p
 
 CAlertUI::~CAlertUI()
 {
-
+    delete m_pLabelText[0];
+    delete m_pLabelText[1];
+    delete m_pLabelText[2];
+    delete m_btnSoft1;
+    delete m_btnSoft2;
+    delete m_btnSoft3;
+    delete m_btnSoft4;
 }
 
 void CAlertUI::InitLayout()
 {
 //    m_labelBackground.setParent(this);
 //    m_labelFrame.setParent(this);
-    m_labelText1 = new QLabel;
-    m_labelText2 = new QLabel;
-    m_labelText3 = new QLabel;
+    m_pLabelText[0] = new QLabel;
+    m_pLabelText[1] = new QLabel;
+    m_pLabelText[2] = new QLabel;
     m_btnSoft1 = new CButton;
     m_btnSoft2 = new CButton;
     m_btnSoft3 = new CButton;
@@ -40,12 +46,12 @@ void CAlertUI::InitLayout()
     connect(m_btnSoft3, SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
     connect(m_btnSoft4, SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
 
-    m_labelText1->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:rgb(255,255,254)");
-    m_labelText2->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:rgb(255,255,254)");
-    m_labelText3->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:rgb(255,255,254)");
-    m_labelText1->setAlignment(Qt::AlignCenter);
-    m_labelText2->setAlignment(Qt::AlignCenter);
-    m_labelText3->setAlignment(Qt::AlignCenter);
+    m_pLabelText[0]->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:rgb(255,255,254)");
+    m_pLabelText[1]->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:rgb(255,255,254)");
+    m_pLabelText[2]->setStyleSheet("border:0px;font: 45px \"Liberation Serif\";color:rgb(255,255,254)");
+    m_pLabelText[0]->setAlignment(Qt::AlignCenter);
+    m_pLabelText[1]->setAlignment(Qt::AlignCenter);
+    m_pLabelText[2]->setAlignment(Qt::AlignCenter);
 
     m_btnSoft1->initParameter(ui_aler_width,ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft1");
     m_btnSoft2->initParameter(ui_aler_width,ui_aler_height, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "Soft2");
@@ -68,41 +74,41 @@ void CAlertUI::updateLayout()
     }
     mLayout = new QVBoxLayout;
 
-    if (!m_labelText3->text().isEmpty())
+    if (!m_pLabelText[2]->text().isEmpty())
     {
-        if (m_labelText1->text().isEmpty())
+        if (m_pLabelText[0]->text().isEmpty())
         {
-            m_labelText1->setText(" ");
+            m_pLabelText[0]->setText(" ");
         }
-        if (m_labelText2->text().isEmpty())
+        if (m_pLabelText[1]->text().isEmpty())
         {
-            m_labelText2->setText(" ");
+            m_pLabelText[1]->setText(" ");
         }
 //        m_labelText1->adjustSize();
 //        m_labelText2->adjustSize();
 //        m_labelText3->adjustSize();
-        m_labelText1->setFixedHeight(ui_aler_height);
-        m_labelText2->setFixedHeight(ui_aler_height);
-        m_labelText3->setFixedHeight(ui_aler_height);
-        mLayout->addWidget(m_labelText1, Qt::AlignTop);
-        mLayout->addWidget(m_labelText2, Qt::AlignTop);
-        mLayout->addWidget(m_labelText3, Qt::AlignTop);
+        m_pLabelText[0]->setFixedHeight(ui_aler_height);
+        m_pLabelText[1]->setFixedHeight(ui_aler_height);
+        m_pLabelText[2]->setFixedHeight(ui_aler_height);
+        mLayout->addWidget(m_pLabelText[0], Qt::AlignTop);
+        mLayout->addWidget(m_pLabelText[1], Qt::AlignTop);
+        mLayout->addWidget(m_pLabelText[2], Qt::AlignTop);
     }
-    else if (!m_labelText2->text().isEmpty())
+    else if (!m_pLabelText[1]->text().isEmpty())
     {
-        if (m_labelText1->text().isEmpty())
+        if (m_pLabelText[0]->text().isEmpty())
         {
-            m_labelText1->setText(" ");
+            m_pLabelText[0]->setText(" ");
         }
-        m_labelText1->setFixedHeight(ui_aler_height);
-        m_labelText2->setFixedHeight(ui_aler_height);
-        mLayout->addWidget(m_labelText1, Qt::AlignTop);
-        mLayout->addWidget(m_labelText2, Qt::AlignTop);
+        m_pLabelText[0]->setFixedHeight(ui_aler_height);
+        m_pLabelText[1]->setFixedHeight(ui_aler_height);
+        mLayout->addWidget(m_pLabelText[0], Qt::AlignTop);
+        mLayout->addWidget(m_pLabelText[1], Qt::AlignTop);
     }
-    else if (!m_labelText1->text().isEmpty())
+    else if (!m_pLabelText[0]->text().isEmpty())
     {
-        m_labelText1->setFixedHeight(ui_aler_height);
-        mLayout->addWidget(m_labelText1, Qt::AlignTop);
+        m_pLabelText[0]->setFixedHeight(ui_aler_height);
+        mLayout->addWidget(m_pLabelText[0], Qt::AlignTop);
     }
     else
     {
@@ -135,23 +141,8 @@ void CAlertUI::setTimeOut(int duration)
 
 void CAlertUI::setAlertText(int textIdx, QString text)
 {
-    std::string strTemp("");
-    if(text.length() > 22)
-    {
-        text = text.left(20) + "...";
-    }
-    switch (textIdx)
-    {
-    case 0:
-        m_labelText1->setText(text);
-        break;
-    case 1:
-        m_labelText2->setText(text);
-        break;
-    case 2:
-        m_labelText3->setText(text);
-        break;
-    }
+    QFontMetrics qfm(m_pLabelText[textIdx]->font());
+    m_pLabelText[textIdx]->setText(qfm.elidedText(text,Qt::ElideRight,width()));
 }
 
 void CAlertUI::setBtnText(int btnIdx, QString text, bool highLight)
@@ -355,13 +346,7 @@ void CAlertUI::showEvent(QShowEvent * e)
             {
                 if (i < 4)
                 {
-                    // 软按键显示文字最多5个字符[20160104 wsw]
-                    strTemp = pObj["params"]["softButtons"][i]["text"].asString();
-                    if(strTemp.length() > 5)
-                    {
-                        strTemp = strTemp.substr(0,3) + "...";
-                    }
-                    setBtnText(i, strTemp.c_str(),pObj["params"]["softButtons"][i]["isHighlighted"].asBool());
+                    setBtnText(i,pObj["params"]["softButtons"][i]["text"].asString().c_str(),pObj["params"]["softButtons"][i]["isHighlighted"].asBool());
                 }
                 else
                 {

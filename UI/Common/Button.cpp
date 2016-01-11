@@ -193,7 +193,8 @@ void CButton::setTextStyle(QString style, bool flag)
 
 void CButton::updateText()
 {
-    m_TextLabel.setText(m_Text);
+    QFontMetrics qfm(m_TextLabel.font());
+    m_TextLabel.setText(qfm.elidedText(m_Text,Qt::ElideRight,width()));
     m_TextLabel.setAlignment(Qt::AlignCenter);
     m_TextLabel.setGeometry((this->width() - m_TextLabel.width()) / 2, (this->height() - m_TextLabel.height()) / 2, m_TextLabel.width(), m_TextLabel.height());
     m_TextLabel.setAttribute(Qt::WA_TranslucentBackground, true);

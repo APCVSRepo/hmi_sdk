@@ -1,6 +1,5 @@
 #include "textspeech.h"
 #include "Config/Config.h"
-#include <qdebug.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -21,7 +20,6 @@ TextSpeech::~TextSpeech()
 
 void TextSpeech::MyExceptionSlot(int,QString,QString,QString)
 {
-    qDebug() << "MyExceptionSlot";
     _bReading = false;
 }
 

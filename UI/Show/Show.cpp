@@ -224,12 +224,10 @@ void Show::setMediaTrack(bool isShow, QString text)
     if(isShow){
         m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*2.0/4.0);
         m_scrollBar.init(4,m_listWidget.height());
-        // 显示最多8个字符[20160106 wsw]
-        if(text.length() > 13)
-        {
-            text = text.left(11) + "...";
-        }
-        m_lab_mediaTrack.setText(text);
+
+        QFontMetrics qfm(m_lab_mediaTrack.font());
+        QString strText = qfm.elidedText(text,Qt::ElideRight,ui_app_width / 2.0);
+        m_lab_mediaTrack.setText(strText);
     }
     else{
         m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);
@@ -243,7 +241,9 @@ void Show::setMediaClock(bool isShow, QString text)
     if(isShow){
         m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*2.0/4.0);
         m_scrollBar.init(4,m_listWidget.height());
-        m_lab_mediaClock.setText(text);
+
+        QFontMetrics qfm(m_lab_mediaClock.font());
+        m_lab_mediaClock.setText(qfm.elidedText(text,Qt::ElideRight,ui_app_width / 2.0));
     }
     else{
         m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);
@@ -263,20 +263,12 @@ void Show::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
     m_btn_one->setId(0);
     m_btn_two->setId(0);
     m_btn_thr->setId(0);
-    std::string strTemp("");
-
 
     for(unsigned int i = 0; i < m_vec_softButtons.size(); i++)
     {
-        strTemp = m_vec_softButtons.at(i).str_text;
-        if(strTemp.length() > 6)
-        {
-            strTemp = strTemp.substr(0,4) + "...";
-        }
-
         if(0 == i)
         {
-            m_btn_one->setText(strTemp.c_str());
+            m_btn_one->setText(m_vec_softButtons.at(i).str_text.c_str());
             m_btn_one->setId(m_vec_softButtons.at(i).i_softButtonID);
             if(m_vec_softButtons.at(i).b_isHighlighted)
             {
@@ -291,7 +283,7 @@ void Show::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
         }
         else if(1 == i)
         {
-            m_btn_two->setText(strTemp.c_str());
+            m_btn_two->setText(m_vec_softButtons.at(i).str_text.c_str());
             m_btn_two->setId(m_vec_softButtons.at(i).i_softButtonID);
             if(m_vec_softButtons.at(i).b_isHighlighted)
             {
@@ -306,7 +298,7 @@ void Show::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
         }
         else if(2 == i)
         {
-            m_btn_thr->setText(strTemp.c_str());
+            m_btn_thr->setText(m_vec_softButtons.at(i).str_text.c_str());
             m_btn_thr->setId(m_vec_softButtons.at(i).i_softButtonID);
             if(m_vec_softButtons.at(i).b_isHighlighted)
             {

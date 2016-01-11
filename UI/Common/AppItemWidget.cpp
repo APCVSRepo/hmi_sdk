@@ -16,7 +16,6 @@ AppItemWidget::AppItemWidget(int w,int h,QWidget *parent)
     mLayout->addWidget(m_lab_caseTitle,80,Qt::AlignLeft);
     mLayout->addWidget(m_lab_icon,10,Qt::AlignCenter);
 
-
     m_lab_caseTitle->setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
 
     QPixmap pixmap(":/images/rightarrow.png");
@@ -43,7 +42,8 @@ AppItemWidget::~AppItemWidget()
 
 void AppItemWidget::setText(QString text)
 {
-    m_lab_caseTitle->setText(text);
+    QFontMetrics qfm(m_lab_caseTitle->font());
+    m_lab_caseTitle->setText(qfm.elidedText(text,Qt::ElideRight,width() - 30));
 }
 
 void AppItemWidget::setRowNo(int rowNo)

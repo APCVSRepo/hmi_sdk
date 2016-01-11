@@ -11,20 +11,14 @@ class vehicleInfoClient : public Channel
 public:
     vehicleInfoClient();
     ~vehicleInfoClient();
-
+virtual ID_CHN_TYPE ChannelType(){return ID_CHN_VEHICLE;}
 protected:
-    void onRequest(Json::Value);
+    void onRequest(Json::Value &);
 
 private:
-    void subscribeVehicleDataResponse(int id);
-    void unSubscribeVehicleDataResponse(int id);
-    void getVehicleTypeResponse(int id);
-    void isReady(int id);
-    void getVehicleData(Json::Value);
-    void sendGetVehicleDataResut(int, Json::Value);
-    void sendGetVehicleDataError(int, Json::Value);
-    void vehicleInfoGetDTCsResponse(Json::Value);
-    void vehicleInfoReadDIDResponse(Json::Value);
+    bool getVehicleData(Json::Value &,Json::Value &result);
+    Json::Value vehicleInfoGetDTCsResponse(Json::Value &);
+    Json::Value vehicleInfoReadDIDResponse(Json::Value &);
 
 };
 

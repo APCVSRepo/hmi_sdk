@@ -132,15 +132,9 @@ void SDLConnector::ChangeMsgHandler(IMessageInterface * pMsgHandler)
 
 void SDLConnector::OnAppActivated(int appID)
 {
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["method"] = "BasicCommunication.OnAppActivated";
     params["appID"] = appID;
-    root["params"] = params;
-
-    m_Base.SendJson(root);
+	m_Base.sendNotification("BasicCommunication.OnAppActivated", params);
 }
 
 void SDLConnector::OnSoftButtonClick(int id, int mode)
@@ -155,72 +149,47 @@ void SDLConnector::OnSoftButtonClick(int id, int mode)
 
 void SDLConnector::_onButtonClickAction(std::string name, std::string mode, int customButtonID)
 {
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["method"] = "Buttons.OnButtonEvent";
     params["name"] = name;
     params["mode"] = mode;
     params["customButtonID"] = customButtonID;
-    root["params"] = params;
 
-    m_Buttons.SendJson(root);
+	m_Buttons.sendNotification("Buttons.OnButtonEvent", params);
 }
 
 void SDLConnector::OnAppExit(int appID)
 {
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["method"] = "BasicCommunication.OnExitApplication";
     params["appID"] = appID;
-    root["params"] = params;
-
-    m_Base.SendJson(root);
+	m_Base.sendNotification("BasicCommunication.OnExitApplication", params);
 }
 
 void SDLConnector::OnAppOut(int appID)
 {
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["method"] = "BasicCommunication.OnAppDeactivated";
     params["appID"] = appID;
     params["reason"] = "GENERAL";
-    root["params"] = params;
-
-    m_Base.SendJson(root);
+	m_Base.sendNotification("BasicCommunication.OnAppDeactivated",params);
 }
 
 // reason 0:timeout 1:aborted 2:clickSB
 void SDLConnector::OnAlertResponse(int id, int reason)
 {
-    Json::Value root;
-    if(reason == ALERT_CLICK_SOFTBUTTON || reason == ALERT_TIMEOUT){
+    if(reason == RESULT_SUCCESS){
         Json::Value result;
-
-        root["jsonrpc"] = "2.0";
-        root["id"] = id;
         result["code"] = 0;
         result["method"] = "UI.Alert";
-        root["result"] = result;
+		m_UI.sendResult(id,result);
     }
     else{
         Json::Value error;
         Json::Value data;
-
-        root["jsonrpc"] = "2.0";
-        root["id"] = id;
         data["method"] = "UI.Alert";
         error["message"] = "Alert request aborted";
         error["code"] = 4;
         error["date"] = data;
-        root["error"] = error;
+		m_UI.sendError(id, error);
     }
-    m_UI.SendJson(root);
     m_UI.onSystemContext("MAIN");
 }
 
@@ -229,85 +198,62 @@ void SDLConnector::OnScrollMessageResponse(int id, int reason)
     Json::Value root;
     if(reason == SCROLLMESSAGE_TIMEOUT || reason == SCROLLMESSAGE_CLICK_SOFTBUTTON){
         Json::Value result;
-
-        root["jsonrpc"] = "2.0";
-        root["id"] = id;
         result["code"] = 0;
         result["method"] = "UI.ScrollMessage";
-        root["result"] = result;
+		m_UI.sendResult(id, result);
     }
     else{
         Json::Value error;
         Json::Value data;
-
-        root["jsonrpc"] = "2.0";
-        root["id"] = id;
         data["method"] = "UI.ScrollMessage";
         error["message"] = "REJECTED";
         error["code"] = 4;
         error["date"] = data;
-        root["error"] = error;
+		m_UI.sendError(id, error);
     }
-    m_UI.SendJson(root);
     m_UI.onSystemContext("MAIN");
 }
 
 void SDLConnector::OnCommandClick(int appID, int cmdID)
 {
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["method"] = "UI.OnCommand";
     params["appID"] = appID;
     params["cmdID"] = cmdID;
-    root["params"] = params;
 
-    m_UI.SendJson(root);
+	m_UI.sendNotification("UI.OnCommand", params);
 }
 
 void SDLConnector::OnPerformInteraction(int code, int performInteractionID, int choiceID)
 {
     Json::Value root;
     Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = performInteractionID;
     result["code"] = code;
     result["method"] = "UI.PerformInteraction";
     if(code == 0){
         result["choiceID"] = choiceID;
     }
-    root["result"] = result;
-    m_UI.SendJson(root);
+
+	m_UI.sendResult(performInteractionID, result);
 }
 
 void SDLConnector::OnVRCommand(int appID, int cmdID)
 {
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["method"] = "VR.OnCommand";
     params["appID"] = appID;
     params["cmdID"] = cmdID;
-    root["params"] = params;
 
-    m_VR.SendJson(root);
+	m_VR.sendNotification("VR.OnCommand", params);
 }
 
 void SDLConnector::OnSliderResponse(int code, int sliderid, int sliderPosition)
 {
-    Json::Value root;
     std::string info_msg = "";
     if (code == SLIDER_OK){
         Json::Value result;
         result["code"] = code;
         result["method"] = "UI.Slider";
         result["sliderPosition"] = sliderPosition;
-        root["result"] = result;
-        root["id"] = sliderid;
-        root["jsonrpc"] = "2.0";
+		m_UI.sendResult(sliderid, result);
     }else{
 
         if(code == SLIDER_TIMEOUT){
@@ -321,12 +267,10 @@ void SDLConnector::OnSliderResponse(int code, int sliderid, int sliderPosition)
         error["code"] = code;
         error["message"] = info_msg;
         error["data"] = data;
-        root["id"] = sliderid;
-        root["jsonrpc"] = "2.0";
-        root["error"] = error;
+   
+		m_UI.sendError(sliderid, error);
     }
 
-    m_UI.SendJson(root);
 }
 
 void SDLConnector::OnPerformAudioPassThru(int appID, int performaududiopassthruID, int code)
@@ -337,10 +281,7 @@ void SDLConnector::OnPerformAudioPassThru(int appID, int performaududiopassthruI
         Json::Value result;
         result["code"] = code;
         result["method"] = "UI.PerformAudioPassThru";
-        root["jsonrpc"] = "2.0";
-        root["id"] = performaududiopassthruID;
-        root["result"] = result;
-        m_UI.SendJson(root);
+		m_UI.sendResult(performaududiopassthruID, result);
     }else if(code == 5){
         Json::Value error;
         Json::Value data;
@@ -349,10 +290,7 @@ void SDLConnector::OnPerformAudioPassThru(int appID, int performaududiopassthruI
         error["code"] = code;
         error["message"] = "PerformAudioPassThru was not completed successful!";
         error["data"] = data;
-        root["jsonrpc"] = "2.0";
-        root["id"] = performaududiopassthruID;
-        root["error"] = error;
-        m_UI.SendJson(root);
+		m_UI.sendError(performaududiopassthruID, error);
     }
     else{
         Json::Value error;
@@ -362,24 +300,17 @@ void SDLConnector::OnPerformAudioPassThru(int appID, int performaududiopassthruI
         error["code"] = code;
         error["message"] = "PerformAudioPassThru was not completed successful!";
         error["data"] = data;
-        root["jsonrpc"] = "2.0";
-        root["id"] = performaududiopassthruID;
-        root["error"] = error;
-        m_UI.SendJson(root);
+		m_UI.sendError(performaududiopassthruID, error);
     }
 }
 
 void SDLConnector::_stopPerformAudioPassThru(int appID)
 {
-    Json::Value root;
     Json::Value params;
 
-    root["jsonrpc"] = "2.0";
-    root["method"] = "UI.PerformAudioPassThruStop";
     params["appID"] = appID;
-    root["params"] = params;
 
-    m_UI.SendJson(root);
+	m_UI.sendNotification("UI.PerformAudioPassThruStop", params);
 }
 
 void SDLConnector::OnButtonClick(std::string buttonname, int mode)
@@ -391,106 +322,70 @@ void SDLConnector::OnButtonClick(std::string buttonname, int mode)
 
 void SDLConnector::_buttonEventDown(std::string buttonname)
 {
-    Json::Value root;
     Json::Value params;
 
-    root["jsonrpc"] = "2.0";
-    root["method"] = "Buttons.OnButtonEvent";
     params["mode"] = "BUTTONDOWN";
     params["name"] = buttonname;
-    root["params"] = params;
 
-    m_UI.SendJson(root);
+	m_UI.sendNotification("Buttons.OnButtonEvent", params);
 }
 
 void SDLConnector::_buttonPressed(std::string buttonname, int mode)
 {
-    Json::Value root;
     Json::Value params;
 
-    root["jsonrpc"] = "2.0";
-    root["method"] = "Buttons.OnButtonEvent";
     if(mode == BUTTON_LONG)
         params["mode"] = "LONG";
     else
         params["mode"] = "SHORT";
     params["name"] = buttonname;
-    root["params"] = params;
 
-    m_UI.SendJson(root);
+	m_UI.sendNotification("Buttons.OnButtonEvent", params);
 }
 
 void SDLConnector::_buttonEventUp(std::string buttonname)
 {
-    Json::Value root;
     Json::Value params;
 
-    root["jsonrpc"] = "2.0";
-    root["method"] = "Buttons.OnButtonEvent";
     params["mode"] = "BUTTONUP";
     params["name"] = buttonname;
-    root["params"] = params;
 
-    m_UI.SendJson(root);
+	m_UI.sendNotification("Buttons.OnButtonEvent", params);
 }
 
 void SDLConnector::OnTTSSpeek(int speekID, int code)
 {
     if(code == SPEEK_OK){
-        Json::Value root;
-        Json::Value result;
-
-        root["jsonrpc"] = "2.0";
-        root["id"] = speekID;
+		Json::Value result;
 
         result["method"] = "TTS.Speek";
         result["code"] = code;
-
-        root["result"] = result;
-
-        m_TTS.SendJson(root);
+		m_TTS.sendResult(speekID, result);
     }else{
-        Json::Value root;
         Json::Value error;
         Json::Value data;
 
         data["method"] = "TTS.Speek";
 
-        root["jsonrpc"] = "2.0";
-        root["id"] = speekID;
-
         error["message"] = "Speech was interrupted";
         error["code"] = code;
         error["data"] = data;
 
-        root["result"] = error;
-
-        m_TTS.SendJson(root);
+		m_TTS.sendError(speekID, error);
     }
 }
 
 void SDLConnector::OnVRStartRecord()
 {
-    Json::Value root;
-
-    root["jsonrpc"] = "2.0";
-    root["method"] = "VR.StartRecord";
-
-    m_VR.SendJson(root);
+	m_VR.sendNotification("VR.StartRecord");
 }
 void SDLConnector::OnVRCancelRecord()
 {
-    Json::Value root;
-
-    root["jsonrpc"] = "2.0";
-    root["method"] = "VR.CancelRecord";
-
-    m_VR.SendJson(root);
+	m_VR.sendNotification("VR.CancelRecord");
 }
 
 void SDLConnector::OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y)
  {
-     Json::Value root;
      Json::Value params;
      Json::Value coord;
      Json::Value event;
@@ -529,14 +424,11 @@ void SDLConnector::OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y)
      ts[0]=t;
      event[0]["ts"]=ts;
      params["event"] =event;
-     root["jsonrpc"] = "2.0";
-     root["method"] = "UI.OnTouchEvent";
-     root["params"] = params;
 
-     LOGI("%s",root.toStyledString().data());
+     LOGI("%s",params.toStyledString().data());
 
    //  std::cout<<root.asString();
-     m_UI.SendJson(root);
+	 m_UI.sendNotification("UI.OnTouchEvent", params);
 
  }
 

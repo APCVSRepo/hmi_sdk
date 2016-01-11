@@ -5,9 +5,9 @@
 #include <string>
 #include "json/json.h"
 
-navigationClient::navigationClient() : Channel("Navigation")
+navigationClient::navigationClient() : Channel(800,"Navigation")
 {
-    m_iIDStart = 800;
+
 }
 
 navigationClient::~navigationClient()
@@ -15,67 +15,38 @@ navigationClient::~navigationClient()
 
 }
 
-void navigationClient::onRequest(Json::Value request)
+
+void navigationClient::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
-
+    int  id = request["id"].asInt();
     if (method == "Navigation.IsReady")
     {
-        isReady(request["id"].asInt());
+        sendResult(id,"IsReady");
     }
     else if (method == "Navigation.ShowConstantTBT")
     {
-        sendNavigationResult(request["id"].asInt(), request["method"].asString());
+        sendResult(id,"ShowConstantTBT");
     }
     else if (method == "Navigation.UpdateTurnList")
     {
-        sendNavigationResult(request["id"].asInt(), request["method"].asString());
+        sendResult(id,"UpdateTurnList");
     }
     else if (method == "Navigation.AlertManeuver")
     {
-        sendNavigationResult(request["id"].asInt(), request["method"].asString());
+        sendResult(id,"AlertManeuver");
     }
-    else
+    else if (method == "Navigation.StartStream")
     {
-        if (method == "Navigation.StartStream")
-        {
-            sendNavigationResult(request["id"].asInt(), request["method"].asString());
-        }
-        else if (method == "Navigation.StopStream")
-        {
-            sendNavigationResult(request["id"].asInt(), request["method"].asString());
-        }
-		m_pCallback->onRequest(request);
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"StartStream",result);
     }
-}
-
-void navigationClient::sendNavigationResult(int id, std::string method)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = method;
-
-    root["result"] = result;
-	SendJson(root);
-}
-
-void navigationClient::isReady(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "Navigation.IsReady";
-    result["available"] = true;
-
-    root["result"] = result;
-	SendJson(root);
+    else if (method == "Navigation.StopStream")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"StopStream",result);
+    }
+    else{
+        Channel::onRequest(request);
+    }
 }

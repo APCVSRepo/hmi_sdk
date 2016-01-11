@@ -36,9 +36,9 @@ AppDataInterface* AppList::getActiveApp()
     return m_pCurApp;
 }
 
-void AppList::onRequest(Json::Value jsonObj)
+Result AppList::onRequest(Json::Value jsonObj)
 {
-    recvFromServer(jsonObj);
+    return recvFromServer(jsonObj);
 }
 
 void AppList::onNotification(Json::Value jsonObj)
@@ -63,12 +63,12 @@ void AppList::onError(std::string)
 {
 }
 
-void AppList::recvFromServer(Json::Value jsonObj)
+Result AppList::recvFromServer(Json::Value jsonObj)
 {
     LOGI("AppList::recvFromServer");
     if(jsonObj.isMember("method"))
     {
-        LOGI(jsonObj.toStyledString().data());
+       // LOGI(jsonObj.toStyledString().data());
         std::string str_method = jsonObj["method"].asString();
 
         if (str_method == "BasicCommunication.OnAppRegistered")
@@ -120,8 +120,11 @@ void AppList::recvFromServer(Json::Value jsonObj)
         else
         {
             if(m_pCurApp)
-                m_pCurApp->recvFromServer(jsonObj);
+                return m_pCurApp->recvFromServer(jsonObj);
+            else
+                return RESULT_APPLICATION_NOT_REGISTERED;
         }
+        return  RESULT_SUCCESS;
 
     }
 }

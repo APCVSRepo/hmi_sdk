@@ -89,12 +89,12 @@ void AppData::setUIManager(UIInterface *pUIManager)
     m_pUIManager = pUIManager;
 }
 
-void AppData::recvFromServer(Json::Value jsonObj)
+Result AppData::recvFromServer(Json::Value jsonObj)
 {
     LOGI("AppData::recvFromServer");
     int appID = jsonObj["params"]["appID"].asInt();
     if(m_iAppID != appID)
-        return;
+        return RESULT_APPLICATION_NOT_REGISTERED;
 
     if(jsonObj.isMember("method"))
     {
@@ -252,6 +252,7 @@ void AppData::recvFromServer(Json::Value jsonObj)
             }
         }
     }
+    return RESULT_SUCCESS;
 }
 
 int AppData::getCurUI()

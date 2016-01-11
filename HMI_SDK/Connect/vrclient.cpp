@@ -6,9 +6,9 @@
 #include <string>
 #include "json/json.h"
 
-vrClient::vrClient() : Channel("VR")
+vrClient::vrClient() : Channel(400,"VR")
 {
-    m_iIDStart = 500;
+
 }
 
 vrClient::~vrClient()
@@ -39,103 +39,43 @@ void vrClient::onUnregistered()
 }
 
 
-void vrClient::onRequest(Json::Value request)
+void vrClient::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
-
+    int id = request["id"].asInt();
     if (method == "VR.GetSupportedLanguages")
     {
-        getSupportedLanguagesAction(request["id"].asInt());
+        sendResult(id,"GetSupportedLanguages");
     }
     else if (method == "VR.GetLanguage")
     {
-        getLanguage(request["id"].asInt());
+        sendResult(id,"GetLanguage");
     }
     else if (method == "VR.ChangeRegistration")
     {
-        sendVRResult(0, request["id"].asInt(), request["method"].asString());
+        sendResult(id,"ChangeRegistration");
     }
     else if(method == "VR.IsReady")
     {
-        isReady(request["id"].asInt());
+        sendResult(id,"IsReady");
     }
     else if(method == "VR.GetCapabilities")
     {
-        //sendVRResult(0, request["id"].asInt(), request["method"].asString());
+        sendResult(id,"GetCapabilities");
+    }
+    else if (method == "VR.AddCommand")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"AddCommand",result);
+    }
+    else if(method == "VR.DeleteCommand")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"DeleteCommand",result);
     }
     else
     {
-        if (method == "VR.AddCommand")
-        {
-            sendVRResult(0, request["id"].asInt(), request["method"].asString());
-        }
-        else if(method == "VR.DeleteCommand")
-        {
-            sendVRResult(0, request["id"].asInt(), request["method"].asString());
-        }
-		m_pCallback->onRequest(request);
+        Channel::onRequest(request);
     }
 }
 
-void vrClient::sendVRResult(int resultCode, int id, std::string method)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = resultCode;
-    result["method"] = method;
-
-    root["result"] = result;
-	SendJson(root);
-}
-
-void vrClient::getSupportedLanguagesAction(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "VR.GetSupportedLanguages";
-    result["languages"] = m_StaticConfigJson["sdlLanguagesList"];
-
-    root["result"] = result;
-	SendJson(root);
-}
-
-void vrClient::getLanguage(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "VR.GetLanguage";
-    result["languages"] = m_StaticConfigJson["hmiVRLanguage"];
-
-    root["result"] = result;
-	SendJson(root);
-}
-
-void vrClient::isReady(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "VR.IsReady";
-    result["available"] = true;
-
-    root["result"] = result;
-	SendJson(root);
-}

@@ -6,9 +6,9 @@
 #include "json/json.h"
 #include "Config/Config.h"
 
-uiClient::uiClient() : Channel("UI")
+uiClient::uiClient() : Channel(600,"UI")
 {
-    m_iIDStart = 400;
+
 }
 
 uiClient::~uiClient()
@@ -34,226 +34,129 @@ void uiClient::onUnregistered()
     UnsubscribeFromNotification("UI.UnsubscribeButton");
 }
 
-void uiClient::onRequest(Json::Value request)
+
+
+void uiClient::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
-
+    int id = request["id"].asInt();
     if(method == "UI.SetGlobalProperties")
     {
-        sendUIResult(request["id"].asInt(), request["method"].asString());
+        sendResult(id,"SetGlobalProperties");
     }
     else if(method == "UI.ResetGlobalProperties")
     {
-        sendUIResult(request["id"].asInt(), request["method"].asString());
+        sendResult(id,"ResetGlobalProperties");
     }
     else if(method == "UI.ChangeRegistration")
     {
-        sendUIResult(request["id"].asInt(), request["method"].asString());
+        sendResult(id,"ChangeRegistration");
     }
     else if(method == "UI.SetAppIcon")
     {
-        sendUIResult(request["id"].asInt(), request["method"].asString());
+        sendResult(id,"SetAppIcon");
     }
     else if(method == "UI.GetSupportedLanguages")
     {
-        getSupportedLanguages(request["id"].asInt());
+        sendResult(id,"GetSupportedLanguages");
     }
     else if(method == "UI.GetLanguage")
     {
-        getLanguage(request["id"].asInt());
+        sendResult(id,"GetLanguage");
     }
     else if(method == "UI.GetCapabilities")
     {
-        getCapabilities(request["id"].asInt());
+        sendResult(id,"GetCapabilities");
     }
     else if(method == "UI.IsReady")
     {
-        isReady(request["id"].asInt());
+        sendResult(id,"IsReady");
     }
     else if(method == "UI.ClosePopUp")
     {
-        closePopUp(request["id"].asInt());
+        sendResult(id,"ClosePopUp");
     }
     else if(method == "UI.ShowVrHelp")
     {
-        sendUIResult(request["id"].asInt(), request["method"].asString());
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"ShowVrHelp",result);
+    }
+    else if (method == "UI.Alert")
+    {
+        m_pCallback->onRequest(request);
+
+        Json::Value params;
+        params["systemContext"] = "ALERT";
+        sendNotification("UI.OnSystemContext",params);
+    }
+    else if(method == "UI.Show")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"Show",result);
+    }
+    else if(method=="UI.ScrollableMessage")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"ScrollableMessage",result);
+    }
+    else if(method == "UI.AddCommand")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"AddCommand",result);
+    }
+    else if(method == "UI.DeleteCommand")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"DeleteCommand",result);
+    }
+    else if(method == "UI.AddSubMenu")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"AddSubMenu",result);
+    }
+    else if(method == "UI.DeleteSubMenu")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"DeleteSubMenu",result);
+    }
+    else if(method == "UI.PerformInteraction")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"PerformInteraction",result);
+    }
+    else if(method == "UI.SetMediaClockTimer")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"SetMediaClockTimer",result);
+    }
+    else if(method == "UI.PerformAudioPassThru")
+    {
+        m_pCallback->onRequest(request);
+        sendNotification("UI.PerformAudioPassThru",startRecordingNotify(request));
+    }
+    else if(method == "UI.EndAudioPassThru")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"EndAudioPassThru",result);
     }
     else
     {
-        if (method == "UI.Alert")
-        {
-            onSystemContext("ALERT");
-        }
-        else if(method == "UI.Show")
-        {
-            sendUIResult(request["id"].asInt(), request["method"].asString());
-        }
-        else if(method == "UI.AddCommand")
-        {
-            sendUIResult(request["id"].asInt(), request["method"].asString());
-        }
-        else if(method == "UI.DeleteCommand")
-        {
-            sendUIResult(request["id"].asInt(), request["method"].asString());
-        }
-        else if(method == "UI.AddSubMenu")
-        {
-            sendUIResult(request["id"].asInt(), request["method"].asString());
-        }
-        else if(method == "UI.DeleteSubMenu")
-        {
-            sendUIResult(request["id"].asInt(), request["method"].asString());
-        }
-        else if(method == "UI.PerformInteraction")
-        {
-            //sendUIResult(request["id"].asInt(), request["method"].asString());
-        }
-        else if(method == "UI.SetMediaClockTimer")
-        {
-            sendMediaClockTimerResponse(request["id"].asInt());
-        }
-        else if(method == "UI.PerformAudioPassThru")
-        {
-            startRecording(request);
-        }
-        else if(method == "UI.EndAudioPassThru")
-        {
-            sendUIResult(request["id"].asInt(), request["method"].asString());
-        }
-        m_pCallback->onRequest(request);
+        Channel::onRequest(request);
     }
 }
 
 
-void uiClient::sendUIResult(int id, std::string method)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = method;
-
-    root["result"] = result;
-    SendJson(root);
-}
-
-void uiClient::sendMediaClockTimerResponse(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "UI.SetMediaClockTimer";
-
-    root["result"] = result;
-    SendJson(root);
-}
-
-void uiClient::getSupportedLanguages(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "UI.GetSupportedLanguages";
-    result["languages"] = m_StaticConfigJson["sdlLanguagesList"];
-
-    root["result"] = result;
-    SendJson(root);
-}
-
-void uiClient::getLanguage(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "UI.GetLanguage";
-    result["languages"] = m_StaticConfigJson["hmiUILanguage"];
-
-    root["result"] = result;
-    SendJson(root);
-}
-
-void uiClient::getCapabilities(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "UI.GetCapabilities";
-
-    m_StaticConfigJson["uiGetCapabilitiesResult"]["displayCapabilities"]["screenParams"]["resolution"]["resolutionWidth"]=ui_res_width;
-    m_StaticConfigJson["uiGetCapabilitiesResult"]["displayCapabilities"]["screenParams"]["resolution"]["resolutionHeight"]=ui_res_height;
-    root["result"] = m_StaticConfigJson["uiGetCapabilitiesResult"];
-
-    SendJson(root);
-}
-
-void uiClient::isReady(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "UI.IsReady";
-    result["available"] = true;
-
-    root["result"] = result;
-    SendJson(root);
-}
-
-void uiClient::closePopUp(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "UI.ClosePopUp";
-
-    root["result"] = result;
-    SendJson(root);
-}
-
 void uiClient::onSystemContext(std::string systemContext)
 {
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["method"] = "UI.OnSystemContext";
-
     params["systemContext"] = systemContext;
-
-    root["params"] = params;
-    SendJson(root);
+    sendNotification("UI.OnSystemContext",params);
 }
 
-void uiClient::startRecording(Json::Value request)
+
+Json::Value uiClient::startRecordingNotify(Json::Value &request)
 {
     Json::Value request_params;
-    Json::Value root;
     Json::Value params;
     request_params = request["params"];
     if(request_params.isMember("samplingRate")){
@@ -274,8 +177,5 @@ void uiClient::startRecording(Json::Value request)
     params["audioPassThruType"] = "RECORD_SEND";
     params["saveAudioPassThruFile"] = "-";
     params["SendAUduiPassThruFile"] = "-";
-    root["jsonrpc"] = "2.0";
-    root["method"] = "PerformAudioPassThruStart";
-    root["params"] = params;
-    SendJson(root);
+    return params;
 }

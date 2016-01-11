@@ -5,9 +5,8 @@
 #include <string>
 #include "json/json.h"
 
-baseCommunicationClient::baseCommunicationClient() : Channel("BasicCommunication")
+baseCommunicationClient::baseCommunicationClient() : Channel(500,"BasicCommunication")
 {
-    m_iIDStart = 600;
 }
 
 baseCommunicationClient::~baseCommunicationClient()
@@ -21,7 +20,7 @@ void baseCommunicationClient::onRegistered()
 	SubscribeToNotification("BasicCommunication.OnAppUnregistered");
 	SubscribeToNotification("BasicCommunication.PlayTone");
 	SubscribeToNotification("BasicCommunication.SDLLog");
-    onReady();
+    sendNotification("BasicCommunication.OnReady");
 }
 
 void baseCommunicationClient::onUnregistered()
@@ -32,190 +31,66 @@ void baseCommunicationClient::onUnregistered()
 	UnsubscribeFromNotification("BasicCommunication.SDLLog");
 }
 
-void baseCommunicationClient::onReady()
-{
-    Json::Value root;
 
-    root["jsonrpc"] = "2.0";
-    root["method"] = "BasicCommunication.OnReady";
 
-    SendJson(root);
-}
-
-void baseCommunicationClient::onRequest(Json::Value request)
+void baseCommunicationClient::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
-    
+    int  id= request["id"].asInt();
     if (method == "BasicCommunication.MixingAudioSupported")
     {
-        mixingAudioSupported();
+        sendResult(id,"MixingAudioSupported");
     }
     else if (method == "BasicCommunication.AllowAllApps")
     {
-        allowAllApps();
+        sendResult(id,"AllowAllApps");
     }
     else if (method == "BasicCommunication.AllowApp")
     {
-        allowApp();
+        sendResult(id,"AllowApp");
     }
     else if (method == "BasicCommunication.AllowDeviceToConnect")
     {
-        allowDeviceToConnect(request["id"].asInt());
+        sendResult(id,"AllowDeviceToConnect");
     }
     else if (method == "BasicCommunication.UpdateAppList")
     {
-        sendBCResult(request["id"].asInt(), method);
+        sendResult(id,"UpdateAppList");
     }
     else if (method == "BasicCommunication.UpdateDeviceList")
     {
-        sendBCResult(request["id"].asInt(), method);
+        sendResult(id,"UpdateDeviceList");
     }
     else if (method == "BasicCommunication.ActivateApp")
     {
-        sendActiveteApp(request["id"].asInt());
+        sendResult(id,"ActivateApp");
     }
     else if (method == "BasicCommunication.IsReady")
     {
-        isReady(request["id"].asInt());
+        sendResult(id,"IsReady");
     }
     else if (method == "BasicCommunication.GetSystemInfo")
     {
-        sendSystemInfo(request["id"].asInt());
+        sendResult(id,"GetSystemInfo");
     }
     else
     {
-		m_pCallback->onRequest(request);
+        Channel::onRequest(request);
     }
 }
 
-void baseCommunicationClient::sendSystemInfo(int id)
+void baseCommunicationClient::onNotification(Json::Value &jsonObj)
 {
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "BasicCommunication.GetSystemInfo";
-    result["ccpu_version"] = "ccpu_version";
-    result["language"] = "EN-US";
-    result["wersContryCode"] = "wersContryCode";
-
-    root["result"] = result;
-    SendJson(root);
-}
-
-void baseCommunicationClient::isReady(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "BasicCommunication.IsReady";
-    result["available"] = true;
-
-    root["result"] = result;
-    SendJson(root);
-}
-
-void baseCommunicationClient::mixingAudioSupported()
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = m_iIDStart;
-
-    result["code"] = 0;
-    result["method"] = "BasicCommunication.MixingAudioSupported";
-    result["attenuatedSupported"] = true;
-
-    root["result"] = result;
-	SendJson(root);
+    std::string method = jsonObj["method"].asString();
+    if(method == "BasicCommunication.SDLLog"){
+//        int app_id=jsonObj["app_id"].asInt();
+//        int correlation_id=jsonObj["correlation_id"].asInt();
+//        std::string function=jsonObj["function"].asString();
+//        Json::Value data=jsonObj["data"];
+    }
+    else{
+        Channel::onNotification(jsonObj);
+    }
 }
 
 
-void baseCommunicationClient::allowAllApps()
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = m_iIDStart;
-
-    result["code"] = 0;
-    result["method"] = "BasicCommunication.AllowAllApps";
-    result["allowed"] = true;
-
-    root["result"] = result;
-	SendJson(root);
-}
-
-
-void baseCommunicationClient::allowApp()
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = m_iIDStart;
-
-    result["code"] = 0;
-    result["method"] = "BasicCommunication.AllowApp";
-    result["allowed"] = true;
-
-    root["result"] = result;
-	SendJson(root);
-}
-
-void baseCommunicationClient::allowDeviceToConnect(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "BasicCommunication.AllowDeviceToConnect";
-    result["allow"] = true;
-
-    root["result"] = result;
-	SendJson(root);
-}
-
-
-
-void baseCommunicationClient::sendBCResult(int id, std::string method)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = method;
-
-    root["result"] = result;
-	SendJson(root);
-}
-
-void baseCommunicationClient::sendActiveteApp(int id)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-
-    result["code"] = 0;
-    result["method"] = "BasicCommunication.ActivateApp";
-
-    root["result"] = result;
-	SendJson(root);
-}

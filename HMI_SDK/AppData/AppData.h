@@ -41,7 +41,7 @@ public:
     void OnVRStartRecord();
     void OnVRCancelRecord();
 
-    void recvFromServer(Json::Value);
+    Result recvFromServer(Json::Value);
 
 private:
     UIInterface *m_pUIManager;

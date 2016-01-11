@@ -78,7 +78,7 @@ void CScrollMsg::InitLayout()
     m_editText->setAttribute(Qt::WA_TranslucentBackground, true);
     //m_editText->setReadOnly(true); //设置不可编辑
     m_editText->setFrameShape(QFrame::NoFrame); //设置无边框
-    m_editText->setStyleSheet("border:1px;background-color:white;color:grey;font:36px \"Liberation Serif\";");
+    m_editText->setStyleSheet("border:1px;background-color:white;color:grey;font:75px \"Liberation Serif\";");
 //    m_editText->verticalScrollBar()->setStyleSheet(
 //                "QScrollBar{background:#3F4657; width: 20px;}"
 //                "QScrollBar::handle{background:#6C717D;}"

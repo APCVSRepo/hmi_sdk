@@ -338,7 +338,7 @@ void Channel::onError(std::string error)
 
 void Channel::sendResult(int id, std::string ref,Result code)
 {
-    if(code != RESULT_USER_WAIT)
+    if(code == RESULT_USER_WAIT)
         return;
     Json::Value result;
     if(m_StaticResult[ref].isMember("result"))

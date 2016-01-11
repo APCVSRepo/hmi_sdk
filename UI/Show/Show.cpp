@@ -225,9 +225,7 @@ void Show::setMediaTrack(bool isShow, QString text)
         m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*2.0/4.0);
         m_scrollBar.init(4,m_listWidget.height());
 
-        QFontMetrics qfm(m_lab_mediaTrack.font());
-        QString strText = qfm.elidedText(text,Qt::ElideRight,ui_app_width / 2.0);
-        m_lab_mediaTrack.setText(strText);
+        SetEdlidedText(&m_lab_mediaTrack,text,ui_app_width / 2.0);
     }
     else{
         m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);
@@ -242,8 +240,7 @@ void Show::setMediaClock(bool isShow, QString text)
         m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*2.0/4.0);
         m_scrollBar.init(4,m_listWidget.height());
 
-        QFontMetrics qfm(m_lab_mediaClock.font());
-        m_lab_mediaClock.setText(qfm.elidedText(text,Qt::ElideRight,ui_app_width / 2.0));
+        SetEdlidedText(&m_lab_mediaClock,text,ui_app_width / 2.0);
     }
     else{
         m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);

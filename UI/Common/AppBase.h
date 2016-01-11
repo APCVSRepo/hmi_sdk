@@ -13,6 +13,7 @@ public:
     explicit AppBase(AppListInterface * pList, QWidget *parent = 0);
     ~AppBase();
 
+    static void SetEdlidedText(QLabel *pLabel,QString strText,int iWidth);
 protected:
     virtual void setTitle(QString title){((MainMenu*)parent()->parent()->parent())->SetTitle(title);}
 

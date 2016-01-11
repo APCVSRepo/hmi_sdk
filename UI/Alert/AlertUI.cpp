@@ -141,8 +141,7 @@ void CAlertUI::setTimeOut(int duration)
 
 void CAlertUI::setAlertText(int textIdx, QString text)
 {
-    QFontMetrics qfm(m_pLabelText[textIdx]->font());
-    m_pLabelText[textIdx]->setText(qfm.elidedText(text,Qt::ElideRight,width()));
+    SetEdlidedText(m_pLabelText[textIdx],text,width());
 }
 
 void CAlertUI::setBtnText(int btnIdx, QString text, bool highLight)

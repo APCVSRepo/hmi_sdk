@@ -124,7 +124,7 @@ Json::Value Channel::ReadSpecifyJson(const char* fileName)
     if(ifs.is_open()){
         Json::Reader reader;
         if(!reader.parse(ifs,result,false)){
-            LOGE("staticResult.json read error");
+            LOGE("%s read error",fileName);
         }
         ifs.close();
     }
@@ -338,7 +338,7 @@ void Channel::onError(std::string error)
 
 void Channel::sendResult(int id, std::string ref,Result code)
 {
-    if(result != RESULT_USER_WAIT)
+    if(code != RESULT_USER_WAIT)
         return;
     Json::Value result;
     if(m_StaticResult[ref].isMember("result"))

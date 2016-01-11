@@ -41,7 +41,7 @@ public:
     void OnVRStartRecord();
     void OnVRCancelRecord();
 
-    void recvFromServer(Json::Value);
+    Result recvFromServer(Json::Value);
 
     // 增加一个退出app的指令
     void addExitAppCommand();

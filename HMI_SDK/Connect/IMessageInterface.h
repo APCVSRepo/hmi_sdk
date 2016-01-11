@@ -3,13 +3,13 @@
 
 #include "json/json.h"
 #include <string>
-
+#include "AppData/AppCommon.h"
 //#define _D(msg, args...) //fprintf(stderr,"[lk]-%s-%s():%d: " msg, __FILE__, __FUNCTION__, __LINE__, ##args)
 
 class IMessageInterface
 {
 public:
-    virtual void onRequest(Json::Value) = 0;
+    virtual Result onRequest(Json::Value) = 0;
     virtual void onNotification(Json::Value) = 0;
     virtual void onResult(Json::Value) = 0;
     virtual void onRawData(void * p, int iLength) = 0;

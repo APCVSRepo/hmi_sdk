@@ -56,20 +56,19 @@ bool JsonBuffer::getJsonFromBuffer(char * pData, int iLength, Json::Value& outpu
 }
 
 
-Channel::Channel(std::string Channelname)
+
+Json::Value g_StaticConfigJson;
+Json::Value g_VehicleInfoJson;
+Json::Value g_StaticResultJson;
+
+Channel::Channel(int startId,std::string Channelname)
 {
-    m_iIDStart = -1;
-    m_iRequestId = -1;
-
-    m_iAppID = -1;
-
-    m_iRegisterRequestId = -1;
-    m_iUnregisterRequestId = -1;
-    m_iIDRange = 1000;
-
+    m_iIDStart = -1;//register start
+    m_iIDRegRequest = startId;//start
+    m_iIDUnRegRequest = -1;
     m_sComponentName = Channelname;
-
-    ReadConfigure();
+    ReadConfigJson();
+    m_StaticResult=g_StaticResultJson[m_sComponentName];
 }
 
 Channel::~Channel()
@@ -77,14 +76,24 @@ Channel::~Channel()
 
 }
 
-void Channel::ReadConfigure()
+void Channel::ReadConfigJson()
 {
-    // init staticConfigDB
-    std::ifstream ifs;
-    char szPath[1024];
+    if(g_StaticConfigJson.isNull())
+        g_StaticConfigJson = ReadSpecifyJson("staticConfigDB.json");
+    if(g_StaticResultJson.isNull())
+        g_StaticResultJson = ReadSpecifyJson("staticResult.json");
+    if(g_VehicleInfoJson.isNull())
+        g_VehicleInfoJson = ReadSpecifyJson("VehicleInfo.json");
+}
+
+Json::Value Channel::ReadSpecifyJson(const char* fileName)
+{
+    char szPath[120];
+    char szResult[120];
+    Json::Value result;
 #ifdef WIN32
 #ifdef WINCE
-    wchar_t wszPath[1024];
+    wchar_t wszPath[MAX_PATH];
     GetModuleFileName( NULL, wszPath, MAX_PATH );
     wchar_t *lpwszSplit = wcsrchr(wszPath, '\\');
     *lpwszSplit = 0;
@@ -92,58 +101,119 @@ void Channel::ReadConfigure()
     memset(szPath, 0, sizeof(szPath));
     WideCharToMultiByte(CP_ACP, 0, wszPath, -1, szPath, nLength, NULL, NULL);
 #else
-    _getcwd(szPath,1024);
+    _getcwd(szPath,120);
 #endif
 #elif ANDROID
     sprintf(szPath,"%s",CONFIG_DIR);
 #else
-    getcwd(szPath,1024);
+    getcwd(szPath,120);
 #endif
-    char szDB[1024]={0};
+
 #ifdef WIN32
-    ::sprintf(szDB, "%s\\%s", szPath, "Config\\staticConfigDB.json");//..\\hmi-sdk-plus\\HMISDK\\
-     LOGD("szDB=%s\n",szDB);
+    ::sprintf(szResult, "%s\\Config\\%s", szPath, fileName);
 #elif ANDROID
-    ::sprintf(szDB, "%s/%s", szPath, "staticConfigDB.json");
-     LOGD("szDB=%s\n",szDB);
+    ::sprintf(szResult, "%s/%s", szPath,fileName);
 #else
-    ::sprintf(szDB, "%s/%s", szPath, "Config/staticConfigDB.json");
-     LOGD("szDB=%s\n",szDB);
+    ::sprintf(szResult, "%s/%s", szPath, fileName);
 #endif
+    LOGD("szResult=%s",szResult);
 
-    std::cout << szDB <<"\n";
-    std::cout<<szPath<<"\n";
-    ifs.open(szDB);
-    assert(ifs.is_open());
+    //staticResult
+    std::ifstream ifs;
+    ifs.open(szResult);
+    if(ifs.is_open()){
+        Json::Reader reader;
+        if(!reader.parse(ifs,result,false)){
+            LOGE("staticResult.json read error");
+        }
+        ifs.close();
+    }
+    else{
+        LOGE("%s can't open",szResult);
+    }
+    return result;
+}
 
-    Json::Reader reader;
-
-    if (!reader.parse(ifs, m_StaticConfigJson, false))
+void Channel::onReceiveData(void * pData, int iLength)
+{
+    Json::Value rpc;
+    while (m_JsonBuffer.getJsonFromBuffer((char*)pData, iLength, rpc))
     {
-        std::cout << "staticConfigJson error.\n";
+        onMessage(rpc);
+        pData = 0;
+        iLength = 0;
+    }
+}
+
+void Channel::onMessage(Json::Value &jsonObj)
+{
+    LOGI("%s:receive:%s",m_sComponentName.c_str(),jsonObj.toStyledString().data());
+    bool run = false;
+    // id
+    if (jsonObj.isMember("id"))
+    {
+        int msgID = jsonObj["id"].asInt();
+        if(jsonObj.isMember("result")){
+            if(msgID==m_iIDRegRequest){
+                run=true;
+                m_iIDStart = jsonObj["result"].asInt();
+                m_iGenerateId= m_iIDStart;
+                onRegistered();
+
+            }
+            else if(msgID == m_iIDUnRegRequest){
+                run=true;
+                m_iIDUnRegRequest=jsonObj["result"].asInt();
+                onUnregistered();
+            }
+            else
+            {
+                run=true;
+                onResult(jsonObj);
+            }
+        }
+        else if(jsonObj.isMember("error")){
+            run=true;
+            onError(jsonObj["error"].asString());
+        }
+        else{
+            run=true;
+            onRequest(jsonObj);
+        }
     }
     else
     {
-        m_ResultCodeJson = m_StaticConfigJson["resultCode"];
+        run=true;
+        onNotification(jsonObj);
     }
-    ifs.close();
 
+    if(!run){
+        LOGE("NOT USED");
+    }
+}
+
+
+void Channel::SetStaticResult(std::string attri,std::string ref,Json::Value value)
+{
+    if(m_StaticResult.isMember(attri))
+       m_StaticResult[attri][ref]=value;
+}
+
+int Channel::RegisterReqId()
+{
+    return m_iIDRegRequest;
+}
+
+int Channel::UnRegisterRegId()
+{
+    return m_iIDUnRegRequest;
 }
 
 void Channel::unRegisterComponent()
 {
-    m_iRegisterRequestId = m_iIDStart;
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = m_iRegisterRequestId;
-    root["method"] = "MB.unregisterComponent";
-
     params["componentName"] = m_sComponentName;
-
-    root["params"] = params;
-    SendJson(root);
+    sendRequest(m_iIDUnRegRequest,"MB.unregisterComponent",params);
 }
 
 void Channel::SetCallback(IMessageInterface * pCallback)
@@ -151,7 +221,7 @@ void Channel::SetCallback(IMessageInterface * pCallback)
     m_pCallback = pCallback;
 }
 
-void Channel::setSocketManager(ISocketManager * pSocketManager, void * pHandle)
+void Channel::setSocketManager(ISocketManager * pSocketManager,void *pHandle)
 {
     m_pSocketManager = pSocketManager;
     m_pHandle = pHandle;
@@ -162,19 +232,9 @@ std::string	Channel::getChannelName()
     return m_sComponentName;
 }
 
-void Channel::onReceiveData(void * pData, int iLength)
-{
-    Json::Value RPC;
-    while (m_JsonBuffer.getJsonFromBuffer((char*)pData, iLength, RPC))
-    {
-        onMessage(RPC);
-        pData = 0;
-        iLength = 0;
-    }
-}
 
-void Channel::sendError(int resultCode, int id, std::string method, std::string message){
-    Json::Value root;
+void Channel::sendError(int resultCode, int id, std::string method, std::string message)
+{
     Json::Value error;
     Json::Value data;
 
@@ -182,100 +242,25 @@ void Channel::sendError(int resultCode, int id, std::string method, std::string 
     error["code"] = resultCode;
     error["data"] = data;
     error["message"] = message;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = id;
-    root["error"] = error;
-
-    SendJson(root);
+    sendError(id,error);
 }
 
-void Channel::SendJson(Json::Value data)
+void Channel::SendJson(Json::Value &data)
 {
     LOGI("---send:%s",data.toStyledString().c_str());
     Json::FastWriter writer;
     std::string json_file = writer.write(data);
     const char * pStr = json_file.c_str();
-    m_pSocketManager->SendData(m_pHandle, (void *)pStr, json_file.length());
+    LOGI("send:%s",pStr);
+    m_pSocketManager->SendData(m_pHandle,(void *)pStr, json_file.length());
 }
 
-void Channel::onMessage(Json::Value jsonObj)
-{
-    LOGI("onMessage:%s",jsonObj.toStyledString().data());
-    std::string _methon = "";
-    if (jsonObj.isMember("method") && jsonObj["method"].asString() == "BasicCommunication.SDLLog")
-    {
-        _methon = jsonObj["method"].asString();
-    }
-
-    if (jsonObj.isMember("params"))
-    {
-        if (jsonObj["params"].isMember("appID"))
-        {
-            m_iAppID = jsonObj["params"]["appID"].asInt();
-        }
-    }
-    // id
-    if (jsonObj.isMember("id"))
-    {
-        if (jsonObj["id"].asInt() == m_iRegisterRequestId)
-        {
-            if (!jsonObj.isMember("error"))
-            {
-                if (jsonObj.isMember("result"))
-                {
-                    m_iRequestId = jsonObj["result"].asInt();
-                    m_iIDStart = jsonObj["result"].asInt();
-                    onRegistered();
-                }
-            }
-        }
-        // handle component unregistration
-        else if (jsonObj["id"].asInt() == m_iUnregisterRequestId)
-        {
-            if (!jsonObj.isMember("error"))
-            {
-                onUnregistered();
-            }
-        }
-        // handle result, error, notification, requests
-        else
-        {
-            if (jsonObj.isMember("result"))
-            {
-                onResult(jsonObj);
-            }
-            else if (jsonObj.isMember("error"))
-            {
-                onError(jsonObj["error"].asString());
-            }
-            else
-            {
-                onRequest(jsonObj);
-            }
-        }
-    }
-    else
-    {
-        onNotification(jsonObj);
-    }
-}
 
 void Channel::onOpen()
 {
-    m_iRegisterRequestId = m_iIDStart;
-
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = m_iIDStart;
-    root["method"] = "MB.registerComponent";
-
     params["componentName"] = m_sComponentName;
-
-    root["params"] = params;
-    SendJson(root);
+    sendRequest(m_iIDRegRequest,"MB.registerComponent",params);
 }
 
 void Channel::onRegistered()
@@ -287,25 +272,58 @@ void Channel::onUnregistered()
 
 }
 
-void Channel::GenerateId()
+int Channel::GenerateId()
 {
-    m_iRequestId = m_iRequestId + 1;
-    if (m_iRequestId >= m_iIDStart + m_iIDRange)
+    ++m_iGenerateId;
+    if (m_iGenerateId >= m_iIDStart + 1000)
     {
-        m_iRequestId = m_iIDStart;
+        m_iGenerateId = m_iIDStart;
+    }
+    return m_iGenerateId;
+}
+
+std::string Channel::MethodName(std::string _mode,Json::Value _method)
+{
+    std::string mode="";
+    std::string method="";
+    std::string mms=_method.asString();
+    int pos = mms.find_first_of('.');
+    if(std::string::npos== pos){
+        LOGE("method:find error,%d",pos);
+        return method;
+    }
+    mode = mms.erase(pos);
+    if(mode == _mode){
+      method = mms.erase(0,pos+1);
+      LOGI("find method:%s",method.c_str());
+    }
+    else{
+        LOGE("mode(%s) is not match mode(%s)",mode.c_str(),_mode.c_str());
+    }
+    return method;
+}
+
+
+
+void Channel::onRequest(Json::Value &request)
+{
+    int  id = request["id"].asInt();
+    Json::Value method =request["method"];
+    std::string ref= MethodName(getChannelName(),method);
+    if(m_StaticResult.isMember(ref)){
+        sendResult(id,ref);
+    }
+    else
+    {
+      LOGE("%s.%s NOT use",getChannelName().c_str(),ref.c_str());
     }
 }
 
-void Channel::onRequest(Json::Value data)
-{
-    m_pCallback->onRequest(data);
-}
-
-void Channel::onNotification(Json::Value data)
+void Channel::onNotification(Json::Value &data)
 {
     m_pCallback->onNotification(data);
 }
-void Channel::onResult(Json::Value data)
+void Channel::onResult(Json::Value &data)
 {
     m_pCallback->onResult(data);
 }
@@ -319,34 +337,83 @@ void Channel::onError(std::string error)
     m_pCallback->onError(error);
 }
 
+void Channel::sendResult(int id, std::string ref,Result code)
+{
+    if(result != RESULT_USER_WAIT)
+        return;
+    Json::Value result;
+    if(m_StaticResult[ref].isMember("result"))
+        result = m_StaticResult[ref]["result"];
+    else
+        result = m_StaticResult[ref];
+    result["code"]=code;
+    sendResult(id,result);
+}
+
+void Channel::sendError(int id, std::string ref,std::string msg,Result code)
+{
+    Json::Value error;
+    if(m_StaticResult[ref].isMember("error")){
+        error = m_StaticResult[ref]["error"];
+        error["code"]=code;
+        error["message"]=msg;
+        sendError(id,error);
+    }
+    else{
+        sendError(code,id,m_sComponentName+"."+ref,msg);
+    }
+}
+
+void Channel::sendResult(int id, Json::Value &result)
+{
+    Json::Value root;
+    root["id"]=id;
+    root["jsonrpc"]="2.0";
+    root["result"]=result;
+    SendJson(root);
+}
+
+void Channel::sendRequest(int id,const std::string mothod,const Json::Value &params)
+{
+    Json::Value root;
+    root["id"]=id;
+    root["jsonrpc"]="2.0";
+    root["method"]=mothod;
+    if(!params.isNull())
+       root["params"]=params;
+    SendJson(root);
+}
+
+void Channel::sendError(int id, Json::Value &error)
+{
+    Json::Value root;
+    root["jsonrpc"] = "2.0";
+    root["id"] = id;
+    root["error"] = error;
+
+    SendJson(root);
+}
+
+void Channel::sendNotification(const std::string mothod, const Json::Value &params)
+{
+    Json::Value root;
+    root["jsonrpc"]="2.0";
+    root["method"]=mothod;
+    if(!params.isNull())
+       root["params"]=params;
+    SendJson(root);
+}
+
 void Channel::SubscribeToNotification(std::string notification)
 {
-    GenerateId();
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = m_iRequestId;
-    root["method"] = "MB.subscribeTo";
-
     params["propertyName"] = notification;
-
-    root["params"] = params;
-    SendJson(root);
+    sendRequest(GenerateId(),"MB.subscribeTo",params);
 }
 
 void Channel::UnsubscribeFromNotification(std::string notification)
 {
-    GenerateId();
-    Json::Value root;
     Json::Value params;
-
-    root["jsonrpc"] = "2.0";
-    root["id"] = m_iRequestId;
-    root["method"] = "MB.unsubscribeTo";
-
     params["propertyName"] = notification;
-
-    root["params"] = params;
-    SendJson(root);
+    sendRequest(GenerateId(),"MB.unsubscribeTo",params);
 }

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <vector>
 #include "Include/global_first.h"
+#include "AppCommon.h"
 
 typedef struct command{
     int i_appID;

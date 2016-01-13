@@ -7,7 +7,6 @@
 class AppItemWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     AppItemWidget(int w,int h,QWidget *parent = 0);
     ~AppItemWidget();
@@ -15,14 +14,15 @@ public:
     // 显示app图标
     void SetIcon(QString strIconPath);
     void setText(QString text);
-    void setRowNo(int rowNo);
-    void flush(int currentNo);
+
+    void setStatus(bool status);
 
     void setIsMenu(bool isMenu);
     bool getIsMenu();
 
-private slots:
+    void setFixedHeight(int h);
 
+private slots:
 
 private:
 
@@ -32,10 +32,7 @@ private:
     // 显示app图标
     QLabel *m_pAppIconLab;
 
-    int m_i_rowNo;
-
     bool m_b_isMenu;
-
 };
 
 

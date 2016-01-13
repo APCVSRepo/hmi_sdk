@@ -3,7 +3,7 @@
 
 #include "UI/Common/AppBase.h"
 #include "UI/Common/ScrollBar.h"
-#include "UI/Common/AppItemWidget.h"
+#include "UI/Common/AppListWidget.h"
 
 #define PERFORMINTERACTION_TIMEOUT      10
 #define PERFORMINTERACTION_CHOICE       0
@@ -28,10 +28,7 @@ signals:
     void menuClicked(int code, int choiceID);
 
 public slots:
-    void listWidgetClickedSlots(QModelIndex);
     void listWidgetDoubleClickedSlots(QModelIndex);
-    void upArrowSlots();
-    void downArrowSlots();
     void timeHideOutSlots();
     void menuClickedSlots(int code, int choiceID);
 
@@ -41,31 +38,13 @@ private:
     void setTimeOut(int duration);
 
 private:
-    ScrollBar m_scrollBar;
-    QListWidget m_listWidget;
+    AppListWidget *m_listWidget;
 
-    QVector <QListWidgetItem *> m_vec_listItem;
-    QVector <AppItemWidget *> m_vec_appItemWidget;
     QVector <SChoiceMenu > m_vec_choiceMenu;
     QVector <bool > m_vec_isMenu;
+	QTimer *m_timerHide;
 
-    int m_i_currentRow;
-    int m_i_totalRow;
-
-    int m_i_showRow;
-    bool m_b_downUp;
-
-    bool m_b_backIcon;
-
-    QTimer *m_timerHide;
-
-    // 清楚之前显示的列表项
-    void clearAllItem();
     void initLayout();
-    void hideBackIcon();
-    void showBackIcon();
-    void addListItemWidget(QString text, bool isMenu);
-    void flushAllItems(int currentNo);
     void flushListWidget();
 };
 

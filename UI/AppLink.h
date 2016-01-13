@@ -6,18 +6,26 @@
 #include "Common/ScrollBar.h"
 #include "Common/AppItemWidget.h"
 #include "AppData/AppListInterface.h"
+#include "Common/AppListWidget.h"
 
 typedef struct appListStruct
 {
-    QString str_appName;
-    int i_appID;
+    QString appName;
+    int  appID;
     QString strIconPath;
 
-    appListStruct():str_appName(""),i_appID(0),strIconPath("")
+    appListStruct():appName(""),appID(0),strIconPath("")
     {
 
     }
-}SAppList;
+}AppLinkItem;
+
+typedef enum
+{
+    APP_ID_FINDAPP=0,
+    APP_ID_APPSETTING,
+    APP_ID_MORE
+}APP_ID_MENU;
 
 class AppLink : public AppBase
 {
@@ -37,13 +45,7 @@ signals:
 
 private slots:
 
-    void listWidgetClickedSlots(QModelIndex);
     void listWidgetDoubleClickedSlots(QModelIndex);
-
-    void onScrollTo(int v);
-//    void upArrowSlots();
-//    void downArrowSlots();
-
     void inAppSlots(int appID);
     void findNewAppSlots();
 
@@ -56,25 +58,17 @@ private:
 private:
 
 //    QWidget m_scrollWidget;
-    ScrollBar m_scrollWidget;
-    QListWidget m_listWidget;
 
-    QVector <QListWidgetItem *> m_vec_listItem;
-    QVector <AppItemWidget *> m_vec_appItemWidget;
-    QVector <QString > m_vec_string;
-//    QMap <QString, QString> m_map_appNameID;
-    QVector <SAppList > m_vec_appList;
+    AppListWidget *m_listWidget;
 
-    int m_i_currentRow;
-    int m_i_totalRow;
-
-    int m_i_showRow;
-    bool m_b_downUp;
+    QVector<AppLinkItem>  m_appItems;
 
     void initLayout();
+/*
     void addListItemWidget(QString text);
     void addListItemWidget(QString text,QString strPath);
     void flushAllItems(int currentNo);
+*/
     void flushListWidget();
 };
 

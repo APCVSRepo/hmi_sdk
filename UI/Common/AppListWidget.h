@@ -17,6 +17,7 @@ public:
     static QString cssString();
 	void FlushAll();
     void AddListItemWidget(QString text,bool isMenu=true);
+    void AddListItemWidget(QString text,QString strIconPath,bool isMenu = true);
     void DelListItemWidget();
     void SetScrollParams(int page,int range);
     void ScrollToIndex(int index);

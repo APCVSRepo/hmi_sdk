@@ -131,7 +131,7 @@ void AppLink::flushListWidget()
     m_listWidget->DelListItemWidget();
     m_listWidget->SetScrollParams(4,m_appItems.count());
     for(int i=0;i<m_appItems.count();i++){
-        m_listWidget->AddListItemWidget(m_appItems.at(i).appName,true);
+        m_listWidget->AddListItemWidget(m_appItems.at(i).appName,m_appItems.at(i).strIconPath,true);
     }
 
 	m_listWidget->FlushAll();

@@ -26,6 +26,24 @@ void AppListWidget::FlushAll()
 	ItemSelect(0);
 }
 
+void AppListWidget::AddListItemWidget(QString text,QString strIconPath,bool isMenu)
+{
+    QListWidgetItem *item = new QListWidgetItem;
+    int w=width()-35;
+    int h=m_LineHeight;
+    item->setSizeHint(QSize(w,h));
+    item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
+    addItem(item);
+    AppItemWidget *itemWidget = new AppItemWidget(w,h,this);
+    // insertItem(index,itemWidget);
+    setItemWidget(item,itemWidget);
+
+    itemWidget->SetIcon(strIconPath);
+    itemWidget->setText(text);
+    itemWidget->setIsMenu(isMenu);
+    m_itemList.push_back(itemWidget);
+}
+
 void AppListWidget::AddListItemWidget(QString text,bool isMenu)
 {
     QListWidgetItem *item = new QListWidgetItem;

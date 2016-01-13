@@ -41,6 +41,7 @@ void vehicleInfoClient::onRequest(Json::Value &request)
     {
         Json::Value result;
         if(getVehicleData(request,result)){
+            sendResult(id, result);
         }
         else{
             sendError(id,result);
@@ -69,11 +70,9 @@ bool vehicleInfoClient::getVehicleData(Json::Value &message,Json::Value &result)
     Json::Value vehicle;
     Json::Value data;
     Json::Value params;
-    int id;
     bool ret = false;
 
     params = message["params"];
-    id = message["id"].asInt();
 
     vehicle = g_VehicleInfoJson["vehicle"];
 
@@ -96,7 +95,15 @@ bool vehicleInfoClient::getVehicleData(Json::Value &message,Json::Value &result)
     }
 
     if(ret){
-        SendGetVehicleDataResult(id, data);
+        Json::Value::Members mem = data.getMemberNames();
+        for (Json::Value::Members::iterator iter = mem.begin(); iter != mem.end(); iter++)
+        {
+            std::string infoitem = std::string(*iter);
+            result[infoitem] = data[infoitem];
+        }
+
+        result["code"] = 0;
+        result["method"] = "VehicleInfo.GetVehicleData";
     }
     else{
         result["message"] = "Params rpc, are not avaliable";
@@ -105,28 +112,6 @@ bool vehicleInfoClient::getVehicleData(Json::Value &message,Json::Value &result)
     }
 
     return ret;
-}
-
-
-void vehicleInfoClient::SendGetVehicleDataResult(int id, Json::Value data)
-{
-    Json::Value root;
-    Json::Value result;
-
-    root["id"] = id;
-    root["jsonrpc"] = "2.0";
-    Json::Value::Members mem = data.getMemberNames();
-    for (Json::Value::Members::iterator iter = mem.begin(); iter != mem.end(); iter++)
-    {
-            std::string infoitem = std::string(*iter);
-            result[infoitem] = data[infoitem];
-    }
-
-    result["code"] = 0;
-    result["method"] = "VehicleInfo.GetVehicleData";
-    root["result"] = result;
-
-    SendJson(root);
 }
 
 Json::Value vehicleInfoClient::vehicleInfoReadDIDResponse(Json::Value &request)

@@ -19,8 +19,6 @@ private:
     bool getVehicleData(Json::Value &,Json::Value &result);
     Json::Value vehicleInfoGetDTCsResponse(Json::Value &);
     Json::Value vehicleInfoReadDIDResponse(Json::Value &);
-    void SendGetVehicleDataResult(int id, Json::Value data);
-
 };
 
 #endif // VEHICLEINFOCLIENT_H

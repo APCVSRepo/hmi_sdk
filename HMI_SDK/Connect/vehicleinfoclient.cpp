@@ -1,4 +1,4 @@
-//#include <global_first.h>
+﻿//#include <global_first.h>
 #include <Connect/vehicleinfoclient.h>
 
 #include <iostream>
@@ -143,19 +143,27 @@ void vehicleInfoClient::getVehicleData(Json::Value message)
         vehicle = VehicleInfoJsonObj["vehicle"];
     }
     ifs.close();
-    Json::Value::Members mem = message.getMemberNames();
+
+    result = false;
+	Json::Value::Members mem = params.getMemberNames();
     for (Json::Value::Members::iterator iter = mem.begin(); iter != mem.end(); iter++)
     {
-        if(std::string(*iter) != "appID" && std::string(*iter) != "request"){
-            if(message[*iter].type() != Json::nullValue){
-                if(vehicle.isMember(*iter)){
-                    data[*iter] = vehicle[*iter];
-                }else{
-                    result = false;
-                }
+		std::string infoitem = std::string(*iter);
+		if (infoitem != "appID" && infoitem != "request")
+		{
+			Json::Value require = params[infoitem];
+			if (!require.isBool())
+				continue;
+			if (!require.asBool())
+				continue;
+
+			if (vehicle.isMember(infoitem)){
+				data[infoitem] = vehicle[infoitem];
+                result = true;
             }
         }
     }
+
     if(result){
         sendGetVehicleDataResut(id, data);
     }else{
@@ -179,6 +187,17 @@ void vehicleInfoClient::sendGetVehicleDataError(int id, Json::Value data)
     root["error"] = error;
     SendJson(root);
 }
+/*
+Message received : {"id":27, "jsonrpc" : "2.0",
+"method" : "VehicleInfo.GetVehicleData", "params" : {"appID":18467, "gps" : true}}
+
+{"jsonrpc":"2.0", "id" : 27, "result" : {"gps":{"longitudeDegrees":42, "latitudeDegrees" : -83, "utcYear" : 2013,
+"utcMonth" : 2, "utcDay" : 14, "utcHours" : 13, "utcMinutes" : 16, "utcSeconds" : 54, "compassDirection" : "SOUTHWEST",
+"pdop" : 8, "hdop" : 5, "vdop" : 3, "actual" : false, "satellites" : 8, "dimension" : "2D", "altitude" : 7, "
+heading" : 173, "speed" : 2}, "code" : 0, "method" : "VehicleInfo.GetVehicleData"}
+}
+
+*/
 
 void vehicleInfoClient::sendGetVehicleDataResut(int id, Json::Value data)
 {
@@ -188,11 +207,17 @@ void vehicleInfoClient::sendGetVehicleDataResut(int id, Json::Value data)
     root["id"] = id;
     root["jsonrpc"] = "2.0";
 
-    result["code"] = 0;
-    result["date"] = data;
-    result["method"] = "VehicleInfo.GetVehicleData";
+	Json::Value::Members mem = data.getMemberNames();
+	for (Json::Value::Members::iterator iter = mem.begin(); iter != mem.end(); iter++)
+	{
+		std::string infoitem = std::string(*iter);
+		result[infoitem] = data[infoitem];
+	}
 
-    root["error"] = result;
+	result["code"] = 0;
+	result["method"] = "VehicleInfo.GetVehicleData";
+    root["result"] = result;
+
     SendJson(root);
 }
 

@@ -1,4 +1,5 @@
 #include "AppItemWidget.h"
+#include <QUrl>
 
 AppItemWidget::AppItemWidget(int w,int h,QWidget *parent)
     : QWidget(parent)
@@ -10,11 +11,13 @@ AppItemWidget::AppItemWidget(int w,int h,QWidget *parent)
     m_lab_caseTitle = new QLabel;
     m_lab_icon = new QLabel;
     m_lab_border = new QLabel;
+    m_pAppIconLab = new QLabel;
 
     QHBoxLayout *mLayout = new QHBoxLayout(this);
-    mLayout->addStretch(10);
+    mLayout->addWidget(m_pAppIconLab,10,Qt::AlignLeft);
+    //mLayout->addStretch(10);
     mLayout->addWidget(m_lab_caseTitle,80,Qt::AlignLeft);
-    mLayout->addWidget(m_lab_icon,10,Qt::AlignCenter);
+    mLayout->addWidget(m_lab_icon,0,Qt::AlignCenter);
 
     m_lab_caseTitle->setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
 
@@ -38,6 +41,21 @@ AppItemWidget::~AppItemWidget()
         delete m_lab_icon;
     if(m_lab_border)
         delete m_lab_border;
+
+    if(m_pAppIconLab)
+        delete m_pAppIconLab;
+}
+
+void AppItemWidget::SetIcon(QString strIconPath)
+{
+    if(strIconPath != "")
+    {
+        QUrl qurl(strIconPath);
+        strIconPath = qurl.path(QUrl::FullyDecoded);
+        QPixmap pixmap(strIconPath);
+        QPixmap fitpixmap = pixmap.scaled(45,45, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        m_pAppIconLab->setPixmap(fitpixmap);
+    }
 }
 
 void AppItemWidget::setText(QString text)

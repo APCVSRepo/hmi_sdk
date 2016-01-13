@@ -18,6 +18,7 @@ public:
     void setUIManager(UIInterface *pUI);
     AppDataInterface* getActiveApp();
     void getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames);
+    void getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames,std::vector<std::string> &vIconPath);
     void OnAppActivated(int appID);
     void OnAppExit();
     void ShowAppList();

@@ -54,7 +54,9 @@ void uiClient::onRequest(Json::Value &request)
     }
     else if(method == "UI.SetAppIcon")
     {
-        sendResult(id,"SetAppIcon");
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"SetAppIcon",result);
+        //sendResult(id,"SetAppIcon");
     }
     else if(method == "UI.GetSupportedLanguages")
     {

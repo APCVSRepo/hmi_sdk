@@ -254,8 +254,7 @@ void SDLConnector::OnSliderResponse(int code, int sliderid, int sliderPosition)
         result["code"] = code;
         result["method"] = "UI.Slider";
         result["sliderPosition"] = sliderPosition + 1;
-		m_UI.sendResult(sliderid, result);
->>>>>>> da812b7ee8286955a4941a9e08972d94590086d7
+        m_UI.sendResult(sliderid, result);
     }else{
 
         if(code == SLIDER_TIMEOUT){

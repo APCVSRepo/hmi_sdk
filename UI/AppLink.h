@@ -11,6 +11,12 @@ typedef struct appListStruct
 {
     QString str_appName;
     int i_appID;
+    QString strIconPath;
+
+    appListStruct():str_appName(""),i_appID(0),strIconPath("")
+    {
+
+    }
 }SAppList;
 
 class AppLink : public AppBase
@@ -42,6 +48,7 @@ private slots:
     void findNewAppSlots();
 
 private:
+    void addNewApp(QString appName,int appID,QString appIconPath);
     void addNewApp(QString appName,int appID);
     void delNewApp(QString appName);
     void clearNewApp();
@@ -66,6 +73,7 @@ private:
 
     void initLayout();
     void addListItemWidget(QString text);
+    void addListItemWidget(QString text,QString strPath);
     void flushAllItems(int currentNo);
     void flushListWidget();
 };

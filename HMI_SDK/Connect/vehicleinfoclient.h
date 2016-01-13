@@ -19,7 +19,6 @@ private:
     bool getVehicleData(Json::Value &,Json::Value &result);
     Json::Value vehicleInfoGetDTCsResponse(Json::Value &);
     Json::Value vehicleInfoReadDIDResponse(Json::Value &);
-
 };
 
 #endif // VEHICLEINFOCLIENT_H

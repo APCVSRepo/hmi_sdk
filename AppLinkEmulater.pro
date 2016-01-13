@@ -144,7 +144,8 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/TextSpeech/TextToSpeech.h \
     UI/AudioTrans/AudioOutput.h \
     AppManager.h \
-    UI/Common/AppListWidget.h
+    UI/Common/AppListWidget.h \
+    HMI_SDK/AppData/AppCommon.h
 
 
 RESOURCES += \

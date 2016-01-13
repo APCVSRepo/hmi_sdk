@@ -823,6 +823,7 @@ bool Value::asBool() const {
     break;
   }
   JSON_FAIL_MESSAGE("Value is not convertible to bool.");
+  return false;
 }
 
 bool Value::isConvertibleTo(ValueType other) const {

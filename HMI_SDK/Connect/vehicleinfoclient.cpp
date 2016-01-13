@@ -1,4 +1,4 @@
-#include <Include/global_first.h>
+﻿#include <Include/global_first.h>
 #include <Connect/vehicleinfoclient.h>
 #include <iostream>
 #include <string>
@@ -41,7 +41,7 @@ void vehicleInfoClient::onRequest(Json::Value &request)
     {
         Json::Value result;
         if(getVehicleData(request,result)){
-            sendResult(id,result);
+            sendResult(id, result);
         }
         else{
             sendError(id,result);
@@ -69,48 +69,50 @@ bool vehicleInfoClient::getVehicleData(Json::Value &message,Json::Value &result)
 {
     Json::Value vehicle;
     Json::Value data;
-    //Json::Value params;
-    int id;
-    bool ret = true;
+    Json::Value params;
+    bool ret = false;
 
-    //params = message["params"];
-    id = message["id"].asInt();
-
+    params = message["params"];
 
     vehicle = g_VehicleInfoJson["vehicle"];
 
-    Json::Value::Members mem = message.getMemberNames();
+    Json::Value::Members mem = params.getMemberNames();
     for (Json::Value::Members::iterator iter = mem.begin(); iter != mem.end(); iter++)
     {
-        if(std::string(*iter) != "appID" && std::string(*iter) != "request"){
-            if(message[*iter].type() != Json::nullValue){
-                if(vehicle.isMember(*iter)){
-                    data[*iter] = vehicle[*iter];
-                }else{
-                    ret = false;
-                }
-            }
+        std::string infoitem = std::string(*iter);
+        if (infoitem != "appID" && infoitem != "request")
+        {
+            Json::Value require = params[infoitem];
+            if (!require.isBool())
+                continue;
+            if (!require.asBool())
+                continue;
+
+            if (vehicle.isMember(infoitem))
+                data[infoitem] = vehicle[infoitem];
+            ret = true;
         }
     }
 
     if(ret){
+        Json::Value::Members mem = data.getMemberNames();
+        for (Json::Value::Members::iterator iter = mem.begin(); iter != mem.end(); iter++)
+        {
+            std::string infoitem = std::string(*iter);
+            result[infoitem] = data[infoitem];
+        }
+
         result["code"] = 0;
-        result["data"] = data;
         result["method"] = "VehicleInfo.GetVehicleData";
     }
     else{
         result["message"] = "Params rpc, are not avaliable";
         result["code"] = 9;
-        data["method"]="VehicleInfo.GetVehicleData";
-        result["data"] = data;
-
+        result["method"]="VehicleInfo.GetVehicleData";
     }
 
     return ret;
-
 }
-
-
 
 Json::Value vehicleInfoClient::vehicleInfoReadDIDResponse(Json::Value &request)
 {

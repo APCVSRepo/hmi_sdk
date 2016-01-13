@@ -11,8 +11,8 @@ public:
     explicit ScrollBar(QWidget *parent = 0);
     ~ScrollBar();
     static QString cssString();
-    void init(int rowNo, int h);
-    void flushScroll(int currentNo, int totalNum);
+    void init(int h);
+    void flushScroll(int page,int currentNo, int totalNum);
 
 signals:
 //    void upClicked();

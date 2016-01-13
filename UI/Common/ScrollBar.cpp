@@ -58,16 +58,15 @@ QString ScrollBar::cssString()
                   ");
 }
 
-void ScrollBar::init(int rowNo, int h)
+void ScrollBar::init(int h)
 {
-
-    this->setOrientation(Qt::Vertical);
-    this->setPageStep(rowNo);
+   this->setOrientation(Qt::Vertical);
    this->setFixedHeight(h);
 }
 
-void ScrollBar::flushScroll(int currentNo, int totalNum)
+void ScrollBar::flushScroll(int page,int currentNo, int totalNum)
 {
+    this->setPageStep(page);
     this->setRange(0,totalNum-1);
     this->setValue(currentNo-1);
 }

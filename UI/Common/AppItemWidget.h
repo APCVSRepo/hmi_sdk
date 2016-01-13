@@ -7,20 +7,20 @@
 class AppItemWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     AppItemWidget(int w,int h,QWidget *parent = 0);
     ~AppItemWidget();
 
     void setText(QString text);
-    void setRowNo(int rowNo);
-    void flush(int currentNo);
+
+    void setStatus(bool status);
 
     void setIsMenu(bool isMenu);
     bool getIsMenu();
 
-private slots:
+    void setFixedHeight(int h);
 
+private slots:
 
 private:
 
@@ -28,10 +28,7 @@ private:
     QLabel *m_lab_icon;
     QLabel *m_lab_border;
 
-    int m_i_rowNo;
-
     bool m_b_isMenu;
-
 };
 
 

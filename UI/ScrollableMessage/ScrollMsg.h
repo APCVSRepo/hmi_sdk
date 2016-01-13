@@ -21,8 +21,7 @@ signals:
     void onSpaceCliced();
 
 public slots:
-    void upClickedSlots();
-    void downClickedSlots();
+
     void timeoutSlots();
     void onSpaceClicedSlots();
     void onButtonClickedSlots(int btID);
@@ -38,11 +37,7 @@ private:
 private:
     QTextEdit *m_editText;
 
-
-    CButton    *m_btnSoft1;
-    CButton    *m_btnSoft2;
-    CButton    *m_btnSoft3;
-    CButton    *m_btnSoft4;
+    CButton    *m_btnSoft[4];
     QTimer m_timer;
 
     void InitLayout();

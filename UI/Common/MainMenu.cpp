@@ -61,7 +61,7 @@ MainMenu::~MainMenu()
 
 void MainMenu::SetTitle(QString title)
 {
-    labelTitle->setText(title);
+    AppBase::SetEdlidedText(labelTitle,title,labelTitle->width());
 }
 
 
@@ -121,10 +121,11 @@ void MainMenu::onMenuButtonClick()
 
 void MainMenu::menuBtnClickedSlots(QString btnText)
 {
-
     //_D("%s\n",btnText.toUtf8().data());
 
-    m_pList->getActiveApp()->OnMenuBtnClick(btnText.toUtf8().data());
+	if (!m_pList->getActiveApp())
+		return;
+	m_pList->getActiveApp()->OnMenuBtnClick(btnText.toUtf8().data());
 
     if("ListButton" == btnText)
     {

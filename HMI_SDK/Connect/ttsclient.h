@@ -11,16 +11,10 @@ class ttsClient : public Channel
 public:
     ttsClient();
     ~ttsClient();
-
 protected:
-    void onRequest(Json::Value);
+    void onRequest(Json::Value &);
 
 private:
-    void sendTTSResult(int id, std::string method);
-    void getCapabilities(int id);
-    void getSupportedLanguages(int id);
-    void getLanguage(int id);
-    void isReady(int id);
 
 };
 

@@ -24,3 +24,9 @@ void AppBase::setBkgImage(const char *img)
     palette.setBrush(QPalette::Background, QBrush(fitpixmap));
     setPalette(palette);
 }
+
+void AppBase::SetEdlidedText(QLabel *pLabel,QString strText,int iWidth)
+{
+    QFontMetrics qfm(pLabel->font());
+    pLabel->setText(qfm.elidedText(strText,Qt::ElideRight,iWidth));
+}

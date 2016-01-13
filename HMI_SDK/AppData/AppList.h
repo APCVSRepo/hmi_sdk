@@ -23,14 +23,14 @@ public:
     void ShowAppList();
 
 public: //IMessageInterface
-    void onRequest(Json::Value);
+    Result onRequest(Json::Value);
     void onNotification(Json::Value);
     void onResult(Json::Value);
     void onRawData(void * p, int iLength);
     void onError(std::string error);
 
 private:
-    void recvFromServer(Json::Value);
+    Result recvFromServer(Json::Value);
     void newAppRegistered(Json::Value jsonObj);
     void appUnregistered(Json::Value jsonObj);
 

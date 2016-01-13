@@ -176,7 +176,6 @@ bool VideoStream::Init()
     int result=avformat_open_input(&pAVFormatContext,m_str_url.toUtf8().data(),NULL,NULL);//"tcp://127.0.0.1:5050"
 #endif
     if (result<0){
-//        qDebug()<<"打开视频流失败";
         char errbuf[1024]={0};
         int e=av_strerror(result,errbuf,1024);
         LOGD("avformat_open_input failed,error=%d,%d,%s",result,e,errbuf);
@@ -239,7 +238,6 @@ bool VideoStream::Init()
     }
 
     m_Stop=false;
-//    qDebug()<<"初始化视频流成功";
     return true;
 }
 

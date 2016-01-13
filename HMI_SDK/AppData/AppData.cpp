@@ -89,12 +89,11 @@ void AppData::setUIManager(UIInterface *pUIManager)
     m_pUIManager = pUIManager;
 }
 
-void AppData::recvFromServer(Json::Value jsonObj)
+Result AppData::recvFromServer(Json::Value jsonObj)
 {
-    LOGI("AppData::recvFromServer");
     int appID = jsonObj["params"]["appID"].asInt();
     if(m_iAppID != appID)
-        return;
+        return RESULT_APPLICATION_NOT_REGISTERED;
 
     if(jsonObj.isMember("method"))
     {
@@ -126,25 +125,21 @@ void AppData::recvFromServer(Json::Value jsonObj)
         }
         else if (str_method == "UI.Alert")
         {
-            LOGI("UI.Alert");
             alert(jsonObj);
             ShowUI(ID_ALERT);
         }
         else if (str_method == "UI.ScrollableMessage")
         {
-            LOGI("UI.ScrollableMessage");
             scrollableMessage(jsonObj);
             ShowUI(ID_SCROLLMSG);
         }
         else if (str_method == "UI.Slider")
         {
-            LOGI("UI.Slider");
             slider(jsonObj);
             ShowUI(ID_SLIDER);
         }
         else if(str_method == "UI.PerformAudioPassThru")
         {
-            LOGI("UI.PerformAudioPassThru");
             performAudioPassThru(jsonObj);
 
             ShowUI(ID_AUDIOPASSTHRU);
@@ -238,7 +233,7 @@ void AppData::recvFromServer(Json::Value jsonObj)
         }
         else if(str_method=="TTS.Speak")
         {
-            LOGI("TTS.Speak");
+            tsSpeak(jsonObj);
             Json::Value ttsSpeeks = jsonObj["params"]["ttsChunks"];
             int size=ttsSpeeks.size();
             for(int i=0;i<size;i++){
@@ -247,11 +242,11 @@ void AppData::recvFromServer(Json::Value jsonObj)
                     continue;
                 if(!IsTextUTF8((char *)speek.data(),speek.size()))
                     speek = string_To_UTF8(speek);
-                LOGI("tts text:%s",speek.data());
                 m_pUIManager->tsSpeak(ID_DEFAULT, speek);
             }
         }
     }
+    return RESULT_SUCCESS;
 }
 
 int AppData::getCurUI()
@@ -326,7 +321,7 @@ void AppData::OnSliderResponse( int code, int sliderPosition)
 
 void AppData::OnTTSSpeek(int code)
 {
-    SDLConnector::getSDLConnectore()->OnTTSSpeek(m_iAppID, code);
+    SDLConnector::getSDLConnectore()->OnTTSSpeek(m_json_tsSpeak["id"].asInt(), code);
 }
 
 void AppData::OnPerformAudioPassThru(int code)
@@ -559,6 +554,19 @@ void AppData::addCommand(Json::Value jsonObj)
 
 }
 
+void AppData::addExitAppCommand()
+{
+    SMenuCommand tmpCommand;
+    tmpCommand.i_appID = m_iAppID;
+    tmpCommand.i_cmdID = 101;
+    std::string strMenuName = "Exit " + m_szAppName;
+    tmpCommand.str_menuName = strMenuName;
+    tmpCommand.i_parentID = 0;
+    tmpCommand.i_position = 0;
+
+    m_vec_scommand.push_back(tmpCommand);
+}
+
 //    {
 //       "id" : 49,
 //       "jsonrpc" : "2.0",
@@ -730,6 +738,11 @@ void AppData::alert(Json::Value jsonObj)
 {
     m_json_alert = jsonObj;
 
+}
+
+void AppData::tsSpeak(Json::Value jsonObj)
+{
+    m_json_tsSpeak = jsonObj;
 }
 
 

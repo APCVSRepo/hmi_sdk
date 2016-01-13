@@ -10,13 +10,10 @@ class buttonsClient : public Channel
 public:
     buttonsClient();
     ~buttonsClient();
-
 public:
-    void onRequest(Json::Value);
+    void onRequest(Json::Value &);
 
 private:
-    void getCapabilities(int id);
-    void isReady(int id);
 };
 
 #endif // BUTTONSCLIENT_H

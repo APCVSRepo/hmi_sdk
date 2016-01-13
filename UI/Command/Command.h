@@ -3,7 +3,7 @@
 
 #include "UI/Common/AppBase.h"
 #include "UI/Common/ScrollBar.h"
-#include "UI/Common/AppItemWidget.h"
+#include "UI/Common/AppListWidget.h"
 
 typedef struct commandID
 {
@@ -28,10 +28,9 @@ signals:
     void commandClick(int cmdID);
 
 public slots:
-    void listWidgetClickedSlots(QModelIndex);
+
     void listWidgetDoubleClickedSlots(QModelIndex);
-    void upArrowSlots();
-    void downArrowSlots();
+
     void backBtnClickSlots();
     void exitAppSlots();
    // void softButtonClickedSlots(int btID, int mode);
@@ -52,15 +51,11 @@ private:
     void showBackIcon();
     void addListItemWidget(QString text, bool isMenu);
 
-    void flushAllItems(int currentNo);
     void flushListWidget();
 
     QPushButton m_btn_backIcon;
-    ScrollBar m_scrollBar;
-    QListWidget m_listWidget;
+    AppListWidget *m_listWidget;
 
-    QVector <QListWidgetItem *> m_vec_listItem;
-    QVector <AppItemWidget *> m_vec_appItemWidget;
 //    QMap <QString ,int> m_map_cmdID;
     QVector <SCmdID> m_vec_cmdID;
     QVector <bool > m_vec_isMenu;

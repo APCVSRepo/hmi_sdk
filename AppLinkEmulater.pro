@@ -5,7 +5,7 @@
 #-------------------------------------------------
 QT       += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia
-win32:CONFIG += qaxcontainer
+win32:QT += axcontainer
 
 #QT += multimediawidgets
 #DEFINES +=VIDEO_STREAM_WIDGET
@@ -74,7 +74,8 @@ SOURCES += \
     UI/AudioTrans/MspVRAudio.cpp \
     UI/TextSpeech/TextToSpeech.cpp \
     UI/AudioTrans/AudioOutput.cpp \
-    AppManager.cpp
+    AppManager.cpp \
+    UI/Common/AppListWidget.cpp
 
 
 
@@ -142,7 +143,9 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/AudioTrans/MspVRAudio.h \
     UI/TextSpeech/TextToSpeech.h \
     UI/AudioTrans/AudioOutput.h \
-    AppManager.h
+    AppManager.h \
+    UI/Common/AppListWidget.h \
+    HMI_SDK/AppData/AppCommon.h
 
 
 RESOURCES += \

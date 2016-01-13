@@ -7,6 +7,7 @@ Show::Show(AppListInterface * pList, QWidget *parent) : AppBase(pList, parent)
     m_btn_two = new CButton;
     m_btn_thr = new CButton;
     m_btn_fou = new CButton;
+    m_listWidget = new AppListWidget(ui_app_width*0.1,0,ui_app_width*2.0/3.0,ui_app_height*3.0/4.0,NULL);
 
     initLayout();
     m_i_totalNum = 1;
@@ -14,7 +15,7 @@ Show::Show(AppListInterface * pList, QWidget *parent) : AppBase(pList, parent)
     m_timerId=0;
 
     connect(this,SIGNAL(startMediaClock(bool)),SLOT(mediaClockSlots(bool)));
-
+    connect(m_listWidget, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onListSelect(QModelIndex)));
    // m_timer_mediaClock = new QTimer;
     //m_timer_mediaClock->setInterval(1000);
    // connect(m_timer_mediaClock,SIGNAL(timeout()),this,SLOT(mediaClockSlots()));
@@ -26,11 +27,11 @@ Show::~Show()
     delete m_btn_two;
     delete m_btn_thr;
     delete m_btn_fou;
+    delete m_listWidget;
 }
 
 void Show::initLayout()
 {
-    m_listWidget.setVerticalScrollBar(&m_scrollBar);
     QHBoxLayout *hhLayout = new QHBoxLayout;
     //hhLayout->addStretch(1);
     hhLayout->addWidget(&m_lab_mediaTrack,4,Qt::AlignLeft|Qt::AlignBottom);
@@ -38,7 +39,7 @@ void Show::initLayout()
     hhLayout->addStretch(2);
 
     QVBoxLayout *vLayout = new QVBoxLayout;
-    vLayout->addWidget(&m_listWidget,80,Qt::AlignCenter);
+    vLayout->addWidget(m_listWidget,80,Qt::AlignCenter);
     vLayout->addLayout(hhLayout,20);
 
     QHBoxLayout *hLayout = new QHBoxLayout;
@@ -70,39 +71,16 @@ void Show::initLayout()
     m_btn_fou->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
 
 
-    m_listWidget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //m_listWidget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    connect(&m_listWidget, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onListSelect(QModelIndex)));
+    m_listWidget->setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);
+    m_listWidget->SetScrollParams(1,1);
 
-#ifndef ANDROID
-    QPalette pll = m_listWidget.palette();
-    pll.setBrush(QPalette::Base,QBrush(QColor(255,255,255,0)));
-    m_listWidget.setPalette(pll);
-#endif
-    m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);
-    m_listWidget.setFrameShape(QFrame::NoFrame); //设置无边框
-    m_listWidget.setFocusPolicy(Qt::NoFocus); //去除选中虚线框
-    m_listWidget.setEditTriggers(QAbstractItemView::NoEditTriggers); //设置不可编辑
-#ifdef ANDROID
-    m_listWidget.setStyleSheet("background-color:transparent");
-#else
-    m_listWidget.setStyleSheet("QListWidget:item:hover{border: 0px;}"); //鼠标移上去不响应突出
-#endif
-  //  m_listWidget.verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 0px;}");
-
-    addListItem();
-    addListItem();
-    addListItem();
-    addListItem();
-
+//    m_listWidget->AddListItemWidget("",false);
+//    m_listWidget->AddListItemWidget("",false);
+//    m_listWidget->AddListItemWidget("",false);
+//    m_listWidget->AddListItemWidget("",false);
     m_lab_mediaTrack.setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
     m_lab_mediaClock.setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
 
-    m_scrollBar.init(4,m_listWidget.height());
-    m_scrollBar.flushScroll(1,4);
-    m_scrollBar.hide();
-//    connect(&m_scrollBar,SIGNAL(upClicked()),this,SLOT(upArrowSlots()));
-//    connect(&m_scrollBar,SIGNAL(downClicked()),this,SLOT(downArrowSlots()));
 
     m_btn_one->setText("-");
     m_btn_two->setText("-");
@@ -120,130 +98,30 @@ void Show::initLayout()
     connect(m_btn_two,SIGNAL(clickedLong(int)),this,SLOT(btnTwoClickedLongSlots(int)));
     connect(m_btn_thr,SIGNAL(clickedLong(int)),this,SLOT(btnThrClickedLongSlots(int)));
 
-   // m_btn_one->changeToPressed();
-
-    setMainField1(true,"");
-    setMainField2(true,"");
-    setMainField3(true,"");
-    setMainField4(false,"");
-    setMediaTrack(false,"");
-    setMediaClock(false,"");
-//    setSoftButtons(std::vector<SSoftButton> vec_softButtons);
     m_vec_softButtons.clear();
 
 }
 
-void Show::addListItem()
-{
-    QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(ui_list_width-10,ui_list_height));
-    item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
-
-    QLabel *label = new QLabel;
-    m_listWidget.addItem(item);
-    m_listWidget.setItemWidget(item,label);
-
-    label->setAlignment(Qt::AlignLeading);
-    label->setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
-
-    m_vec_listItem.append(item);
-    m_vec_listLabel.append(label);
-}
-
-
-
-void Show::setMainField1(bool isShow, QString text)
-{
-    if(isShow)
-        m_vec_listLabel.at(0)->setText(text);
-    else
-        m_vec_listLabel.at(0)->clear();
-}
-void Show::setMainField2(bool isShow, QString text)
-{
-    if(isShow)
-        m_vec_listLabel.at(1)->setText(text);
-    else
-        m_vec_listLabel.at(1)->clear();
-}
-void Show::setMainField3(bool isShow, QString text)
-{
-    if(isShow)
-    {
-        m_vec_listLabel.at(2)->setText(text);
-        m_scrollBar.show();
-    }
-    else
-    {
-        m_vec_listLabel.at(2)->clear();
-        if(0 == m_vec_listLabel.at(3)->text().size())
-            m_scrollBar.hide();
-    }
-}
-void Show::setMainField4(bool isShow, QString text)
-{
-    if(isShow)
-    {
-        m_vec_listLabel.at(3)->setText(text);
-        m_scrollBar.show();
-    }
-    else
-    {
-        m_vec_listLabel.at(3)->clear();
-        if(0 == m_vec_listLabel.at(2)->text().size())
-            m_scrollBar.hide();
-    }
-}
-void Show::setAlignment(int type)
-{
-    switch(type)
-    {
-    case 1:
-    {
-        for(int i = 0; i < 4; i++)
-            m_vec_listLabel.at(i)->setAlignment(Qt::AlignLeft);
-        break;
-    }
-    case 2:
-    {
-        for(int i = 0; i < 4; i++)
-            m_vec_listLabel.at(i)->setAlignment(Qt::AlignCenter);
-        break;
-    }
-    case 3:
-    {
-        for(int i = 0; i < 4; i++)
-            m_vec_listLabel.at(i)->setAlignment(Qt::AlignRight);
-        break;
-    }
-    }
-}
 
 void Show::setMediaTrack(bool isShow, QString text)
 {
     if(isShow){
-        m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*2.0/4.0);
-        m_scrollBar.init(4,m_listWidget.height());
+        m_lab_mediaTrack.show();
         m_lab_mediaTrack.setText(text);
     }
     else{
-        m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);
-        m_scrollBar.init(4,m_listWidget.height());
-        m_lab_mediaTrack.clear();
+        m_lab_mediaTrack.hide();
     }
 }
 void Show::setMediaClock(bool isShow, QString text)
 {
     LOGI(text.toStdString().data());
     if(isShow){
-        m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*2.0/4.0);
-        m_scrollBar.init(4,m_listWidget.height());
+        m_lab_mediaClock.show();
         m_lab_mediaClock.setText(text);
     }
     else{
-        m_listWidget.setFixedSize(ui_app_width*2.0/3.0,ui_app_height*3.0/4.0);
-        m_scrollBar.init(4,m_listWidget.height());
-        m_lab_mediaClock.setText("");
+        m_lab_mediaClock.hide();
     }
 }
 
@@ -259,11 +137,11 @@ void Show::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
     m_btn_two->setId(0);
     m_btn_thr->setId(0);
 
-    for(int i = 0; i < m_vec_softButtons.size(); i++)
+    for(unsigned int i = 0; i < m_vec_softButtons.size(); i++)
     {
         if(0 == i)
         {
-            m_btn_one->setText(m_vec_softButtons.at(i).str_text.data());
+            m_btn_one->setText(m_vec_softButtons.at(i).str_text.c_str());
             m_btn_one->setId(m_vec_softButtons.at(i).i_softButtonID);
             if(m_vec_softButtons.at(i).b_isHighlighted)
             {
@@ -278,7 +156,7 @@ void Show::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
         }
         else if(1 == i)
         {
-            m_btn_two->setText(m_vec_softButtons.at(i).str_text.data());
+            m_btn_two->setText(m_vec_softButtons.at(i).str_text.c_str());
             m_btn_two->setId(m_vec_softButtons.at(i).i_softButtonID);
             if(m_vec_softButtons.at(i).b_isHighlighted)
             {
@@ -293,7 +171,7 @@ void Show::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
         }
         else if(2 == i)
         {
-            m_btn_thr->setText(m_vec_softButtons.at(i).str_text.data());
+            m_btn_thr->setText(m_vec_softButtons.at(i).str_text.c_str());
             m_btn_thr->setId(m_vec_softButtons.at(i).i_softButtonID);
             if(m_vec_softButtons.at(i).b_isHighlighted)
             {
@@ -327,19 +205,6 @@ void Show::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
 
 }
 
-//向上滚动
-void Show::upArrowSlots()
-{
-    m_scrollBar.flushScroll(1,2);
-    m_listWidget.setCurrentRow(0);
-}
-
-//向下滚动
-void Show::downArrowSlots()
-{
-    m_scrollBar.flushScroll(2,2);
-    m_listWidget.setCurrentRow(3);
-}
 
 void Show::onListSelect(const QModelIndex &index)
 {
@@ -366,7 +231,7 @@ void Show::btnFourClickedSlots()
         m_btn_thr->setText("More...");
         m_btn_thr->setId(0);
 
-        for(int i = (m_i_currentNo-1)*3; i < m_vec_softButtons.size(); i++)
+        for(unsigned int i = (m_i_currentNo-1)*3; i < m_vec_softButtons.size(); i++)
         {
             if((m_i_currentNo-1)*3 == i)
             {
@@ -477,57 +342,70 @@ void Show::showEvent(QShowEvent * e)
     Json::Value pObj;
     std::vector <SSoftButton > vec_softButtons;
     vec_softButtons.clear();
-    this->setMainField1(true,"");
-    this->setMainField2(true,"");
-    this->setMainField3(true,"");
-    this->setMainField4(true,"");
-    this->setMediaTrack(false,"");
-    this->setMediaClock(false,"");
     if (m_pList->getActiveApp())
     {
         pObj = m_pList->getActiveApp()->getShowData();
-        for(int i = 0; i < pObj["params"]["showStrings"].size(); i++)
-        {
-            Json::Value  fieldName=pObj["params"]["showStrings"][i];
-            if("mainField1" == fieldName["fieldName"].asString())
-            {
-                this->setMainField1(true,fieldName["fieldText"].asString().data());
-            }
-            else if("mainField2" == fieldName["fieldName"].asString())
-            {
-                this->setMainField2(true,fieldName["fieldText"].asString().data());
-            }
-            else if("mainField3" == fieldName["fieldName"].asString())
-            {
-                this->setMainField3(true,fieldName["fieldText"].asString().data());
-            }
-            else if("mainField4" == fieldName["fieldName"].asString())
-            {
-                this->setMainField4(true,fieldName["fieldText"].asString().data());
-            }
-            else if("mediaTrack" == fieldName["fieldName"].asString())
-            {
-                this->setMediaTrack(true,fieldName["fieldText"].asString().data());
-            }
-            else if("mediaClock" == fieldName["fieldName"].asString())
-            {
-                this->setMediaClock(true,fieldName["fieldText"].asString().data());
-            }
-        }
-        if(pObj["params"].isMember("softButtons"))
-        {
+		if(pObj.isNull())
+			return;
+		Json::Value jsonParams = pObj["params"];
+		int fieldNum=0;
+		QString fieldText[4];
+		bool    mediaHas=false;
+		for (unsigned int i = 0; i < jsonParams["showStrings"].size(); i++)
+		{
+			Json::Value  fieldName = jsonParams["showStrings"][i];
+			if ("mainField1" == fieldName["fieldName"].asString())
+			{
+				fieldText[fieldNum++] = fieldName["fieldText"].asString().data();
+			}
+			else if ("mainField2" == fieldName["fieldName"].asString())
+			{
+				fieldText[fieldNum++] = fieldName["fieldText"].asString().data();
+			}
+			else if ("mainField3" == fieldName["fieldName"].asString())
+			{
+				fieldText[fieldNum++] = fieldName["fieldText"].asString().data();
+			}
+			else if ("mainField4" == fieldName["fieldName"].asString())
+			{
+				fieldText[fieldNum++] = fieldName["fieldText"].asString().data();
+			}
+			else if ("mediaTrack" == fieldName["fieldName"].asString())
+			{
+				mediaHas = true;
+				this->setMediaTrack(true, fieldName["fieldText"].asString().data());
+			}
+			else if ("mediaClock" == fieldName["fieldName"].asString())
+			{
+				mediaHas = true;
+				this->setMediaClock(true, fieldName["fieldText"].asString().data());
+			}
+		}
+		m_listWidget->DelListItemWidget();
+		m_listWidget->setFixedSize(ui_app_width*2.0 / 3.0, ui_app_height*(mediaHas ? 2.0 : 3.0) / 4.0);
+		if (!mediaHas){
+			this->setMediaTrack(false, "");
+			this->setMediaClock(false, "");
+		}
+		m_listWidget->SetScrollParams(mediaHas ? 2 : fieldNum, fieldNum);
+		for (int i = 0; i<fieldNum; i++){
+			m_listWidget->AddListItemWidget(fieldText[i], false);
+		}
+		if (jsonParams.isMember("softButtons"))
+		{
 
-            for(int i = 0; i < pObj["params"]["softButtons"].size(); i++)
-            {
-                SSoftButton tmpSoftButton;
-                tmpSoftButton.b_isHighlighted = pObj["params"]["softButtons"][i]["isHighlighted"].asBool();
-                tmpSoftButton.i_softButtonID = pObj["params"]["softButtons"][i]["softButtonID"].asInt();
-                tmpSoftButton.str_text = pObj["params"]["softButtons"][i]["text"].asString();
-                vec_softButtons.push_back(tmpSoftButton);
-            }
-            this->setSoftButtons(vec_softButtons);
-        }
+			for (int i = 0; i < jsonParams["softButtons"].size(); i++)
+			{
+				SSoftButton tmpSoftButton;
+				tmpSoftButton.b_isHighlighted = jsonParams["softButtons"][i]["isHighlighted"].asBool();
+				tmpSoftButton.i_softButtonID = jsonParams["softButtons"][i]["softButtonID"].asInt();
+				tmpSoftButton.str_text = jsonParams["softButtons"][i]["text"].asString();
+				vec_softButtons.push_back(tmpSoftButton);
+			}
+			this->setSoftButtons(vec_softButtons);
+		}
     }
+    
 }
 
 //{

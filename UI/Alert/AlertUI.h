@@ -33,9 +33,10 @@ private:
     void setTimeOut(int duration);
 
 private:
-    QLabel *m_labelText1;
-    QLabel *m_labelText2;
-    QLabel *m_labelText3;
+    QLabel *m_pLabelText[3];
+//    QLabel *m_labelText1;
+//    QLabel *m_labelText2;
+//    QLabel *m_labelText3;
     CButton *m_btnSoft1;
     CButton *m_btnSoft2;
     CButton *m_btnSoft3;

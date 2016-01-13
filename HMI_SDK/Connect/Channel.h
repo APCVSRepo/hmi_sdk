@@ -19,63 +19,82 @@ private:
 	std::string m_szBuffer;
 };
 
-class Channel : public IChannel
+
+extern Json::Value g_StaticConfigJson;
+extern Json::Value g_VehicleInfoJson;
+extern Json::Value g_StaticResultJson;
+
+class ISocketManager;
+
+class Channel:public IChannel
 {
 public:
-	Channel(std::string Channelname);
-	virtual ~Channel();
+    Channel(int startId,std::string Channelname);
+    virtual ~Channel();
+
+    static Json::Value ReadSpecifyJson(const char *fileName);
+    static void ReadConfigJson();
+
     void SetCallback(IMessageInterface * pCallback);
 
+    void onReceiveData(void * pData, int iLength);
+
+    int RegisterReqId();
+    int UnRegisterRegId();
 	std::string	getChannelName();
-	void setSocketManager(ISocketManager * pManager, void * pHandle);
+    void setSocketManager(ISocketManager * pManager,void *pHandle=NULL);
 	void onOpen();
-	virtual void onReceiveData(void * pData, int iLength);
 
 protected:
-	void onMessage(Json::Value jsonObj);
+
 	void unRegisterComponent();
 	void sendError(int resultCode, int id, std::string method, std::string message);
 
 	void SubscribeToNotification(std::string notification);
 	void UnsubscribeFromNotification(std::string notification);
 
+    void onMessage(Json::Value &jsonObj);
 
 public:
 	//IMessageCallback
-	virtual void onRequest(Json::Value);
-	virtual void onNotification(Json::Value);
-	virtual void onResult(Json::Value);
+    virtual void onRequest(Json::Value &);
+    virtual void onNotification(Json::Value &);
+    virtual void onResult(Json::Value &);
 	virtual void onRawData(void * p, int iLength);
 	virtual void onError(std::string error);
-    void SendJson(Json::Value data);
-
-protected:
-	virtual void onRegistered();
+    void SendJson(Json::Value &data);
+    virtual void sendError(int id,Json::Value &error);
+    virtual void sendResult(int id,Json::Value &result);
+    virtual void sendRequest(int id,const std::string mothod,const Json::Value &params=Json::Value::null);
+    virtual void sendNotification(const std::string mothod,const Json::Value &params=Json::Value::null);
+    virtual void onRegistered();
 	virtual void onUnregistered();
 
-	Json::Value getJsonFromNetworkData(void * p, int iLength);
+    virtual void SetStaticResult(std::string attri,std::string ref,Json::Value value);
+    virtual void sendResult(int id,std::string ref,Result code=RESULT_SUCCESS);
+    virtual void sendError(int id,std::string ref,std::string message,Result code = RESULT_REJECTED);
 
-private:
-	void GenerateId();
-	void ReadConfigure();
+    int GenerateId();
+    std::string MethodName(std::string _mode,Json::Value _method);
+protected:
+
 
 protected:
-	int m_iIDStart;
-	int m_iRequestId;
-	int m_iRegisterRequestId;
-	int m_iUnregisterRequestId;
-	int m_iIDRange;
-	std::string m_sComponentName;
-	int m_iAppID;
-
-	JsonBuffer m_JsonBuffer;
-
-	ISocketManager * m_pSocketManager;
-	void * m_pHandle;
     IMessageInterface * m_pCallback;
+    ISocketManager * m_pSocketManager;
+    void * m_pHandle;
+private:
 
-	Json::Value m_StaticConfigJson;
-	Json::Value m_ResultCodeJson;
+    int m_iIDRegRequest;
+    int m_iIDUnRegRequest;
+    int m_iIDStart;
+    int m_iGenerateId;
+	std::string m_sComponentName;
+
+    Json::Value  m_StaticResult;
+
+    JsonBuffer m_JsonBuffer;
+
 };
 
 #endif

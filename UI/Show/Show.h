@@ -4,6 +4,7 @@
 #include "UI/Common/AppBase.h"
 #include "UI/Common/ScrollBar.h"
 #include "UI/Common/Button.h"
+#include "Common/AppListWidget.h"
 
 typedef struct softButton{
     bool b_isHighlighted;
@@ -34,8 +35,7 @@ signals:
     //void softButtonClicked(int btID, int mode);
 
 public slots:
-    void upArrowSlots();
-    void downArrowSlots();
+
 
     void onListSelect(const QModelIndex &index);
 
@@ -55,10 +55,6 @@ protected:
     virtual void showEvent(QShowEvent * e);
 
 private:
-    void setMainField1(bool isShow, QString text);
-    void setMainField2(bool isShow, QString text);
-    void setMainField3(bool isShow, QString text);
-    void setMainField4(bool isShow, QString text);
     void setAlignment(int type);
     void setMediaTrack(bool isShow, QString text);
     void setMediaClock(bool isShow, QString text);
@@ -68,18 +64,16 @@ private:
     void addListItem();
 
     QLabel m_lab_icon;
-    QListWidget m_listWidget;
+    AppListWidget *m_listWidget;
     QLabel m_lab_mediaTrack;
     QLabel m_lab_mediaClock;
 
-    ScrollBar m_scrollBar;
 
     CButton *m_btn_one;
     CButton *m_btn_two;
     CButton *m_btn_thr;
     CButton *m_btn_fou;
 
-    QVector <QListWidgetItem *> m_vec_listItem;
     QVector <QLabel *> m_vec_listLabel;
     std::vector<SSoftButton> m_vec_softButtons;
 

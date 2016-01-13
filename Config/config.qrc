@@ -2,5 +2,6 @@
     <qresource prefix="/config">
         <file>staticConfigDB.json</file>
         <file>VehicleInfo.json</file>
+        <file>staticResult.json</file>
     </qresource>
 </RCC>

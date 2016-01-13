@@ -55,7 +55,7 @@ void UIConfig::loadResolution(int res_w,int res_h)
     ui_showScroll_height=ui_res_height*(1.0/4.0);
     ui_commandScroll_height=ui_res_height*(5.0/12.0);
     ui_item_width=ui_app_width*(3.0/4.0);
-    ui_item_height=ui_app_height*(1.0/6.0);
+    ui_item_height=ui_app_height*(1.0/5.0);
     ui_btn_width=(ui_app_width-30)/4;
     ui_btn_height=ui_app_height*0.18;
 

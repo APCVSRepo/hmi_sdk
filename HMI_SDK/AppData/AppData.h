@@ -41,8 +41,10 @@ public:
     void OnVRStartRecord();
     void OnVRCancelRecord();
 
-    void recvFromServer(Json::Value);
+    Result recvFromServer(Json::Value);
 
+    // 增加一个退出app的指令
+    void addExitAppCommand();
 private:
     UIInterface *m_pUIManager;
     std::vector<int> m_vecUIStack;
@@ -59,6 +61,7 @@ private:
     Json::Value m_json_audioPassThru;
     Json::Value m_json_interaction;
     Json::Value m_json_mediaclock;
+    Json::Value m_json_tsSpeak;
 
     void addCommand(Json::Value jsonObj);
     void addSubMenu(Json::Value jsonObj);
@@ -70,6 +73,7 @@ private:
     void performAudioPassThru(Json::Value jsonObj);
     void performInteraction(Json::Value jsonObj);
     void systemRequest(Json::Value jsonObj);
+    void tsSpeak(Json::Value jsonObj);
 
     Json::Value m_videoStreamJson;
     void videoStreamStart(Json::Value jsonObj);

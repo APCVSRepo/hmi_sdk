@@ -24,8 +24,12 @@ public:
     void ItemSelect(int index);
     void SetItemText(int index,QString txt);
     void setFixedSize(int w, int h);
+signals:
+    void clicked(int itemIndex);
+    void longclicked(int itemIndex);
 public slots:
     void onItemClicked(QModelIndex );
+    void onItemDoubleClicked(QModelIndex);
 private:
     ScrollBar m_scrollWidget;
 	QVector<AppItemWidget*> m_itemList;

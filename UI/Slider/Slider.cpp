@@ -168,7 +168,6 @@ void Slider::setTimeOut(int duration)
 {
     m_timer.setInterval(duration);
     m_timer.start();
-
 }
 
 void Slider::timeoutSlots()

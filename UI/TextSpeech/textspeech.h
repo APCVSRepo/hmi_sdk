@@ -24,8 +24,6 @@ public:
 
     void setVolume(int value);
     bool isSpeaking();
-
-    bool StartVoiceThread(std::string string);
 private:
 #ifdef WIN32
     QAxObject _voice;
@@ -37,7 +35,7 @@ private:
     bool _binit;
     bool _bReading;
 
-    std::string m_strToSpeak;
+    QString m_strToSpeak;
     void SpeakThreadComplete();
 signals:
     void speakComplete();

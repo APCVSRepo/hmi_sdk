@@ -125,7 +125,7 @@ void CUIManager::waitMSec(int ms)
 
 void CUIManager::tsSpeak(int VRID, std::string strText)
 {
-    bool ret = ts.StartVoiceThread(strText);
+    bool ret = ts.speak(strText.c_str());
     /*
     while(ts.isSpeaking())
         waitMSec(100);

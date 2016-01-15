@@ -141,6 +141,11 @@ void uiClient::onRequest(Json::Value &request)
         Result result=m_pCallback->onRequest(request);
         sendResult(id,"EndAudioPassThru",result);
     }
+    else if(method == "UI.Slider")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"Slider",result);
+    }
     else
     {
         Channel::onRequest(request);

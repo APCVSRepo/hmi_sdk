@@ -137,6 +137,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
         {
             slider(jsonObj);
             ShowUI(ID_SLIDER);
+            return RESULT_USER_WAIT;
         }
         else if(str_method == "UI.PerformAudioPassThru")
         {
@@ -301,6 +302,7 @@ void AppData::OnSoftButtonClick(int sbID, int mode)
 void AppData::OnCommandClick(int cmdID)
 {
     SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, cmdID);
+    ShowPreviousUI();
 }
 
 void AppData::OnAlertResponse(int reason)

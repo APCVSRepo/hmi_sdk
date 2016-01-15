@@ -125,12 +125,7 @@ void MainMenu::menuBtnClickedSlots(QString btnText)
 
 	if (!m_pList->getActiveApp())
 		return;
-	m_pList->getActiveApp()->OnMenuBtnClick(btnText.toUtf8().data());
-
-    if("ListButton" == btnText)
-    {
-        m_pList->getActiveApp()->OnVRStartRecord();
-	}
+    m_pList->getActiveApp()->OnMenuBtnClick(btnText.toUtf8().data());
 }
 
 void MainMenu::keyPressEvent(QKeyEvent *e)

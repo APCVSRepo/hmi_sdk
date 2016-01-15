@@ -150,13 +150,12 @@ void CAudioPassThru::setAudioText(int textIdx, QString text)
 void CAudioPassThru::setTimeOut(int duration)
 {
     m_timer.start(duration);
-
 }
 
 void CAudioPassThru::timeoutSlots()
 {
     m_timer.stop();
-    audioPassThruHide(PERFORMAUDIOPASSTHRU_TIMEOUT);
+    emit audioPassThruHide(PERFORMAUDIOPASSTHRU_TIMEOUT);
 }
 
 void CAudioPassThru::setAudioPassThruDisplayText1(QString text)
@@ -186,8 +185,9 @@ void CAudioPassThru::audioPassThruHideSlots(int code)
 void CAudioPassThru::showEvent(QShowEvent * e)
 {
     if (m_pList->getActiveApp())
-    {
+    {        
         Json::Value m_jsonData = m_pList->getActiveApp()->getAudioPassThruJson();
+        LOGI("---CAudioPassThru::showEvent   %s",m_jsonData.toStyledString().c_str());
         if(!m_jsonData.isMember("id") || !m_jsonData.isMember("params"))
         {
             return;

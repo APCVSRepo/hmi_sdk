@@ -134,7 +134,7 @@ void uiClient::onRequest(Json::Value &request)
     else if(method == "UI.PerformAudioPassThru")
     {
         m_pCallback->onRequest(request);
-        sendNotification("UI.PerformAudioPassThru",startRecordingNotify(request));
+        sendNotification("UI.PerformAudioPassThruStart",startRecordingNotify(request));
     }
     else if(method == "UI.EndAudioPassThru")
     {
@@ -178,6 +178,6 @@ Json::Value uiClient::startRecordingNotify(Json::Value &request)
     }
     params["audioPassThruType"] = "RECORD_SEND";
     params["saveAudioPassThruFile"] = "-";
-    params["SendAUduiPassThruFile"] = "-";
+    params["sendAudioPassThruFile"] = "-";
     return params;
 }

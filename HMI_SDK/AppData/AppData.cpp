@@ -140,9 +140,10 @@ Result AppData::recvFromServer(Json::Value jsonObj)
         }
         else if(str_method == "UI.PerformAudioPassThru")
         {
-            performAudioPassThru(jsonObj);
-
+            performAudioPassThru(jsonObj);            
             ShowUI(ID_AUDIOPASSTHRU);
+            SDLConnector::getSDLConnectore()->OnVRStartRecord();
+            return RESULT_USER_WAIT;
         }
         else if(str_method == "UI.PerformInteraction")
         {
@@ -154,6 +155,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
                 iUI = ID_CHOICESET;
 
             ShowUI(iUI);
+            return RESULT_USER_WAIT;
         }
         else if(str_method == "Navigation.StartStream")
         {

@@ -49,8 +49,6 @@ void Choiceset::addNewMenu(int choiceID, std::string menuName)
     tmpChoiceMenu.str_menuName = menuName;
     m_vec_choiceMenu.insert(0,tmpChoiceMenu);
     m_vec_isMenu.insert(0,false);
-
-
 }
 
 //刷新list列表
@@ -88,9 +86,17 @@ void Choiceset::timeHideOutSlots()
     m_timerHide->stop();
     emit menuClicked(PERFORMINTERACTION_TIMEOUT, m_vec_choiceMenu.at(0).i_choiceID);
 }
+
+void Choiceset::ClearAllItem()
+{
+    m_vec_choiceMenu.clear();
+    m_vec_isMenu.clear();
+}
+
 void Choiceset::showEvent(QShowEvent * e)
 {
     setChoicesetName("Choice Name");
+    ClearAllItem();
     if (m_pList->getActiveApp())
     {
         Json::Value jsonData = m_pList->getActiveApp()->getInteractionJson();

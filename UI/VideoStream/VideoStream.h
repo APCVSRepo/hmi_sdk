@@ -83,7 +83,7 @@ private:
     QMediaPlayer  *m_VideoPlayer;
 #else
   //  QLabel *m_label;
-    QTimer *m_timerPlay;
+    //QTimer *m_timerPlay;
     QImage m_image;
     bool   m_Stop;
    // QLabel  *m_Screen;

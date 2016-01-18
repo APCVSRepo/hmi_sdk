@@ -14,6 +14,17 @@ Slider::Slider(AppListInterface * pList, QWidget *parent) :
     connect(this, SIGNAL(onSpaceCliced()), this, SLOT(onButtonCancelClicked()));
 }
 
+Slider::~Slider()
+{
+    delete m_labelText1;
+    delete m_labelText2;
+    delete m_labelText3;
+    delete m_btnSoft1;
+    delete m_btnSoft2;
+    delete m_btnSoft3;
+    delete m_btnSoft4;
+}
+
 void Slider::InitLayout()
 {
     m_labelText1 = new QLabel;
@@ -102,7 +113,7 @@ void Slider::onMoveRightSlot()
 
 void Slider::setSliderTitle(QString text)
 {
-    m_labelText1->setText(text);
+    SetEdlidedText(m_labelText1,text,width());
 }
 
 //void Slider::setSliderStrings(QString* pStr, int iCnt, int iPos)
@@ -150,14 +161,13 @@ void Slider::updateScreen()
         }
     }
     m_labelText2->setText("<" + m_EditText + ">");
-    m_labelText3->setText(m_Strings[m_iPos]);
+    SetEdlidedText(m_labelText3,m_Strings[m_iPos],width());
 }
 
 void Slider::setTimeOut(int duration)
 {
     m_timer.setInterval(duration);
     m_timer.start();
-
 }
 
 void Slider::timeoutSlots()

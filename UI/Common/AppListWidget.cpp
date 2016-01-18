@@ -15,10 +15,12 @@ AppListWidget::AppListWidget(int x,int y,int w,int h,QWidget *parent):QListWidge
     setEditTriggers(QAbstractItemView::NoEditTriggers); //设置不可编辑
     setVerticalScrollBar(&m_scrollWidget);
     m_scrollWidget.init(h-30);
+
     SetScrollParams(4,4);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(onItemClicked(QModelIndex)));
+    connect(this,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(onItemDoubleClicked(QModelIndex)));
 }
 
 void AppListWidget::FlushAll()
@@ -26,9 +28,28 @@ void AppListWidget::FlushAll()
 	ItemSelect(0);
 }
 
+void AppListWidget::AddListItemWidget(QString text,QString strIconPath,bool isMenu)
+{
+    QListWidgetItem *item = new QListWidgetItem;
+    int w=width()-35;
+    int h=m_LineHeight;
+    item->setSizeHint(QSize(w,h));
+    item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);//不响应突出
+    addItem(item);
+    AppItemWidget *itemWidget = new AppItemWidget(w,h,this);
+    // insertItem(index,itemWidget);
+    setItemWidget(item,itemWidget);
+
+    itemWidget->SetIcon(strIconPath);
+    itemWidget->setText(text);
+    itemWidget->setIsMenu(isMenu);
+    m_itemList.push_back(itemWidget);
+}
+
 void AppListWidget::AddListItemWidget(QString text,bool isMenu)
 {
     QListWidgetItem *item = new QListWidgetItem;
+
     int w=width()-35;
     int h=m_LineHeight;
     item->setSizeHint(QSize(w,h));
@@ -98,6 +119,12 @@ void AppListWidget::onItemClicked(QModelIndex index)
 {
     ItemSelect(index.row());
     ScrollToIndex(index.row());
+    emit clicked(index.row());
+}
+
+void AppListWidget::onItemDoubleClicked(QModelIndex index)
+{
+    emit longclicked(index.row());
 }
 
 void AppListWidget::ItemSelect(int index)

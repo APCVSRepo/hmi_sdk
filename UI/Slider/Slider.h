@@ -14,6 +14,7 @@ class Slider : public AppBase
     Q_OBJECT
 public:
     explicit Slider(AppListInterface * pList, QWidget *parent = 0);
+    ~Slider();
     
 protected:
     virtual void showEvent(QShowEvent * e);

@@ -107,7 +107,7 @@ void Show::setMediaTrack(bool isShow, QString text)
 {
     if(isShow){
         m_lab_mediaTrack.show();
-        m_lab_mediaTrack.setText(text);
+        SetEdlidedText(&m_lab_mediaTrack,text,ui_app_width / 2.0);
     }
     else{
         m_lab_mediaTrack.hide();
@@ -118,7 +118,7 @@ void Show::setMediaClock(bool isShow, QString text)
     LOGI(text.toStdString().data());
     if(isShow){
         m_lab_mediaClock.show();
-        m_lab_mediaClock.setText(text);
+        SetEdlidedText(&m_lab_mediaClock,text,ui_app_width / 2.0);
     }
     else{
         m_lab_mediaClock.hide();

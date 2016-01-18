@@ -25,6 +25,7 @@ CUIManager::~CUIManager()
     for(int i = 0; i < ID_UI_MAX; i++)
         if(m_vUIWidgets[i])
             delete m_vUIWidgets[i];
+
 #ifdef SDL_SUPPORT_LIB
     delete m_MspVR;
 #endif
@@ -135,7 +136,7 @@ void CUIManager::waitMSec(int ms)
 
 void CUIManager::tsSpeak(int VRID, std::string strText)
 {
-    bool ret = ts.StartVoiceThread(strText);
+    bool ret = ts.speak(strText.c_str());
     /*
     while(ts.isSpeaking())
         waitMSec(100);

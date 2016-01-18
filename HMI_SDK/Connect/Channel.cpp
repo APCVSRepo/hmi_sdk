@@ -251,7 +251,6 @@ void Channel::SendJson(Json::Value &data)
     Json::FastWriter writer;
     std::string json_file = writer.write(data);
     const char * pStr = json_file.c_str();
-    LOGI("send:%s",pStr);
     m_pSocketManager->SendData(m_pHandle,(void *)pStr, json_file.length());
 }
 

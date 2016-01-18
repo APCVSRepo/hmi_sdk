@@ -5,6 +5,7 @@
 #include "UI/Common/ScrollBar.h"
 #include "UI/Common/AppListWidget.h"
 
+
 #define PERFORMINTERACTION_TIMEOUT      10
 #define PERFORMINTERACTION_CHOICE       0
 
@@ -36,7 +37,8 @@ private:
     void addNewMenu(int choiceID, std::string menuName);
     void setChoicesetName(QString title);
     void setTimeOut(int duration);
-
+    // 清除所有列表项
+    void ClearAllItem();
 private:
     AppListWidget *m_listWidget;
 

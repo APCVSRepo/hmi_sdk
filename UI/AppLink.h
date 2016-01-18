@@ -12,6 +12,12 @@ typedef struct appListStruct
 {
     QString appName;
     int  appID;
+    QString strIconPath;
+
+    appListStruct():appName(""),appID(0),strIconPath("")
+    {
+
+    }
 }AppLinkItem;
 
 typedef enum
@@ -44,6 +50,7 @@ private slots:
     void findNewAppSlots();
 
 private:
+    void addNewApp(QString appName,int appID,QString appIconPath);
     void addNewApp(QString appName,int appID);
     void delNewApp(QString appName);
     void clearNewApp();
@@ -57,6 +64,11 @@ private:
     QVector<AppLinkItem>  m_appItems;
 
     void initLayout();
+/*
+    void addListItemWidget(QString text);
+    void addListItemWidget(QString text,QString strPath);
+    void flushAllItems(int currentNo);
+*/
     void flushListWidget();
 };
 

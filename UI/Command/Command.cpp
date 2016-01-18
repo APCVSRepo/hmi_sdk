@@ -114,13 +114,6 @@ void Command::clearAllCommand()
     m_vec_cmdID.clear();
     m_vec_isMenu.clear();
     m_vec_subStrList.clear();
-
-    SCmdID tmpCmdId;
-    tmpCmdId.str_command = "Exit New application";
-    tmpCmdId.i_cmdID = 0;
-    m_vec_cmdID.insert(0,tmpCmdId);
-    m_vec_isMenu.append(true);
-
 }
 
 //增加Menu，增加显示到list的最上一行;

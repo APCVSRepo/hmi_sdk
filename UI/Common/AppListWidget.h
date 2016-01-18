@@ -17,14 +17,19 @@ public:
     static QString cssString();
 	void FlushAll();
     void AddListItemWidget(QString text,bool isMenu=true);
+    void AddListItemWidget(QString text,QString strIconPath,bool isMenu = true);
     void DelListItemWidget();
     void SetScrollParams(int page,int range);
     void ScrollToIndex(int index);
     void ItemSelect(int index);
     void SetItemText(int index,QString txt);
     void setFixedSize(int w, int h);
+signals:
+    void clicked(int itemIndex);
+    void longclicked(int itemIndex);
 public slots:
     void onItemClicked(QModelIndex );
+    void onItemDoubleClicked(QModelIndex);
 private:
     ScrollBar m_scrollWidget;
 	QVector<AppItemWidget*> m_itemList;

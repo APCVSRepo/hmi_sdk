@@ -1,4 +1,7 @@
 #include "AppItemWidget.h"
+#include <QUrl>
+
+#define APPICONWIDTH 45
 
 AppItemWidget::AppItemWidget(int w,int h,QWidget *parent)
     : QWidget(parent)
@@ -9,13 +12,28 @@ AppItemWidget::AppItemWidget(int w,int h,QWidget *parent)
     m_lab_caseTitle = new QLabel(this);
     m_lab_icon = new QLabel(this);
     m_lab_border = new QLabel(this);
-    m_lab_caseTitle->setGeometry(0.1*w,0,w*0.8,h);
-    m_lab_icon->setGeometry(0.9*w,0,0.1*w,h);
+    m_pAppIconLab= new QLabel(this);
+
+    m_pAppIconLab->setGeometry(5,0,0.6*h,h);
+    m_lab_caseTitle->setGeometry(0.6*h+10,0,w-h-20,h);
+    m_lab_icon->setGeometry(w-0.4*h-10,0,0.4*h,h);
 //    QHBoxLayout *mLayout = new QHBoxLayout(this);
 //    mLayout->addStretch(10);
 //    mLayout->addWidget(m_lab_caseTitle,80,Qt::AlignLeft);
 //    mLayout->addWidget(m_lab_icon,10,Qt::AlignCenter);
 
+/*
+    m_lab_caseTitle = new QLabel;
+    m_lab_icon = new QLabel;
+    m_lab_border = new QLabel;
+    m_pAppIconLab = new QLabel;
+
+    QHBoxLayout *mLayout = new QHBoxLayout(this);
+    mLayout->addWidget(m_pAppIconLab,10,Qt::AlignLeft);
+    //mLayout->addStretch(10);
+    mLayout->addWidget(m_lab_caseTitle,80,Qt::AlignLeft);
+    mLayout->addWidget(m_lab_icon,0,Qt::AlignCenter);
+*/
 
     m_lab_caseTitle->setStyleSheet("font: 75 36pt \"Liberation Serif\";color:rgb(255,255,255);border: 0px");
 
@@ -38,11 +56,27 @@ AppItemWidget::~AppItemWidget()
         delete m_lab_icon;
     if(m_lab_border)
         delete m_lab_border;
+
+    if(m_pAppIconLab)
+        delete m_pAppIconLab;
+}
+
+void AppItemWidget::SetIcon(QString strIconPath)
+{
+    if(strIconPath != "")
+    {
+        QUrl qurl(strIconPath);
+        strIconPath = qurl.path(QUrl::FullyDecoded);
+        QPixmap pixmap(strIconPath);
+        QPixmap fitpixmap = pixmap.scaled(height()*0.6,height()*0.6,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+        m_pAppIconLab->setPixmap(fitpixmap);
+    }
 }
 
 void AppItemWidget::setText(QString text)
 {
-    m_lab_caseTitle->setText(text);
+    QFontMetrics qfm(m_lab_caseTitle->font());
+    m_lab_caseTitle->setText(qfm.elidedText(text,Qt::ElideRight,width() - height() - 20));
 }
 
 

@@ -115,6 +115,25 @@ Result AppList::recvFromServer(Json::Value jsonObj)
                     }
                 }
             }
+        }        
+        else if(str_method == "UI.SetAppIcon")
+        {
+            int iAppId = jsonObj["params"]["appID"].asInt();
+            std::vector <AppData *>::iterator Iter = m_AppDatas.begin();
+            while(Iter != m_AppDatas.end())
+            {
+                if(iAppId == (*Iter)->m_iAppID)
+                {
+                    (*Iter)->m_strAppIconFilePath = jsonObj["params"]["syncFileName"]["value"].asString();
+                    if(m_pCurApp == NULL)
+                    {
+                        m_pUIManager->onAppShow(ID_APPLINK);
+                    }
+                    //m_pUIManager->onAppShow(m_pCurApp->getCurUI());
+                    break;
+                }
+                ++Iter;
+            }
         }
         else
         {
@@ -225,6 +244,16 @@ void AppList::OnAppExit()
     m_pCurApp = NULL;
     m_pUIManager->onAppShow(ID_APPLINK);
     m_pUIManager->onAppStop();
+}
+
+void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames,std::vector<std::string> &vIconPath)
+{
+    for(int i = 0; i < m_AppDatas.size(); i++)
+    {
+        vAppIDs.push_back(m_AppDatas[i]->m_iAppID);
+        vAppNames.push_back(m_AppDatas[i]->m_szAppName);
+        vIconPath.push_back(m_AppDatas[i]->m_strAppIconFilePath);
+    }
 }
 
 void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames)

@@ -21,7 +21,7 @@ VideoStream::VideoStream(int w,int h,QWidget *parent) :
 #ifdef VIDEO_STREAM_WIDGET
     QVideoWidget(parent)
 #else
-    QWidget(parent)
+    QWidget(parent),pAVFormatContext(nullptr),pAVFrame(nullptr),pSwsContext(nullptr)
 #endif
 {
     m_i_w = w;
@@ -60,14 +60,25 @@ VideoStream::VideoStream(int w,int h,QWidget *parent) :
 
 VideoStream::~VideoStream()
 {
+
 #ifdef VIDEO_STREAM_WIDGET
     delete m_VideoPlayer;
 #else
-    avformat_free_context(pAVFormatContext);
-    av_frame_free(&pAVFrame);
-    sws_freeContext(pSwsContext);
+    if(pAVFormatContext != nullptr)
+    {
+        avformat_free_context(pAVFormatContext);
+    }
+    if(pAVFrame != nullptr)
+    {
+        av_frame_free(&pAVFrame);
+    }
+    if(pSwsContext != nullptr)
+    {
+        sws_freeContext(pSwsContext);
+    }
     //delete m_Screen;
 #endif
+
 }
 
 void VideoStream::setUrl(QString url)

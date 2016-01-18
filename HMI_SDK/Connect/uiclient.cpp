@@ -54,7 +54,9 @@ void uiClient::onRequest(Json::Value &request)
     }
     else if(method == "UI.SetAppIcon")
     {
-        sendResult(id,"SetAppIcon");
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"SetAppIcon",result);
+        //sendResult(id,"SetAppIcon");
     }
     else if(method == "UI.GetSupportedLanguages")
     {
@@ -132,12 +134,17 @@ void uiClient::onRequest(Json::Value &request)
     else if(method == "UI.PerformAudioPassThru")
     {
         m_pCallback->onRequest(request);
-        sendNotification("UI.PerformAudioPassThru",startRecordingNotify(request));
+        sendNotification("UI.PerformAudioPassThruStart",startRecordingNotify(request));
     }
     else if(method == "UI.EndAudioPassThru")
     {
         Result result=m_pCallback->onRequest(request);
         sendResult(id,"EndAudioPassThru",result);
+    }
+    else if(method == "UI.Slider")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"Slider",result);
     }
     else
     {
@@ -176,6 +183,6 @@ Json::Value uiClient::startRecordingNotify(Json::Value &request)
     }
     params["audioPassThruType"] = "RECORD_SEND";
     params["saveAudioPassThruFile"] = "-";
-    params["SendAUduiPassThruFile"] = "-";
+    params["sendAudioPassThruFile"] = "-";
     return params;
 }

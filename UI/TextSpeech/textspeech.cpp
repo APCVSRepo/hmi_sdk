@@ -32,7 +32,7 @@ unsigned int WINAPI TextSpeech::ThreadTextToSpeech(void *arg)
     if(bSuccess)
     {
         voiceObj.dynamicCall("SetRate(int)",-3).toInt();
-        voiceObj.dynamicCall("Speak(QString,SpeechVoiceSpeakFlags)",((TextSpeech *)arg)->m_strToSpeak.c_str(),0).toInt();
+        voiceObj.dynamicCall("Speak(QString,SpeechVoiceSpeakFlags)",((TextSpeech *)arg)->m_strToSpeak,0).toInt();
     }
 
     CoUninitialize();
@@ -46,7 +46,8 @@ void TextSpeech::SpeakThreadComplete()
 }
 
 
-bool TextSpeech::StartVoiceThread(std::string string)
+//bool TextSpeech::StartVoiceThread(std::string string)
+bool TextSpeech::speak(QString string)
 {
 
     if(!_bReading)
@@ -90,6 +91,7 @@ bool TextSpeech::initSpeech()
 }
 
 //文本转语音朗读函数
+/*
 bool TextSpeech::speak(QString txt)
 {
     if(!_binit)
@@ -98,6 +100,7 @@ bool TextSpeech::speak(QString txt)
     _bReading = true;
     return result;//返回是否执行阅读函数
 }
+*/
 
 //判断语音系统是否运行函数
 bool TextSpeech::isSpeaking()

@@ -81,6 +81,7 @@ private:
     void videoStreamStop(Json::Value jsonObj);
 
 public:
+    std::string m_strAppIconFilePath;
     int m_iAppID;
     std::string m_szAppName;
 };

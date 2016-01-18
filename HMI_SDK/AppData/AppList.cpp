@@ -216,6 +216,7 @@ void AppList::OnAppActivated(int iAppID)
     m_pCurApp = pData;
     SDLConnector::getSDLConnectore()->OnAppActivated(iAppID);
     m_pUIManager->onAppShow(ID_MAIN);
+    m_pUIManager->onAppActive();
 }
 
 void AppList::OnAppExit()
@@ -223,6 +224,7 @@ void AppList::OnAppExit()
     SDLConnector::getSDLConnectore()->OnAppExit(m_pCurApp->m_iAppID);
     m_pCurApp = NULL;
     m_pUIManager->onAppShow(ID_APPLINK);
+    m_pUIManager->onAppStop();
 }
 
 void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames)

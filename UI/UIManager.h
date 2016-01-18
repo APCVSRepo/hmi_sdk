@@ -30,6 +30,8 @@ public:
     explicit CUIManager(AppListInterface * pList, QWidget *parent = NULL);
     ~CUIManager();
 
+    void onAppActive();
+    void onAppStop();
     //hmi
     void onAppShow(int type);
 
@@ -58,7 +60,7 @@ public slots:
 private:
     QWidget * m_vUIWidgets[ID_UI_MAX];
     int m_iCurUI;
-    AppListInterface * m_pAppList;
+    AppListInterface * m_pList;
 
 #ifdef SDL_SUPPORT_LIB
     msp_vr_audio *m_MspVR;

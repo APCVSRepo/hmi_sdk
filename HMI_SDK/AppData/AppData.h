@@ -24,6 +24,7 @@ public:
     Json::Value getInteractionJson();
     std::string getUrlString();
     Json::Value getMediaClockJson();
+    std::string getAppName();
 
     int getCurUI();
 

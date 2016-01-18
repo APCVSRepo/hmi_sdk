@@ -7,8 +7,9 @@
 class UIInterface
 {
 public:
+    virtual void onAppActive() = 0;
+    virtual void onAppStop() = 0;
     virtual void onAppShow(int type) = 0;
-
     virtual void onVideoStreamStart() = 0;
     virtual void onVideoStreamStop() = 0;
 

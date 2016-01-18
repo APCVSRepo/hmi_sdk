@@ -1228,3 +1228,7 @@ void AppData::videoStreamStop(Json::Value jsonObj)
 //}
 
 
+std::string AppData::getAppName()
+{
+    return m_szAppName;
+}

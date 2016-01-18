@@ -38,6 +38,7 @@ public:
     virtual Json::Value getInteractionJson() = 0;
     virtual Json::Value getMediaClockJson() = 0;
     virtual std::string getUrlString() = 0;
+    virtual std::string getAppName() = 0;
 
     virtual int getCurUI() = 0;
 

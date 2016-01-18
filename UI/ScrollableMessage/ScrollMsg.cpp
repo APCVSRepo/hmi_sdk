@@ -51,8 +51,6 @@ void CScrollMsg::InitLayout()
 
     m_editText->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    m_pMainLayout=new QVBoxLayout(this);
-    this->setLayout(m_pMainLayout);
    // m_listWidget->hide();
 
     m_listWidget->setFixedSize(ui_app_width*2/3,ui_app_height);

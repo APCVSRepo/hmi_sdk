@@ -8,7 +8,7 @@ AppLink::AppLink(AppListInterface * pList, QWidget *parent)
     connect(this,SIGNAL(inAppSignals(int)),this,SLOT(inAppSlots(int)));
     connect(this,SIGNAL(findNewApp()),this,SLOT(findNewAppSlots()));
 
-    connect(m_listWidget,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(listWidgetDoubleClickedSlots(QModelIndex)));
+    connect(m_listWidget,SIGNAL(clicked(QModelIndex)),this,SLOT(listWidgetDoubleClickedSlots(QModelIndex)));
     initLayout();
 }
 

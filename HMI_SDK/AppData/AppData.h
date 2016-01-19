@@ -46,11 +46,13 @@ public:
 
     // 增加一个退出app的指令
     void addExitAppCommand();
+
+    bool ShowPreviousUI();
+
 private:
     UIInterface *m_pUIManager;
     std::vector<int> m_vecUIStack;
     void ShowUI(int);
-    void ShowPreviousUI();
 
     Json::Value m_json_show;
 //    SShow m_struct_show;

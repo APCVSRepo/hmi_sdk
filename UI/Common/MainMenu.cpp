@@ -102,9 +102,7 @@ void MainMenu::onMenuButtonClick()
                 emit menuBtnClicked("TelButton");
                 break;
             case ID_MENU_MSG:
-                {
-                m_pList->ShowAppList();
-                }
+                m_pList->ShowPreviousUI();
                 break;
             case ID_MENU_CD:
                 emit menuBtnClicked("CDButton");

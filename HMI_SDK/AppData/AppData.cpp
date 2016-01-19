@@ -257,7 +257,7 @@ int AppData::getCurUI()
     int iSize = m_vecUIStack.size();
     if(iSize > 0)
         return m_vecUIStack[iSize - 1];
-    return 0;
+    return ID_MAIN;
 }
 
 void AppData::OnShowCommand()
@@ -441,18 +441,16 @@ void AppData::ShowUI(int iUIType)
     m_pUIManager->onAppShow(iUIType);
 }
 
-void AppData::ShowPreviousUI()
+bool AppData::ShowPreviousUI()
 {
-    m_vecUIStack.pop_back();
     int iSize = m_vecUIStack.size();
-    if(iSize > 0)
+    if(iSize > 1)
     {
-        m_pUIManager->onAppShow(m_vecUIStack[iSize - 1]);
+        m_vecUIStack.pop_back();
+        m_pUIManager->onAppShow(m_vecUIStack[iSize - 2]);
+        return true;
     }
-    else
-    {
-        ShowUI(ID_MAIN);
-    }
+    return false;
 }
 
 

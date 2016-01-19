@@ -26,8 +26,13 @@ void AppList::setUIManager(UIInterface *pUIManager)
         m_pCurApp->setUIManager(pUIManager);
 }
 
-void AppList::ShowAppList()
+void AppList::ShowPreviousUI()
 {
+    if(m_pCurApp)
+    {
+        if(m_pCurApp->ShowPreviousUI())
+            return;
+    }
     m_pUIManager->onAppShow(ID_APPLINK);
 }
 
@@ -234,7 +239,7 @@ void AppList::OnAppActivated(int iAppID)
         SDLConnector::getSDLConnectore()->OnAppOut(m_pCurApp->m_iAppID);
     m_pCurApp = pData;
     SDLConnector::getSDLConnectore()->OnAppActivated(iAppID);
-    m_pUIManager->onAppShow(ID_MAIN);
+    m_pUIManager->onAppShow(m_pCurApp->getCurUI());
     m_pUIManager->onAppActive();
 }
 

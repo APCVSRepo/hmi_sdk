@@ -79,7 +79,8 @@ void CUIManager::onAppStop()
 //show app
 void CUIManager::onAppShow(int type)
 {
-    emit onAppShowSignal(type);
+    if((type >= 0) && (type < ID_UI_MAX))
+        emit onAppShowSignal(type);
 }
 
 void CUIManager::onVideoStreamStart()

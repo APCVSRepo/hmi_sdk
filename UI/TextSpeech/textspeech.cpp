@@ -10,7 +10,9 @@
 TextSpeech::TextSpeech(QObject *parent) :
     QObject(parent),_binit(0),_bReading(0)
 {
-    //initSpeech();//初始化语音
+#ifdef ANDROID
+    initSpeech();//初始化语音
+#endif
 }
 
 TextSpeech::~TextSpeech()

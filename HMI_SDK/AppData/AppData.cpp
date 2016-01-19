@@ -146,16 +146,24 @@ Result AppData::recvFromServer(Json::Value jsonObj)
             SDLConnector::getSDLConnectore()->OnVRStartRecord();
             return RESULT_USER_WAIT;
         }
+        else if(str_method=="VR.PerformInteraction")
+        {
+            m_json_interaction["ChoicesetVR"]=jsonObj["params"];
+            LOGI(m_json_interaction.toStyledString().data());
+            Json::Value initialPrompt=jsonObj["params"]["initialPrompt"];
+            std::string txt=initialPrompt[0]["text"].asString();
+            if(!IsTextUTF8((char *)txt.data(),txt.size()))
+                txt = string_To_UTF8(txt);
+            m_pUIManager->tsSpeak(ID_DEFAULT, txt);
+            //ShowUI(ID_CHOICESETVR);
+            return RESULT_USER_WAIT;
+        }
         else if(str_method == "UI.PerformInteraction")
         {
-            performInteraction(jsonObj);
-            int iUI;
-            if(jsonObj["params"].isMember("vrHelp"))
-                iUI = ID_CHOICESETVR;
-            else if(jsonObj["params"].isMember("choiceSet"))
-                iUI = ID_CHOICESET;
-
-            ShowUI(iUI);
+            m_json_interaction["id"]=jsonObj["id"];
+            m_json_interaction["Choiceset"]=jsonObj["params"];
+            LOGI(m_json_interaction.toStyledString().data());
+            ShowUI(ID_CHOICESET);
             return RESULT_USER_WAIT;
         }
         else if(str_method == "Navigation.StartStream")
@@ -338,10 +346,38 @@ void AppData::OnPerformAudioPassThru(int code)
     ShowPreviousUI();
 }
 
-void AppData::OnPerformInteraction(int code, int choiceID)
+void AppData::OnPerformInteraction(int code, int row)
 {
+    Json::Value jsonChoice=m_json_interaction["Choiceset"];
+    Json::Value jsonChoiceVR;
+    bool isVrMode=m_json_interaction.isMember("ChoicesetVR");
+    if(isVrMode)
+        jsonChoiceVR =m_json_interaction["ChoicesetVR"];
+    int choiceID=0;
+    if(jsonChoice.isMember("choiceSet")){
+        choiceID=jsonChoice["choiceSet"][row]["choiceID"].asInt();
+    }
+    if(isVrMode){
+        if(code==RESULT_TIMED_OUT){
+            if(jsonChoiceVR.isMember("timeoutPrompt")){
+                std::string speak=jsonChoiceVR["timeoutPrompt"][0]["text"].asString();
+                if(!IsTextUTF8((char *)speak.data(),speak.size()))
+                    speak = string_To_UTF8(speak);
+                m_pUIManager->tsSpeak(ID_DEFAULT,speak);
+            }
+        }
+        else{
+            if(jsonChoiceVR.isMember("helpPrompt")){
+                std::string speak=jsonChoiceVR["helpPrompt"][row]["text"].asString();
+                if(!IsTextUTF8((char *)speak.data(),speak.size()))
+                    speak = string_To_UTF8(speak);
+                m_pUIManager->tsSpeak(ID_DEFAULT,speak);
+            }
+        }
+    }
+
     SDLConnector::getSDLConnectore()->OnPerformInteraction(code, m_json_interaction["id"].asInt(), choiceID);
-    ShowPreviousUI();
+    //ShowPreviousUI();
 }
 
 

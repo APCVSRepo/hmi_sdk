@@ -73,6 +73,11 @@ void vrClient::onRequest(Json::Value &request)
         Result result=m_pCallback->onRequest(request);
         sendResult(id,"DeleteCommand",result);
     }
+    else if(method=="VR.PerformInteraction")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"PerformInteraction",result);
+    }
     else
     {
         Channel::onRequest(request);

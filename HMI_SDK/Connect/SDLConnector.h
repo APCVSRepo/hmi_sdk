@@ -127,6 +127,7 @@ public:
 
     //touch event
     void OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y);
+
 private:
     void _onButtonClickAction(std::string, std::string, int);
     void _stopPerformAudioPassThru(int);

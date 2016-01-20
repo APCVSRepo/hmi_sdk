@@ -54,18 +54,12 @@ void AppLink::listWidgetDoubleClickedSlots(QModelIndex index)
 {
     int appID = m_appItems.at(index.row()).appID;
 
-    if(appID > 1)
-        emit inAppSignals(appID);
-    else if(index.row()+1 == m_listWidget->count())
-    {
-        //App Setting
+    if(APP_ID_APPSETTING == appID)
         emit appSetting();
-    }
-    else if(index.row()+2 == m_listWidget->count())
-    {
-        //Find New App
+    else if(APP_ID_FINDAPP == appID)
         emit findNewApp();
-    }
+    else
+        emit inAppSignals(appID);
 }
 
 void AppLink::addNewApp(QString appName,int appID,QString appIconPath)

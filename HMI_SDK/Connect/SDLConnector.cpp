@@ -29,7 +29,7 @@ void SDLConnector::Close()
 }
 
 
-SDLConnector * ToSDL
+SDLConnector * SDLConnector::getSDLConnector()
 {
     if (g_SingleConnector == 0)
         g_SingleConnector = new SDLConnector();

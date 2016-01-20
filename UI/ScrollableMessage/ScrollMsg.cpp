@@ -32,9 +32,6 @@ void CScrollMsg::InitLayout()
         m_btnSoft[i]=new CButton(this);
         m_btnSoft[i]->initParameter(ui_aler_width,ui_aler_height,image[i],image[i],"",text[i]);
         m_btnSoft[i]->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
-        connect(m_btnSoft[i], SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
-
-        connect(m_btnSoft[i], SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
     }
 
     connect(m_listWidget,SIGNAL(clicked(int)),this,SLOT(onItemClicked(int)));
@@ -328,6 +325,8 @@ void CScrollMsg::showEvent(QShowEvent * e)
 
                 addSoftButton(m_jsonData["softButtons"][i]["softButtonID"].asInt(),
                         m_jsonData["softButtons"][i]["text"].asString().c_str(),m_jsonData["softButtons"][i]["isHighlighted"].asBool());
+                connect(m_btnSoft[i], SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
+                connect(m_btnSoft[i], SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
 
             }
         }

@@ -50,14 +50,17 @@ typedef enum
     TOUCH_END
 }TOUCH_TYPE;
 
+#define ToSDL SDLConnector::getSDLConnector()
+
 class SDLConnector : public INetworkStatus
 {
 private:
     SDLConnector();
+    ~SDLConnector();
 
 public:
-    static SDLConnector * getSDLConnectore();
-    ~SDLConnector();
+    static SDLConnector * getSDLConnector();
+    static void Close();
 
     bool ConnectToSDL(IMessageInterface * pMsgHandler, INetworkStatus * pNetwork = NULL);
     void ChangeMsgHandler(IMessageInterface * pMsgHandler);

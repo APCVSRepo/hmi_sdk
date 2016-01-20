@@ -289,11 +289,11 @@ void Show::btnThrClickedSlots(int btID)
     if(m_i_totalNum == m_i_currentNo && m_i_totalNum != 1)
     {
         //clicked More;
-        m_pList->getActiveApp()->OnShowCommand();
+        AppControl->OnShowCommand();
     }
     else
     {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
+        AppControl->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -301,7 +301,7 @@ void Show::btnTwoClickedSlots(int btID)
 {
     if(btID != 0)
     {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
+        AppControl->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -309,7 +309,7 @@ void Show::btnOneClickedSlots(int btID)
 {
     if(btID != 0)
     {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
+        AppControl->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -317,7 +317,7 @@ void Show::btnThrClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
+        AppControl->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -325,7 +325,7 @@ void Show::btnTwoClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
+        AppControl->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -333,7 +333,7 @@ void Show::btnOneClickedLongSlots(int btID)
 {
     if(btID != 0)
     {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
+        AppControl->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -342,9 +342,9 @@ void Show::showEvent(QShowEvent * e)
     Json::Value pObj;
     std::vector <SSoftButton > vec_softButtons;
     vec_softButtons.clear();
-    if (m_pList->getActiveApp())
+    if (AppControl)
     {
-        pObj = m_pList->getActiveApp()->getShowData();
+        pObj = AppControl->getShowData();
 		if(pObj.isNull())
 			return;
 		Json::Value jsonParams = pObj["params"];

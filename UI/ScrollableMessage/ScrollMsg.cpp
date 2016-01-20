@@ -263,7 +263,7 @@ void CScrollMsg::onButtonClickedSlots(int btID)
     emit scrollMsgAbort(1);
     if(btID != 0)
     {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
+        AppControl->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -282,7 +282,7 @@ void CScrollMsg::onButtonClickedLongSlots(int btID)
     emit scrollMsgAbort(1);
     if(btID != 0)
     {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
+        AppControl->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -290,29 +290,29 @@ void CScrollMsg::onItemClicked(int index)
 {
     m_timer.stop();
     emit scrollMsgAbort(1);
-    m_pList->getActiveApp()->OnSoftButtonClick(m_listButton.at(index).btnId,0);
+    AppControl->OnSoftButtonClick(m_listButton.at(index).btnId,0);
 }
 
 void CScrollMsg::onItemLongClicked(int index)
 {
     m_timer.stop();
     emit scrollMsgAbort(1);
-    m_pList->getActiveApp()->OnSoftButtonClick(m_listButton.at(index).btnId,1);
+    AppControl->OnSoftButtonClick(m_listButton.at(index).btnId,1);
 }
 
 void CScrollMsg::scrollMsgAbortSlots(int reason)
 {
     //_D("smID=%d, reason=%d\n",smID,reason);
-    m_pList->getActiveApp()->OnScrollMessageResponse(reason);
+    AppControl->OnScrollMessageResponse(reason);
 }
 
 
 void CScrollMsg::showEvent(QShowEvent * e)
 {
-    if (m_pList->getActiveApp())
+    if (AppControl)
     {
         m_listButton.clear();
-        Json::Value m_jsonData = m_pList->getActiveApp()->getScrollableMsgJson()["params"];
+        Json::Value m_jsonData = AppControl->getScrollableMsgJson()["params"];
 
         setTimeOut(m_jsonData["timeout"].asInt());
 

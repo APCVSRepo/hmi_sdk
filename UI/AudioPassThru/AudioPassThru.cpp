@@ -179,14 +179,14 @@ void CAudioPassThru::onButtonClickedSlots(int id)
 
 void CAudioPassThru::audioPassThruHideSlots(int code)
 {
-    m_pList->getActiveApp()->OnPerformAudioPassThru(code);
+    AppControl->OnPerformAudioPassThru(code);
 }
 
 void CAudioPassThru::showEvent(QShowEvent * e)
 {
-    if (m_pList->getActiveApp())
+    if (AppControl)
     {        
-        Json::Value m_jsonData = m_pList->getActiveApp()->getAudioPassThruJson();
+        Json::Value m_jsonData = AppControl->getAudioPassThruJson();
         LOGI("---CAudioPassThru::showEvent   %s",m_jsonData.toStyledString().c_str());
         if(!m_jsonData.isMember("id") || !m_jsonData.isMember("params"))
         {

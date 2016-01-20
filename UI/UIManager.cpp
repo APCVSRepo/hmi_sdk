@@ -92,7 +92,7 @@ void CUIManager::onVideoStreamStart()
 void CUIManager::onVideoStartSlots()
 {
     fflush(stdout);
-    std::string str_url = m_pList->getActiveApp()->getUrlString();
+    std::string str_url = AppControl->getUrlString();
     //_D("%s\n",str_url.data());
     ((MainMenu *)m_vUIWidgets[ID_MAIN])->StartVideoStream(str_url.c_str());
 }

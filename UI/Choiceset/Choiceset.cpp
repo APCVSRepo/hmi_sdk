@@ -67,7 +67,7 @@ void Choiceset::flushListWidget()
 void Choiceset::menuClickedSlots(int code,int row)
 {
     //_D("code=%d:%d:%d\n",code,performInteractionID,choiceID);
-    m_pList->getActiveApp()->OnPerformInteraction(code, row);
+    AppControl->OnPerformInteraction(code, row);
 }
 
 void Choiceset::setChoicesetName(QString title)
@@ -97,9 +97,9 @@ void Choiceset::showEvent(QShowEvent * e)
 {
     setChoicesetName("Choice Name");
     ClearAllItem();
-    if (m_pList->getActiveApp())
+    if (AppControl)
     {
-        Json::Value jsonData = m_pList->getActiveApp()->getInteractionJson();
+        Json::Value jsonData = AppControl->getInteractionJson();
         Json::Value jsonChoice= jsonData["Choiceset"];
         //setChoicesetName(jsonChoice["vrHelpTitle"].asString().c_str());
         if(jsonChoice.isMember("timeout"))

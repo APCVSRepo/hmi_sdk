@@ -216,6 +216,19 @@ void AppList::newAppRegistered(Json::Value jsonObj)
     pData->m_iAppID = jsonObj["params"]["application"]["appID"].asInt();
     pData->m_szAppName = jsonObj["params"]["application"]["appName"].asString();
     pData->addExitAppCommand();
+
+    std::vector <AppData *>::iterator i;
+    for(i = m_AppDatas.begin(); i != m_AppDatas.end(); i++)
+    {
+        AppData * pOne = *i;
+        if(pOne->m_iAppID == pData->m_iAppID)
+        {
+            m_AppDatas.erase(i);
+            delete pOne;
+            break;
+        }
+    }
+
     m_AppDatas.push_back(pData);
 }
 
@@ -236,16 +249,16 @@ void AppList::OnAppActivated(int iAppID)
     }
 
     if(m_pCurApp != NULL)
-        SDLConnector::getSDLConnectore()->OnAppOut(m_pCurApp->m_iAppID);
+        ToSDL->OnAppOut(m_pCurApp->m_iAppID);
     m_pCurApp = pData;
-    SDLConnector::getSDLConnectore()->OnAppActivated(iAppID);
+    ToSDL->OnAppActivated(iAppID);
     m_pUIManager->onAppShow(m_pCurApp->getCurUI());
     m_pUIManager->onAppActive();
 }
 
 void AppList::OnAppExit()
 {
-    SDLConnector::getSDLConnectore()->OnAppExit(m_pCurApp->m_iAppID);
+    ToSDL->OnAppExit(m_pCurApp->m_iAppID);
     m_pCurApp = NULL;
     m_pUIManager->onAppShow(ID_APPLINK);
     m_pUIManager->onAppStop();

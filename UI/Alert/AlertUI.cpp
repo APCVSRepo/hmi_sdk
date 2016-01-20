@@ -229,7 +229,7 @@ void CAlertUI::onButtonClickedSlots(int btID)
     alertAbortSlots(1);
     if(btID != 0)
     {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 0);
+        AppControl->OnSoftButtonClick(btID, 0);
     }
 }
 
@@ -239,7 +239,7 @@ void CAlertUI::onButtonClickedLongSlots(int btID)
     alertAbortSlots(1);
     if(btID != 0)
     {
-        m_pList->getActiveApp()->OnSoftButtonClick(btID, 1);
+        AppControl->OnSoftButtonClick(btID, 1);
     }
 }
 
@@ -300,18 +300,17 @@ void CAlertUI::onButtonClickedLongSlots(int btID)
 void CAlertUI::alertAbortSlots(int reason)
 {
     //_D("alertID=%d, reason=%d\n",alertID,reason);
-    m_pList->getActiveApp()->OnAlertResponse(reason);
+    AppControl->OnAlertResponse(reason);
 }
 
 void CAlertUI::showEvent(QShowEvent * e)
 {
     Json::Value pObj;
     int itemCnt = 0;
-    std::string strTemp("");
 
-    if (m_pList->getActiveApp())
+    if (AppControl)
     {
-        pObj = m_pList->getActiveApp()->getAlertJson();
+        pObj = AppControl->getAlertJson();
 
         setAlertText(0,"");
         setAlertText(1,"");

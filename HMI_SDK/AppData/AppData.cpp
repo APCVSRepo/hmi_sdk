@@ -143,7 +143,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
         {
             performAudioPassThru(jsonObj);            
             ShowUI(ID_AUDIOPASSTHRU);
-            SDLConnector::getSDLConnectore()->OnVRStartRecord();
+            ToSDL->OnVRStartRecord();
             return RESULT_USER_WAIT;
         }
         else if(str_method=="VR.PerformInteraction")
@@ -240,7 +240,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
                 strVRName = string_To_UTF8(strVRName);
 
             m_pUIManager->tsSpeak(ID_CANCEL, strVRName);
-            SDLConnector::getSDLConnectore()->OnVRCommand(m_iAppID, jsonObj["params"]["cmdID"].asInt());
+            ToSDL->OnVRCommand(m_iAppID, jsonObj["params"]["cmdID"].asInt());
         }
         else if(str_method=="TTS.Speak")
         {
@@ -277,13 +277,13 @@ void AppData::OnShowCommand()
 void AppData::OnMenuBtnClick(std::string btnText)
 {
     if("FMButton" == btnText)
-        SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, 101);
+        ToSDL->OnCommandClick(m_iAppID, 101);
     else if("TelButton" == btnText)
-        SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, 102);
+        ToSDL->OnCommandClick(m_iAppID, 102);
     else if("MsgButton" == btnText)
-        SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, 103);
+        ToSDL->OnCommandClick(m_iAppID, 103);
     else if("CDButton" == btnText)
-        SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, 104);
+        ToSDL->OnCommandClick(m_iAppID, 104);
     else if("ListButton" == btnText)
     {
 //        SDLConnector::getSDLConnectore()->OnCommandClick(m_i_currentAppID, 105);
@@ -293,47 +293,47 @@ void AppData::OnMenuBtnClick(std::string btnText)
 
 void AppData::OnVRStartRecord()
 {
-    SDLConnector::getSDLConnectore()->OnVRStartRecord();
+    ToSDL->OnVRStartRecord();
     ShowUI(ID_AUDIOPASSTHRU);
 }
 
 void AppData::OnVRCancelRecord()
 {
-    SDLConnector::getSDLConnectore()->OnVRCancelRecord();
+    ToSDL->OnVRCancelRecord();
 }
 
 void AppData::OnSoftButtonClick(int sbID, int mode)
 {
-    SDLConnector::getSDLConnectore()->OnSoftButtonClick(sbID, mode);
+    ToSDL->OnSoftButtonClick(sbID, mode);
 }
 
 void AppData::OnCommandClick(int cmdID)
 {
-    SDLConnector::getSDLConnectore()->OnCommandClick(m_iAppID, cmdID);
+    ToSDL->OnCommandClick(m_iAppID, cmdID);
     ShowPreviousUI();
 }
 
 void AppData::OnAlertResponse(int reason)
 {
-    SDLConnector::getSDLConnectore()->OnAlertResponse(m_json_alert["id"].asInt(), reason);
+    ToSDL->OnAlertResponse(m_json_alert["id"].asInt(), reason);
     ShowPreviousUI();
 }
 
 void AppData::OnScrollMessageResponse(int reason)
 {
-    SDLConnector::getSDLConnectore()->OnScrollMessageResponse(m_json_scrollableMessage["id"].asInt(), reason);
+    ToSDL->OnScrollMessageResponse(m_json_scrollableMessage["id"].asInt(), reason);
     ShowPreviousUI();
 }
 
 void AppData::OnSliderResponse( int code, int sliderPosition)
 {
-    SDLConnector::getSDLConnectore()->OnSliderResponse(code, m_json_slider["id"].asInt(), sliderPosition);
+    ToSDL->OnSliderResponse(code, m_json_slider["id"].asInt(), sliderPosition);
     ShowPreviousUI();
 }
 
 void AppData::OnTTSSpeek(int code)
 {
-    SDLConnector::getSDLConnectore()->OnTTSSpeek(m_json_tsSpeak["id"].asInt(), code);
+    ToSDL->OnTTSSpeek(m_json_tsSpeak["id"].asInt(), code);
 }
 
 void AppData::OnPerformAudioPassThru(int code)
@@ -341,8 +341,8 @@ void AppData::OnPerformAudioPassThru(int code)
     if(m_json_audioPassThru == Json::Value::null)
         return;
 
-    SDLConnector::getSDLConnectore()->OnPerformAudioPassThru(m_iAppID, m_json_audioPassThru["id"].asInt(), code);
-    SDLConnector::getSDLConnectore()->OnVRCancelRecord();
+    ToSDL->OnPerformAudioPassThru(m_iAppID, m_json_audioPassThru["id"].asInt(), code);
+    ToSDL->OnVRCancelRecord();
     ShowPreviousUI();
 }
 
@@ -376,7 +376,7 @@ void AppData::OnPerformInteraction(int code, int row)
         }
     }
 
-    SDLConnector::getSDLConnectore()->OnPerformInteraction(code, m_json_interaction["id"].asInt(), choiceID);
+    ToSDL->OnPerformInteraction(code, m_json_interaction["id"].asInt(), choiceID);
     //ShowPreviousUI();
 }
 

@@ -1,7 +1,7 @@
 #ifndef APPITEMWIDGET_H
 #define APPITEMWIDGET_H
 
-#include "UI/AppInclude.h"
+#include "UI/UIInclude.h"
 
 
 class AppItemWidget : public QWidget

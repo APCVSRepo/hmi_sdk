@@ -13,7 +13,7 @@ win32:QT += axcontainer
 DEFINES += __STDINT_MACROS  #for ffmpeg
 #CONFIG  += wince  ##wince
 
-TARGET = AppLinkDevice
+TARGET = AppLink_HMI
 TEMPLATE = app
 
 MOC_DIR=temp/moc
@@ -41,7 +41,6 @@ SOURCES += \
     Tools/json/json_reader.cpp \
     HMI_SDK/AppData/AppList.cpp \
     HMI_SDK/AppData/AppData.cpp \
-    UI/AppLink.cpp \
     UI/Alert/AlertUI.cpp \
     UI/AudioPassThru/AudioPassThru.cpp \
     UI/Choiceset/ChoicesetVR.cpp \
@@ -75,7 +74,8 @@ SOURCES += \
     HMI_SDK/Connect/TTS.cpp \
     HMI_SDK/Connect/UI.cpp \
     HMI_SDK/Connect/VehicleInfo.cpp \
-    HMI_SDK/Connect/VR.cpp
+    HMI_SDK/Connect/VR.cpp \
+    UI/AppList/AppListUI.cpp
 
 
 
@@ -109,8 +109,6 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/Common/MainMenu.h \
     UI/Common/BaseWidght.h \
     UI/Common/AppBase.h \
-    UI/AppLink.h \
-    UI/AppInclude.h \
     UI/UIInterface.h \
     UI/UIManager.h \
     UI/Alert/AlertUI.h \
@@ -129,13 +127,11 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/Common/Background.h \
     UI/VideoStream/VideoStream.h \
     UI/TextSpeech/textspeech.h \
-    UI/Singleton.h \
     UI/AudioTrans/AudioInput.h \
     UI/AudioTrans/MspVRAudio.h \
     UI/TextSpeech/TextToSpeech.h \
     UI/AudioTrans/AudioOutput.h \
     AppManager.h \
-    UI/Common/AppListWidget.h \
     HMI_SDK/AppData/AppCommon.h \
     HMI_SDK/Connect/BasicCommunication.h \
     HMI_SDK/Connect/Buttons.h \
@@ -144,7 +140,11 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     HMI_SDK/Connect/TTS.h \
     HMI_SDK/Connect/UI.h \
     HMI_SDK/Connect/VehicleInfo.h \
-    HMI_SDK/Connect/VR.h
+    HMI_SDK/Connect/VR.h \
+    Include/ProtocolDefines.h \
+    UI/Common/AppListWidget.h \
+    UI/UIInclude.h \
+    UI/AppList/AppListUI.h
 
 
 RESOURCES += \

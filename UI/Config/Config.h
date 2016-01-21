@@ -1,6 +1,5 @@
 ﻿#ifndef CONFIG_H
 #define CONFIG_H
-#include "../Singleton.h"
 #include <Include/global_first.h>
 enum
 {

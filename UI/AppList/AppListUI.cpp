@@ -1,7 +1,8 @@
-﻿#include "AppLink.h"
+﻿#include "AppListUI.h"
 #include "UI/Notify/Notify.h"
 #include "Common/AppBase.h"
-AppLink::AppLink(AppListInterface * pList, QWidget *parent)
+
+AppListUI::AppListUI(AppListInterface * pList, QWidget *parent)
     : AppBase(pList, parent)
 {
     m_listWidget = new AppListWidget(ui_app_width*0.1,0,ui_app_width*0.8,ui_app_height,this);
@@ -12,17 +13,17 @@ AppLink::AppLink(AppListInterface * pList, QWidget *parent)
     initLayout();
 }
 
-AppLink::~AppLink()
+AppListUI::~AppListUI()
 {
 }
 
-void AppLink::initLayout()
+void AppListUI::initLayout()
 {
 
 }
 
 /*
-void AppLink::addListItemWidget(QString text,QString strPath)
+void AppListUI::addListItemWidget(QString text,QString strPath)
 {
     QListWidgetItem *item = new QListWidgetItem;
     item->setSizeHint(QSize(m_listWidget.width(),ui_app_height/4.0));
@@ -41,7 +42,7 @@ void AppLink::addListItemWidget(QString text,QString strPath)
 }
 
 //刷新选中的白框在哪一行上;
-void AppLink::flushAllItems(int currentNo)
+void AppListUI::flushAllItems(int currentNo)
 {
     for(int i = 0; i < m_vec_appItemWidget.count(); i++)
         m_vec_appItemWidget.at(i)->flush(currentNo);
@@ -50,7 +51,7 @@ void AppLink::flushAllItems(int currentNo)
 
 
 //双击某行，可进行某一行的子菜单;
-void AppLink::listWidgetDoubleClickedSlots(QModelIndex index)
+void AppListUI::listWidgetDoubleClickedSlots(QModelIndex index)
 {
     int appID = m_appItems.at(index.row()).appID;
 
@@ -62,9 +63,9 @@ void AppLink::listWidgetDoubleClickedSlots(QModelIndex index)
         emit inAppSignals(appID);
 }
 
-void AppLink::addNewApp(QString appName,int appID,QString appIconPath)
+void AppListUI::addNewApp(QString appName,int appID,QString appIconPath)
 {
-    AppLinkItem linkItem;
+    AppListItem linkItem;
     linkItem.appID=appID;
     linkItem.appName=appName;
     linkItem.strIconPath = appIconPath;
@@ -72,19 +73,19 @@ void AppLink::addNewApp(QString appName,int appID,QString appIconPath)
 }
 
 //有新的APP上线，增加显示到list的最上一行;
-void AppLink::addNewApp(QString appName, int appID)
+void AppListUI::addNewApp(QString appName, int appID)
 {
 //    m_vec_string.insert(0,appTitle);
-    AppLinkItem linkItem;
+    AppListItem linkItem;
     linkItem.appID=appID;
     linkItem.appName=appName;
     m_appItems.insert(0,linkItem);
 }
-void AppLink::clearNewApp()
+void AppListUI::clearNewApp()
 {
     m_appItems.clear();
 
-    AppLinkItem linkItem1,linkItem2;
+    AppListItem linkItem1,linkItem2;
     linkItem1.appID=APP_ID_APPSETTING;
     linkItem1.appName="App settings";
     linkItem2.appID=APP_ID_FINDAPP;
@@ -94,7 +95,7 @@ void AppLink::clearNewApp()
 }
 
 //刷新list列表
-void AppLink::flushListWidget()
+void AppListUI::flushListWidget()
 {
 /*
     for(int i = 0; i < m_vec_listItem.size(); i++)
@@ -113,9 +114,9 @@ void AppLink::flushListWidget()
     m_vec_appItemWidget.clear();
     m_listWidget.clear();
 
-    for(int i = 0; i < m_vec_appList.size(); i++)
-        //addListItemWidget(m_vec_appList.at(i).str_appName);
-        addListItemWidget(m_vec_appList.at(i).str_appName,m_vec_appList.at(i).strIconPath);
+    for(int i = 0; i < m_vec_AppList.size(); i++)
+        //addListItemWidget(m_vec_AppList.at(i).str_appName);
+        addListItemWidget(m_vec_AppList.at(i).str_appName,m_vec_AppList.at(i).strIconPath);
 
     if(m_listWidget.count() > 4)
     {
@@ -131,23 +132,23 @@ void AppLink::flushListWidget()
 	m_listWidget->FlushAll();
 }
 
-void AppLink::inAppSlots(int appID)
+void AppListUI::inAppSlots(int appID)
 {
     m_pList->OnAppActivated(appID);
 }
 
 
 
-void AppLink::findNewAppSlots()
+void AppListUI::findNewAppSlots()
 {
     Notify n(this->parentWidget());
     n.showDlg();
 }
 
-void AppLink::showEvent(QShowEvent * e)
+void AppListUI::showEvent(QShowEvent * e)
 {
     // TODO: getData();
-    LOGI("---AppLink::showEvent");
+    LOGI("---AppListUI::showEvent");
     clearNewApp();
     setTitle("Mobile Apps");
 

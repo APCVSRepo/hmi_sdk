@@ -1,7 +1,7 @@
-﻿#ifndef APPLINK_H
-#define APPLINK_H
+﻿#ifndef APPLIST_UI_H
+#define APPLIST_UI_H
 
-#include "AppInclude.h"
+#include "UIInclude.h"
 #include "Common/AppBase.h"
 #include "Common/ScrollBar.h"
 #include "Common/AppItemWidget.h"
@@ -18,7 +18,7 @@ typedef struct appListStruct
     {
 
     }
-}AppLinkItem;
+}AppListItem;
 
 typedef enum
 {
@@ -27,13 +27,13 @@ typedef enum
     APP_ID_MORE
 }APP_ID_MENU;
 
-class AppLink : public AppBase
+class AppListUI : public AppBase
 {
     Q_OBJECT
 
 public:
-    AppLink(AppListInterface * pList, QWidget *parent = 0);
-    ~AppLink();
+    AppListUI(AppListInterface * pList, QWidget *parent = 0);
+    ~AppListUI();
 
 protected:
     virtual void showEvent(QShowEvent * e);
@@ -61,7 +61,7 @@ private:
 
     AppListWidget *m_listWidget;
 
-    QVector<AppLinkItem>  m_appItems;
+    QVector<AppListItem>  m_appItems;
 
     void initLayout();
 /*
@@ -72,4 +72,4 @@ private:
     void flushListWidget();
 };
 
-#endif // APPLINK_H
+#endif // APPLIST_UI_H

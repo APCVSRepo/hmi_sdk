@@ -1,23 +1,23 @@
 ﻿#include <Include/global_first.h>
-#include <Connect/vehicleinfoclient.h>
+#include <Connect/VehicleInfo.h>
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <cassert>
 #include "json/json.h"
 
-vehicleInfoClient::vehicleInfoClient() : Channel(700,"VehicleInfo")
+VehicleInfo::VehicleInfo() : Channel(700,"VehicleInfo")
 {
 
 }
 
-vehicleInfoClient::~vehicleInfoClient()
+VehicleInfo::~VehicleInfo()
 {
 
 }
 
 
-void vehicleInfoClient::onRequest(Json::Value &request)
+void VehicleInfo::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
     int  id = request["id"].asInt();
@@ -65,7 +65,7 @@ void vehicleInfoClient::onRequest(Json::Value &request)
 
 
 
-bool vehicleInfoClient::getVehicleData(Json::Value &message,Json::Value &result)
+bool VehicleInfo::getVehicleData(Json::Value &message,Json::Value &result)
 {
     Json::Value vehicle;
     Json::Value data;
@@ -114,7 +114,7 @@ bool vehicleInfoClient::getVehicleData(Json::Value &message,Json::Value &result)
     return ret;
 }
 
-Json::Value vehicleInfoClient::vehicleInfoReadDIDResponse(Json::Value &request)
+Json::Value VehicleInfo::vehicleInfoReadDIDResponse(Json::Value &request)
 {
     Json::Value did;
     Json::Value didLocation;
@@ -141,7 +141,7 @@ Json::Value vehicleInfoClient::vehicleInfoReadDIDResponse(Json::Value &request)
     return result;
 }
 
-Json::Value vehicleInfoClient::vehicleInfoGetDTCsResponse(Json::Value &request)
+Json::Value VehicleInfo::vehicleInfoGetDTCsResponse(Json::Value &request)
 {
     Json::Value dtc;
     dtc = g_VehicleInfoJson["dtc"];

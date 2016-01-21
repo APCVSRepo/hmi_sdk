@@ -2,14 +2,14 @@
 #define __SDL_CONNECTOR_H__
 #include "Connect/ISocketManager.h"
 
-#include "Connect/basecommunicationclient.h"
-#include "Connect/buttonsclient.h"
-#include "Connect/navigationclient.h"
-#include "Connect/ttsclient.h"
-#include "Connect/uiclient.h"
-#include "Connect/vehicleinfoclient.h"
-#include "Connect/vrclient.h"
-#include "Connect/socketstosdl.h"
+#include "Connect/BasicCommunication.h"
+#include "Connect/Buttons.h"
+#include "Connect/Navigation.h"
+#include "Connect/TTS.h"
+#include "Connect/UI.h"
+#include "Connect/VehicleInfo.h"
+#include "Connect/VR.h"
+#include "Connect/SocketsToSDL.h"
 #include <string>
 #include "json/json.h"
 #include <stdio.h>
@@ -72,13 +72,13 @@ private:
     std::vector<IChannel*> m_channels;
     bool    m_sdl_is_connected;
 
-    vrClient m_VR;
-    baseCommunicationClient m_Base;
-    buttonsClient m_Buttons;
-    navigationClient m_Navi;    
-    ttsClient m_TTS;
-    vehicleInfoClient m_Vehicle;
-    uiClient m_UI;
+    VR m_VR;
+    BasicCommunication m_Base;
+    Buttons m_Buttons;
+    Navigation m_Navi;    
+    TTS m_TTS;
+    VehicleInfo m_Vehicle;
+    UI m_UI;
 
     INetworkStatus * m_pNetwork;
     IMessageInterface * m_pMsgHandler;

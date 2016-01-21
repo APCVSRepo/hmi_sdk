@@ -1,21 +1,21 @@
 ﻿#include <Include/global_first.h>
-#include <Connect/ttsclient.h>
+#include <Connect/TTS.h>
 #include <iostream>
 #include <string>
 #include "json/json.h"
 
-ttsClient::ttsClient() : Channel(300,"TTS")
+TTS::TTS() : Channel(300,"TTS")
 {
 
 }
 
-ttsClient::~ttsClient()
+TTS::~TTS()
 {
 
 }
 
 
-void ttsClient::onRequest(Json::Value &request)
+void TTS::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
     int  id= request["id"].asInt();

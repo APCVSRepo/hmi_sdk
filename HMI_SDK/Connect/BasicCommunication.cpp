@@ -1,20 +1,20 @@
 ﻿#include "Include/global_first.h"
-#include "Connect/basecommunicationclient.h"
+#include "Connect/BasicCommunication.h"
 
 #include <iostream>
 #include <string>
 #include "json/json.h"
 
-baseCommunicationClient::baseCommunicationClient() : Channel(500,"BasicCommunication")
+BasicCommunication::BasicCommunication() : Channel(500,"BasicCommunication")
 {
 }
 
-baseCommunicationClient::~baseCommunicationClient()
+BasicCommunication::~BasicCommunication()
 {
 
 }
 
-void baseCommunicationClient::onRegistered()
+void BasicCommunication::onRegistered()
 {
 	SubscribeToNotification("BasicCommunication.OnAppRegistered");
 	SubscribeToNotification("BasicCommunication.OnAppUnregistered");
@@ -23,7 +23,7 @@ void baseCommunicationClient::onRegistered()
     sendNotification("BasicCommunication.OnReady");
 }
 
-void baseCommunicationClient::onUnregistered()
+void BasicCommunication::onUnregistered()
 {
 	UnsubscribeFromNotification("BasicCommunication.OnAppRegistered");
 	UnsubscribeFromNotification("BasicCommunication.OnAppUnregistered");
@@ -33,7 +33,7 @@ void baseCommunicationClient::onUnregistered()
 
 
 
-void baseCommunicationClient::onRequest(Json::Value &request)
+void BasicCommunication::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
     int  id= request["id"].asInt();
@@ -79,7 +79,7 @@ void baseCommunicationClient::onRequest(Json::Value &request)
     }
 }
 
-void baseCommunicationClient::onNotification(Json::Value &jsonObj)
+void BasicCommunication::onNotification(Json::Value &jsonObj)
 {
     std::string method = jsonObj["method"].asString();
     if(method == "BasicCommunication.SDLLog"){

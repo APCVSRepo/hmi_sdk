@@ -6,11 +6,11 @@
 #include "ISocketManager.h"
 #include "Channel.h"
 
-class navigationClient : public Channel
+class Navigation : public Channel
 {
 public:
-    navigationClient();
-    ~navigationClient();
+    Navigation();
+    ~Navigation();
 protected:
     void onRequest(Json::Value &);
 

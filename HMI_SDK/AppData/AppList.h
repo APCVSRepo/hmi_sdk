@@ -1,8 +1,6 @@
 ﻿#ifndef APPLIST_H
 #define APPLIST_H
 
-#include "Connect/connect.h"
-
 #include "AppListInterface.h"
 #include "AppData.h"
 #include "UI/UIInterface.h"

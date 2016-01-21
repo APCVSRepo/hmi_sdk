@@ -6,8 +6,6 @@
 #  include <stdlib.h>
 # endif
 # include <winsock2.h>
-
-
 #endif
 
 #include <stdarg.h>

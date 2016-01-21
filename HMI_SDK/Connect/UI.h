@@ -6,11 +6,11 @@
 #include "Channel.h"
 
 
-class uiClient : public Channel
+class UI : public Channel
 {
 public:
-    uiClient();
-    ~uiClient();
+    UI();
+    ~UI();
 protected:
     void onRegistered();
     void onUnregistered();

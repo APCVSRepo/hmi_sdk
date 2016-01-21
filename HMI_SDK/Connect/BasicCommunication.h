@@ -5,11 +5,11 @@
 
 #include "Connect/Channel.h"
 
-class baseCommunicationClient : public Channel
+class BasicCommunication : public Channel
 {
 public:
-    baseCommunicationClient();
-    ~baseCommunicationClient();
+    BasicCommunication();
+    ~BasicCommunication();
 protected:
     void onRegistered();
     void onUnregistered();

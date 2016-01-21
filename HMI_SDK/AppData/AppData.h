@@ -1,7 +1,6 @@
 ﻿#ifndef APPDATA_H
 #define APPDATA_H
 
-#include "Connect/connect.h"
 #include "Connect/SDLConnector.h"
 #include "AppData/AppDataInterface.h"
 #include "UIInterface.h"

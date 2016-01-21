@@ -32,5 +32,30 @@
         <file>images/muparray.png</file>
         <file>images/mf.png</file>
         <file>images/Screen.png</file>
+        <file>images/applinkmain.png</file>
+        <file>images/downmenu.png</file>
+        <file>images/home.png</file>
+        <file>images/key_off.png</file>
+        <file>images/key_on.png</file>
+        <file>images/link_off.png</file>
+        <file>images/link_on.png</file>
+        <file>images/list_off.png</file>
+        <file>images/list_on.png</file>
+        <file>images/music_off.png</file>
+        <file>images/music_on.png</file>
+        <file>images/phone_off.png</file>
+        <file>images/phone_on.png</file>
+        <file>images/setting_off.png</file>
+        <file>images/setting_on.png</file>
+        <file>images/wifi.png</file>
+        <file>images/mainmenu.png</file>
+        <file>images/gamechild_on.png</file>
+        <file>images/listchild_on.png</file>
+        <file>images/phonechild_on.png</file>
+        <file>images/phonechild_off.png</file>
+        <file>images/listchild_off.png</file>
+        <file>images/gamechild_off.png</file>
+        <file>images/app_on.png</file>
+        <file>images/app_off.png</file>
     </qresource>
 </RCC>

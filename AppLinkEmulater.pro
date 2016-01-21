@@ -67,6 +67,9 @@ SOURCES += \
     UI/AudioTrans/AudioOutput.cpp \
     AppManager.cpp \
     UI/Common/AppListWidget.cpp \
+    UI/Common/MenuButton.cpp \
+    UI/AppLinkMenu.cpp \
+    UI/Common/CAppButton.cpp  \
     HMI_SDK/Connect/BasicCommunication.cpp \
     HMI_SDK/Connect/Buttons.cpp \
     HMI_SDK/Connect/Navigation.cpp \
@@ -130,6 +133,9 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/AudioTrans/AudioInput.h \
     UI/AudioTrans/MspVRAudio.h \
     UI/TextSpeech/TextToSpeech.h \
+    UI/Common/MenuButton.h \
+    UI/AppLinkMenu.h \
+    UI/Common/CAppButton.h \
     UI/AudioTrans/AudioOutput.h \
     AppManager.h \
     HMI_SDK/AppData/AppCommon.h \

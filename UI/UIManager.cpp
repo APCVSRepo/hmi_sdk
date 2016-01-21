@@ -34,9 +34,9 @@ CUIManager::~CUIManager()
 void CUIManager::initAppHMI()
 {
     MainMenu * pMain = new MainMenu(m_pList);
-    QWidget* pParent = pMain->CenterWidget();
-    m_vUIWidgets[ID_MAIN]= pMain;
-    m_vUIWidgets[ID_APPLINK]=new AppListUI(m_pList, pParent);
+	QWidget* pParent = pMain->CenterWidget();
+	m_vUIWidgets[ID_MAIN] = pMain;
+	m_vUIWidgets[ID_APPLINK] = new AppLinkMenu(m_pList, pMain); 
     m_vUIWidgets[ID_ALERT]=new CAlertUI(m_pList, pParent);
     m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pList, pParent);
     m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pList, pParent);

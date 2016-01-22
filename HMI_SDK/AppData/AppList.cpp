@@ -30,7 +30,7 @@ void AppList::ShowPreviousUI()
 {
     if(m_pCurApp)
     {
-        if(m_pCurApp->ShowPreviousUI())
+        if(m_pCurApp->ShowPreviousUI(false))
             return;
     }
     m_pUIManager->onAppShow(ID_APPLINK);

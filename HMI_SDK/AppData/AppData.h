@@ -46,7 +46,8 @@ public:
     // 增加一个退出app的指令
     void addExitAppCommand();
 
-    bool ShowPreviousUI();
+    // bInApp: just show the UI of the app, or could bjump to the applist.
+    bool ShowPreviousUI(bool bInApp = true);
 
 private:
     UIInterface *m_pUIManager;

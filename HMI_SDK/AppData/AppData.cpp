@@ -477,16 +477,23 @@ void AppData::ShowUI(int iUIType)
     m_pUIManager->onAppShow(iUIType);
 }
 
-bool AppData::ShowPreviousUI()
+bool AppData::ShowPreviousUI(bool bInApp)
 {
     int iSize = m_vecUIStack.size();
+    if(iSize > 0)
+        m_vecUIStack.pop_back();
+
     if(iSize > 1)
     {
-        m_vecUIStack.pop_back();
         m_pUIManager->onAppShow(m_vecUIStack[iSize - 2]);
         return true;
     }
-    return false;
+
+    if(!bInApp)
+        return false;
+
+    ShowUI(ID_MAIN);
+    return true;
 }
 
 

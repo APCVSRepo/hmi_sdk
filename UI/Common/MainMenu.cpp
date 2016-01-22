@@ -102,9 +102,7 @@ void MainMenu::onMenuButtonClick()
                 emit menuBtnClicked("TelButton");
                 break;
             case ID_MENU_MSG:
-                {
-                m_pList->ShowAppList();
-                }
+                m_pList->ShowPreviousUI();
                 break;
             case ID_MENU_CD:
                 emit menuBtnClicked("CDButton");
@@ -123,9 +121,9 @@ void MainMenu::menuBtnClickedSlots(QString btnText)
 {
     //_D("%s\n",btnText.toUtf8().data());
 
-	if (!m_pList->getActiveApp())
+	if (!AppControl)
 		return;
-    m_pList->getActiveApp()->OnMenuBtnClick(btnText.toUtf8().data());
+    AppControl->OnMenuBtnClick(btnText.toUtf8().data());
 }
 
 void MainMenu::keyPressEvent(QKeyEvent *e)

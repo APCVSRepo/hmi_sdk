@@ -5,11 +5,11 @@
 
 #include "Connect/Channel.h"
 
-class buttonsClient : public Channel
+class Buttons : public Channel
 {
 public:
-    buttonsClient();
-    ~buttonsClient();
+    Buttons();
+    ~Buttons();
 public:
     void onRequest(Json::Value &);
 

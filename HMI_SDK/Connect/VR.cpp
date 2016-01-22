@@ -1,22 +1,22 @@
-#include <Include/global_first.h>
-#include <Connect/vrclient.h>
+﻿#include <Include/global_first.h>
+#include <Connect/VR.h>
 
 
 #include <iostream>
 #include <string>
 #include "json/json.h"
 
-vrClient::vrClient() : Channel(400,"VR")
+VR::VR() : Channel(400,"VR")
 {
 
 }
 
-vrClient::~vrClient()
+VR::~VR()
 {
 
 }
 
-void vrClient::onRegistered()
+void VR::onRegistered()
 {
     SubscribeToNotification("VR.VRCancel");
 	SubscribeToNotification("VR.VRStatus");
@@ -27,7 +27,7 @@ void vrClient::onRegistered()
 	SubscribeToNotification("VR.VRResult");
 }
 
-void vrClient::onUnregistered()
+void VR::onUnregistered()
 {
     UnsubscribeFromNotification("VR.VRCancel");
 	UnsubscribeFromNotification("VR.VRStatus");
@@ -39,7 +39,7 @@ void vrClient::onUnregistered()
 }
 
 
-void vrClient::onRequest(Json::Value &request)
+void VR::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
     int id = request["id"].asInt();
@@ -72,6 +72,11 @@ void vrClient::onRequest(Json::Value &request)
     {
         Result result=m_pCallback->onRequest(request);
         sendResult(id,"DeleteCommand",result);
+    }
+    else if(method=="VR.PerformInteraction")
+    {
+        Result result=m_pCallback->onRequest(request);
+        sendResult(id,"PerformInteraction",result);
     }
     else
     {

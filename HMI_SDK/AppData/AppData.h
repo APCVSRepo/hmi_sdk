@@ -1,7 +1,6 @@
 ﻿#ifndef APPDATA_H
 #define APPDATA_H
 
-#include "Connect/connect.h"
 #include "Connect/SDLConnector.h"
 #include "AppData/AppDataInterface.h"
 #include "UIInterface.h"
@@ -24,6 +23,7 @@ public:
     Json::Value getInteractionJson();
     std::string getUrlString();
     Json::Value getMediaClockJson();
+    std::string getAppName();
 
     int getCurUI();
 
@@ -45,11 +45,13 @@ public:
 
     // 增加一个退出app的指令
     void addExitAppCommand();
+
+    bool ShowPreviousUI();
+
 private:
     UIInterface *m_pUIManager;
     std::vector<int> m_vecUIStack;
     void ShowUI(int);
-    void ShowPreviousUI();
 
     Json::Value m_json_show;
 //    SShow m_struct_show;

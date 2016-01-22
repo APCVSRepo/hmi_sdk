@@ -1,7 +1,7 @@
 #ifndef SCROLLBAR_H
 #define SCROLLBAR_H
 
-#include "UI/AppInclude.h"
+#include "UI/UIInclude.h"
 #include <QScrollBar>
 
 class ScrollBar : public QScrollBar

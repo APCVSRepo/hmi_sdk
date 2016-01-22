@@ -1,22 +1,22 @@
-#include "Include/global_first.h"
-#include "Connect/buttonsclient.h"
+﻿#include "Include/global_first.h"
+#include "Connect/Buttons.h"
 
 #include <iostream>
 #include <string>
 #include "json/json.h"
 
-buttonsClient::buttonsClient() : Channel(200,"Buttons")
+Buttons::Buttons() : Channel(200,"Buttons")
 {
 
 }
 
-buttonsClient::~buttonsClient()
+Buttons::~Buttons()
 {
 
 }
 
 
-void buttonsClient::onRequest(Json::Value &request)
+void Buttons::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
     int  id = request["id"].asInt();

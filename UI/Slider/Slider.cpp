@@ -91,7 +91,7 @@ void Slider::InitLayout()
 
 void Slider::sliderClickedSlots( int code, int sliderPosition)
 {
-    m_pList->getActiveApp()->OnSliderResponse(code, sliderPosition);
+    AppControl->OnSliderResponse(code, sliderPosition);
 }
 
 void Slider::onMoveLeftSlot()
@@ -191,12 +191,12 @@ void Slider::onButtonCancelClicked()
 
 void Slider::showEvent(QShowEvent * e)
 {
-    if (m_pList->getActiveApp())
-    {        
+    if (AppControl)
+    {
         m_btnSoft1->setText("Save");
         m_btnSoft4->setText("Cancel");
 
-        Json::Value m_jsonData = m_pList->getActiveApp()->getSlider();
+        Json::Value m_jsonData = AppControl->getSlider();
 //        this->setAppID(m_jsonData["params"]["appID"].asInt());
         this->setTimeOut(m_jsonData["params"]["timeout"].asInt());
 

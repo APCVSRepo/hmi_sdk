@@ -105,7 +105,7 @@ void Command::exitAppSlots()
 void Command::commandClickSlots(int cmdID)
 {
     //_D("appID = %d:%d\n",m_i_appID,cmdID);
-    m_pList->getActiveApp()->OnCommandClick(cmdID);
+    AppControl->OnCommandClick(cmdID);
 }
 
 
@@ -230,11 +230,11 @@ void Command::backBtnClickSlots()
 
 void Command::showEvent(QShowEvent * e)
 {
-    if (m_pList->getActiveApp())
+    if (AppControl)
     {
         this->clearAllCommand();
         vector<SMenuCommand> CmdList;
-        CmdList = m_pList->getActiveApp()->getCommandList();
+        CmdList = AppControl->getCommandList();
         for(int i = 0; i < CmdList.size(); i++)
         {
             if(0 != CmdList.at(i).i_cmdID && 0 == CmdList.at(i).i_menuID)
@@ -250,7 +250,7 @@ void Command::showEvent(QShowEvent * e)
 //                this->setAppID(CmdList.at(i).i_appID);
 
                 vector<SMenuCommand> TmpCmdList;
-                TmpCmdList = m_pList->getActiveApp()->getCommandList(CmdList.at(i).i_menuID);
+                TmpCmdList = AppControl->getCommandList(CmdList.at(i).i_menuID);
                 for(int j = 0; j < TmpCmdList.size(); j++)
                 {
                     this->addSubCommand(CmdList.at(i).str_menuName.data()

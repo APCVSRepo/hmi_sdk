@@ -13,7 +13,7 @@ win32:QT += axcontainer
 DEFINES += __STDINT_MACROS  #for ffmpeg
 #CONFIG  += wince  ##wince
 
-TARGET = AppLinkDevice
+TARGET = AppLink_HMI
 TEMPLATE = app
 
 MOC_DIR=temp/moc
@@ -33,23 +33,14 @@ INSTALLS+=target
 
 SOURCES += \
     main.cpp \
-    HMI_SDK/Connect/vrclient.cpp \
-    HMI_SDK/Connect/vehicleinfoclient.cpp \
-    HMI_SDK/Connect/uiclient.cpp \
-    HMI_SDK/Connect/ttsclient.cpp \
-    HMI_SDK/Connect/socketstosdl.cpp \
     HMI_SDK/Connect/SDLConnector.cpp \
-    HMI_SDK/Connect/navigationclient.cpp \
     HMI_SDK/Connect/Channel.cpp \
-    HMI_SDK/Connect/buttonsclient.cpp \
-    HMI_SDK/Connect/basecommunicationclient.cpp \
     Tools/json/json_writer.cpp \
     Tools/json/json_valueiterator.inl \
     Tools/json/json_value.cpp \
     Tools/json/json_reader.cpp \
     HMI_SDK/AppData/AppList.cpp \
     HMI_SDK/AppData/AppData.cpp \
-    UI/AppLink.cpp \
     UI/Alert/AlertUI.cpp \
     UI/AudioPassThru/AudioPassThru.cpp \
     UI/Choiceset/ChoicesetVR.cpp \
@@ -78,8 +69,19 @@ SOURCES += \
     UI/Common/AppListWidget.cpp \
     UI/Common/MainWidget.cpp \
     UI/Common/CustomCombobox.cpp \
-    UI/Common/CustomComboboxItem.cpp
-
+    UI/Common/CustomComboboxItem.cpp \
+    UI/AppList/AppListUI.cpp \
+    UI/Common/MenuButton.cpp \
+    UI/AppLinkMenu.cpp \
+    UI/Common/CAppButton.cpp  \
+    HMI_SDK/Connect/BasicCommunication.cpp \
+    HMI_SDK/Connect/Buttons.cpp \
+    HMI_SDK/Connect/Navigation.cpp \
+    HMI_SDK/Connect/SocketsToSDL.cpp \
+    HMI_SDK/Connect/TTS.cpp \
+    HMI_SDK/Connect/UI.cpp \
+    HMI_SDK/Connect/VehicleInfo.cpp \
+    HMI_SDK/Connect/VR.cpp \
 
 
 
@@ -92,17 +94,8 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     HMI_SDK/AppData/AppDataInterface.h \
     HMI_SDK/AppData/AppData.h \
     HMI_SDK/AppData/AppList.h \
-    HMI_SDK/Connect/vrclient.h \
-    HMI_SDK/Connect/vehicleinfoclient.h \
-    HMI_SDK/Connect/uiclient.h \
-    HMI_SDK/Connect/ttsclient.h \
-    HMI_SDK/Connect/socketstosdl.h \
     HMI_SDK/Connect/SDLConnector.h \
-    HMI_SDK/Connect/navigationclient.h \
-    HMI_SDK/Connect/connect.h \
     HMI_SDK/Connect/Channel.h \
-    HMI_SDK/Connect/buttonsclient.h \
-    HMI_SDK/Connect/basecommunicationclient.h \
     HMI_SDK/Connect/IMessageInterface.h \
     HMI_SDK/Connect/SDLConnector.h \
     HMI_SDK/Connect/ISocketManager.h \
@@ -121,8 +114,6 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/Common/MainMenu.h \
     UI/Common/BaseWidght.h \
     UI/Common/AppBase.h \
-    UI/AppLink.h \
-    UI/AppInclude.h \
     UI/UIInterface.h \
     UI/UIManager.h \
     UI/Alert/AlertUI.h \
@@ -141,17 +132,31 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/Common/Background.h \
     UI/VideoStream/VideoStream.h \
     UI/TextSpeech/textspeech.h \
-    UI/Singleton.h \
     UI/AudioTrans/AudioInput.h \
     UI/AudioTrans/MspVRAudio.h \
     UI/TextSpeech/TextToSpeech.h \
+    UI/Common/MenuButton.h \
+    UI/AppLinkMenu.h \
+    UI/Common/CAppButton.h \
     UI/AudioTrans/AudioOutput.h \
     AppManager.h \
+    HMI_SDK/AppData/AppCommon.h \
+    HMI_SDK/Connect/BasicCommunication.h \
+    HMI_SDK/Connect/Buttons.h \
+    HMI_SDK/Connect/Navigation.h \
+    HMI_SDK/Connect/SocketsToSDL.h \
+    HMI_SDK/Connect/TTS.h \
+    HMI_SDK/Connect/UI.h \
+    HMI_SDK/Connect/VehicleInfo.h \
+    HMI_SDK/Connect/VR.h \
+    Include/ProtocolDefines.h \
     UI/Common/AppListWidget.h \
     HMI_SDK/AppData/AppCommon.h \
     UI/Common/MainWidget.h \
     UI/Common/CustomCombobox.h \
-    UI/Common/CustomComboboxItem.h
+    UI/Common/CustomComboboxItem.h \
+    UI/AppList/AppListUI.h \
+    UI/UIInclude.h \
 
 
 RESOURCES += \

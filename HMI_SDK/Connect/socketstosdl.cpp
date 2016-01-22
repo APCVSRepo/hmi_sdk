@@ -1,5 +1,5 @@
 ﻿#include "Include/global_first.h"
-#include <Connect/socketstosdl.h>
+#include <Connect/SocketsToSDL.h>
 
 #ifdef WIN32
 #ifdef WINCE

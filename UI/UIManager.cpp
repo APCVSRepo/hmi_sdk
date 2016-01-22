@@ -17,7 +17,7 @@
 CUIManager::CUIManager(AppListInterface * pList, QWidget *parent) :
     QWidget(parent)
 {
-    m_pAppList = pList;
+    m_pList = pList;
 }
 
 CUIManager::~CUIManager()
@@ -39,22 +39,20 @@ CUIManager::~CUIManager()
 
 void CUIManager::initAppHMI()
 {
-    MainMenu * pMain = new MainMenu(m_pAppList);
-    QWidget* pParent = pMain->CenterWidget();
-    pMain->show();
-    MainWidget *pFirstShow = new MainWidget(m_pAppList);
-
-    m_vUIWidgets[ID_MAIN]= pFirstShow;
-    m_vUIWidgets[ID_APPLINK]=new AppLink(m_pAppList, pParent);
-    m_vUIWidgets[ID_ALERT]=new CAlertUI(m_pAppList, pParent);
-    m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pAppList, pParent);
-    m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pAppList, pParent);
-    m_vUIWidgets[ID_CHOICESET]=new Choiceset(m_pAppList, pParent);
-    m_vUIWidgets[ID_COMMAND]=new Command(m_pAppList, pParent);
-    m_vUIWidgets[ID_SCROLLMSG]=new CScrollMsg(m_pAppList, pParent);
-    m_vUIWidgets[ID_SHOW] = pFirstShow;//new Show(m_pAppList, pParent);
+    MainMenu * pMain = new MainMenu(m_pList);
+	QWidget* pParent = pMain->CenterWidget();
+    MainWidget *pNewShow = new MainWidget(m_pList,pMain);
+    m_vUIWidgets[ID_MAIN] = pNewShow;
+	m_vUIWidgets[ID_APPLINK] = new AppLinkMenu(m_pList, pMain); 
+    m_vUIWidgets[ID_ALERT]=new CAlertUI(m_pList, pParent);
+    m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pList, pParent);
+    m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pList, pParent);
+    m_vUIWidgets[ID_CHOICESET]=new Choiceset(m_pList, pParent);
+    m_vUIWidgets[ID_COMMAND]=new Command(m_pList, pParent);
+    m_vUIWidgets[ID_SCROLLMSG]=new CScrollMsg(m_pList, pParent);
+    m_vUIWidgets[ID_SHOW] = pNewShow;//new Show(m_pList, pParent);
     m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
-    m_vUIWidgets[ID_SLIDER]=new Slider(m_pAppList, pParent);
+    m_vUIWidgets[ID_SLIDER]=new Slider(m_pList, pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;
 
     for(int i = 0; i < ID_UI_MAX; i++)
@@ -74,10 +72,22 @@ void CUIManager::initAppHMI()
     //emit finishMainHMI();
 }
 
+void CUIManager::onAppActive()
+{
+    QString qs = AppControl->getAppName().c_str();
+    ((MainMenu *)m_vUIWidgets[ID_MAIN])->SetTitle(qs);
+}
+
+void CUIManager::onAppStop()
+{
+
+}
+
 //show app
 void CUIManager::onAppShow(int type)
 {
-    emit onAppShowSignal(type);
+    if((type >= 0) && (type < ID_UI_MAX))
+        emit onAppShowSignal(type);
 }
 
 void CUIManager::onVideoStreamStart()
@@ -89,7 +99,7 @@ void CUIManager::onVideoStreamStart()
 void CUIManager::onVideoStartSlots()
 {
     fflush(stdout);
-    std::string str_url = m_pAppList->getActiveApp()->getUrlString();
+    std::string str_url = AppControl->getUrlString();
     //_D("%s\n",str_url.data());
     ((MainMenu *)m_vUIWidgets[ID_MAIN])->StartVideoStream(str_url.c_str());
 }
@@ -144,25 +154,25 @@ void CUIManager::tsSpeak(int VRID, std::string strText)
     {
     case ID_DEFAULT:
         if(ret)
-            m_pAppList->getActiveApp()->OnTTSSpeek(0);
+            AppControl->OnTTSSpeek(0);
         else
-            m_pAppList->getActiveApp()->OnTTSSpeek(5);
+            AppControl->OnTTSSpeek(5);
         break;
     case ID_CANCEL:
-        m_pAppList->getActiveApp()->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_CANCEL);
+        AppControl->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_CANCEL);
         break;
     case ID_HELP:
-        m_pAppList->getActiveApp()->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_DONE);
+        AppControl->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_DONE);
         break;
     case ID_EXIT:
-        m_pAppList->getActiveApp()->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_DONE);
-        m_pAppList->OnAppExit();
+        AppControl->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_DONE);
+        m_pList->OnAppExit();
         break;
     case ID_SWITCHAPP:
-        m_pAppList->getActiveApp()->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_DONE);
+        AppControl->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_DONE);
         break;
     default:
-        m_pAppList->getActiveApp()->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_CANCEL);
+        AppControl->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_CANCEL);
         break;
     }
 }

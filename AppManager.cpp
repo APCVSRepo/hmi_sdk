@@ -23,6 +23,7 @@ AppManager::~AppManager()
 {
     delete m_uiManager;
     delete m_appList;
+    SDLConnector::Close();
 }
 
 
@@ -33,7 +34,7 @@ void AppManager::initApps()
     initSDL();
 #endif
     m_uiManager->initAppHMI();
-    SDLConnector::getSDLConnectore()->ConnectToSDL(m_appList);
+    ToSDL->ConnectToSDL(m_appList);
     emit finishMainHMI();
 }
 

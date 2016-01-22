@@ -1,8 +1,6 @@
 ﻿#ifndef APPLIST_H
 #define APPLIST_H
 
-#include "Connect/connect.h"
-
 #include "AppListInterface.h"
 #include "AppData.h"
 #include "UI/UIInterface.h"
@@ -21,7 +19,7 @@ public:
     void getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames,std::vector<std::string> &vIconPath);
     void OnAppActivated(int appID);
     void OnAppExit();
-    void ShowAppList();
+    void ShowPreviousUI();
 
 public: //IMessageInterface
     Result onRequest(Json::Value);

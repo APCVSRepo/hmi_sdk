@@ -4,11 +4,11 @@
 #include "ISocketManager.h"
 #include "Channel.h"
 
-class vrClient : public Channel
+class VR : public Channel
 {
 public:
-    vrClient();
-    ~vrClient();
+    VR();
+    ~VR();
 protected:
     void onRegistered();
     void onUnregistered();

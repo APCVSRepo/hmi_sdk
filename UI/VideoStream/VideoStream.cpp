@@ -331,7 +331,7 @@ void VideoStream::mousePressEvent(QMouseEvent *e)
     x= x*videoWidth/width();
     y= y*videoHeight/height();
     LOGD("Touch Event:type=BEGIN,x=%d,y=%d",x,y);
-    SDLConnector::getSDLConnectore()->OnVideoScreenTouch(TOUCH_START,x,y);
+    ToSDL->OnVideoScreenTouch(TOUCH_START,x,y);
 }
 
 
@@ -343,7 +343,7 @@ void VideoStream::mouseMoveEvent(QMouseEvent *e)
     y= y*videoHeight/height();
     LOGD("Touch Event:type=MOVE,x=%d,y=%d",x,y);
 
-    SDLConnector::getSDLConnectore()->OnVideoScreenTouch(TOUCH_MOVE,x,y);
+    ToSDL->OnVideoScreenTouch(TOUCH_MOVE,x,y);
 }
 
 void VideoStream::mouseReleaseEvent(QMouseEvent *e)
@@ -354,7 +354,7 @@ void VideoStream::mouseReleaseEvent(QMouseEvent *e)
     y= y*videoHeight/height();
     LOGD("Touch Event:type=END,x=%d,y=%d",x,y);
 
-    SDLConnector::getSDLConnectore()->OnVideoScreenTouch(TOUCH_END,x,y);
+    ToSDL->OnVideoScreenTouch(TOUCH_END,x,y);
 }
 
 

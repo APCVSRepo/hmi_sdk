@@ -1,22 +1,22 @@
 ﻿#include <Include/global_first.h>
-#include <Connect/uiclient.h>
+#include <Connect/UI.h>
 
 #include <iostream>
 #include <string>
 #include "json/json.h"
 #include "Config/Config.h"
 
-uiClient::uiClient() : Channel(600,"UI")
+UI::UI() : Channel(600,"UI")
 {
 
 }
 
-uiClient::~uiClient()
+UI::~UI()
 {
 
 }
 
-void uiClient::onRegistered()
+void UI::onRegistered()
 {
     SubscribeToNotification("UI.ShowNotification");
     SubscribeToNotification("UI.CreateInteractionChoiceSet");
@@ -25,7 +25,7 @@ void uiClient::onRegistered()
     SubscribeToNotification("UI.UnsubscribeButton");
 }
 
-void uiClient::onUnregistered()
+void UI::onUnregistered()
 {
     UnsubscribeFromNotification("UI.ShowNotification");
     UnsubscribeFromNotification("UI.CreateInteractionChoiceSet");
@@ -36,7 +36,7 @@ void uiClient::onUnregistered()
 
 
 
-void uiClient::onRequest(Json::Value &request)
+void UI::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
     int id = request["id"].asInt();
@@ -153,7 +153,7 @@ void uiClient::onRequest(Json::Value &request)
 }
 
 
-void uiClient::onSystemContext(std::string systemContext)
+void UI::onSystemContext(std::string systemContext)
 {
     Json::Value params;
     params["systemContext"] = systemContext;
@@ -161,7 +161,7 @@ void uiClient::onSystemContext(std::string systemContext)
 }
 
 
-Json::Value uiClient::startRecordingNotify(Json::Value &request)
+Json::Value UI::startRecordingNotify(Json::Value &request)
 {
     Json::Value request_params;
     Json::Value params;

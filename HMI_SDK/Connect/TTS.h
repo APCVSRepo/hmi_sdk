@@ -6,11 +6,11 @@
 #include "ISocketManager.h"
 #include "Channel.h"
 
-class ttsClient : public Channel
+class TTS : public Channel
 {
 public:
-    ttsClient();
-    ~ttsClient();
+    TTS();
+    ~TTS();
 protected:
     void onRequest(Json::Value &);
 

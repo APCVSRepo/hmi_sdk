@@ -19,8 +19,17 @@ SDLConnector::~SDLConnector()
     m_bReleased = true;
 }
 
+void SDLConnector::Close()
+{
+    if (g_SingleConnector)
+    {
+        delete g_SingleConnector;
+        g_SingleConnector =  0;
+    }
+}
 
-SDLConnector * SDLConnector::getSDLConnectore()
+
+SDLConnector * SDLConnector::getSDLConnector()
 {
     if (g_SingleConnector == 0)
         g_SingleConnector = new SDLConnector();

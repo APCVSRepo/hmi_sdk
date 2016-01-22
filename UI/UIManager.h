@@ -17,6 +17,7 @@
 #include "AppData/AppListInterface.h"
 #include "QMessageBox"
 #include "Common/MainMenu.h"
+#include "Common/MainWidget.h"
 
 #ifdef SDL_SUPPORT_LIB
 #include "AudioTrans/MspVRAudio.h"

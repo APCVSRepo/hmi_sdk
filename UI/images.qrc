@@ -32,5 +32,10 @@
         <file>images/muparray.png</file>
         <file>images/mf.png</file>
         <file>images/Screen.png</file>
+        <file>images/MainWidget/AppIcon.png</file>
+        <file>images/MainWidget/Backgroud.png</file>
+        <file>images/MainWidget/MenuIcon.png</file>
+        <file>images/MainWidget/BtnPress.png</file>
+        <file>images/MainWidget/BtnNormal.png</file>
     </qresource>
 </RCC>

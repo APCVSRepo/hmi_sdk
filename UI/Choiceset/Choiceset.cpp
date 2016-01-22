@@ -29,7 +29,6 @@ void Choiceset::initLayout()
 
     mLayout->setMargin(0); //边框无缝
     mLayout->setSpacing(0);
-
 }
 
 

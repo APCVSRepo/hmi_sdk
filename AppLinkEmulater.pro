@@ -75,7 +75,10 @@ SOURCES += \
     UI/TextSpeech/TextToSpeech.cpp \
     UI/AudioTrans/AudioOutput.cpp \
     AppManager.cpp \
-    UI/Common/AppListWidget.cpp
+    UI/Common/AppListWidget.cpp \
+    UI/Common/MainWidget.cpp \
+    UI/Common/CustomCombobox.cpp \
+    UI/Common/CustomComboboxItem.cpp
 
 
 
@@ -145,7 +148,10 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/AudioTrans/AudioOutput.h \
     AppManager.h \
     UI/Common/AppListWidget.h \
-    HMI_SDK/AppData/AppCommon.h
+    HMI_SDK/AppData/AppCommon.h \
+    UI/Common/MainWidget.h \
+    UI/Common/CustomCombobox.h \
+    UI/Common/CustomComboboxItem.h
 
 
 RESOURCES += \

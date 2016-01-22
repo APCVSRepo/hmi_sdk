@@ -99,7 +99,6 @@ void Show::initLayout()
     connect(m_btn_thr,SIGNAL(clickedLong(int)),this,SLOT(btnThrClickedLongSlots(int)));
 
     m_vec_softButtons.clear();
-
 }
 
 

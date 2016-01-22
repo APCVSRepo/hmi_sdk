@@ -38,6 +38,7 @@ public:
     bool isPressed();
     bool isDisable();
 
+    void SetLeftIcon(QString strIconPath);
 signals:
     void clicked();
     void clicked(int id);
@@ -61,6 +62,11 @@ private:
     QString m_Text;
     QString m_Style;
 
+    QHBoxLayout *m_pMainLayout;
+    QVBoxLayout *m_pIconLayout;
+    QVBoxLayout *m_pTextLayout;
+    QLabel *m_pLeftIconLab;
+
     int m_Id;
 
     int m_BtnStatus;
@@ -68,5 +74,8 @@ private:
     int m_i_clickY;
 
     unsigned int m_i_time;
+
+    bool m_bLeftIcon;
+    int GetTextWidth();
 };
 #endif // CBUTTON_H

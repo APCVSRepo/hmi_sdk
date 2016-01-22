@@ -39,7 +39,7 @@ void AppManager::initApps()
 
 void AppManager::ShowUI()
 {
-    m_uiManager->onAppShow(ID_MAIN);
+    //m_uiManager->onAppShow(ID_MAIN);
     m_uiManager->onAppShow(ID_APPLINK);
 }
 

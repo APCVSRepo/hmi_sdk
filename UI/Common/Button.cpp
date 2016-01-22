@@ -2,12 +2,23 @@
 
 CButton::CButton(QWidget *parent) :
     QWidget(parent),
-    m_BtnStatus(BTN_STAT_UNKNOW),
-    m_i_clickX(0),
-    m_i_clickY(0)
+    m_BtnStatus(BTN_STAT_UNKNOW),m_i_clickX(0),m_i_clickY(0),m_pLeftIconLab(nullptr),m_bLeftIcon(false),m_pIconLayout(nullptr)
 {
     m_IconLabel.setParent(this);
-    m_TextLabel.setParent(this);
+    //m_TextLabel.setParent(this);
+
+    m_pMainLayout = new QHBoxLayout(&m_IconLabel);
+    m_pMainLayout->setSpacing(0);
+    m_pMainLayout->setMargin(0);
+    m_pIconLayout = new QVBoxLayout;
+    m_pIconLayout->setSpacing(0);
+    m_pIconLayout->setMargin(0);
+    m_pTextLayout = new QVBoxLayout;
+    m_pTextLayout->setSpacing(0);
+    m_pTextLayout->setMargin(0);
+    m_pMainLayout->addLayout(m_pIconLayout);
+    m_pMainLayout->addLayout(m_pTextLayout);
+    m_pTextLayout->addWidget(&m_TextLabel);
 }
 
 /***********************************************************************************************************
@@ -36,7 +47,16 @@ CButton::CButton(int W, int H, QString normalIcon, QString pressedIcon, QString 
 
 CButton::~CButton()
 {
-
+    delete m_pMainLayout;
+    if(m_pIconLayout != nullptr)
+    {
+        delete m_pIconLayout;
+    }
+    delete m_pTextLayout;
+    if(m_pLeftIconLab != nullptr)
+    {
+        delete m_pLeftIconLab;
+    }
 }
 
 /***********************************************************************************************************
@@ -185,6 +205,7 @@ void CButton::setText(QString text, bool flag)
 void CButton::setTextStyle(QString style, bool flag)
 {
     m_Style = style;
+    setStyleSheet(m_Style);
     if (flag)
     {
         updateTextStyle();
@@ -194,9 +215,10 @@ void CButton::setTextStyle(QString style, bool flag)
 void CButton::updateText()
 {
     QFontMetrics qfm(m_TextLabel.font());
-    m_TextLabel.setText(qfm.elidedText(m_Text,Qt::ElideRight,width()));
+    QString strTemp(qfm.elidedText(m_Text,Qt::ElideRight,GetTextWidth()));
+    m_TextLabel.setText(strTemp);
     m_TextLabel.setAlignment(Qt::AlignCenter);
-    m_TextLabel.setGeometry((this->width() - m_TextLabel.width()) / 2, (this->height() - m_TextLabel.height()) / 2, m_TextLabel.width(), m_TextLabel.height());
+    //m_TextLabel.setGeometry((this->width() - m_TextLabel.width()) / 2, (this->height() - m_TextLabel.height()) / 2, m_TextLabel.width(), m_TextLabel.height());
     m_TextLabel.setAttribute(Qt::WA_TranslucentBackground, true);
 }
 
@@ -309,4 +331,19 @@ void CButton::mouseMoveEvent(QMouseEvent *event)
     {
         setIconNormal(m_IconNormalPath);
     }
+}
+
+void CButton::SetLeftIcon(QString strIconPath)
+{
+    m_pLeftIconLab = new QLabel;
+    m_pIconLayout->addWidget(m_pLeftIconLab,0,Qt::AlignCenter);
+    QPixmap pixmap(strIconPath);
+    pixmap = pixmap.scaled(height()*0.6,height()*0.6,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+    m_pLeftIconLab->setPixmap(pixmap);
+    m_bLeftIcon = true;
+}
+
+int CButton::GetTextWidth()
+{
+    return m_bLeftIcon?(width()-height()*0.8):(width());
 }

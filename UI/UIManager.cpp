@@ -23,8 +23,14 @@ CUIManager::CUIManager(AppListInterface * pList, QWidget *parent) :
 CUIManager::~CUIManager()
 {
     for(int i = 0; i < ID_UI_MAX; i++)
+    {
         if(m_vUIWidgets[i])
+        {
             delete m_vUIWidgets[i];
+            m_vUIWidgets[i] = nullptr;
+        }
+    }
+
 
 #ifdef SDL_SUPPORT_LIB
     delete m_MspVR;
@@ -35,7 +41,10 @@ void CUIManager::initAppHMI()
 {
     MainMenu * pMain = new MainMenu(m_pAppList);
     QWidget* pParent = pMain->CenterWidget();
-    m_vUIWidgets[ID_MAIN]= pMain;
+    pMain->show();
+    MainWidget *pFirstShow = new MainWidget(m_pAppList);
+
+    m_vUIWidgets[ID_MAIN]= pFirstShow;
     m_vUIWidgets[ID_APPLINK]=new AppLink(m_pAppList, pParent);
     m_vUIWidgets[ID_ALERT]=new CAlertUI(m_pAppList, pParent);
     m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pAppList, pParent);
@@ -43,7 +52,7 @@ void CUIManager::initAppHMI()
     m_vUIWidgets[ID_CHOICESET]=new Choiceset(m_pAppList, pParent);
     m_vUIWidgets[ID_COMMAND]=new Command(m_pAppList, pParent);
     m_vUIWidgets[ID_SCROLLMSG]=new CScrollMsg(m_pAppList, pParent);
-    m_vUIWidgets[ID_SHOW]=new Show(m_pAppList, pParent);
+    m_vUIWidgets[ID_SHOW] = pFirstShow;//new Show(m_pAppList, pParent);
     m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
     m_vUIWidgets[ID_SLIDER]=new Slider(m_pAppList, pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;

@@ -1,6 +1,6 @@
 ﻿#ifndef CUIMANAGER_H
 #define CUIMANAGER_H
-#include "UI/AppList/AppListUI.h"
+#include "AppLinkMenu.h"
 #include "UI/Alert/AlertUI.h"
 #include "UI/AudioPassThru/AudioPassThru.h"
 #include "UI/Choiceset/Choiceset.h"

@@ -53,15 +53,15 @@ void CAlertUI::InitLayout()
     m_pLabelText[1]->setAlignment(Qt::AlignCenter);
     m_pLabelText[2]->setAlignment(Qt::AlignCenter);
 
-    m_btnSoft1->initParameter(ui_aler_width,ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft1");
-    m_btnSoft2->initParameter(ui_aler_width,ui_aler_height, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "Soft2");
-    m_btnSoft3->initParameter(ui_aler_width,ui_aler_height, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "Soft3");
-    m_btnSoft4->initParameter(ui_aler_width,ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft4");
+    m_btnSoft1->initParameter(ui_btn_width,ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft1");
+    m_btnSoft2->initParameter(ui_btn_width,ui_aler_height, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "Soft2");
+    m_btnSoft3->initParameter(ui_btn_width,ui_aler_height, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "Soft3");
+    m_btnSoft4->initParameter(ui_btn_width,ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Soft4");
 
-    m_btnSoft1->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
-    m_btnSoft2->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
-    m_btnSoft3->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
-    m_btnSoft4->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
+    m_btnSoft1->setTextStyle("border:0px;font: 38px \"Liberation Serif\";color:rgb(255,255,254)");
+    m_btnSoft2->setTextStyle("border:0px;font: 38px \"Liberation Serif\";color:rgb(255,255,254)");
+    m_btnSoft3->setTextStyle("border:0px;font: 38px \"Liberation Serif\";color:rgb(255,255,254)");
+    m_btnSoft4->setTextStyle("border:0px;font: 38px \"Liberation Serif\";color:rgb(255,255,254)");
 
     updateLayout();
 }
@@ -125,6 +125,8 @@ void CAlertUI::updateLayout()
     btnLayout->addWidget(m_btnSoft2);
     btnLayout->addWidget(m_btnSoft3);
     btnLayout->addWidget(m_btnSoft4);
+    btnLayout->addStretch(1);
+    btnLayout->setSpacing(0);
     mLayout->addLayout(btnLayout);
     mLayout->addSpacing(0);
     mLayout->setMargin(0);

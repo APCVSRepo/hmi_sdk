@@ -139,6 +139,12 @@ Result AppList::recvFromServer(Json::Value jsonObj)
                 }
                 ++Iter;
             }
+        }        
+        else if(str_method == "UI.EndAudioPassThru")
+        {
+            ToSDL->OnVRCancelRecord();
+            m_pUIManager->OnEndAudioPassThru();
+            return RESULT_SUCCESS;
         }
         else
         {

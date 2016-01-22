@@ -17,7 +17,7 @@
 #include "AppData/AppListInterface.h"
 #include "QMessageBox"
 #include "Common/MainMenu.h"
-#include "Common/MainWidget.h"
+#include "show2/MainWidget.h"
 
 #ifdef SDL_SUPPORT_LIB
 #include "AudioTrans/MspVRAudio.h"
@@ -40,6 +40,7 @@ public:
 
     void tsSpeak(int VRID, std::string strText);
 
+    void OnEndAudioPassThru();
 signals:
     //void finishMainHMI();
     void onAppShowSignal(int type);

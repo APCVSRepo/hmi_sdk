@@ -148,8 +148,8 @@ Result AppList::recvFromServer(Json::Value jsonObj)
                 return RESULT_APPLICATION_NOT_REGISTERED;
         }
         return  RESULT_SUCCESS;
-
     }
+    return  RESULT_SUCCESS;
 }
 
 

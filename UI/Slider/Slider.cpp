@@ -35,6 +35,20 @@ void Slider::InitLayout()
     m_btnSoft3 = new CButton;
     m_btnSoft4 = new CButton;
 
+    QHBoxLayout *btnLayout = new QHBoxLayout;
+    QVBoxLayout *mLayout = new QVBoxLayout(this);
+    btnLayout->addWidget(m_btnSoft1, 25);
+    btnLayout->addWidget(m_btnSoft2, 25);
+    btnLayout->addWidget(m_btnSoft3, 25);
+    btnLayout->addWidget(m_btnSoft4, 25);
+
+    mLayout->addWidget(m_labelText1, 24);
+    mLayout->addWidget(m_labelText2, 24);
+    mLayout->addWidget(m_labelText3, 24);
+    mLayout->addLayout(btnLayout, 23);
+    mLayout->addStretch(5);
+    mLayout->setMargin(0);
+
     connect(m_btnSoft1, SIGNAL(clicked()), this, SLOT(onButtonSaveClicked()));
     connect(m_btnSoft2, SIGNAL(clicked()), this, SLOT(onMoveLeftSlot()));
     connect(m_btnSoft3, SIGNAL(clicked()), this, SLOT(onMoveRightSlot()));
@@ -56,36 +70,23 @@ void Slider::InitLayout()
 //    setSliderTitle("Test string.");
 //    setPosition(3);
 
-    m_btnSoft1->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Close");
-    m_btnSoft2->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "");
-    m_btnSoft2->setIconExtra(":/images/leftarrow.png");
-    m_btnSoft3->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "");
-    m_btnSoft3->setIconExtra(":/images/rightarrow.png");
-    m_btnSoft4->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png", "", "Cancel");
-
     m_btnSoft1->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btnSoft2->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btnSoft3->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     m_btnSoft4->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
 
-    QHBoxLayout *btnLayout = new QHBoxLayout;
-    QVBoxLayout *mLayout = new QVBoxLayout;
-
-    btnLayout->addWidget(m_btnSoft1, 25);
-    btnLayout->addWidget(m_btnSoft2, 25);
-    btnLayout->addWidget(m_btnSoft3, 25);
-    btnLayout->addWidget(m_btnSoft4, 25);
-
-    mLayout->addWidget(m_labelText1, 24);
-    mLayout->addWidget(m_labelText2, 24);
-    mLayout->addWidget(m_labelText3, 24);
-    mLayout->addLayout(btnLayout, 23);
-    mLayout->addStretch(5);
-    mLayout->setMargin(0);
+    m_btnSoft1->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png");
+    m_btnSoft2->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert_left.png", ":/images/softbutton_alert_left.png", "", "");
+    m_btnSoft2->setIconExtra(":/images/leftarrow.png");
+    m_btnSoft3->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert_right.png", ":/images/softbutton_alert_right.png", "", "");
+    m_btnSoft3->setIconExtra(":/images/rightarrow.png");
+    m_btnSoft4->initParameter(ui_aler_width, ui_aler_height, ":/images/softbutton_alert.png", ":/images/softbutton_alert.png");
 
 //    m_labelFrame.setLayout(mLayout);
-    this->setLayout(mLayout);
-    m_btnSoft1->setText("Save");
+    //this->setLayout(mLayout);
+
+    m_btnSoft1->setText("-");
+    m_btnSoft4->setText("-");
 }
 
 void Slider::sliderClickedSlots( int code, int sliderPosition)
@@ -192,6 +193,9 @@ void Slider::showEvent(QShowEvent * e)
 {
     if (AppControl)
     {
+        m_btnSoft1->setText("Save");
+        m_btnSoft4->setText("Cancel");
+
         Json::Value m_jsonData = AppControl->getSlider();
 //        this->setAppID(m_jsonData["params"]["appID"].asInt());
         this->setTimeOut(m_jsonData["params"]["timeout"].asInt());

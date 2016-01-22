@@ -29,7 +29,8 @@ void Choiceset::initLayout()
 
     mLayout->setMargin(0); //边框无缝
     mLayout->setSpacing(0);
-     m_listWidget->setFixedSize(ui_app_width*0.9,ui_app_height-10);
+
+    m_listWidget->setFixedSize(ui_app_width*0.9,ui_app_height-10);
 }
 
 

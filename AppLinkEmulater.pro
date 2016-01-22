@@ -67,6 +67,7 @@ SOURCES += \
     UI/AudioTrans/AudioOutput.cpp \
     AppManager.cpp \
     UI/Common/AppListWidget.cpp \
+    UI/AppList/AppListUI.cpp \
     UI/Common/MenuButton.cpp \
     UI/AppLinkMenu.cpp \
     UI/Common/CAppButton.cpp  \
@@ -78,8 +79,9 @@ SOURCES += \
     HMI_SDK/Connect/UI.cpp \
     HMI_SDK/Connect/VehicleInfo.cpp \
     HMI_SDK/Connect/VR.cpp \
-    UI/AppList/AppListUI.cpp
-
+    UI/show2/CustomCombobox.cpp \
+    UI/show2/CustomComboboxItem.cpp \
+    UI/show2/MainWidget.cpp
 
 
 
@@ -149,8 +151,12 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     HMI_SDK/Connect/VR.h \
     Include/ProtocolDefines.h \
     UI/Common/AppListWidget.h \
+    HMI_SDK/AppData/AppCommon.h \
+    UI/AppList/AppListUI.h \
     UI/UIInclude.h \
-    UI/AppList/AppListUI.h
+    UI/show2/CustomCombobox.h \
+    UI/show2/CustomComboboxItem.h \
+    UI/show2/MainWidget.h
 
 
 RESOURCES += \

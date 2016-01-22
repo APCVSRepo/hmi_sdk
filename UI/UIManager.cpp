@@ -23,8 +23,14 @@ CUIManager::CUIManager(AppListInterface * pList, QWidget *parent) :
 CUIManager::~CUIManager()
 {
     for(int i = 0; i < ID_UI_MAX; i++)
+    {
         if(m_vUIWidgets[i])
+        {
             delete m_vUIWidgets[i];
+            m_vUIWidgets[i] = nullptr;
+        }
+    }
+
 
 #ifdef SDL_SUPPORT_LIB
     delete m_MspVR;
@@ -35,7 +41,9 @@ void CUIManager::initAppHMI()
 {
     MainMenu * pMain = new MainMenu(m_pList);
 	QWidget* pParent = pMain->CenterWidget();
-	m_vUIWidgets[ID_MAIN] = pMain;
+    pMain->show();
+    MainWidget *pNewShow = new MainWidget(m_pList,pMain);
+    m_vUIWidgets[ID_MAIN] = pNewShow;
 	m_vUIWidgets[ID_APPLINK] = new AppLinkMenu(m_pList, pMain); 
     m_vUIWidgets[ID_ALERT]=new CAlertUI(m_pList, pParent);
     m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pList, pParent);
@@ -43,7 +51,7 @@ void CUIManager::initAppHMI()
     m_vUIWidgets[ID_CHOICESET]=new Choiceset(m_pList, pParent);
     m_vUIWidgets[ID_COMMAND]=new Command(m_pList, pParent);
     m_vUIWidgets[ID_SCROLLMSG]=new CScrollMsg(m_pList, pParent);
-    m_vUIWidgets[ID_SHOW]=new Show(m_pList, pParent);
+    m_vUIWidgets[ID_SHOW] = pNewShow;//new Show(m_pList, pParent);
     m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
     m_vUIWidgets[ID_SLIDER]=new Slider(m_pList, pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;
@@ -68,7 +76,8 @@ void CUIManager::initAppHMI()
 void CUIManager::onAppActive()
 {
     QString qs = AppControl->getAppName().c_str();
-    ((MainMenu *)m_vUIWidgets[ID_MAIN])->SetTitle(qs);
+    //((MainMenu *)m_vUIWidgets[ID_MAIN])->SetTitle(qs);
+    ((MainWidget *)m_vUIWidgets[ID_MAIN])->SetAppName(qs);
 }
 
 void CUIManager::onAppStop()
@@ -113,14 +122,15 @@ void CUIManager::AppShowSlot(int type)
     {
         if(ID_SHOW == m_iCurUI)
         {
-            Show * pShow = (Show *)m_vUIWidgets[ID_SHOW];
-            pShow->UpdateMediaColckTimer();
+            //Show * pShow = (Show *)m_vUIWidgets[ID_SHOW];
+            //pShow->UpdateMediaColckTimer();
         }
     }
     else
     {
-        if(m_iCurUI != ID_MAIN)
-            m_vUIWidgets[m_iCurUI]->hide();
+        //if(m_iCurUI != ID_MAIN)
+            //m_vUIWidgets[m_iCurUI]->hide();
+        m_vUIWidgets[m_iCurUI]->hide();
         m_iCurUI = type;
         m_vUIWidgets[m_iCurUI]->show();
     }
@@ -168,4 +178,9 @@ void CUIManager::tsSpeak(int VRID, std::string strText)
         AppControl->OnPerformAudioPassThru(PERFORMAUDIOPASSTHRU_CANCEL);
         break;
     }
+}
+
+void CUIManager::OnEndAudioPassThru()
+{
+    ((CAudioPassThru *)m_vUIWidgets[ID_AUDIOPASSTHRU])->onButtonClickedSlots(PERFORMAUDIOPASSTHRU_CANCEL);
 }

@@ -377,7 +377,7 @@ void AppData::OnPerformInteraction(int code, int row)
     }
 
     ToSDL->OnPerformInteraction(code, m_json_interaction["id"].asInt(), choiceID);
-    //ShowPreviousUI();
+    ShowPreviousUI();
 }
 
 

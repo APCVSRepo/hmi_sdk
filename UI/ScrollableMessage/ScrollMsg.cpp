@@ -30,7 +30,7 @@ void CScrollMsg::InitLayout()
     char* text[4]={"Soft1","Soft2","Soft3","Soft4"};
     for(int i=0;i<4;i++){
         m_btnSoft[i]=new CButton(this);
-        m_btnSoft[i]->initParameter(ui_aler_width,ui_aler_height,image[i],image[i],"",text[i]);
+        m_btnSoft[i]->initParameter(ui_btn_width,ui_aler_height,image[i],image[i],"",text[i]);
         m_btnSoft[i]->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(255,255,254)");
     }
 
@@ -104,7 +104,7 @@ void CScrollMsg::ChangeLayout(int flag)
         m_editText->setGeometry(10,10,ui_app_width-20,ui_app_height*3/4-15);
         for(int i=0;i<4;i++){
             m_btnSoft[i]->show();
-            m_btnSoft[i]->setGeometry(5+i*ui_app_width/4,ui_app_height*3/4+15,ui_app_width/4-10,ui_app_height*1/4-20);
+            m_btnSoft[i]->setGeometry(5+i*ui_btn_width,ui_app_height*3/4+15,ui_btn_width,ui_app_height*1/4-20);
         }
         m_listWidget->hide();
 //        QHBoxLayout midLayout;

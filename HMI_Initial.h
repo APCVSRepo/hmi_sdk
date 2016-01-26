@@ -1,21 +1,23 @@
-#ifndef APPMANAGER_H
+﻿#ifndef APPMANAGER_H
 #define APPMANAGER_H
 #include <QObject>
 #include "AppData/AppList.h"
 #include "UI/UIManager.h"
 
-class AppManager:public QObject
+class HMI_Initial:public QObject
 {
     Q_OBJECT
 public:
-    AppManager();
-    ~AppManager();
+    HMI_Initial();
+    ~HMI_Initial();
 
     void ShowUI();
+
 public slots:
     void initApps();
 signals:
     void finishMainHMI();
+
 private:
 #ifdef SDL_SUPPORT_LIB
     static void initSDL();

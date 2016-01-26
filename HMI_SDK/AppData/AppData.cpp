@@ -180,6 +180,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
         {
             m_json_mediaclock = jsonObj;
             ShowUI(ID_MEDIACLOCK);
+            return RESULT_USER_WAIT;
         }
 
         else if(str_method == "VR.VRStatus")
@@ -380,6 +381,11 @@ void AppData::OnPerformInteraction(int code, int row)
     ShowPreviousUI();
 }
 
+void AppData::OnMediaClock(int code)
+{
+    int id=m_json_mediaclock["id"].asInt();
+    ToSDL->OnMediaClockResponse(id,code);
+}
 
 
 //////////////////////////////////

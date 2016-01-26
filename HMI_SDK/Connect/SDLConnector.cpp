@@ -203,6 +203,14 @@ void SDLConnector::OnAlertResponse(int id, int reason)
     m_UI.onSystemContext("MAIN");
 }
 
+void SDLConnector::OnMediaClockResponse(int id,int code)
+{
+    Json::Value result;
+    result["code"] = code;
+    result["method"] = "UI.SetMediaClockTimer";
+    m_UI.sendResult(id, result);
+}
+
 void SDLConnector::OnScrollMessageResponse(int id, int reason)
 {
     Json::Value root;

@@ -338,6 +338,11 @@ void Show::btnOneClickedLongSlots(int btID)
 
 void Show::showEvent(QShowEvent * e)
 {
+    m_btn_one->setText("-");
+    m_btn_two->setText("-");
+    m_btn_thr->setText("-");
+    m_btn_fou->setText("More...");
+
     Json::Value pObj;
     std::vector <SSoftButton > vec_softButtons;
     vec_softButtons.clear();
@@ -479,7 +484,7 @@ void Show::UpdateMediaColckTimer()
     else if(jsonObj["params"]["updateMode"].asString() == "CLEAR")
     {
         emit startMediaClock(false);
-        this->setMediaClock(true,"");
+        setMediaClock(false,"");
         AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
     }
 }

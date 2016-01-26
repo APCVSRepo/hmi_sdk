@@ -16,10 +16,17 @@ BasicCommunication::~BasicCommunication()
 
 void BasicCommunication::onRegistered()
 {
-	SubscribeToNotification("BasicCommunication.OnAppRegistered");
+    SubscribeToNotification("BasicCommunication.OnPutFile");
+    SubscribeToNotification("SDL.OnSystemError");
+    SubscribeToNotification("SDL.OnStatusUpdate");
+    SubscribeToNotification("SDL.OnAppPermissionChanged");
+    SubscribeToNotification("BasicCommunication.OnFileRemoved");
+    SubscribeToNotification("BasicCommunication.OnAppRegistered");
 	SubscribeToNotification("BasicCommunication.OnAppUnregistered");
 	SubscribeToNotification("BasicCommunication.PlayTone");
-	SubscribeToNotification("BasicCommunication.SDLLog");
+    SubscribeToNotification("BasicCommunication.OnSDLClose");
+    SubscribeToNotification("SDL.OnSDLConsentNeeded");
+    SubscribeToNotification("BasicCommunication.OnResumeAudioSource");
     sendNotification("BasicCommunication.OnReady");
 }
 

@@ -1,4 +1,4 @@
-﻿#include "AppManager.h"
+﻿#include "HMI_Initial.h"
 #include <QTimer>
 #include <QDesktopWidget>
 #include "Connect/SDLConnector.h"
@@ -6,7 +6,7 @@
 #include <main.h>
 #include <QDir>
 
-AppManager::AppManager():QObject(NULL)
+HMI_Initial::HMI_Initial():QObject(NULL)
 {
 #ifdef ANDROID
     UIConfig::loadResolution(QApplication::desktop()->width(),QApplication::desktop()->height()-30);
@@ -19,7 +19,7 @@ AppManager::AppManager():QObject(NULL)
     QTimer::singleShot(500,this,SLOT(initApps()));
 }
 
-AppManager::~AppManager()
+HMI_Initial::~HMI_Initial()
 {
     delete m_uiManager;
     delete m_appList;
@@ -28,7 +28,7 @@ AppManager::~AppManager()
 
 
 
-void AppManager::initApps()
+void HMI_Initial::initApps()
 {
 #ifdef SDL_SUPPORT_LIB
     initSDL();
@@ -38,7 +38,7 @@ void AppManager::initApps()
     emit finishMainHMI();
 }
 
-void AppManager::ShowUI()
+void HMI_Initial::ShowUI()
 {
     m_uiManager->onAppShow(ID_MAIN);
     m_uiManager->onAppShow(ID_APPLINK);

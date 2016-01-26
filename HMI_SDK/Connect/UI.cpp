@@ -23,6 +23,7 @@ void UI::onRegistered()
     SubscribeToNotification("UI.DeleteInteractionChoiceSet");
     SubscribeToNotification("UI.SubscribeButton");
     SubscribeToNotification("UI.UnsubscribeButton");
+    SubscribeToNotification("UI.OnRecordStart");
 }
 
 void UI::onUnregistered()

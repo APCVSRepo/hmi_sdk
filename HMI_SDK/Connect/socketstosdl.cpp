@@ -35,7 +35,7 @@ SocketsToSDL::SocketsToSDL()
 		m_SendThread(),
         m_bTerminate(false)
 {
-	m_sHost = "127.0.0.1";
+    m_sHost = "127.0.0.1";
     m_iPort = 12346;
 	pthread_mutex_init(&m_SendMutex, 0);
 
@@ -208,7 +208,7 @@ bool SocketsToSDL::ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * 
 	sockaddr_in toLocal;
 	memset(&toLocal, 0, sizeof(toLocal));
 	toLocal.sin_family = AF_INET;
-    toLocal.sin_addr.s_addr = inet_addr("127.0.0.1");
+    toLocal.sin_addr.s_addr = inet_addr(m_sHost.c_str());
     toLocal.sin_port = htons(m_iPort);
 
     size_t namelen = sizeof(toLocal);

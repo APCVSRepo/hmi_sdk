@@ -4,7 +4,7 @@
 
 #include "UI/Config/Config.h"
 #include <QDialog>
-#include "AppManager.h"
+#include "HMI_Initial.h"
 
 
 int main(int argc, char *argv[])
@@ -18,12 +18,13 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
 #endif
 
-    AppManager appManager;
+    HMI_Initial appManager;
     QDialog diaStart;
     diaStart.setGeometry(0,0,ui_res_width,ui_res_height);
     diaStart.setStyleSheet("border-image:url(:/images/Screen.png);");
     QObject::connect(&appManager,SIGNAL(finishMainHMI()),&diaStart, SLOT(accept()));
     diaStart.exec();
     appManager.ShowUI();
+
     return a.exec();
 }

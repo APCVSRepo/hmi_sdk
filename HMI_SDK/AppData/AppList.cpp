@@ -30,7 +30,7 @@ void AppList::ShowPreviousUI()
 {
     if(m_pCurApp)
     {
-        if(m_pCurApp->ShowPreviousUI())
+        if(m_pCurApp->ShowPreviousUI(false))
             return;
     }
     m_pUIManager->onAppShow(ID_APPLINK);
@@ -154,8 +154,8 @@ Result AppList::recvFromServer(Json::Value jsonObj)
                 return RESULT_APPLICATION_NOT_REGISTERED;
         }
         return  RESULT_SUCCESS;
-
     }
+    return  RESULT_SUCCESS;
 }
 
 

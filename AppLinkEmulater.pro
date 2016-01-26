@@ -65,7 +65,6 @@ SOURCES += \
     UI/AudioTrans/MspVRAudio.cpp \
     UI/TextSpeech/TextToSpeech.cpp \
     UI/AudioTrans/AudioOutput.cpp \
-    AppManager.cpp \
     UI/Common/AppListWidget.cpp \
     UI/AppList/AppListUI.cpp \
     UI/Common/MenuButton.cpp \
@@ -81,7 +80,8 @@ SOURCES += \
     HMI_SDK/Connect/VR.cpp \
     UI/show2/CustomCombobox.cpp \
     UI/show2/CustomComboboxItem.cpp \
-    UI/show2/MainWidget.cpp
+    UI/show2/MainWidget.cpp \
+    HMI_Initial.cpp
 
 
 
@@ -139,7 +139,6 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/AppLinkMenu.h \
     UI/Common/CAppButton.h \
     UI/AudioTrans/AudioOutput.h \
-    AppManager.h \
     HMI_SDK/AppData/AppCommon.h \
     HMI_SDK/Connect/BasicCommunication.h \
     HMI_SDK/Connect/Buttons.h \
@@ -156,7 +155,8 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/UIInclude.h \
     UI/show2/CustomCombobox.h \
     UI/show2/CustomComboboxItem.h \
-    UI/show2/MainWidget.h
+    UI/show2/MainWidget.h \
+    HMI_Initial.h
 
 
 RESOURCES += \

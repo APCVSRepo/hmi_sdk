@@ -55,6 +55,8 @@ public:
     virtual void OnMenuBtnClick(std::string btnText) = 0;
     virtual void OnVRStartRecord() = 0;
     virtual void OnVRCancelRecord() = 0;
+
+    virtual void OnSetMediaClockTimerResponse(int iCode) = 0;
 };
 
 #endif // APPDATAINTERFACE_H

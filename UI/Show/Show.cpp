@@ -440,28 +440,47 @@ void Show::UpdateMediaColckTimer()
 
     if(jsonObj["params"]["updateMode"].asString() == "COUNTUP")
     {
-        nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS);
-        m_b_countup = true;
-        emit startMediaClock(true);
+        if(nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS))
+        {
+            m_b_countup = true;
+            emit startMediaClock(true);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
+        }
+        else
+        {
+            emit startMediaClock(false);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_DATA_NOT_AVAILABLE);
+        }
     }
     else if(jsonObj["params"]["updateMode"].asString() == "COUNTDOWN")
     {
-        m_b_countup = false;
-        nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS);
-        emit startMediaClock(true);
+        if(nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS))
+        {
+            m_b_countup = false;
+            emit startMediaClock(true);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
+        }
+        else
+        {
+            emit startMediaClock(false);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_DATA_NOT_AVAILABLE);
+        }
     }
     else if(jsonObj["params"]["updateMode"].asString() == "PAUSE")
     {
         emit startMediaClock(false);
+        AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
     }
     else if(jsonObj["params"]["updateMode"].asString() == "RESUME")
     {
         emit startMediaClock(true);
+        AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
     }
     else if(jsonObj["params"]["updateMode"].asString() == "CLEAR")
     {
         emit startMediaClock(false);
         this->setMediaClock(true,"");
+        AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
     }
 }
 

@@ -209,13 +209,13 @@ void SDLConnector::OnScrollMessageResponse(int id, int reason)
     if(reason == SCROLLMESSAGE_TIMEOUT || reason == SCROLLMESSAGE_CLICK_SOFTBUTTON){
         Json::Value result;
         result["code"] = 0;
-        result["method"] = "UI.ScrollMessage";
+        result["method"] = "UI.ScrollableMessage";
 		m_UI.sendResult(id, result);
     }
     else{
         Json::Value error;
         Json::Value data;
-        data["method"] = "UI.ScrollMessage";
+        data["method"] = "UI.ScrollableMessage";
         error["message"] = "REJECTED";
         error["code"] = 4;
         error["date"] = data;
@@ -281,6 +281,26 @@ void SDLConnector::OnSliderResponse(int code, int sliderid, int sliderPosition)
 		m_UI.sendError(sliderid, error);
     }
 
+}
+
+void SDLConnector::OnSetMediaClockTimerResponse(int iCode,int iRequestId)
+{
+    //std::string info_msg = "";
+    if (iCode == RESULT_SUCCESS){
+        Json::Value result;
+        result["code"] = iCode;
+        result["method"] = "UI.SetMediaClockTimer";
+        m_UI.sendResult(iRequestId, result);
+    }else{
+        Json::Value error;
+        Json::Value data;
+        data["method"] = "UI.SetMediaClockTimer";
+        error["code"] = iCode;
+        //error["message"] = info_msg;
+        error["data"] = data;
+
+        m_UI.sendError(iRequestId, error);
+    }
 }
 
 void SDLConnector::OnPerformAudioPassThru(int appID, int performaududiopassthruID, int code)

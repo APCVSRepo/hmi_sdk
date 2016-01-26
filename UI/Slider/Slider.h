@@ -50,6 +50,7 @@ private:
     int m_iPos;
     QString m_EditText;
     QVector <QString> m_Strings;
+    bool m_bDynamic;
     void InitLayout();
     void updateScreen();
     bool setPosition(int iPos);

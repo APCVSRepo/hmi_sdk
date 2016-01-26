@@ -51,7 +51,6 @@ void TextSpeech::SpeakThreadComplete()
 //bool TextSpeech::StartVoiceThread(std::string string)
 bool TextSpeech::speak(QString string)
 {
-
     if(!_bReading)
     {
         _bReading = true;

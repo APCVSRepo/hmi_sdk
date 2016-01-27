@@ -1,0 +1,68 @@
+Message received: {"id":20,"jsonrpc":"2.0","method":"BasicCommunication.UpdateDeviceList","params":{"deviceList":[{"id":"2828dbb20eebb308a2395204d1d4cf655be18fd331a3a66ef370f21e29e51b82","isSDLAllowed":true,"name":"10.27.0.118","transportType":"WIFI"}]}}
+ RPCClient.js:130
+FFW.BasicCommunicationRPC.onRPCRequest FFW.BasicCommunicationRPC.onRPCRequest BasicCommunicationRPC.js:437
+FFW.BasicCommunication.UpdateDeviceListResponse BasicCommunicationRPC.js:728
+{"jsonrpc":"2.0","id":20,"result":{"code":0,"method":"BasicCommunication.UpdateDeviceList"}} RPCClient.js:278
+14:3:35:724 RPCClient.js:281
+
+Message received: {"jsonrpc":"2.0","method":"BasicCommunication.OnAppRegistered","params":{"application":{"appID":19170,"appName":"SyncProxyTester","appType":["NAVIGATION"],"deviceInfo":{"id":"2828dbb20eebb308a2395204d1d4cf655be18fd331a3a66ef370f21e29e51b82","isSDLAllowed":true,"name":"10.27.0.118","transportType":"WIFI"},"hmiDisplayLanguageDesired":"EN-US","icon":"","isMediaApplication":true,"ngnMediaScreenAppName":"SyncP","requestType":[]},"priority":"NONE","resumeVrGrammars":false,"vrSynonyms":["SyncProxyTester"]}}
+ RPCClient.js:130
+
+FFW.BasicCommunicationRPC.onRPCNotification BasicCommunicationRPC.js:350
+1 AppModel.js:335
+2 AppModel.js:335
+
+FFW.BasicCommunication.OnFindApplications BasicCommunicationRPC.js:960
+{"jsonrpc":"2.0","method":"BasicCommunication.OnFindApplications"} RPCClient.js:278
+14:3:36:514 RPCClient.js:281
+
+
+Message received: {"id":21,"jsonrpc":"2.0","method":"BasicCommunication.UpdateAppList","params":{"applications":[{"appID":19170,"appName":"SyncProxyTester","appType":["NAVIGATION"],"deviceInfo":{"id":"2828dbb20eebb308a2395204d1d4cf655be18fd331a3a66ef370f21e29e51b82","isSDLAllowed":true,"name":"10.27.0.118","transportType":"WIFI"},"hmiDisplayLanguageDesired":"EN-US","isMediaApplication":true,"ngnMediaScreenAppName":"SyncP"}]}}
+ RPCClient.js:130
+FFW.BasicCommunicationRPC.onRPCRequest BasicCommunicationRPC.js:437
+FFW.BasicCommunication.UpdateAppListResponse BasicCommunicationRPC.js:728
+{"jsonrpc":"2.0","id":21,"result":{"code":0,"method":"BasicCommunication.UpdateAppList"}} RPCClient.js:278
+14:3:38:683 RPCClient.js:281
+
+
+Message received: {"id":22,"jsonrpc":"2.0","method":"TTS.SetGlobalProperties","params":{"appID":19170,"helpPrompt":[]}}
+ RPCClient.js:130
+FFW.TTS.onRPCRequest TTSRPC.js:148
+FFW.TTS.SetGlobalPropertiesResponse TTSRPC.js:395
+{"jsonrpc":"2.0","id":22,"result":{"code":0,"method":"TTS.SetGlobalProperties"}} RPCClient.js:278
+14:3:39:598 RPCClient.js:281
+Message received: {"jsonrpc":"2.0","method":"SDL.OnStatusUpdate","params":{"status":"UPDATING"}}
+ RPCClient.js:130
+FFW.BasicCommunicationRPC.onRPCNotification BasicCommunicationRPC.js:350
+FFW.TTS.Started TTSRPC.js:435
+{"jsonrpc":"2.0","method":"TTS.Started"} RPCClient.js:278
+14:3:40:2 RPCClient.js:281
+SDL.GetUserFriendlyMessage: Request from HMI! BasicCommunicationRPC.js:668
+{"jsonrpc":"2.0","id":3012,"method":"SDL.GetUserFriendlyMessage","params":{"language":"EN-US","messageCodes":["StatusPending"]}} RPCClient.js:278
+14:3:40:7 RPCClient.js:281
+Message received: {"id":3012,"jsonrpc":"2.0","result":{"code":0,"method":"SDL.GetUserFriendlyMessage"}}
+ RPCClient.js:130
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:202
+SDL.GetUserFriendlyMessage: Response from SDL! BasicCommunicationRPC.js:210
+Uncaught TypeError: Cannot read property 'forEach' of undefined SettingsController.js:248
+Message received: {"id":23,"jsonrpc":"2.0","method":"VR.ChangeRegistration","params":{"appID":19170,"language":"EN-US"}}
+ RPCClient.js:130
+FFW.VR.onRPCRequest VRRPC.js:155
+FFW.VR.ChangeRegistrationResponse VRRPC.js:422
+{"jsonrpc":"2.0","id":23,"result":{"code":0,"method":"VR.ChangeRegistration"}} RPCClient.js:278
+14:3:43:475 RPCClient.js:281
+Message received: {"id":24,"jsonrpc":"2.0","method":"TTS.ChangeRegistration","params":{"appID":19170,"language":"EN-US"}}
+ RPCClient.js:130
+FFW.TTS.onRPCRequest TTSRPC.js:148
+FFW.TTS.ChangeRegistrationResponse TTSRPC.js:395
+{"jsonrpc":"2.0","id":24,"result":{"code":0,"method":"TTS.ChangeRegistration"}} RPCClient.js:278
+14:3:43:758 RPCClient.js:281
+Message received: {"id":25,"jsonrpc":"2.0","method":"UI.ChangeRegistration","params":{"appID":19170,"language":"EN-US"}}
+ RPCClient.js:130
+FFW.UI.onRPCRequest UIRPC.js:163
+FFW.UI.ChangeRegistrationResponse UIRPC.js:1500
+{"jsonrpc":"2.0","id":25,"result":{"code":0,"method":"UI.ChangeRegistration"}} RPCClient.js:278
+14:3:43:986 RPCClient.js:281
+FFW.TTS.Stopped TTSRPC.js:468
+{"jsonrpc":"2.0","method":"TTS.Stopped"} RPCClient.js:278
+14:3:45:10 RPCClient.js:281

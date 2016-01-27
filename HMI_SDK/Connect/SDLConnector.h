@@ -71,6 +71,8 @@ public:
     // reason: timeout clickSB and aborted
     void OnAlertResponse(int alertID, int reason);
 
+    void OnMediaClockResponse(int id,int code);
+
     // reason: timeout clickSB and rejected
     void OnScrollMessageResponse(int smID, int reason);
 
@@ -95,6 +97,7 @@ public:
     //touch event
     void OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y);
 
+    void OnSetMediaClockTimerResponse(int iCode,int iRequestId);
 private:
     void _onButtonClickAction(std::string, std::string, int);
     void _stopPerformAudioPassThru(int);

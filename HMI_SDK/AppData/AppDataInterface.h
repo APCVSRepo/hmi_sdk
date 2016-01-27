@@ -51,10 +51,13 @@ public:
     virtual void OnTTSSpeek(int code) = 0;
     virtual void OnPerformAudioPassThru(int code) = 0;
     virtual void OnPerformInteraction(int code, int choiceID) = 0;
+    virtual void OnMediaClock(int code)=0;
 
     virtual void OnMenuBtnClick(std::string btnText) = 0;
     virtual void OnVRStartRecord() = 0;
     virtual void OnVRCancelRecord() = 0;
+
+    virtual void OnSetMediaClockTimerResponse(int iCode) = 0;
 };
 
 #endif // APPDATAINTERFACE_H

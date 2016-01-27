@@ -40,7 +40,7 @@ void HMI_Initial::initApps()
 
 void HMI_Initial::ShowUI()
 {
-    //m_uiManager->onAppShow(ID_MAIN);
+    m_uiManager->onAppShow(ID_MAIN);
     m_uiManager->onAppShow(ID_APPLINK);
 }
 

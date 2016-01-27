@@ -47,7 +47,7 @@ AppLinkMenu::AppLinkMenu(AppListInterface * pList,QWidget *parent) : QWidget(par
     QString sheet_off[MENU_MAX]={":/images/music_off.png",":/images/key_off.png",":/images/phone_off.png",
                                  ":/images/link_off.png",":/images/list_off.png",
                                 ":/images/setting_off.png"};
-    QString text[MENU_MAX]={"Music","Keys","Phone","Navigation","AppList","Settings"};
+    QString text[MENU_MAX]={"音频","空调","电话","导航","应用程序","设置"};
     for(int i=0;i<MENU_MAX;i++){
         m_pMenuTab[i]=new MenuButton(m_pMainMenu);
         m_pMenuTab[i]->setGeometry((ui_res_width-2*margin)/MENU_MAX*i,0,(ui_res_width-2*margin)/MENU_MAX,status_height);
@@ -55,20 +55,20 @@ AppLinkMenu::AppLinkMenu(AppListInterface * pList,QWidget *parent) : QWidget(par
         m_pMenuTab[i]->setText(text[i]);
         connect(m_pMenuTab[i],SIGNAL(clicked()),SLOT(onMenuSelected()));
     }
-    m_pMenuTab[0]->setActive(true);
+    m_pMenuTab[4]->setActive(true);
 
     m_AppWidth=(ui_res_width-2*margin)/4;
     m_AppHeight=center_height/2;
     QString appsheet_on[2]={":/images/phonechild_on.png",":/images/listchild_on.png"};
     QString appsheet_off[2]={":/images/phonechild_off.png",":/images/listchild_off.png"};
-    QString childText[2]={"Find New App","App Setting"};
+    QString childText[2]={"连接设备","连接移动应用程序"};
     int funcId[2]={-1,-2};
     for(int i=0;i<2;i++){
         InsertChildApp(i,funcId[i],childText[i],appsheet_on[i],appsheet_off[i]);
     }
 
     m_pTimer=new QTimer(this);
-    m_pTimer->start(1000);//����
+    m_pTimer->start(1000);//分钟
     connect(m_pTimer,SIGNAL(timeout()),SLOT(onUpdateTime()));
 
 }
@@ -81,8 +81,9 @@ AppLinkMenu::~AppLinkMenu()
     delete m_pCenter;
     delete m_pMainMenu;
 	delete m_pTimer;
-    delete []m_pMenuTab;
-    //delete []m_pChildApps;
+	for (int i = 0; i < MENU_MAX; i++){
+		delete m_pMenuTab[i];
+	}
 }
 
 QWidget* AppLinkMenu::CenterWidget()

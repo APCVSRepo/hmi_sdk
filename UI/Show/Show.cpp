@@ -338,6 +338,11 @@ void Show::btnOneClickedLongSlots(int btID)
 
 void Show::showEvent(QShowEvent * e)
 {
+    m_btn_one->setText("-");
+    m_btn_two->setText("-");
+    m_btn_thr->setText("-");
+    m_btn_fou->setText("More...");
+
     Json::Value pObj;
     std::vector <SSoftButton > vec_softButtons;
     vec_softButtons.clear();
@@ -350,6 +355,7 @@ void Show::showEvent(QShowEvent * e)
 		int fieldNum=0;
 		QString fieldText[4];
 		bool    mediaHas=false;
+        Qt::Alignment  align=Qt::AlignCenter;
 		for (unsigned int i = 0; i < jsonParams["showStrings"].size(); i++)
 		{
 			Json::Value  fieldName = jsonParams["showStrings"][i];
@@ -380,6 +386,18 @@ void Show::showEvent(QShowEvent * e)
 				this->setMediaClock(true, fieldName["fieldText"].asString().data());
 			}
 		}
+        if(jsonParams.isMember("alignment")){
+            if(jsonParams["alignment"].asString()=="CENTERED"){
+                align=Qt::AlignCenter;
+            }
+            else if(jsonParams["alignment"].asString()=="LEFT_ALIGNED"){
+                align=Qt::AlignLeft;
+            }
+            else if(jsonParams["alignment"].asString()=="RIGHT_ALIGNED"){
+                align=Qt::AlignRight;
+            }
+        }
+
 		m_listWidget->DelListItemWidget();
 		m_listWidget->setFixedSize(ui_app_width*2.0 / 3.0, ui_app_height*(mediaHas ? 2.0 : 3.0) / 4.0);
 		if (!mediaHas){
@@ -390,6 +408,7 @@ void Show::showEvent(QShowEvent * e)
 		for (int i = 0; i<fieldNum; i++){
 			m_listWidget->AddListItemWidget(fieldText[i], false);
 		}
+        m_listWidget->SetTextAlignment(align);
 		if (jsonParams.isMember("softButtons"))
 		{
 
@@ -440,28 +459,47 @@ void Show::UpdateMediaColckTimer()
 
     if(jsonObj["params"]["updateMode"].asString() == "COUNTUP")
     {
-        nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS);
-        m_b_countup = true;
-        emit startMediaClock(true);
+        if(nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS))
+        {
+            m_b_countup = true;
+            emit startMediaClock(true);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
+        }
+        else
+        {
+            emit startMediaClock(false);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_DATA_NOT_AVAILABLE);
+        }
     }
     else if(jsonObj["params"]["updateMode"].asString() == "COUNTDOWN")
     {
-        m_b_countup = false;
-        nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS);
-        emit startMediaClock(true);
+        if(nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS))
+        {
+            m_b_countup = false;
+            emit startMediaClock(true);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
+        }
+        else
+        {
+            emit startMediaClock(false);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_DATA_NOT_AVAILABLE);
+        }
     }
     else if(jsonObj["params"]["updateMode"].asString() == "PAUSE")
     {
         emit startMediaClock(false);
+        AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
     }
     else if(jsonObj["params"]["updateMode"].asString() == "RESUME")
     {
         emit startMediaClock(true);
+        AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
     }
     else if(jsonObj["params"]["updateMode"].asString() == "CLEAR")
     {
         emit startMediaClock(false);
-        this->setMediaClock(true,"");
+        setMediaClock(false,"");
+        AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
     }
 }
 

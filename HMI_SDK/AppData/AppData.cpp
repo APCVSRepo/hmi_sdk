@@ -132,6 +132,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
         {
             scrollableMessage(jsonObj);
             ShowUI(ID_SCROLLMSG);
+            return RESULT_USER_WAIT;
         }
         else if (str_method == "UI.Slider")
         {
@@ -180,6 +181,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
         {
             m_json_mediaclock = jsonObj;
             ShowUI(ID_MEDIACLOCK);
+            return RESULT_USER_WAIT;
         }
 
         else if(str_method == "VR.VRStatus")
@@ -249,8 +251,8 @@ Result AppData::recvFromServer(Json::Value jsonObj)
             int size=ttsSpeeks.size();
             for(int i=0;i<size;i++){
                 std::string speek=ttsSpeeks[i]["text"].asString();
-                if(ttsSpeeks[i]["type"].asString()!="TEXT")
-                    continue;
+                //if(ttsSpeeks[i]["type"].asString()!="TEXT")
+                //    continue;
                 if(!IsTextUTF8((char *)speek.data(),speek.size()))
                     speek = string_To_UTF8(speek);
                 m_pUIManager->tsSpeak(ID_DEFAULT, speek);
@@ -331,6 +333,11 @@ void AppData::OnSliderResponse( int code, int sliderPosition)
     ShowPreviousUI();
 }
 
+void AppData::OnSetMediaClockTimerResponse(int iCode)
+{
+    ToSDL->OnSetMediaClockTimerResponse(iCode, m_json_mediaclock["id"].asInt());
+}
+
 void AppData::OnTTSSpeek(int code)
 {
     ToSDL->OnTTSSpeek(m_json_tsSpeak["id"].asInt(), code);
@@ -380,6 +387,11 @@ void AppData::OnPerformInteraction(int code, int row)
     ShowPreviousUI();
 }
 
+void AppData::OnMediaClock(int code)
+{
+    int id=m_json_mediaclock["id"].asInt();
+    ToSDL->OnMediaClockResponse(id,code);
+}
 
 
 //////////////////////////////////

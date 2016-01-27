@@ -245,6 +245,10 @@ void MainWidget::showEvent(QShowEvent * e)
     {
         m_pShowLine[i].setText("");
     }
+    for(int i = 0;i != 3;++i)
+    {
+        m_pSoftBtn[i].setText("-");
+    }
 
     Json::Value pObj;
     std::vector <SSoftButton > vec_softButtons;

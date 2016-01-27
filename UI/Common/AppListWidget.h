@@ -23,6 +23,7 @@ public:
     void ScrollToIndex(int index);
     void ItemSelect(int index);
     void SetItemText(int index,QString txt);
+    void SetTextAlignment(Qt::Alignment align);
     void setFixedSize(int w, int h);
 signals:
     void clicked(int itemIndex);

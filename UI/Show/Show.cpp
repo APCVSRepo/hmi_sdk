@@ -338,6 +338,11 @@ void Show::btnOneClickedLongSlots(int btID)
 
 void Show::showEvent(QShowEvent * e)
 {
+    m_btn_one->setText("-");
+    m_btn_two->setText("-");
+    m_btn_thr->setText("-");
+    m_btn_fou->setText("More...");
+
     Json::Value pObj;
     std::vector <SSoftButton > vec_softButtons;
     vec_softButtons.clear();
@@ -454,28 +459,47 @@ void Show::UpdateMediaColckTimer()
 
     if(jsonObj["params"]["updateMode"].asString() == "COUNTUP")
     {
-        nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS);
-        m_b_countup = true;
-        emit startMediaClock(true);
+        if(nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS))
+        {
+            m_b_countup = true;
+            emit startMediaClock(true);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
+        }
+        else
+        {
+            emit startMediaClock(false);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_DATA_NOT_AVAILABLE);
+        }
     }
     else if(jsonObj["params"]["updateMode"].asString() == "COUNTDOWN")
     {
-        m_b_countup = false;
-        nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS);
-        emit startMediaClock(true);
+        if(nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS))
+        {
+            m_b_countup = false;
+            emit startMediaClock(true);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
+        }
+        else
+        {
+            emit startMediaClock(false);
+            AppControl->OnSetMediaClockTimerResponse(RESULT_DATA_NOT_AVAILABLE);
+        }
     }
     else if(jsonObj["params"]["updateMode"].asString() == "PAUSE")
     {
         emit startMediaClock(false);
+        AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
     }
     else if(jsonObj["params"]["updateMode"].asString() == "RESUME")
     {
         emit startMediaClock(true);
+        AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
     }
     else if(jsonObj["params"]["updateMode"].asString() == "CLEAR")
     {
         emit startMediaClock(false);
-        this->setMediaClock(true,"");
+        setMediaClock(false,"");
+        AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
     }
 }
 

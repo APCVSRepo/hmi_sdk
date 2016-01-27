@@ -5,8 +5,7 @@
 #include "Common/AppBase.h"
 
 Slider::Slider(AppListInterface * pList, QWidget *parent) :
-  AppBase(pList, parent),
-    m_iPos(0)
+  AppBase(pList, parent),m_iPos(0),m_bDynamic(false)
 {
     InitLayout();
     connect(&m_timer,SIGNAL(timeout()),this,SLOT(timeoutSlots()));
@@ -91,7 +90,10 @@ void Slider::InitLayout()
 
 void Slider::sliderClickedSlots( int code, int sliderPosition)
 {
-    AppControl->OnSliderResponse(code, sliderPosition);
+    if(AppControl)
+    {
+        AppControl->OnSliderResponse(code, sliderPosition);
+    }
 }
 
 void Slider::onMoveLeftSlot()
@@ -162,7 +164,14 @@ void Slider::updateScreen()
         }
     }
     m_labelText2->setText("<" + m_EditText + ">");
-    SetEdlidedText(m_labelText3,m_Strings[m_iPos],width());
+    if(m_bDynamic)
+    {
+        SetEdlidedText(m_labelText3,m_Strings[m_iPos],width());
+    }
+    else
+    {
+        SetEdlidedText(m_labelText3,m_Strings[0],width());
+    }
 }
 
 void Slider::setTimeOut(int duration)
@@ -214,10 +223,19 @@ void Slider::showEvent(QShowEvent * e)
                 vec_strSliter.push_back(m_jsonData["params"]["sliderFooter"][i].asString());
             }
         }
+        if(vec_strSliter.size() == 1)
+        {
+            m_bDynamic = false;
+        }
+        else if(vec_strSliter.size() == numTicks)
+        {
+             m_bDynamic = true;
+        }
         while(vec_strSliter.size() < numTicks)
         {
             vec_strSliter.push_back("-");
         }
+
 
         this->setSliderStrings(vec_strSliter,position);
     }

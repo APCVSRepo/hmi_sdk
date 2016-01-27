@@ -306,6 +306,11 @@ void CScrollMsg::scrollMsgAbortSlots(int reason)
 
 void CScrollMsg::showEvent(QShowEvent * e)
 {
+    for(int i = 0;i != 4;++i)
+    {
+        disconnect(m_btnSoft[i], SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
+    }
+
     if (AppControl)
     {
         m_listButton.clear();
@@ -327,7 +332,6 @@ void CScrollMsg::showEvent(QShowEvent * e)
                         m_jsonData["softButtons"][i]["text"].asString().c_str(),m_jsonData["softButtons"][i]["isHighlighted"].asBool());
                 connect(m_btnSoft[i], SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));
                 connect(m_btnSoft[i], SIGNAL(clickedLong(int)), this, SLOT(onButtonClickedLongSlots(int)));
-
             }
         }
 		UpdateLayout();

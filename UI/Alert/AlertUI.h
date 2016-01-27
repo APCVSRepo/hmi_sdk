@@ -29,7 +29,7 @@ public slots:
 
 private:
     void setAlertText(int textIdx, QString text);
-    void setBtnText(int btnIdx, QString text, bool highLight);
+    void setBtnText(int btnIdx, QString text, bool highLight,int iSoftBtnId = 0);
     void setTimeOut(int duration);
 
 private:

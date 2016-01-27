@@ -41,6 +41,8 @@ public:
     void OnVRStartRecord();
     void OnVRCancelRecord();
 
+    void OnSetMediaClockTimerResponse(int iCode);
+
     Result recvFromServer(Json::Value);
 
     // 增加一个退出app的指令

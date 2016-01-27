@@ -146,13 +146,14 @@ void CAlertUI::setAlertText(int textIdx, QString text)
     SetEdlidedText(m_pLabelText[textIdx],text,width());
 }
 
-void CAlertUI::setBtnText(int btnIdx, QString text, bool highLight)
+void CAlertUI::setBtnText(int btnIdx, QString text, bool highLight,int iSoftBtnId)
 {
     switch (btnIdx)
     {
     case 0:
     {
         m_btnSoft1->setText(text);
+        m_btnSoft1->setId(iSoftBtnId);
         if(highLight)
         {
             m_btnSoft1->setIconNormal(":/images/highlightsoftbutton_alert.png");
@@ -168,6 +169,7 @@ void CAlertUI::setBtnText(int btnIdx, QString text, bool highLight)
     case 1:
     {
         m_btnSoft2->setText(text);
+        m_btnSoft2->setId(iSoftBtnId);
         if(highLight)
         {
             m_btnSoft2->setIconNormal(":/images/highlightsoftbutton_alert_left.png");
@@ -183,6 +185,7 @@ void CAlertUI::setBtnText(int btnIdx, QString text, bool highLight)
     case 2:
     {
         m_btnSoft3->setText(text);
+        m_btnSoft3->setId(iSoftBtnId);
         if(highLight)
         {
             m_btnSoft3->setIconNormal(":/images/highlightsoftbutton_alert_right.png");
@@ -198,6 +201,7 @@ void CAlertUI::setBtnText(int btnIdx, QString text, bool highLight)
     case 3:
     {
         m_btnSoft4->setText(text);
+        m_btnSoft4->setId(iSoftBtnId);
         if(highLight)
         {
             m_btnSoft4->setIconNormal(":/images/highlightsoftbutton_alert.png");
@@ -342,15 +346,26 @@ void CAlertUI::showEvent(QShowEvent * e)
         {
             setTimeOut(pObj["params"]["duration"].asInt()+20000);
             itemCnt = pObj["params"]["softButtons"].size();
-            for (int i = 0; i < itemCnt; i++)
+            if(itemCnt == 2)
             {
-                if (i < 4)
+                setBtnText(0,pObj["params"]["softButtons"][0]["text"].asString().c_str(),pObj["params"]["softButtons"][0]["isHighlighted"].asBool(),
+                        pObj["params"]["softButtons"][0]["softButtonID"].asInt());
+                setBtnText(3,pObj["params"]["softButtons"][1]["text"].asString().c_str(),pObj["params"]["softButtons"][1]["isHighlighted"].asBool(),
+                        pObj["params"]["softButtons"][1]["softButtonID"].asInt());
+            }
+            else
+            {
+                for (int i = 0; i < itemCnt; i++)
                 {
-                    setBtnText(i,pObj["params"]["softButtons"][i]["text"].asString().c_str(),pObj["params"]["softButtons"][i]["isHighlighted"].asBool());
-                }
-                else
-                {
-                    break;
+                    if (i < 4)
+                    {
+                        setBtnText(i,pObj["params"]["softButtons"][i]["text"].asString().c_str(),pObj["params"]["softButtons"][i]["isHighlighted"].asBool(),
+                                pObj["params"]["softButtons"][i]["softButtonID"].asInt());
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
         }

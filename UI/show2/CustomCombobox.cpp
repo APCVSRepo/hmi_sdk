@@ -75,7 +75,7 @@ void CustomCombobox::AddListItem(QString strText,bool bMenu)
     itemWidget->setIsMenu(bMenu);
     m_itemList.push_back(itemWidget);
 
-    connect(itemWidget,SIGNAL(MouseOnItemSignal(CustomComboboxItem *)),this,SLOT(OnMouseMoveOnItem(CustomComboboxItem *)));
+    //connect(itemWidget,SIGNAL(MouseOnItemSignal(CustomComboboxItem *)),this,SLOT(OnMouseMoveOnItem(CustomComboboxItem *)));
 
     m_iHeight += h;
     if(m_iHeight > m_iMaxHeight)

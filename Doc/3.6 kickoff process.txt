@@ -1,0 +1,365 @@
+
+{"jsonrpc":"2.0","id":200,"method":"MB.registerComponent","params":{"componentName":"Buttons"}} RPCClient.js:267:17
+15:17:56:999 RPCClient.js:270:1
+Message received: {"id":200,"jsonrpc":"2.0","result":2000}
+
+{"jsonrpc":"2.0","id":300,"method":"MB.registerComponent","params":{"componentName":"TTS"}} RPCClient.js:267:17
+15:17:57:87 RPCClient.js:270:1
+Message received: {"id":300,"jsonrpc":"2.0","result":3000}
+
+{"jsonrpc":"2.0","id":500,"method":"MB.registerComponent","params":{"componentName":"VR"}} RPCClient.js:267:17
+15:17:57:127 RPCClient.js:270:1
+Message received: {"id":500,"jsonrpc":"2.0","result":4000}
+
+{"jsonrpc":"2.0","id":600,"method":"MB.registerComponent","params":{"componentName":"BasicCommunication"}} RPCClient.js:267:17
+15:17:57:164 RPCClient.js:270:1
+Message received: {"id":600,"jsonrpc":"2.0","result":5000}
+
+{"jsonrpc":"2.0","id":5001,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnPutFile"}} RPCClient.js:267:17
+15:17:57:216 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5002,"method":"MB.subscribeTo","params":{"propertyName":"SDL.OnSystemError"}} RPCClient.js:267:17
+15:17:57:217 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5003,"method":"MB.subscribeTo","params":{"propertyName":"SDL.OnStatusUpdate"}} RPCClient.js:267:17
+15:17:57:217 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5004,"method":"MB.subscribeTo","params":{"propertyName":"SDL.OnAppPermissionChanged"}} RPCClient.js:267:17
+15:17:57:217 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5005,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnFileRemoved"}} RPCClient.js:267:17
+15:17:57:218 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5006,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnAppRegistered"}} RPCClient.js:267:17
+15:17:57:218 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5007,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnAppUnregistered"}} RPCClient.js:267:17
+15:17:57:218 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5008,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.PlayTone"}} RPCClient.js:267:17
+15:17:57:218 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5009,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnSDLClose"}} RPCClient.js:267:17
+15:17:57:219 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5010,"method":"MB.subscribeTo","params":{"propertyName":"SDL.OnSDLConsentNeeded"}} RPCClient.js:267:17
+15:17:57:219 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5011,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnResumeAudioSource"}} RPCClient.js:267:17
+15:17:57:220 RPCClient.js:270:1
+Message received: {"id":5001,"jsonrpc":"2.0","result":"OK"}
+
+Message received: {"id":5002,"jsonrpc":"2.0","result":"OK"}
+
+Message received: {"id":5003,"jsonrpc":"2.0","result":"OK"}
+
+Message received: {"id":5004,"jsonrpc":"2.0","result":"OK"}
+
+Message received: {"id":5005,"jsonrpc":"2.0","result":"OK"}
+
+Message received: {"id":5006,"jsonrpc":"2.0","result":"OK"}
+
+Message received: {"id":5007,"jsonrpc":"2.0","result":"OK"}
+
+Message received: {"id":5008,"jsonrpc":"2.0","result":"OK"}
+
+Message received: {"id":5009,"jsonrpc":"2.0","result":"OK"}
+
+Message received: {"id":5010,"jsonrpc":"2.0","result":"OK"}
+
+Message received: {"id":5011,"jsonrpc":"2.0","result":"OK"}
+
+{"jsonrpc":"2.0","id":400,"method":"MB.registerComponent","params":{"componentName":"UI"}} RPCClient.js:267:17
+
+Message received: {"id":400,"jsonrpc":"2.0","result":6000}
+ 
+"jsonrpc":"2.0","id":6001,"method":"MB.subscribeTo","params":{"propertyName":"UI.OnRecordStart"}} RPCClient.js:267:17
+
+Message received: {"id":6001,"jsonrpc":"2.0","result":"OK"}
+
+{"jsonrpc":"2.0","id":700,"method":"MB.registerComponent","params":{"componentName":"VehicleInfo"}} RPCClient.js:267:17
+
+Message received: {"id":700,"jsonrpc":"2.0","result":7000}
+
+{"jsonrpc":"2.0","id":800,"method":"MB.registerComponent","params":{"componentName":"Navigation"}} RPCClient.js:267:17
+
+Message received: {"id":800,"jsonrpc":"2.0","result":8000}
+
+{"jsonrpc":"2.0","method":"BasicCommunication.OnReady"} RPCClient.js:267:17
+
+Message received: {"id":1,"jsonrpc":"2.0","method":"VR.IsReady"}
+
+{"jsonrpc":"2.0","id":1,"result":{"available":true,"code":0,"method":"VR.IsReady"}} RPCClient.js:267:17
+
+Message received: {"id":2,"jsonrpc":"2.0","method":"TTS.IsReady"}
+
+{"jsonrpc":"2.0","id":2,"result":{"available":true,"code":0,"method":"TTS.IsReady"}} RPCClient.js:267:17
+
+Message received: {"id":3,"jsonrpc":"2.0","method":"UI.IsReady"}
+
+{"jsonrpc":"2.0","id":3,"result":{"available":true,"code":0,"method":"UI.IsReady"}} RPCClient.js:267:17
+
+Message received: {"id":4,"jsonrpc":"2.0","method":"Navigation.IsReady"}
+
+{"jsonrpc":"2.0","id":4,"result":{"available":true,"code":0,"method":"Navigation.IsReady"}} RPCClient.js:267:17
+
+Message received: {"id":5,"jsonrpc":"2.0","method":"VehicleInfo.IsReady"}
+
+{"jsonrpc":"2.0","id":5,"result":{"available":true,"code":0,"method":"VehicleInfo.IsReady"}} RPCClient.js:267:17
+
+Message received: {"id":6,"jsonrpc":"2.0","method":"Buttons.GetCapabilities"}
+
+{"jsonrpc":"2.0","id":6,"result":{"capabilities":[{"name":"PRESET_0","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_1","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_2","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_3","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_4","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_5","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_6","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_7","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_8","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_9","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"OK","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"SEEKLEFT","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"SEEKRIGHT","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"TUNEUP","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"TUNEDOWN","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true}],"presetBankCapabilities":{"onScreenPresetsAvailable":true},"code":0,"method":"Buttons.GetCapabilities"}} RPCClient.js:267:17
+
+Message received: {"id":7,"jsonrpc":"2.0","method":"VR.GetLanguage"}
+
+{"jsonrpc":"2.0","id":7,"result":{"code":0,"method":"VR.GetLanguage","language":"EN-US"}} RPCClient.js:267:17
+
+Message received: {"id":8,"jsonrpc":"2.0","method":"VR.GetSupportedLanguages"}
+
+{"jsonrpc":"2.0","id":8,"result":{"code":0,"method":"VR.GetSupportedLanguages","languages":["EN-US","ES-MX","FR-CA","DE-DE","ES-ES","EN-GB","RU-RU","TR-TR","PL-PL","FR-FR","IT-IT","SV-SE","PT-PT","NL-NL","ZH-TW","JA-JP","AR-SA","KO-KR","PT-BR","CS-CZ","DA-DK","NO-NO"]}} RPCClient.js:267:17
+
+Message received: {"id":9,"jsonrpc":"2.0","method":"VR.GetCapabilities"}
+
+{"jsonrpc":"2.0","id":9,"result":{"code":0,"method":"VR.GetCapabilities","vrCapabilities":["TEXT"]}} RPCClient.js:267:17
+
+Message received: {"id":10,"jsonrpc":"2.0","method":"TTS.GetLanguage"}
+
+{"jsonrpc":"2.0","id":10,"result":{"code":0,"method":"TTS.GetLanguage","language":"EN-US"}} RPCClient.js:267:17
+
+Message received: {"id":11,"jsonrpc":"2.0","method":"TTS.GetSupportedLanguages"}
+
+{"jsonrpc":"2.0","id":11,"result":{"code":0,"method":"TTS.GetSupportedLanguages","languages":["EN-US","ES-MX","FR-CA","DE-DE","ES-ES","EN-GB","RU-RU","TR-TR","PL-PL","FR-FR","IT-IT","SV-SE","PT-PT","NL-NL","ZH-TW","JA-JP","AR-SA","KO-KR","PT-BR","CS-CZ","DA-DK","NO-NO"]}} RPCClient.js:267:17
+
+Message received: {"id":12,"jsonrpc":"2.0","method":"TTS.GetCapabilities"}
+
+{"jsonrpc":"2.0","id":12,"result":{"speechCapabilities":["TEXT","PRE_RECORDED"],"prerecordedSpeechCapabilities":["HELP_JINGLE","INITIAL_JINGLE","LISTEN_JINGLE","POSITIVE_JINGLE","NEGATIVE_JINGLE"],"code":0,"method":"TTS.GetCapabilities"}} RPCClient.js:267:17
+
+Message received: {"id":13,"jsonrpc":"2.0","method":"UI.GetLanguage"}
+
+{"jsonrpc":"2.0","id":13,"result":{"code":0,"method":"UI.GetLanguage","language":"EN-US"}} RPCClient.js:267:17
+
+Message received: {"id":14,"jsonrpc":"2.0","method":"UI.GetSupportedLanguages"}
+
+{"id":14,"jsonrpc":"2.0","result":{"code":0,"method":"UI.GetSupportedLanguages","languages":["EN-US","ES-MX","FR-CA","DE-DE","ES-ES","EN-GB","RU-RU","TR-TR","PL-PL","FR-FR","IT-IT","SV-SE","PT-PT","NL-NL","ZH-TW","JA-JP","AR-SA","KO-KR","PT-BR","CS-CZ","DA-DK","NO-NO"]}} RPCClient.js:267:17
+
+Message received: {"id":15,"jsonrpc":"2.0","method":"UI.GetCapabilities"}
+
+{"jsonrpc":"2.0","id":15,"result":{"displayCapabilities":{"displayType":"GEN2_8_DMA","textFields":[{"name":"mainField1","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"mainField2","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"mainField3","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"mainField4","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"statusBar","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"mediaClock","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"mediaTrack","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"alertText1","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"alertText2","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"alertText3","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"scrollableMessageBody","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"initialInteractionText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"navigationText1","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"navigationText2","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"ETA","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"totalDistance","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"navigationText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"audioPassThruDisplayText1","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"audioPassThruDisplayText2","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"sliderHeader","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"sliderFooter","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"notificationText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"menuName","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"secondaryText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"tertiaryText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"timeToDestination","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"turnText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"menuTitle","characterSet":"TYPE2SET","width":500,"rows":1}],"imageFields":[{"name":"softButtonImage","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"choiceImage","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"choiceSecondaryImage","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"vrHelpItem","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"turnIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"menuIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"cmdIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"graphic","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"showConstantTBTIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"showConstantTBTNextTurnIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"showConstantTBTNextTurnIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}}],"mediaClockFormats":["CLOCK1","CLOCK2","CLOCK3","CLOCKTEXT1","CLOCKTEXT2","CLOCKTEXT3","CLOCKTEXT4"],"graphicSupported":true,"imageCapabilities":["DYNAMIC","STATIC"],"templatesAvailable":["TEMPLATE"],"screenParams":{"resolution":{"resolutionWidth":800,"resolutionHeight":480},"touchEventAvailable":{"pressAvailable":true,"multiTouchAvailable":true,"doublePressAvailable":false}},"numCustomPresetsAvailable":8},"audioPassThruCapabilities":{"samplingRate":"44KHZ","bitsPerSample":"8_BIT","audioType":"PCM"},"hmiZoneCapabilities":"FRONT","softButtonCapabilities":{"shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true,"imageSupported":true},"code":0,"method":"UI.GetCapabilities"}} RPCClient.js:267:17
+
+Message received: {"id":16,"jsonrpc":"2.0","method":"VehicleInfo.GetVehicleType"}
+
+{"jsonrpc":"2.0","id":16,"result":{"code":0,"method":"VehicleInfo.GetVehicleType","vehicleType":{"make":"Ford","model":"Fiesta","modelYear":"2013","trim":"SE"}}} RPCClient.js:267:17
+15:17:57:614
+
+Below is the RAW message:
+===================================================================================================
+预期为选择器。  选择器错误导致忽略规则集。 buttonControls.css:418:0
+解析 'border-radius' 的值时出错。  声明被丢弃。 general.css:133:19
+解析 'border-radius' 的值时出错。  声明被丢弃。 general.css:211:19
+预期为声明，但却得到 ']'。  跳过至下一个声明。 general.css:683:0
+解析 'box-shadow' 的值时出错。  声明被丢弃。 general.css:1076:19
+解析 'background-image' 的值时出错。  声明被丢弃。 general.css:1088:22
+预期为选择器。  选择器错误导致忽略规则集。 general.css:1156:0
+未知属性 '-moz-border-radius'。  声明被丢弃。 media.css:140:19
+未知属性 '-moz-border-radius'。  声明被丢弃。 media.css:284:19
+解析 'display' 的值时出错。  声明被丢弃。 sdl.css:21:13
+解析 'display' 的值时出错。  声明被丢弃。 sdl.css:22:13
+FFW: Framework init Framework.js:38:9
+SDL: Application init! SDLApp.js:64:9
+unreachable code after return statement RPCController.js:1155:32
+SDL: Application ready! SDLApp.js:72:9
+解析 'height' 的值时出错。  声明被丢弃。 index.html
+解析 'transition-duration' 的值时出错。  声明被丢弃。 index.html
+所用的 getPreventDefault() 已不赞成使用。请使用 defaultPrevented 替代。 jquery-1.7.2.min.js:3:7108
+RPCCLient.onWSOpen RPCClient.js:118:13
+{"jsonrpc":"2.0","id":200,"method":"MB.registerComponent","params":{"componentName":"Buttons"}} RPCClient.js:267:17
+15:17:56:999 RPCClient.js:270:1
+Message received: {"id":200,"jsonrpc":"2.0","result":2000}
+ RPCClient.js:131:13
+FFW.Buttons.onRPCRegistered ButtonsRPC.js:65:9
+RPCCLient.onWSOpen RPCClient.js:118:13
+{"jsonrpc":"2.0","id":300,"method":"MB.registerComponent","params":{"componentName":"TTS"}} RPCClient.js:267:17
+15:17:57:87 RPCClient.js:270:1
+Message received: {"id":300,"jsonrpc":"2.0","result":3000}
+ RPCClient.js:131:13
+FFW.TTS.onRPCRegistered TTSRPC.js:86:9
+RPCCLient.onWSOpen RPCClient.js:118:13
+{"jsonrpc":"2.0","id":500,"method":"MB.registerComponent","params":{"componentName":"VR"}} RPCClient.js:267:17
+15:17:57:127 RPCClient.js:270:1
+Message received: {"id":500,"jsonrpc":"2.0","result":4000}
+ RPCClient.js:131:13
+FFW.VR.onRPCRegistered VRRPC.js:74:9
+RPCCLient.onWSOpen RPCClient.js:118:13
+{"jsonrpc":"2.0","id":600,"method":"MB.registerComponent","params":{"componentName":"BasicCommunication"}} RPCClient.js:267:17
+15:17:57:164 RPCClient.js:270:1
+Message received: {"id":600,"jsonrpc":"2.0","result":5000}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCRegistered BasicCommunicationRPC.js:115:13
+{"jsonrpc":"2.0","id":5001,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnPutFile"}} RPCClient.js:267:17
+15:17:57:216 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5002,"method":"MB.subscribeTo","params":{"propertyName":"SDL.OnSystemError"}} RPCClient.js:267:17
+15:17:57:217 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5003,"method":"MB.subscribeTo","params":{"propertyName":"SDL.OnStatusUpdate"}} RPCClient.js:267:17
+15:17:57:217 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5004,"method":"MB.subscribeTo","params":{"propertyName":"SDL.OnAppPermissionChanged"}} RPCClient.js:267:17
+15:17:57:217 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5005,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnFileRemoved"}} RPCClient.js:267:17
+15:17:57:218 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5006,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnAppRegistered"}} RPCClient.js:267:17
+15:17:57:218 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5007,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnAppUnregistered"}} RPCClient.js:267:17
+15:17:57:218 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5008,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.PlayTone"}} RPCClient.js:267:17
+15:17:57:218 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5009,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnSDLClose"}} RPCClient.js:267:17
+15:17:57:219 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5010,"method":"MB.subscribeTo","params":{"propertyName":"SDL.OnSDLConsentNeeded"}} RPCClient.js:267:17
+15:17:57:219 RPCClient.js:270:1
+{"jsonrpc":"2.0","id":5011,"method":"MB.subscribeTo","params":{"propertyName":"BasicCommunication.OnResumeAudioSource"}} RPCClient.js:267:17
+15:17:57:220 RPCClient.js:270:1
+Message received: {"id":5001,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+Message received: {"id":5002,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+Message received: {"id":5003,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+Message received: {"id":5004,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+Message received: {"id":5005,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+Message received: {"id":5006,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+Message received: {"id":5007,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+Message received: {"id":5008,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+Message received: {"id":5009,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+Message received: {"id":5010,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+Message received: {"id":5011,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:195:13
+RPCCLient.onWSOpen RPCClient.js:118:13
+{"jsonrpc":"2.0","id":400,"method":"MB.registerComponent","params":{"componentName":"UI"}} RPCClient.js:267:17
+15:17:57:238 RPCClient.js:270:1
+Message received: {"id":400,"jsonrpc":"2.0","result":6000}
+ RPCClient.js:131:13
+FFW.UI.onRPCRegistered UIRPC.js:91:9
+{"jsonrpc":"2.0","id":6001,"method":"MB.subscribeTo","params":{"propertyName":"UI.OnRecordStart"}} RPCClient.js:267:17
+15:17:57:269 RPCClient.js:270:1
+Message received: {"id":6001,"jsonrpc":"2.0","result":"OK"}
+ RPCClient.js:131:13
+FFW.UI.onRPCResult UIRPC.js:125:9
+RPCCLient.onWSOpen RPCClient.js:118:13
+{"jsonrpc":"2.0","id":700,"method":"MB.registerComponent","params":{"componentName":"VehicleInfo"}} RPCClient.js:267:17
+15:17:57:293 RPCClient.js:270:1
+Message received: {"id":700,"jsonrpc":"2.0","result":7000}
+ RPCClient.js:131:13
+FFW.VehicleInfo.onRPCRegistered VehicleInfoRPC.js:75:9
+RPCCLient.onWSOpen RPCClient.js:118:13
+{"jsonrpc":"2.0","id":800,"method":"MB.registerComponent","params":{"componentName":"Navigation"}} RPCClient.js:267:17
+15:17:57:331 RPCClient.js:270:1
+Message received: {"id":800,"jsonrpc":"2.0","result":8000}
+ RPCClient.js:131:13
+FFW.Navigation.onRPCRegistered NavigationRPC.js:78:9
+FFW.BasicCommunication.onReady BasicCommunicationRPC.js:783:13
+{"jsonrpc":"2.0","method":"BasicCommunication.OnReady"} RPCClient.js:267:17
+15:17:57:357 RPCClient.js:270:1
+1453360677358 Controller.js:156:13
+Message received: {"id":1,"jsonrpc":"2.0","method":"VR.IsReady"}
+ RPCClient.js:131:13
+FFW.VR.onRPCRequest VRRPC.js:148:9
+FFW.VR.IsReadyResponse VRRPC.js:222:17
+{"jsonrpc":"2.0","id":1,"result":{"available":true,"code":0,"method":"VR.IsReady"}} RPCClient.js:267:17
+15:17:57:376 RPCClient.js:270:1
+Message received: {"id":2,"jsonrpc":"2.0","method":"TTS.IsReady"}
+ RPCClient.js:131:13
+FFW.TTS.onRPCRequest TTSRPC.js:141:9
+FFW.TTS.IsReadyResponse TTSRPC.js:255:13
+{"jsonrpc":"2.0","id":2,"result":{"available":true,"code":0,"method":"TTS.IsReady"}} RPCClient.js:267:17
+15:17:57:395 RPCClient.js:270:1
+Message received: {"id":3,"jsonrpc":"2.0","method":"UI.IsReady"}
+ RPCClient.js:131:13
+FFW.UI.onRPCRequest UIRPC.js:156:9
+FFW.UI.IsReadyResponse UIRPC.js:1208:21
+{"jsonrpc":"2.0","id":3,"result":{"available":true,"code":0,"method":"UI.IsReady"}} RPCClient.js:267:17
+15:17:57:412 RPCClient.js:270:1
+Message received: {"id":4,"jsonrpc":"2.0","method":"Navigation.IsReady"}
+ RPCClient.js:131:13
+FFW.Navigation.onRPCRequest NavigationRPC.js:141:9
+FFW.Navigation.IsReadyResponse NavigationRPC.js:149:21
+{"jsonrpc":"2.0","id":4,"result":{"available":true,"code":0,"method":"Navigation.IsReady"}} RPCClient.js:267:17
+15:17:57:431 RPCClient.js:270:1
+Message received: {"id":5,"jsonrpc":"2.0","method":"VehicleInfo.IsReady"}
+ RPCClient.js:131:13
+FFW.VehicleInfo.onRPCRequest VehicleInfoRPC.js:132:9
+FFW.VehicleInfo.IsReadyResponse VehicleInfoRPC.js:204:17
+{"jsonrpc":"2.0","id":5,"result":{"available":true,"code":0,"method":"VehicleInfo.IsReady"}} RPCClient.js:267:17
+15:17:57:446 RPCClient.js:270:1
+Message received: {"id":6,"jsonrpc":"2.0","method":"Buttons.GetCapabilities"}
+ RPCClient.js:131:13
+FFW.Buttons.onRPCRequest ButtonsRPC.js:120:9
+{"jsonrpc":"2.0","id":6,"result":{"capabilities":[{"name":"PRESET_0","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_1","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_2","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_3","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_4","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_5","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_6","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_7","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_8","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"PRESET_9","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"OK","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"SEEKLEFT","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"SEEKRIGHT","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"TUNEUP","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true},{"name":"TUNEDOWN","shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true}],"presetBankCapabilities":{"onScreenPresetsAvailable":true},"code":0,"method":"Buttons.GetCapabilities"}} RPCClient.js:267:17
+15:17:57:459 RPCClient.js:270:1
+Message received: {"id":7,"jsonrpc":"2.0","method":"VR.GetLanguage"}
+ RPCClient.js:131:13
+FFW.VR.onRPCRequest VRRPC.js:148:9
+FFW.VR.GetLanguageResponse VRRPC.js:193:17
+{"jsonrpc":"2.0","id":7,"result":{"code":0,"method":"VR.GetLanguage","language":"EN-US"}} RPCClient.js:267:17
+15:17:57:476 RPCClient.js:270:1
+Message received: {"id":8,"jsonrpc":"2.0","method":"VR.GetSupportedLanguages"}
+ RPCClient.js:131:13
+FFW.VR.onRPCRequest VRRPC.js:148:9
+FFW.VR.GetSupportedLanguagesResponse VRRPC.js:174:17
+{"jsonrpc":"2.0","id":8,"result":{"code":0,"method":"VR.GetSupportedLanguages","languages":["EN-US","ES-MX","FR-CA","DE-DE","ES-ES","EN-GB","RU-RU","TR-TR","PL-PL","FR-FR","IT-IT","SV-SE","PT-PT","NL-NL","ZH-TW","JA-JP","AR-SA","KO-KR","PT-BR","CS-CZ","DA-DK","NO-NO"]}} RPCClient.js:267:17
+15:17:57:491 RPCClient.js:270:1
+Message received: {"id":9,"jsonrpc":"2.0","method":"VR.GetCapabilities"}
+ RPCClient.js:131:13
+FFW.VR.onRPCRequest VRRPC.js:148:9
+FFW.VR.GetCapabilitiesResponse VRRPC.js:248:17
+{"jsonrpc":"2.0","id":9,"result":{"code":0,"method":"VR.GetCapabilities","vrCapabilities":["TEXT"]}} RPCClient.js:267:17
+15:17:57:505 RPCClient.js:270:1
+Message received: {"id":10,"jsonrpc":"2.0","method":"TTS.GetLanguage"}
+ RPCClient.js:131:13
+FFW.TTS.onRPCRequest TTSRPC.js:141:9
+FFW.TTS.GetLanguageResponse TTSRPC.js:226:13
+{"jsonrpc":"2.0","id":10,"result":{"code":0,"method":"TTS.GetLanguage","language":"EN-US"}} RPCClient.js:267:17
+15:17:57:520 RPCClient.js:270:1
+Message received: {"id":11,"jsonrpc":"2.0","method":"TTS.GetSupportedLanguages"}
+ RPCClient.js:131:13
+FFW.TTS.onRPCRequest TTSRPC.js:141:9
+FFW.TTS.GetSupportedLanguagesResponse TTSRPC.js:208:13
+{"jsonrpc":"2.0","id":11,"result":{"code":0,"method":"TTS.GetSupportedLanguages","languages":["EN-US","ES-MX","FR-CA","DE-DE","ES-ES","EN-GB","RU-RU","TR-TR","PL-PL","FR-FR","IT-IT","SV-SE","PT-PT","NL-NL","ZH-TW","JA-JP","AR-SA","KO-KR","PT-BR","CS-CZ","DA-DK","NO-NO"]}} RPCClient.js:267:17
+15:17:57:605 RPCClient.js:270:1
+Message received: {"id":12,"jsonrpc":"2.0","method":"TTS.GetCapabilities"}
+ RPCClient.js:131:13
+FFW.TTS.onRPCRequest TTSRPC.js:141:9
+FFW.TTS.GetCapabilitiesResponse TTSRPC.js:178:13
+{"jsonrpc":"2.0","id":12,"result":{"speechCapabilities":["TEXT","PRE_RECORDED"],"prerecordedSpeechCapabilities":["HELP_JINGLE","INITIAL_JINGLE","LISTEN_JINGLE","POSITIVE_JINGLE","NEGATIVE_JINGLE"],"code":0,"method":"TTS.GetCapabilities"}} RPCClient.js:267:17
+15:17:57:607 RPCClient.js:270:1
+Message received: {"id":13,"jsonrpc":"2.0","method":"UI.GetLanguage"}
+ RPCClient.js:131:13
+FFW.UI.onRPCRequest UIRPC.js:156:9
+FFW.UI.GetLanguageResponse UIRPC.js:811:21
+{"jsonrpc":"2.0","id":13,"result":{"code":0,"method":"UI.GetLanguage","language":"EN-US"}} RPCClient.js:267:17
+15:17:57:608 RPCClient.js:270:1
+Message received: {"id":14,"jsonrpc":"2.0","method":"UI.GetSupportedLanguages"}
+ RPCClient.js:131:13
+FFW.UI.onRPCRequest UIRPC.js:156:9
+FFW.UI.GetSupportedLanguagesResponse UIRPC.js:790:21
+{"id":14,"jsonrpc":"2.0","result":{"code":0,"method":"UI.GetSupportedLanguages","languages":["EN-US","ES-MX","FR-CA","DE-DE","ES-ES","EN-GB","RU-RU","TR-TR","PL-PL","FR-FR","IT-IT","SV-SE","PT-PT","NL-NL","ZH-TW","JA-JP","AR-SA","KO-KR","PT-BR","CS-CZ","DA-DK","NO-NO"]}} RPCClient.js:267:17
+15:17:57:611 RPCClient.js:270:1
+Message received: {"id":15,"jsonrpc":"2.0","method":"UI.GetCapabilities"}
+ RPCClient.js:131:13
+FFW.UI.onRPCRequest UIRPC.js:156:9
+FFW.UI.GetCapabilitiesResponse UIRPC.js:832:21
+{"jsonrpc":"2.0","id":15,"result":{"displayCapabilities":{"displayType":"GEN2_8_DMA","textFields":[{"name":"mainField1","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"mainField2","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"mainField3","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"mainField4","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"statusBar","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"mediaClock","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"mediaTrack","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"alertText1","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"alertText2","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"alertText3","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"scrollableMessageBody","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"initialInteractionText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"navigationText1","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"navigationText2","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"ETA","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"totalDistance","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"navigationText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"audioPassThruDisplayText1","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"audioPassThruDisplayText2","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"sliderHeader","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"sliderFooter","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"notificationText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"menuName","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"secondaryText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"tertiaryText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"timeToDestination","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"turnText","characterSet":"TYPE2SET","width":500,"rows":1},{"name":"menuTitle","characterSet":"TYPE2SET","width":500,"rows":1}],"imageFields":[{"name":"softButtonImage","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"choiceImage","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"choiceSecondaryImage","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"vrHelpItem","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"turnIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"menuIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"cmdIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"graphic","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"showConstantTBTIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"showConstantTBTNextTurnIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}},{"name":"showConstantTBTNextTurnIcon","imageTypeSupported":["GRAPHIC_BMP","GRAPHIC_JPEG","GRAPHIC_PNG"],"imageResolution":{"resolutionWidth":64,"resolutionHeight":64}}],"mediaClockFormats":["CLOCK1","CLOCK2","CLOCK3","CLOCKTEXT1","CLOCKTEXT2","CLOCKTEXT3","CLOCKTEXT4"],"graphicSupported":true,"imageCapabilities":["DYNAMIC","STATIC"],"templatesAvailable":["TEMPLATE"],"screenParams":{"resolution":{"resolutionWidth":800,"resolutionHeight":480},"touchEventAvailable":{"pressAvailable":true,"multiTouchAvailable":true,"doublePressAvailable":false}},"numCustomPresetsAvailable":8},"audioPassThruCapabilities":{"samplingRate":"44KHZ","bitsPerSample":"8_BIT","audioType":"PCM"},"hmiZoneCapabilities":"FRONT","softButtonCapabilities":{"shortPressAvailable":true,"longPressAvailable":true,"upDownAvailable":true,"imageSupported":true},"code":0,"method":"UI.GetCapabilities"}} RPCClient.js:267:17
+15:17:57:613 RPCClient.js:270:1
+Message received: {"id":16,"jsonrpc":"2.0","method":"VehicleInfo.GetVehicleType"}
+ RPCClient.js:131:13
+FFW.VehicleInfo.onRPCRequest VehicleInfoRPC.js:132:9
+FFW.VehicleInfo.GetVehicleTypeResponse VehicleInfoRPC.js:402:9
+{"jsonrpc":"2.0","id":16,"result":{"code":0,"method":"VehicleInfo.GetVehicleType","vehicleType":{"make":"Ford","model":"Fiesta","modelYear":"2013","trim":"SE"}}} RPCClient.js:267:17
+15:17:57:614

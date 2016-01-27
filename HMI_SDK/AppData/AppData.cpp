@@ -125,11 +125,20 @@ Result AppData::recvFromServer(Json::Value jsonObj)
         }
         else if (str_method == "UI.Alert")
         {
+            if(m_json_alert.isMember("id")){
+                if(m_json_alert["id"].asInt()!=-1)
+                    return RESULT_TOO_MANY_PENDING_REQUESTS;
+            }
             alert(jsonObj);
             ShowUI(ID_ALERT);
+            return RESULT_USER_WAIT;
         }
         else if (str_method == "UI.ScrollableMessage")
         {
+            if(m_json_scrollableMessage.isMember("id")){
+                if(m_json_scrollableMessage["id"].asInt()!=-1)
+                    return RESULT_TOO_MANY_PENDING_REQUESTS;
+            }
             scrollableMessage(jsonObj);
             ShowUI(ID_SCROLLMSG);
             return RESULT_USER_WAIT;
@@ -317,14 +326,23 @@ void AppData::OnCommandClick(int cmdID)
 
 void AppData::OnAlertResponse(int reason)
 {
-    ToSDL->OnAlertResponse(m_json_alert["id"].asInt(), reason);
-    ShowPreviousUI();
+    if(m_json_alert["id"].asInt()!=-1)
+    {
+        ToSDL->OnAlertResponse(m_json_alert["id"].asInt(), reason);
+        m_json_alert["id"]=-1;
+        ShowPreviousUI();
+    }
+
 }
 
 void AppData::OnScrollMessageResponse(int reason)
 {
-    ToSDL->OnScrollMessageResponse(m_json_scrollableMessage["id"].asInt(), reason);
-    ShowPreviousUI();
+    if(m_json_scrollableMessage["id"].asInt()!=-1){
+        ToSDL->OnScrollMessageResponse(m_json_scrollableMessage["id"].asInt(), reason);
+        m_json_scrollableMessage["id"]=-1;
+        ShowPreviousUI();
+    }
+
 }
 
 void AppData::OnSliderResponse( int code, int sliderPosition)

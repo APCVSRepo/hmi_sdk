@@ -1,0 +1,13 @@
+FFW.SDL.OnAppActivated: Request from HMI! BasicCommunicationRPC.js:579
+{"jsonrpc":"2.0","id":3013,"method":"SDL.ActivateApp","params":{"appID":19170}} RPCClient.js:278
+14:7:36:139 RPCClient.js:281
+Message received: {"id":3013,"jsonrpc":"2.0","result":{"code":0,"isAppPermissionsRevoked":false,"isAppRevoked":false,"isPermissionsConsentNeeded":false,"isSDLAllowed":true,"method":"SDL.ActivateApp","priority":"NONE"}}
+ RPCClient.js:130
+FFW.BasicCommunicationRPC.onRPCResult BasicCommunicationRPC.js:202
+SDL.ActivateApp: Response from SDL! BasicCommunicationRPC.js:221
+Message received: {"id":26,"jsonrpc":"2.0","method":"TTS.SetGlobalProperties","params":{"appID":19170,"helpPrompt":[]}}
+ RPCClient.js:130
+FFW.TTS.onRPCRequest TTSRPC.js:148
+FFW.TTS.SetGlobalPropertiesResponse TTSRPC.js:395
+{"jsonrpc":"2.0","id":26,"result":{"code":0,"method":"TTS.SetGlobalProperties"}} RPCClient.js:278
+14:7:56:117 RPCClient.js:281

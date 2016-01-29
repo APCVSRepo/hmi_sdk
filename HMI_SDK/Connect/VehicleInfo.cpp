@@ -57,6 +57,10 @@ void VehicleInfo::onRequest(Json::Value &request)
         Json::Value result = vehicleInfoGetDTCsResponse(request);
         sendResult(id,result);
     }
+    else if(method=="VehicleInfo.DiagnosticMessage")
+    {
+        sendResult(id,"DiagnosticMessage");
+    }
     else
     {
         Channel::onRequest(request);

@@ -8,7 +8,7 @@ Choiceset::Choiceset(AppListInterface * pList, QWidget *parent) : AppBase(pList,
     initLayout();
 
     connect(m_timerHide,SIGNAL(timeout()),this,SLOT(timeHideOutSlots()));
-    connect(m_listWidget,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(listWidgetDoubleClickedSlots(QModelIndex)));
+    connect(m_listWidget,SIGNAL(clicked(QModelIndex)),this,SLOT(listWidgetDoubleClickedSlots(QModelIndex)));
     connect(this,SIGNAL(menuClicked(int,int)),this,SLOT(menuClickedSlots(int,int)));
 }
 
@@ -58,10 +58,10 @@ void Choiceset::flushListWidget()
     m_listWidget->DelListItemWidget();
     m_listWidget->SetScrollParams(4,m_vec_choiceMenu.size());
     for(int i = 0; i < m_vec_choiceMenu.size(); i++)
-        m_listWidget->AddListItemWidget(QString("%1 %2 %3").arg(i).arg(m_vec_choiceMenu.at(i).str_menuName.data()).arg(m_vec_choiceMenu.at(i).i_choiceID),"",m_vec_isMenu.at(i));
+        m_listWidget->AddListItemWidget(QString("%1").arg(m_vec_choiceMenu.at(i).str_menuName.data()),"",m_vec_isMenu.at(i));
 
 
-	m_listWidget->FlushAll();
+    //m_listWidget->FlushAll();
 }
 
 

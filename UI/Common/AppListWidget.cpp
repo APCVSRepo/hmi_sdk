@@ -146,6 +146,14 @@ void AppListWidget::SetItemText(int index, QString txt)
         LOGI("ITEM SS null");
 }
 
+void AppListWidget::SetTextAlignment(Qt::Alignment align)
+{
+    for (int i = 0; i<m_itemList.count(); i++){
+        AppItemWidget *item = m_itemList.at(i);
+        item->setAlignMent(align);
+    }
+}
+
 void AppListWidget::setFixedSize(int w, int h)
 {
     QListWidget::setFixedSize(w,h);

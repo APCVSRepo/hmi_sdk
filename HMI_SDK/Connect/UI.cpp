@@ -86,10 +86,12 @@ void UI::onRequest(Json::Value &request)
     }
     else if (method == "UI.Alert")
     {
-        m_pCallback->onRequest(request);
-
+        Result result=m_pCallback->onRequest(request);
+		if (result == RESULT_USER_WAIT)
+			return;
+        sendError(4,id,"UI.Alert","too many pending request");
         Json::Value params;
-        params["systemContext"] = "ALERT";
+        params["systemContext"] = "MAIN";
         sendNotification("UI.OnSystemContext",params);
     }
     else if(method == "UI.Show")

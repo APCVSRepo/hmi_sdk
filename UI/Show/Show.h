@@ -24,6 +24,7 @@ class Show : public AppBase
 public:
     explicit Show(AppListInterface * pList, QWidget *parent = 0);
     ~Show();
+    typedef enum {INIT=0,NOT_USED,IN_USE,CLOCK_WAIT,CLOCK_END}MediaClock_STATUS;
 
     void UpdateMediaColckTimer();
 
@@ -67,7 +68,7 @@ private:
     AppListWidget *m_listWidget;
     QLabel m_lab_mediaTrack;
     QLabel m_lab_mediaClock;
-
+    MediaClock_STATUS m_mediaClock_status;
 
     CButton *m_btn_one;
     CButton *m_btn_two;

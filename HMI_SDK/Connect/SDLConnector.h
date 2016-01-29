@@ -71,6 +71,8 @@ public:
     // reason: timeout clickSB and aborted
     void OnAlertResponse(int alertID, int reason);
 
+    void OnMediaClockResponse(int id,int code);
+
     // reason: timeout clickSB and rejected
     void OnScrollMessageResponse(int smID, int reason);
 

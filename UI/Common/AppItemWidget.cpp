@@ -17,6 +17,7 @@ AppItemWidget::AppItemWidget(int w,int h,QWidget *parent)
     m_pAppIconLab->setGeometry(5,0,0.6*h,h);
     m_lab_caseTitle->setGeometry(0.6*h+10,0,w-h-20,h);
     m_lab_icon->setGeometry(w-0.4*h-10,0,0.4*h,h);
+    m_lab_caseTitle->setAlignment(Qt::AlignCenter);
 //    QHBoxLayout *mLayout = new QHBoxLayout(this);
 //    mLayout->addStretch(10);
 //    mLayout->addWidget(m_lab_caseTitle,80,Qt::AlignLeft);
@@ -79,7 +80,10 @@ void AppItemWidget::setText(QString text)
     m_lab_caseTitle->setText(qfm.elidedText(text,Qt::ElideRight,width() - height() - 20));
 }
 
-
+void AppItemWidget::setAlignMent(Qt::Alignment align)
+{
+    m_lab_caseTitle->setAlignment(align);
+}
 
 void AppItemWidget::setStatus(bool status)
 {

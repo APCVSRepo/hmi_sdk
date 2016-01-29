@@ -79,8 +79,9 @@ void MenuButton::paintEvent(QPaintEvent *e)
     painter.setPen(pen);
     QFont font;
     font.setFamily("Liberation Serif");
-    font.setPixelSize(14);
-    font.setBold(true);
+    //font.setFamily("华文宋体");
+    font.setPixelSize(16);
+    //font.setBold(true);
     painter.setFont(font);
     QRectF rect=QRectF(0,1.0*height()*15/24,width(),height()/3);
     painter.drawText(rect,m_text,QTextOption(Qt::AlignCenter));

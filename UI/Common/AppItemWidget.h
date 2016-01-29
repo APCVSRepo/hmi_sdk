@@ -14,6 +14,7 @@ public:
     // 显示app图标
     void SetIcon(QString strIconPath);
     void setText(QString text);
+    void setAlignMent(Qt::Alignment align);
 
     void setStatus(bool status);
 

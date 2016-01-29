@@ -355,6 +355,7 @@ void Show::showEvent(QShowEvent * e)
 		int fieldNum=0;
 		QString fieldText[4];
 		bool    mediaHas=false;
+        Qt::Alignment  align=Qt::AlignCenter;
 		for (unsigned int i = 0; i < jsonParams["showStrings"].size(); i++)
 		{
 			Json::Value  fieldName = jsonParams["showStrings"][i];
@@ -385,6 +386,18 @@ void Show::showEvent(QShowEvent * e)
 				this->setMediaClock(true, fieldName["fieldText"].asString().data());
 			}
 		}
+        if(jsonParams.isMember("alignment")){
+            if(jsonParams["alignment"].asString()=="CENTERED"){
+                align=Qt::AlignCenter;
+            }
+            else if(jsonParams["alignment"].asString()=="LEFT_ALIGNED"){
+                align=Qt::AlignLeft;
+            }
+            else if(jsonParams["alignment"].asString()=="RIGHT_ALIGNED"){
+                align=Qt::AlignRight;
+            }
+        }
+
 		m_listWidget->DelListItemWidget();
 		m_listWidget->setFixedSize(ui_app_width*2.0 / 3.0, ui_app_height*(mediaHas ? 2.0 : 3.0) / 4.0);
 		if (!mediaHas){
@@ -395,6 +408,7 @@ void Show::showEvent(QShowEvent * e)
 		for (int i = 0; i<fieldNum; i++){
 			m_listWidget->AddListItemWidget(fieldText[i], false);
 		}
+        m_listWidget->SetTextAlignment(align);
 		if (jsonParams.isMember("softButtons"))
 		{
 

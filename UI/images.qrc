@@ -62,5 +62,11 @@
         <file>images/gamechild_off.png</file>
         <file>images/app_on.png</file>
         <file>images/app_off.png</file>
+        <file>images/ReturnBtnNormal.png</file>
+        <file>images/ReturnBtnPress.png</file>
+        <file>images/ZoomInBtnNormal.png</file>
+        <file>images/ZoomInBtnPress.png</file>
+        <file>images/ZoomOutBtnNormal.png</file>
+        <file>images/ZoomOutBtnPress.png</file>
     </qresource>
 </RCC>

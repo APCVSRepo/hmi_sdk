@@ -69,7 +69,6 @@ SOURCES += \
     UI/AppList/AppListUI.cpp \
     UI/Common/MenuButton.cpp \
     UI/AppLinkMenu.cpp \
-    UI/Common/CAppButton.cpp  \
     HMI_SDK/Connect/BasicCommunication.cpp \
     HMI_SDK/Connect/Buttons.cpp \
     HMI_SDK/Connect/Navigation.cpp \
@@ -78,11 +77,15 @@ SOURCES += \
     HMI_SDK/Connect/UI.cpp \
     HMI_SDK/Connect/VehicleInfo.cpp \
     HMI_SDK/Connect/VR.cpp \
-    UI/show2/CustomCombobox.cpp \
-    UI/show2/CustomComboboxItem.cpp \
-    UI/show2/MainWidget.cpp \
-    HMI_Initial.cpp
-
+    HMI_Initial.cpp \
+    Gen3UI/Gen3UIManager.cpp \
+    Gen3UI/MainWindow/MainWindow.cpp \
+    Gen3UI/AppListView/AppListView.cpp \
+    Gen3UI/AppListView/CAppButton.cpp \
+    Gen3UI/Show/MainWidget.cpp \
+    Gen3UI/CommandView/CommandView.cpp \
+    Gen3UI/CommandView/CustomCombobox.cpp \
+    Gen3UI/CommandView/CustomComboboxItem.cpp
 
 
 INCLUDEPATH += $$PWD/   \
@@ -137,7 +140,6 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     UI/TextSpeech/TextToSpeech.h \
     UI/Common/MenuButton.h \
     UI/AppLinkMenu.h \
-    UI/Common/CAppButton.h \
     UI/AudioTrans/AudioOutput.h \
     HMI_SDK/AppData/AppCommon.h \
     HMI_SDK/Connect/BasicCommunication.h \
@@ -153,10 +155,15 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
     HMI_SDK/AppData/AppCommon.h \
     UI/AppList/AppListUI.h \
     UI/UIInclude.h \
-    UI/show2/CustomCombobox.h \
-    UI/show2/CustomComboboxItem.h \
-    UI/show2/MainWidget.h \
-    HMI_Initial.h
+    HMI_Initial.h \
+    Gen3UI/Gen3UIManager.h \
+    Gen3UI/MainWindow/MainWindow.h \
+    Gen3UI/AppListView/AppListView.h \
+    Gen3UI/AppListView/CAppButton.h \
+    Gen3UI/Show/MainWidget.h \
+    Gen3UI/CommandView/CommandView.h \
+    Gen3UI/CommandView/CustomCombobox.h \
+    Gen3UI/CommandView/CustomComboboxItem.h
 
 
 RESOURCES += \
@@ -164,7 +171,6 @@ RESOURCES += \
 
 OTHER_FILES += \
     UI/LiberationSerif-Regular.ttf
-
 INCLUDEPATH +=  $$PWD/Include/ffmpeg \
                 $$PWD/Include/msp
 

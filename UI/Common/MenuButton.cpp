@@ -58,7 +58,8 @@ void MenuButton::paintEvent(QPaintEvent *e)
         int sx=(irect.width()-orect.width())/2;
         int sy=(irect.height()-orect.height())/2;
         //m_pOnImage=m_pOnImage.scaled(width(),height());
-       painter.drawImage(0,0,m_pOnImage,sx,sy);
+       //painter.drawImage(0,0,orect.width(),orect.height(),m_pOnImage,sx,sy);
+        painter.drawImage(orect,m_pOnImage);
        wordColor=Qt::white;
     }
     else
@@ -68,7 +69,8 @@ void MenuButton::paintEvent(QPaintEvent *e)
         int sx=(irect.width()-orect.width())/2;
         int sy=(irect.height()-orect.height())/2;
         //m_pOffImage=m_pOffImage.scaled(width(),height());
-       painter.drawImage(0,0,m_pOffImage,sx,sy);
+       //painter.drawImage(0,0,orect.width(),orect.height(),m_pOffImage,sx,sy);
+        painter.drawImage(orect,m_pOnImage);
        wordColor=Qt::black;
     }
 

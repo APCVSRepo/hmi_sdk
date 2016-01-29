@@ -53,6 +53,45 @@ VideoStream::VideoStream(int w,int h,QWidget *parent) :
     m_i_frameFinished = 0;
 #endif
 
+    m_ucCurrentImageIndex[0] = 0;
+    m_ucCurrentImageIndex[1] = 2;
+
+    m_pBtnImage[0] = new QImage(":/images/ZoomInBtnNormal.png");
+    m_pBtnImage[1] = new QImage(":/images/ZoomInBtnPress.png");
+    m_pBtnImage[2] = new QImage(":/images/ZoomOutBtnNormal.png");
+    m_pBtnImage[3] = new QImage(":/images/ZoomOutBtnPress.png");
+
+    m_pMenuBtn = new CButton(this);
+    m_pZoomInBtn = new CButton(this);
+    m_pZoomOutBtn = new CButton(this);
+
+
+    int iBtnHeight = 60;
+    int iBtnWidth = 80;
+
+    m_pZoomInBtn->setGeometry(QRect(40,height()*0.5,iBtnWidth,iBtnHeight));
+    m_pZoomInBtn->initParameter(iBtnWidth,iBtnHeight,":/images/ZoomInBtnNormal.png",":/images/ZoomInBtnPress.png","","");
+
+    m_pZoomOutBtn->setGeometry(QRect(40,height()*0.5+iBtnHeight+10,iBtnWidth,iBtnHeight));
+    m_pZoomOutBtn->initParameter(iBtnWidth,iBtnHeight,":/images/ZoomOutBtnNormal.png",":/images/ZoomOutBtnPress.png","","");
+
+    m_pMenuBtn->setGeometry(QRect(40,height()*0.8,iBtnWidth,iBtnHeight));
+    m_pMenuBtn->initParameter(iBtnWidth,iBtnHeight,":/images/ZoomOutBtnNormal.png",":/images/ZoomOutBtnNormal.png","","Menu");
+    m_pMenuBtn->setTextStyle("border:0px;font: 20px \"Liberation Serif\";color:rgb(0,0,0)");
+
+    connect(m_pZoomInBtn,SIGNAL(clicked()),this,SLOT(OnClickedZoomInBtn()));
+    connect(m_pZoomOutBtn,SIGNAL(clicked()),this,SLOT(OnClickedZoomOutBtn()));
+    connect(m_pMenuBtn,SIGNAL(clicked()),this,SLOT(OnClickedMenuBtn()));
+
+    m_pTimeLab = new QLabel(this);
+    m_pTimeLab->setGeometry(QRect(width()*0.8,height()*0.02,width()*0.2,height()*0.1));
+    m_pTimeLab->setAlignment(Qt::AlignCenter);
+    m_pTimeLab->setStyleSheet("font: 55 30pt \"Liberation Serif\";color:rgb(0,0,0);background:transparent;border: 0px");
+    m_pTimeLab->setText(QTime::currentTime().toString("HH:mm:ss"));
+
+    m_pTimer = new QTimer(this);
+    m_pTimer->start(1000);
+    connect(m_pTimer,SIGNAL(timeout()),this,SLOT(onUpdateTime()));
 }
 
 
@@ -60,6 +99,10 @@ VideoStream::VideoStream(int w,int h,QWidget *parent) :
 
 VideoStream::~VideoStream()
 {
+    for(int i = 0;i != 4;++i)
+    {
+        delete m_pBtnImage[i];
+    }
 
 #ifdef VIDEO_STREAM_WIDGET
     delete m_VideoPlayer;
@@ -96,7 +139,7 @@ void VideoStream::av_log_default_callback(void* ptr, int level, const char* fmt,
     char fmtBuf[256]={0};
     vsprintf(fmtBuf,fmt,vl);
     va_end(vl);
-    LOGD("level=%d:%s",level,fmtBuf);
+    //LOGD("level=%d:%s",level,fmtBuf);
 }
 
 #ifdef VIDEO_STREAM_MEM
@@ -184,7 +227,7 @@ bool VideoStream::Init()
 #ifdef VIDEO_STREAM_MEM
     int result=avformat_open_input(&pAVFormatContext,NULL,NULL,NULL);
 #else
-    int result=avformat_open_input(&pAVFormatContext,m_str_url.toUtf8().data(),NULL,NULL);//"tcp://127.0.0.1:5050"
+    int result=avformat_open_input(&pAVFormatContext,"tcp://127.0.0.1:5050",NULL,NULL);//"tcp://127.0.0.1:5050"//m_str_url.toUtf8().data()
 #endif
     if (result<0){
         char errbuf[1024]={0};
@@ -314,13 +357,21 @@ void VideoStream::PlayImageSlots()
 
 void VideoStream::paintEvent(QPaintEvent *e)
 {
+    if(!m_VideoImage.isNull())
+    {
+        QPainter painter(this);
+       // painter.drawImage(0,0,QImage(pAVPicture.data[0],width(),height(),QImage::Format_RGB888));
+        painter.drawImage(QRect(0,0,this->width(),this->height()),m_VideoImage,QRect(0,0,m_VideoImage.width(),m_VideoImage.height()));
+    }
+
+
+
+    //painter.drawImage(m_BtnRect[0],*(m_pBtnImage[m_ucCurrentImageIndex[0]]));
+    //painter.drawImage(m_BtnRect[1],*(m_pBtnImage[m_ucCurrentImageIndex[1]]));
+
     QWidget::paintEvent(e);
-    if(m_VideoImage.isNull())
-        return;
-    QPainter painter(this);
-   // painter.drawImage(0,0,QImage(pAVPicture.data[0],width(),height(),QImage::Format_RGB888));
-    painter.drawImage(QRect(0,0,this->width(),this->height()),m_VideoImage,QRect(0,0,m_VideoImage.width(),m_VideoImage.height()));
 }
+
 #endif
 
 
@@ -330,7 +381,7 @@ void VideoStream::mousePressEvent(QMouseEvent *e)
     int y=e->y();
     x= x*videoWidth/width();
     y= y*videoHeight/height();
-    LOGD("Touch Event:type=BEGIN,x=%d,y=%d",x,y);
+    LOGD("Touch Event:type=BEGIN,x=%d,y=%d,%d,%d",x,y,e->x(),e->y());
     ToSDL->OnVideoScreenTouch(TOUCH_START,x,y);
 }
 
@@ -341,10 +392,13 @@ void VideoStream::mouseMoveEvent(QMouseEvent *e)
     int y=e->y();
     x= x*videoWidth/width();
     y= y*videoHeight/height();
-    LOGD("Touch Event:type=MOVE,x=%d,y=%d",x,y);
+    //LOGD("Touch Event:type=MOVE,x=%d,y=%d",x,y);
 
     ToSDL->OnVideoScreenTouch(TOUCH_MOVE,x,y);
 }
+
+#define ZOOMINBTNID 3
+#define ZOOMOUTBTNID 4
 
 void VideoStream::mouseReleaseEvent(QMouseEvent *e)
 {
@@ -352,10 +406,39 @@ void VideoStream::mouseReleaseEvent(QMouseEvent *e)
     int y=e->y();
     x= x*videoWidth/width();
     y= y*videoHeight/height();
-    LOGD("Touch Event:type=END,x=%d,y=%d",x,y);
+    //LOGD("Touch Event:type=END,x=%d,y=%d",x,y);
 
     ToSDL->OnVideoScreenTouch(TOUCH_END,x,y);
 }
 
+bool VideoStream::PointInRect(QRect rect,QPoint point)
+{
+    if(point.x() < rect.left() || point.x() > rect.right() || point.y() < rect.top() || point.y() > rect.bottom())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
 
+void VideoStream::OnClickedZoomInBtn()
+{
+    ToSDL->OnSoftButtonClick(ZOOMINBTNID,BUTTON_SHORT);
+}
 
+void VideoStream::OnClickedZoomOutBtn()
+{
+    ToSDL->OnSoftButtonClick(ZOOMOUTBTNID,BUTTON_SHORT);
+}
+
+void VideoStream::OnClickedMenuBtn()
+{
+
+}
+
+void VideoStream::onUpdateTime()
+{
+    m_pTimeLab->setText(QTime::currentTime().toString("HH:mm:ss"));
+}

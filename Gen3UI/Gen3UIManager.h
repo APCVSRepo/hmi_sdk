@@ -1,6 +1,5 @@
-﻿#ifndef CUIMANAGER_H
-#define CUIMANAGER_H
-#include "AppLinkMenu.h"
+﻿#ifndef CGEN3UIMANAGER_H
+#define CGEN3UIMANAGER_H
 #include "UI/Alert/AlertUI.h"
 #include "UI/AudioPassThru/AudioPassThru.h"
 #include "UI/Choiceset/Choiceset.h"
@@ -13,22 +12,21 @@
 #include "UI/Notify/Notify.h"
 #include "UI/Common/AppBase.h"
 #include "UI/TextSpeech/textspeech.h"
-#include "UIInterface.h"
+#include "UI/UIInterface.h"
 #include "AppData/AppListInterface.h"
 #include "QMessageBox"
-#include "Common/MainMenu.h"
-//#include "show2/MainWidget.h"
+#include "Gen3UI/MainWindow/MainWindow.h"
 
 #ifdef SDL_SUPPORT_LIB
 #include "AudioTrans/MspVRAudio.h"
 #endif
 
-class CUIManager : public QWidget, public UIInterface
+class CGen3UIManager : public QWidget, public UIInterface
 {
     Q_OBJECT
 public:
-    explicit CUIManager(AppListInterface * pList, QWidget *parent = NULL);
-    ~CUIManager();
+    explicit CGen3UIManager(AppListInterface * pList, QWidget *parent = NULL);
+    ~CGen3UIManager();
 
     void onAppActive();
     void onAppStop();

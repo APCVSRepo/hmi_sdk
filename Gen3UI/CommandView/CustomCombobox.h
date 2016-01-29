@@ -9,7 +9,7 @@ class CustomCombobox : public QListWidget
 {
     Q_OBJECT
 public:
-    explicit CustomCombobox(int iMaxHeight,bool bUp = true,QWidget *parent = NULL);
+    explicit CustomCombobox(int iMaxHeight,bool bUp = false,QWidget *parent = NULL);
     //explicit CustomCombobox(int iStartX,int iStartY,int iWidth,int iMaxHeight,bool bUp = true,QWidget *parent = NULL);
     ~CustomCombobox();
 
@@ -43,6 +43,7 @@ private:
     int m_iMaxHeight;
     // true表示向上，false表示朝下
     bool m_bUp;
+
 
     //void mouseMoveEvent(QMouseEvent *event);
 };

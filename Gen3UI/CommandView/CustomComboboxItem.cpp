@@ -25,8 +25,6 @@ CustomComboboxItem::CustomComboboxItem(int w,int h,QWidget *parent) : QLabel(par
     QPixmap pixmap(":/images/rightarrow.png");
     QPixmap fitpixmap=pixmap.scaled(30,30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     m_pMenuArrowLab->setPixmap(fitpixmap);
-
-    setMouseTracking(true);
 }
 
 CustomComboboxItem::~CustomComboboxItem()
@@ -55,10 +53,11 @@ void CustomComboboxItem::setIsMenu(bool isMenu)
         m_pMenuArrowLab->setHidden(true);
 }
 
-void CustomComboboxItem::SetBkPic(QString strNormalPicPath,QString strHoverPicPath)
+void CustomComboboxItem::SetBkPic(QString strNormalPicPath,QString strPressPicPath,QString strHoverPicPath)
 {
     m_strNormalBk = strNormalPicPath;
     m_strHoverBk = strHoverPicPath;
+    m_strPressBk = strPressPicPath;
 
     QPixmap pixmap(m_strNormalBk);
     pixmap = pixmap.scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -75,9 +74,13 @@ void CustomComboboxItem::ChangeBkPic(int iFlag)
         {
             pPixmap = new QPixmap(m_strNormalBk);
         }
-        else
+        else if(iFlag == HOVER_STATE)
         {
             pPixmap = new QPixmap(m_strHoverBk);
+        }
+        else
+        {
+            pPixmap = new QPixmap(m_strPressBk);
         }
         *pPixmap = pPixmap->scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         setPixmap(*pPixmap);
@@ -92,6 +95,14 @@ QString CustomComboboxItem::GetItemText()
     return m_pTextLab->text();
 }
 
+void CustomComboboxItem::mousePressEvent(QMouseEvent *event)
+{
+    ChangeBkPic(PRESS_STATE);
+}
 
+void CustomComboboxItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    ChangeBkPic(PRESS_STATE);
+}
 
 

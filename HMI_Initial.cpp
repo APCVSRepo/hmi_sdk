@@ -14,7 +14,8 @@ HMI_Initial::HMI_Initial():QObject(NULL)
     UIConfig::loadResolution(800,480);
 #endif
     m_appList = new AppList;
-    m_uiManager = new CUIManager(m_appList);
+    //m_uiManager = new CUIManager(m_appList);
+    m_uiManager = new CGen3UIManager(m_appList);
     m_appList->setUIManager(m_uiManager);
     QTimer::singleShot(500,this,SLOT(initApps()));
 }
@@ -45,7 +46,7 @@ void HMI_Initial::ShowUI()
 }
 
 #ifdef SDL_SUPPORT_LIB
-void* AppManager::SDLStartThread(void *arg)
+void* HMI_Initial::SDLStartThread(void *arg)
 {
 #ifdef ANDROID
     if(!FileCopyToConfigdir(":/assets/"))
@@ -67,7 +68,7 @@ void* AppManager::SDLStartThread(void *arg)
     return NULL;
 }
 #ifdef ANDROID
-bool AppManager::FileCopyToConfigdir(const char *dir_)
+bool HMI_Initial::FileCopyToConfigdir(const char *dir_)
 {
     QDir  dir(dir_);
     if(!dir.exists()){
@@ -101,7 +102,7 @@ bool AppManager::FileCopyToConfigdir(const char *dir_)
 }
 #endif
 
-void AppManager::initSDL()
+void HMI_Initial::initSDL()
 {
     pthread_t  sdlthread;
     pthread_create(&sdlthread,NULL,SDLStartThread,NULL);

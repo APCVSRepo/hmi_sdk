@@ -2,7 +2,7 @@
 #define CAPPBUTTON_H
 
 #include <QWidget>
-#include "MenuButton.h"
+#include "Common/MenuButton.h"
 
 class CAppButton : public MenuButton
 {

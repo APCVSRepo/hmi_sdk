@@ -17,11 +17,15 @@ public:
 
     void setIsMenu(bool isMenu);
 
-    void SetBkPic(QString strNormalPicPath,QString strHoverPicPath);
-    enum BkState{NORMAL_STATE = 0,HOVER_STATE};
+    void SetBkPic(QString strNormalPicPath,QString strPressPicPath,QString strHoverPicPath);
+    enum BkState{NORMAL_STATE = 0,PRESS_STATE,HOVER_STATE};
     void ChangeBkPic(int iFlag);
 
     QString GetItemText();
+
+protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 private:
     QLabel *m_pIconLab;
     QLabel *m_pMenuArrowLab;
@@ -30,6 +34,7 @@ private:
 
     QString m_strNormalBk;
     QString m_strHoverBk;
+    QString m_strPressBk;
 
     int m_iBkState;
 };

@@ -1,14 +1,23 @@
 #include "MainWidget.h"
-#include "../Config/Config.h"
+//#include "../Config/Config.h"
 
 
 #define MARGIN 10
 
-MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : BaseWidght(0,0,ui_res_width,ui_res_height,parent),
-    m_pCurrentMenu(nullptr)
+MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(parent)
 {    
+    if(parent)
+    {
+        setGeometry(0,0,parent->width(),parent->height());
+    }
     m_pList = pList;
-    setBackGroundImge(":/images/MainWidget/Backgroud.png");
+
+    setAutoFillBackground(true);
+    QPixmap pixmap(":/images/MainWidget/Backgroud.png");
+    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, QBrush(pixmap));
+    setPalette(palette);
 
     QVBoxLayout *pMainLayout = new QVBoxLayout(this);
 
@@ -17,13 +26,13 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : BaseWidght(0
     pTopLayout->setMargin(MARGIN);
     m_pAppNameLab = new QLabel;
     pTopLayout->addWidget(m_pAppNameLab,0,Qt::AlignLeft);
-    m_pAppNameLab->setStyleSheet(QString("font: 60 35pt \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));    
+    m_pAppNameLab->setStyleSheet(QString("font: 60 40px \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
 
     m_pShowLine = new QLabel[4];
     for(int i = 0;i != 4;++i)
     {
         pTopLayout->addWidget(m_pShowLine + i,0,Qt::AlignLeft);
-        m_pShowLine[i].setStyleSheet("border:0px;font: 22px \"Liberation Serif\";color:rgb(0,0,0)");
+        m_pShowLine[i].setStyleSheet("border:0px;font: 10px \"Liberation Serif\";color:rgb(0,0,0)");
     }
 
     QHBoxLayout *pCenterLayout = new QHBoxLayout;
@@ -33,11 +42,11 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : BaseWidght(0
     pCenterLayout->addWidget(m_pIconLab,0,Qt::AlignCenter);
     pCenterLayout->addWidget(m_pMainTitleLab,0,Qt::AlignCenter);
     pCenterLayout->addStretch(1);
-    m_pMainTitleLab->setStyleSheet(QString("font: 60 40pt \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
+    m_pMainTitleLab->setStyleSheet(QString("font: 60 35pt \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
     m_pMainTitleLab->setText("SmartDeviceLink");
-    QPixmap pixmap(":/images/MainWidget/AppIcon.png");
-    QPixmap fitpixmap = pixmap.scaled(80,80, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    m_pIconLab->setPixmap(fitpixmap);
+    QPixmap IconPixmap(":/images/MainWidget/AppIcon.png");
+    IconPixmap = IconPixmap.scaled(80,80, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    m_pIconLab->setPixmap(IconPixmap);
 
     QVBoxLayout *pBottomLayout = new QVBoxLayout;
     QHBoxLayout *pBtnLayout = new QHBoxLayout;
@@ -45,7 +54,7 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : BaseWidght(0
     pBtnLayout->setMargin(MARGIN);
     m_pMenuBtn = new CButton;
     m_pMenuBtn->initParameter(ui_btn_width,ui_btn_height,":/images/MainWidget/BtnNormal.png",":/images/MainWidget/BtnPress.png","","-");
-    m_pMenuBtn->setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(0,0,0)");
+    m_pMenuBtn->setTextStyle("border:0px;font: 36px \"Liberation Serif\";color:rgb(0,0,0)");
     m_pMenuBtn->SetLeftIcon(":/images/MainWidget/MenuIcon.png");
     m_pSoftBtn = new CButton[3];
     pBtnLayout->addWidget(m_pMenuBtn,0,Qt::AlignLeft);
@@ -56,7 +65,7 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : BaseWidght(0
     {
         pBtnLayout->addWidget(&m_pSoftBtn[i],0,Qt::AlignLeft);
         m_pSoftBtn[i].initParameter(ui_btn_width,ui_btn_height,":/images/MainWidget/BtnNormal.png",":/images/MainWidget/BtnPress.png","","-");
-        m_pSoftBtn[i].setTextStyle("border:0px;font: 42px \"Liberation Serif\";color:rgb(0,0,0)");
+        m_pSoftBtn[i].setTextStyle("border:0px;font: 36px \"Liberation Serif\";color:rgb(0,0,0)");
     }
     pBtnLayout->addStretch(1);
 
@@ -73,9 +82,9 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : BaseWidght(0
 
     connect(m_pMenuBtn,SIGNAL(clicked()),this,SLOT(BtnMenuClickedSlots()));
 
-    m_pCommandList = new CustomCombobox(height()*0.6,true,this);
-    m_pCommandList->hide();
-    connect(m_pCommandList,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(OnCommandListItemClicked(QListWidgetItem *)));
+    //m_pCommandList = new CustomCombobox(height()*0.6,true,this);
+    //m_pCommandList->hide();
+    //connect(m_pCommandList,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(OnCommandListItemClicked(QListWidgetItem *)));
 }
 
 MainWidget::~MainWidget()
@@ -94,6 +103,8 @@ void MainWidget::SetAppName(QString strName)
 
 void MainWidget::BtnMenuClickedSlots()
 {
+    m_pList->getActiveApp()->OnShowCommand();
+    /*
     m_pCommandList->SetPos(m_pMenuBtn->geometry().left(),m_pMenuBtn->geometry().top(),m_pMenuBtn->geometry().width()*2.5,0);
     m_CmdVec.clear();
 
@@ -118,8 +129,10 @@ void MainWidget::BtnMenuClickedSlots()
     }
     m_pCurrentMenu = nullptr;
     RefreshCommandList(0);
+    */
 }
 
+/*
 void MainWidget::AddCommand(int iCmdId,std::string strName)
 {
     tagCmdInf tempCmdInf;
@@ -157,6 +170,7 @@ void MainWidget::AddSubCommand(int iParentId,int iCmdId,std::string strName)
     }
 }
 
+
 void MainWidget::RefreshCommandList(tagCmdInf *pMenu)
 {
     m_pCommandList->ClearAllItem();
@@ -177,7 +191,7 @@ void MainWidget::RefreshCommandList(tagCmdInf *pMenu)
     }
     m_pCommandList->show();
 }
-
+*/
 void MainWidget::SoftBtnClickedSlot(int iSoftBtnID)
 {
     if(iSoftBtnID != 0)
@@ -188,11 +202,12 @@ void MainWidget::SoftBtnClickedSlot(int iSoftBtnID)
 
 void MainWidget::mousePressEvent(QMouseEvent * event)
 {
-    HideCommandList();
+    //HideCommandList();
 }
 
 void MainWidget::OnCommandListItemClicked(QListWidgetItem *pItem)
 {
+    /*
     int iRow = m_pCommandList->row(pItem);
     HideCommandList();
 
@@ -222,14 +237,17 @@ void MainWidget::OnCommandListItemClicked(QListWidgetItem *pItem)
         //emit CommandClick(m_pCurrentMenu->CmdVec[iRow].iId);
         m_pList->getActiveApp()->OnCommandClick(m_pCurrentMenu->CmdVec[iRow].iId);
     }
+    */
 }
-
+/*
 void MainWidget::HideCommandList()
 {
+
     m_pCommandList->ClearAllItem();
     m_pCommandList->hide();
-}
 
+}
+*/
 void MainWidget::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
 {
     int iBtnCount = vec_softButtons.size() > 3?3:vec_softButtons.size();
@@ -255,6 +273,8 @@ void MainWidget::showEvent(QShowEvent * e)
     vec_softButtons.clear();
     if (m_pList->getActiveApp())
     {
+        SetAppName(m_pList->getActiveApp()->getAppName().c_str());
+
         pObj = m_pList->getActiveApp()->getShowData();
         if(pObj.isNull())
             return;

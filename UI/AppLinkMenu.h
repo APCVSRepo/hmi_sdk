@@ -6,7 +6,7 @@
 #include "Common/MenuButton.h"
 #include <QTimer>
 #include <QTextEdit>
-#include "Common/CAppButton.h"
+#include "Gen3UI/AppListView/CAppButton.h"
 #include <AppData/AppListInterface.h>
 
 typedef enum

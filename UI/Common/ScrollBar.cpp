@@ -30,6 +30,7 @@ QString ScrollBar::cssString()
                                 border-radius:0px;\
                                 min-height: 20px;\
                                 width:30px;\
+                                border-image: url(:images/downarrow.png);\
                             }\
                             QScrollBar::add-line:vertical {\
                                 height: 31px;\

@@ -3,6 +3,7 @@
 #include <QObject>
 #include "AppData/AppList.h"
 #include "UI/UIManager.h"
+#include "Gen3UI/Gen3UIManager.h"
 
 class HMI_Initial:public QObject
 {
@@ -29,8 +30,8 @@ private:
 
 private:
     AppList *m_appList;
-    CUIManager *m_uiManager;
-
+    //CUIManager *m_uiManager;
+    CGen3UIManager *m_uiManager;
 };
 
 #endif // APPMANAGER_H

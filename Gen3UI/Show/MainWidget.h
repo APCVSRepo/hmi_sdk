@@ -4,21 +4,13 @@
 #include <qlabel.h>
 #include "Common/AppBase.h"
 #include "Common/Button.h"
-#include "CustomCombobox.h"
+//#include "CustomCombobox.h"
 
 #include "Show/Show.h"
 
-typedef struct CommandInformation
-{
-    std::string strCmd;
-    int iParentId;
-    // 如果是Menu则是MenuID，如果是Command则是CommandID
-    int iId;
-    bool bMenu;
-    std::vector<CommandInformation> CmdVec;
-}tagCmdInf;
 
-class MainWidget : public BaseWidght
+
+class MainWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -42,15 +34,15 @@ public slots:
 private:
     void setSoftButtons(std::vector<SSoftButton> vec_softButtons);
 
-    void AddCommand(int iCmdId,std::string strName);
-    void AddMenu(int iMenuId,std::string strName);
-    void AddSubCommand(int iParentId,int iCmdId,std::string strName);
+    //void AddCommand(int iCmdId,std::string strName);
+    //void AddMenu(int iMenuId,std::string strName);
+    //void AddSubCommand(int iParentId,int iCmdId,std::string strName);
     // 如果pMenu为nullptr表示主菜单
-    void RefreshCommandList(tagCmdInf *pMenu);
+    //void RefreshCommandList(tagCmdInf *pMenu);
     // 隐藏command列表
-    void HideCommandList();
+    //void HideCommandList();
 
-    std::vector<tagCmdInf> m_CmdVec;
+    //std::vector<tagCmdInf> m_CmdVec;
 
     // 4个文字show
     QLabel *m_pShowLine;
@@ -64,9 +56,9 @@ private:
 
     AppListInterface *m_pList;
 
-    CustomCombobox *m_pCommandList;
+    //CustomCombobox *m_pCommandList;
     // 如果为主菜单则为nullptr，子菜单则是该子菜单的结构体指针
-    tagCmdInf *m_pCurrentMenu;
+    //tagCmdInf *m_pCurrentMenu;
 };
 
 #endif // MAINWIDGET_H

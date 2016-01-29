@@ -69,7 +69,7 @@ void CustomCombobox::AddListItem(QString strText,bool bMenu)
     addItem(item);
     CustomComboboxItem *itemWidget = new CustomComboboxItem(w,h,this);
     // insertItem(index,itemWidget);
-    itemWidget->SetBkPic(":/images/MainWidget/BtnNormal.png",":/images/MainWidget/BtnPress.png");
+    itemWidget->SetBkPic(":/images/CommandItemNormal.png",":/images/CommandItemPress.png",":/images/CommandItemNormal.png");
     setItemWidget(item,itemWidget);    
     itemWidget->setText(strText);
     itemWidget->setIsMenu(bMenu);
@@ -139,7 +139,6 @@ void CustomCombobox::OnTimeOutSlot()
             m_itemList[iIndex]->ChangeBkPic(CustomComboboxItem::HOVER_STATE);
         }
     }
-
 }
 
 QString CustomCombobox::cssString()

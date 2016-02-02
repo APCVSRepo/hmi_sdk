@@ -45,20 +45,18 @@ private:
     //std::vector<tagCmdInf> m_CmdVec;
 
     // 4个文字show
-    QLabel *m_pShowLine;
+    QLabel m_pShowLine[4];
 
     QLabel *m_pAppNameLab;
     QLabel *m_pMainTitleLab;
     QLabel *m_pIconLab;
     CButton *m_pMenuBtn;
     // 三个软按键
-    CButton *m_pSoftBtn;
+    CButton m_pSoftBtn[3];
 
     AppListInterface *m_pList;
 
-    //CustomCombobox *m_pCommandList;
-    // 如果为主菜单则为nullptr，子菜单则是该子菜单的结构体指针
-    //tagCmdInf *m_pCurrentMenu;
+    QVBoxLayout *m_pMainLayout;
 };
 
 #endif // MAINWIDGET_H

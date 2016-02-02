@@ -24,12 +24,14 @@ CCommandView::CCommandView(AppListInterface *pList,QWidget *parent) :
     m_pReturnBtn = new CButton;
     m_pAppNameLab = new QLabel;
     m_pCommandList = new CustomCombobox(iHeight*0.8);
+    m_pCommandList->setMinimumWidth(width()*0.9);
+    m_pCommandList->setMaximumWidth(width()*0.9);
 
     m_pTopLayout->addWidget(m_pReturnBtn);
     m_pTopLayout->addWidget(m_pAppNameLab);
     m_pTopLayout->addStretch(1);
 
-    //m_pBottomLayout->addStretch(1);
+    m_pBottomLayout->addStretch(1);
     m_pBottomLayout->addWidget(m_pCommandList);
 
     m_pMainLayout->addLayout(m_pTopLayout);
@@ -37,7 +39,8 @@ CCommandView::CCommandView(AppListInterface *pList,QWidget *parent) :
 
     m_pAppNameLab->setStyleSheet(QString("font: 60 40px \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
 
-    m_pReturnBtn->initParameter(40,40,":/images/ReturnBtnNormal.png",":/images/ReturnBtnPress.png","","");
+    m_pReturnBtn->initParameter(60,60,":/images/ReturnBtnNormal.png",":/images/ReturnBtnPress.png","","");
+    connect(m_pReturnBtn,SIGNAL(clicked()),this,SLOT(OnReturnBtnClicked()));
 
     connect(m_pCommandList,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(OnCommandListItemClicked(QListWidgetItem *)));
 }
@@ -45,8 +48,6 @@ CCommandView::CCommandView(AppListInterface *pList,QWidget *parent) :
 CCommandView::~CCommandView()
 {
     delete m_pMainLayout;
-    delete m_pTopLayout;
-    delete m_pBottomLayout;
     delete m_pReturnBtn;
     delete m_pAppNameLab;
     delete m_pCommandList;
@@ -136,4 +137,9 @@ void CCommandView::showEvent(QShowEvent * e)
     }
     m_pCurrentMenu = nullptr;
     RefreshCommandList(0);
+}
+
+void CCommandView::OnReturnBtnClicked()
+{
+    m_pList->getActiveApp()->OnCommandClick(-1);
 }

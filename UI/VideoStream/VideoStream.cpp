@@ -69,14 +69,14 @@ VideoStream::VideoStream(int w,int h,QWidget *parent) :
     int iBtnHeight = 60;
     int iBtnWidth = 80;
 
-    m_pZoomInBtn->setGeometry(QRect(40,height()*0.5,iBtnWidth,iBtnHeight));
+    m_pZoomInBtn->setGeometry(QRect(40,height()*0.5-10,iBtnWidth,iBtnHeight));
     m_pZoomInBtn->initParameter(iBtnWidth,iBtnHeight,":/images/ZoomInBtnNormal.png",":/images/ZoomInBtnPress.png","","");
 
     m_pZoomOutBtn->setGeometry(QRect(40,height()*0.5+iBtnHeight+10,iBtnWidth,iBtnHeight));
     m_pZoomOutBtn->initParameter(iBtnWidth,iBtnHeight,":/images/ZoomOutBtnNormal.png",":/images/ZoomOutBtnPress.png","","");
 
-    m_pMenuBtn->setGeometry(QRect(40,height()*0.8,iBtnWidth,iBtnHeight));
-    m_pMenuBtn->initParameter(iBtnWidth,iBtnHeight,":/images/ZoomOutBtnNormal.png",":/images/ZoomOutBtnNormal.png","","Menu");
+    m_pMenuBtn->setGeometry(QRect(40,height()*0.8+10,iBtnWidth,iBtnHeight));
+    m_pMenuBtn->initParameter(iBtnWidth,iBtnHeight,":/images/BtnNormal.png",":/images/BtnPress.png","","菜单");
     m_pMenuBtn->setTextStyle("border:0px;font: 20px \"Liberation Serif\";color:rgb(0,0,0)");
 
     connect(m_pZoomInBtn,SIGNAL(clicked()),this,SLOT(OnClickedZoomInBtn()));
@@ -92,6 +92,8 @@ VideoStream::VideoStream(int w,int h,QWidget *parent) :
     m_pTimer = new QTimer(this);
     m_pTimer->start(1000);
     connect(m_pTimer,SIGNAL(timeout()),this,SLOT(onUpdateTime()));
+
+    hide();
 }
 
 
@@ -361,13 +363,15 @@ void VideoStream::paintEvent(QPaintEvent *e)
     {
         QPainter painter(this);
        // painter.drawImage(0,0,QImage(pAVPicture.data[0],width(),height(),QImage::Format_RGB888));
-        painter.drawImage(QRect(0,0,this->width(),this->height()),m_VideoImage,QRect(0,0,m_VideoImage.width(),m_VideoImage.height()));
+        painter.drawImage(QRect(0,0,this->width(),this->height()),m_VideoImage,QRect(0,0,m_VideoImage.width(),m_VideoImage.height()));        
+
+        QPen myPen = painter.pen();
+        myPen.setWidth(5);
+        painter.setPen(myPen);
+        painter.drawLine(QPoint(40,height()*0.8-5),QPoint(40,height()*0.8));
+        painter.drawLine(QPoint(40,height()*0.8),QPoint(120,height()*0.8));
+        painter.drawLine(QPoint(120,height()*0.8),QPoint(120,height()*0.8-5));
     }
-
-
-
-    //painter.drawImage(m_BtnRect[0],*(m_pBtnImage[m_ucCurrentImageIndex[0]]));
-    //painter.drawImage(m_BtnRect[1],*(m_pBtnImage[m_ucCurrentImageIndex[1]]));
 
     QWidget::paintEvent(e);
 }
@@ -435,7 +439,7 @@ void VideoStream::OnClickedZoomOutBtn()
 
 void VideoStream::OnClickedMenuBtn()
 {
-
+    emit ClickMenuBtn();
 }
 
 void VideoStream::onUpdateTime()

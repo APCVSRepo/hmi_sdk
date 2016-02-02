@@ -10,7 +10,7 @@ class CAppButton : public MenuButton
 public:
     CAppButton(QWidget *pParent=NULL);
     ~CAppButton();
-    virtual void setIcon(const QString on,const QString off);
+    virtual void setIcon(const QString on,const QString off,bool bPaint = false);
     void setFuncId(int id);
     int  getFuncId();
 signals:

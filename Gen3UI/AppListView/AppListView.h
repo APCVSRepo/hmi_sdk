@@ -13,7 +13,7 @@ public:
     explicit CAppListView(AppListInterface * pList,QWidget *parent = 0);
     ~CAppListView();
 
-    void InsertChildApp(int index,int funcId,QString text,QString on,QString off);
+    void InsertChildApp(int index,int funcId,QString text,QString on,QString off,bool bPaint = false);
     void DeleteChildApp(int index);
 protected:
     virtual void showEvent(QShowEvent * e);

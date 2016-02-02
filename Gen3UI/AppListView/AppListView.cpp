@@ -23,7 +23,8 @@ CAppListView::CAppListView(AppListInterface * pList,QWidget *parent) : QWidget(p
 
     QString appsheet_on[2]={":/images/phonechild_on.png",":/images/listchild_on.png"};
     QString appsheet_off[2]={":/images/phonechild_off.png",":/images/listchild_off.png"};
-    QString childText[2]={"Find New App","App Setting"};
+    //QString childText[2]={"Find New App","App Setting"};
+    QString childText[2]={"连接设备","连接移动应用程序"};
     int funcId[2]={-1,-2};
     for(int i=0;i<2;i++){
         InsertChildApp(i,funcId[i],childText[i],appsheet_on[i],appsheet_off[i]);
@@ -56,7 +57,7 @@ void CAppListView::onChildAppSelected(int funcId)
     }
 }
 
-void CAppListView::InsertChildApp(int index,int appId,QString text,QString on,QString off)
+void CAppListView::InsertChildApp(int index,int appId,QString text,QString on,QString off,bool bPaint)
 {
     for(int i=index;i<m_pChildApps.size();i++){
         CAppButton *button=m_pChildApps.at(i);
@@ -69,7 +70,7 @@ void CAppListView::InsertChildApp(int index,int appId,QString text,QString on,QS
     int c=index%4;
     newbutton->setGeometry(5 + m_AppWidth*c, 5 + m_AppHeight*r, m_AppWidth - 10, m_AppHeight - 10);
     newbutton->setFuncId(appId);
-    newbutton->setIcon(on, off);
+    newbutton->setIcon(on, off,bPaint);
     newbutton->setText(text);
     newbutton->show();
     connect(newbutton, SIGNAL(clickedWitchFuncId(int)), SLOT(onChildAppSelected(int)));
@@ -103,9 +104,10 @@ void CAppListView::showEvent(QShowEvent * e)
 
     if(vAppIDs.size()>0){
 
-        for(int i=0;i<vAppIDs.size();i++){
-            InsertChildApp(2+i,vAppIDs.at(i),vAppNames.at(i).c_str(),vIconPath.at(i).c_str(),vIconPath.at(i).c_str());
+        for(int i=0;i<vAppIDs.size();i++)
+        {
+            InsertChildApp(2+i,vAppIDs.at(i),vAppNames.at(i).c_str(),vIconPath.at(i).c_str(),vIconPath.at(i).c_str(),true);
         }
     }
-    this->show();
+    //this->show();
 }

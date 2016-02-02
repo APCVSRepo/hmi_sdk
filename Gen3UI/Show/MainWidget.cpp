@@ -7,93 +7,97 @@
 MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(parent)
 {    
     if(parent)
-    {
-        setGeometry(0,0,parent->width(),parent->height());
-    }
-    m_pList = pList;
+     {
+         setGeometry(0,0,parent->width(),parent->height());
+     }
+     m_pList = pList;
 
-    setAutoFillBackground(true);
-    QPixmap pixmap(":/images/MainWidget/Backgroud.png");
-    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    QPalette palette;
-    palette.setBrush(QPalette::Background, QBrush(pixmap));
-    setPalette(palette);
+     setAutoFillBackground(true);
+     QPixmap pixmap(":/images/MainWidget/Backgroud.png");
+     pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+     QPalette palette;
+     palette.setBrush(QPalette::Background, QBrush(pixmap));
+     setPalette(palette);
 
-    QVBoxLayout *pMainLayout = new QVBoxLayout(this);
+     m_pMainLayout = new QVBoxLayout(this);
 
-    QVBoxLayout *pTopLayout = new QVBoxLayout;
-    pTopLayout->setSpacing(1);
-    pTopLayout->setMargin(MARGIN);
-    m_pAppNameLab = new QLabel;
-    pTopLayout->addWidget(m_pAppNameLab,0,Qt::AlignLeft);
-    m_pAppNameLab->setStyleSheet(QString("font: 60 40px \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
+     QVBoxLayout *pTopLayout = new QVBoxLayout;
+     pTopLayout->setSpacing(1);
+     pTopLayout->setMargin(MARGIN);
+     m_pAppNameLab = new QLabel;
+     pTopLayout->addWidget(m_pAppNameLab,0,Qt::AlignLeft);
+     m_pAppNameLab->setStyleSheet(QString("font: 60 40px \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
 
-    m_pShowLine = new QLabel[4];
-    for(int i = 0;i != 4;++i)
-    {
-        pTopLayout->addWidget(m_pShowLine + i,0,Qt::AlignLeft);
-        m_pShowLine[i].setStyleSheet("border:0px;font: 10px \"Liberation Serif\";color:rgb(0,0,0)");
-    }
 
-    QHBoxLayout *pCenterLayout = new QHBoxLayout;
-    m_pIconLab = new QLabel;
-    m_pMainTitleLab = new QLabel;
-    pCenterLayout->addStretch(1);
-    pCenterLayout->addWidget(m_pIconLab,0,Qt::AlignCenter);
-    pCenterLayout->addWidget(m_pMainTitleLab,0,Qt::AlignCenter);
-    pCenterLayout->addStretch(1);
-    m_pMainTitleLab->setStyleSheet(QString("font: 60 35pt \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
-    m_pMainTitleLab->setText("SmartDeviceLink");
-    QPixmap IconPixmap(":/images/MainWidget/AppIcon.png");
-    IconPixmap = IconPixmap.scaled(80,80, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    m_pIconLab->setPixmap(IconPixmap);
+     //m_pShowLine = new QLabel[4];
+     for(int i = 0;i != 4;++i)
+     {
+         pTopLayout->addWidget(m_pShowLine + i,0,Qt::AlignLeft);
+         m_pShowLine[i].setStyleSheet("border:0px;font: 14px \"Liberation Serif\";color:rgb(0,0,0)");
+     }
 
-    QVBoxLayout *pBottomLayout = new QVBoxLayout;
-    QHBoxLayout *pBtnLayout = new QHBoxLayout;
-    pBtnLayout->setSpacing(0);
-    pBtnLayout->setMargin(MARGIN);
-    m_pMenuBtn = new CButton;
-    m_pMenuBtn->initParameter(ui_btn_width,ui_btn_height,":/images/MainWidget/BtnNormal.png",":/images/MainWidget/BtnPress.png","","-");
-    m_pMenuBtn->setTextStyle("border:0px;font: 36px \"Liberation Serif\";color:rgb(0,0,0)");
-    m_pMenuBtn->SetLeftIcon(":/images/MainWidget/MenuIcon.png");
-    m_pSoftBtn = new CButton[3];
-    pBtnLayout->addWidget(m_pMenuBtn,0,Qt::AlignLeft);
-    pBottomLayout->addStretch(1);
-    pBottomLayout->addLayout(pBtnLayout);
 
-    for(int i = 0;i != 3;++i)
-    {
-        pBtnLayout->addWidget(&m_pSoftBtn[i],0,Qt::AlignLeft);
-        m_pSoftBtn[i].initParameter(ui_btn_width,ui_btn_height,":/images/MainWidget/BtnNormal.png",":/images/MainWidget/BtnPress.png","","-");
-        m_pSoftBtn[i].setTextStyle("border:0px;font: 36px \"Liberation Serif\";color:rgb(0,0,0)");
-    }
-    pBtnLayout->addStretch(1);
+     QHBoxLayout *pCenterLayout = new QHBoxLayout;
+     m_pIconLab = new QLabel;
+     m_pMainTitleLab = new QLabel;
+     pCenterLayout->addStretch(1);
+     pCenterLayout->addWidget(m_pIconLab);
+     pCenterLayout->addWidget(m_pMainTitleLab);
+     pCenterLayout->addStretch(1);
+     m_pMainTitleLab->setStyleSheet(QString("font: 60 35pt \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
+     m_pMainTitleLab->setText("SmartDeviceLink");
+     QPixmap IconPixmap(":/images/MainWidget/AppIcon.png");
+     IconPixmap = IconPixmap.scaled(80,80, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+     m_pIconLab->setPixmap(IconPixmap);
+     m_pIconLab->setStyleSheet("background:transparent;background-image: none");
 
-    pMainLayout->addLayout(pTopLayout,1);
-    pMainLayout->addLayout(pCenterLayout);
-    pMainLayout->addLayout(pBottomLayout,1);
+     QVBoxLayout *pBottomLayout = new QVBoxLayout;
+     QHBoxLayout *pBtnLayout = new QHBoxLayout;
+     pBtnLayout->setSpacing(0);
+     pBtnLayout->setMargin(MARGIN);
+     m_pMenuBtn = new CButton;
+     m_pMenuBtn->initParameter(ui_btn_width,ui_btn_height,":/images/MainWidget/BtnNormal.png",":/images/MainWidget/BtnPress.png","","-");
+     m_pMenuBtn->setTextStyle("border:0px;font: 36px \"Liberation Serif\";color:rgb(0,0,0)");
+     m_pMenuBtn->SetLeftIcon(":/images/MainWidget/MenuIcon.png");
+     //m_pSoftBtn = new CButton[3];
+     pBtnLayout->addWidget(m_pMenuBtn,0,Qt::AlignLeft);
+     pBottomLayout->addStretch(1);
+     pBottomLayout->addLayout(pBtnLayout);
 
-    m_pMenuBtn->setText("Menu");
-    for(int i = 0;i != 3;++i)
-    {
-        m_pSoftBtn[i].setText("-");
-        connect(&m_pSoftBtn[i],SIGNAL(clicked(int)),this,SLOT(SoftBtnClickedSlot(int)));
-    }
+     for(int i = 0;i != 3;++i)
+     {
+         pBtnLayout->addWidget(&m_pSoftBtn[i],0,Qt::AlignLeft);
+         m_pSoftBtn[i].initParameter(ui_btn_width,ui_btn_height,":/images/MainWidget/BtnNormal.png",":/images/MainWidget/BtnPress.png","","-");
+         m_pSoftBtn[i].setTextStyle("border:0px;font: 36px \"Liberation Serif\";color:rgb(0,0,0)");
+     }
+     pBtnLayout->addStretch(1);
 
-    connect(m_pMenuBtn,SIGNAL(clicked()),this,SLOT(BtnMenuClickedSlots()));
+     m_pMainLayout->addLayout(pTopLayout,1);
+     m_pMainLayout->addLayout(pCenterLayout);
+     m_pMainLayout->addLayout(pBottomLayout,1);
 
-    //m_pCommandList = new CustomCombobox(height()*0.6,true,this);
-    //m_pCommandList->hide();
-    //connect(m_pCommandList,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(OnCommandListItemClicked(QListWidgetItem *)));
+     m_pMenuBtn->setText("Menu");
+     for(int i = 0;i != 3;++i)
+     {
+         m_pSoftBtn[i].setText("-");
+         connect(&m_pSoftBtn[i],SIGNAL(clicked(int)),this,SLOT(SoftBtnClickedSlot(int)));
+     }
+
+     connect(m_pMenuBtn,SIGNAL(clicked()),this,SLOT(BtnMenuClickedSlots()));
 }
 
 MainWidget::~MainWidget()
 {
+    /*
+    delete []m_pShowLine;
+
+    delete m_pMainLayout;
     delete m_pAppNameLab;
     delete m_pIconLab;
     delete m_pMainTitleLab;
 
     delete []m_pSoftBtn;
+*/
 }
 
 void MainWidget::SetAppName(QString strName)

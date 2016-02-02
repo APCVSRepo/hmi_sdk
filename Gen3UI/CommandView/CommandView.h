@@ -31,7 +31,7 @@ protected:
 signals:
 
 public slots:
-
+    void OnReturnBtnClicked();
 private:
     void AddCommand(int iCmdId,std::string strName);
     void AddMenu(int iMenuId,std::string strName);

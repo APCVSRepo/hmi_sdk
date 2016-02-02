@@ -57,7 +57,7 @@ void MenuButton::paintEvent(QPaintEvent *e)
         QRect orect=rect();
         int sx=(irect.width()-orect.width())/2;
         int sy=(irect.height()-orect.height())/2;
-        //m_pOnImage=m_pOnImage.scaled(width(),height());
+        m_pOnImage=m_pOnImage.scaled(width(),height());
        //painter.drawImage(0,0,orect.width(),orect.height(),m_pOnImage,sx,sy);
         painter.drawImage(orect,m_pOnImage);
        wordColor=Qt::white;
@@ -68,9 +68,9 @@ void MenuButton::paintEvent(QPaintEvent *e)
         QRect orect=rect();
         int sx=(irect.width()-orect.width())/2;
         int sy=(irect.height()-orect.height())/2;
-        //m_pOffImage=m_pOffImage.scaled(width(),height());
+        m_pOffImage=m_pOffImage.scaled(width(),height());
        //painter.drawImage(0,0,orect.width(),orect.height(),m_pOffImage,sx,sy);
-        painter.drawImage(orect,m_pOnImage);
+        painter.drawImage(orect,m_pOffImage);
        wordColor=Qt::black;
     }
 
@@ -79,8 +79,7 @@ void MenuButton::paintEvent(QPaintEvent *e)
     painter.setPen(pen);
     QFont font;
     font.setFamily("Liberation Serif");
-    //font.setFamily("华文宋体");
-    font.setPixelSize(16);
+    font.setPixelSize(22);
     //font.setBold(true);
     painter.setFont(font);
     QRectF rect=QRectF(0,1.0*height()*15/24,width(),height()/3);

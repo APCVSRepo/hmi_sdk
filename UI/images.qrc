@@ -68,5 +68,13 @@
         <file>images/ZoomInBtnPress.png</file>
         <file>images/ZoomOutBtnNormal.png</file>
         <file>images/ZoomOutBtnPress.png</file>
+        <file>images/BtnNormal.png</file>
+        <file>images/BtnPress.png</file>
+        <file>images/CommandItemNormal.png</file>
+        <file>images/CommandItemPress.png</file>
+        <file>images/Slider.png</file>
+        <file>images/SliderBack.png</file>
+        <file>images/DownArrowNormal.png</file>
+        <file>images/UpArrowNormal.png</file>
     </qresource>
 </RCC>

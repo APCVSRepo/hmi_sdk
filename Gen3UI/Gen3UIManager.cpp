@@ -137,6 +137,11 @@ void CGen3UIManager::AppShowSlot(int type)
         //m_vUIWidgets[m_iCurUI]->hide();
         m_iCurUI = type;
         m_vUIWidgets[m_iCurUI]->show();
+
+        if(((MainWindow *)m_vUIWidgets[ID_MAIN])->InVideoStream() && type != ID_COMMAND)
+        {
+            ((MainWindow *)m_vUIWidgets[ID_MAIN])->BackToVideoStream();
+        }
     }
 }
 

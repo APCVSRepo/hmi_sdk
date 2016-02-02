@@ -34,6 +34,10 @@ public:
 
     void StartVideoStream(const char* url);
     void StopVideoStream();
+
+    bool InVideoStream();
+
+    void BackToVideoStream();
 protected:
     virtual void showEvent(QShowEvent * e);
 
@@ -43,6 +47,8 @@ public slots:
     void onUpdateTime();
     void onMenuSelected();
     //void onChildAppSelected(int funcId);
+
+    void OnVideoStreamMenuBtnClicked();
 private:
     VideoStream* videoWidget;
 
@@ -58,6 +64,8 @@ private:
     AppListInterface *m_pList;
     int  m_AppWidth;
     int  m_AppHeight;
+
+    bool m_bInVideoStream;
 };
 
 #endif // APPLINKMENU_H

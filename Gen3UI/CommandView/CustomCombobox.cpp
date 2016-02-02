@@ -19,6 +19,15 @@ CustomCombobox::CustomCombobox(int iMaxHeight,bool bUp,QWidget *parent) : QListW
     setStyleSheet(cssString());
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setVerticalScrollBar(&m_scrollWidget);
+    m_scrollWidget.setStyleSheet(QString::fromUtf8("\
+QScrollBar::vertical {background:none;border:0px solid grey;width: 30px;margin:30px 0px 30px 0px;border-image: url(:images/SliderBack.png);}\
+QScrollBar::handle:vertical {background: rgb(255,113,125);border: 1px solid grey;border-radius:0px;min-height: 20px;width:30px;border-image: url(:images/Slider.png);}\
+QScrollBar::add-line:vertical {height: 31px;subcontrol-origin:margin;}\
+QScrollBar::sub-line:vertical {height: 31px;subcontrol-origin:margin;}\
+QScrollBar::up-arrow:vertical {background:none;}\
+QScrollBar::down-arrow:vertical {border-image: url(:images/DownArrowNormal.png);}\
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background: none;border:0,0,0,0;}\
+QScrollArea {border:0,0,0,0;background:rgb(63,70,87);}"));
     m_scrollWidget.init(m_iMaxHeight);
     //SetScrollParams(4,4);
     setFrameShape(QFrame::NoFrame);
@@ -83,7 +92,7 @@ void CustomCombobox::AddListItem(QString strText,bool bMenu)
         m_iHeight = m_iMaxHeight;
     }
 
-    SetPos(m_iStartX,m_iStartY,m_iWidth,m_iHeight);
+    //SetPos(m_iStartX,m_iStartY,m_iWidth,m_iHeight);
 }
 
 void CustomCombobox::SetPos(int iStartX,int iStartY,int iWidth,int iHeight)

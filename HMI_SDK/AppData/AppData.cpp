@@ -320,7 +320,10 @@ void AppData::OnSoftButtonClick(int sbID, int mode)
 
 void AppData::OnCommandClick(int cmdID)
 {
-    ToSDL->OnCommandClick(m_iAppID, cmdID);
+    if(cmdID > 0)
+    {
+        ToSDL->OnCommandClick(m_iAppID, cmdID);
+    }
     ShowPreviousUI();
 }
 

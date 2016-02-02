@@ -48,15 +48,6 @@ CButton::CButton(int W, int H, QString normalIcon, QString pressedIcon, QString 
 CButton::~CButton()
 {
     delete m_pMainLayout;
-    if(m_pIconLayout != nullptr)
-    {
-        delete m_pIconLayout;
-    }
-    delete m_pTextLayout;
-    if(m_pLeftIconLab != nullptr)
-    {
-        delete m_pLeftIconLab;
-    }
 }
 
 /***********************************************************************************************************

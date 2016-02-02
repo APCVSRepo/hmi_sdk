@@ -129,9 +129,12 @@ void CUIManager::AppShowSlot(int type)
     else
     {
         if(m_iCurUI != ID_MAIN)
+        {
             m_vUIWidgets[m_iCurUI]->hide();
+        }
         //m_vUIWidgets[m_iCurUI]->hide();
         m_iCurUI = type;
+
         m_vUIWidgets[m_iCurUI]->show();
     }
 }

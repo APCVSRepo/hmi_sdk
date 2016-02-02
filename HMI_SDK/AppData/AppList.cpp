@@ -277,6 +277,7 @@ void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vA
         vAppIDs.push_back(m_AppDatas[i]->m_iAppID);
         vAppNames.push_back(m_AppDatas[i]->m_szAppName);
         vIconPath.push_back(m_AppDatas[i]->m_strAppIconFilePath);
+        LOGI("---%s",m_AppDatas[i]->m_strAppIconFilePath.c_str());
     }
 }
 
@@ -298,6 +299,13 @@ void AppList::appUnregistered(Json::Value jsonObj)
     {
         if(appID == (*i)->m_iAppID)
         {
+            if(m_pCurApp)
+            {
+                if(m_pCurApp->m_iAppID == appID)
+                {
+                    m_pCurApp = NULL;
+                }
+            }
             delete *i;
             m_AppDatas.erase(i);
             break;

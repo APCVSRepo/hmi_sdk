@@ -2,7 +2,8 @@
 #include "Config/Config.h"
 #include <QTime>
 #include "Notify/Notify.h"
-MainWindow::MainWindow(AppListInterface * pList,QWidget *parent) : QWidget(parent)
+MainWindow::MainWindow(AppListInterface * pList,QWidget *parent) : QWidget(parent),
+    m_bInVideoStream(false)
 {
 	m_pList = pList;
 	int title_height=40;
@@ -47,7 +48,8 @@ MainWindow::MainWindow(AppListInterface * pList,QWidget *parent) : QWidget(paren
     QString sheet_off[MENU_MAX]={":/images/music_off.png",":/images/key_off.png",":/images/phone_off.png",
                                  ":/images/link_off.png",":/images/list_off.png",
                                 ":/images/setting_off.png"};
-    QString text[MENU_MAX]={"Music","Keys","Phone","Navigation","AppList","Settings"};
+    //QString text[MENU_MAX]={"Music","Keys","Phone","Navigation","AppList","Settings"};
+    QString text[MENU_MAX]={"音频","空调","电话","导航","应用程序","设置"};
     for(int i=0;i<MENU_MAX;i++){
         m_pMenuTab[i]=new MenuButton(m_pMainMenu);
         m_pMenuTab[i]->setGeometry((ui_res_width-2*margin)/MENU_MAX*i,0,(ui_res_width-2*margin)/MENU_MAX,status_height);
@@ -55,7 +57,7 @@ MainWindow::MainWindow(AppListInterface * pList,QWidget *parent) : QWidget(paren
         m_pMenuTab[i]->setText(text[i]);
         connect(m_pMenuTab[i],SIGNAL(clicked()),SLOT(onMenuSelected()));
     }
-    m_pMenuTab[0]->setActive(true);
+    m_pMenuTab[4]->setActive(true);
 
     m_AppWidth=(ui_res_width-2*margin)/4;
     m_AppHeight=center_height/2;
@@ -70,10 +72,11 @@ MainWindow::MainWindow(AppListInterface * pList,QWidget *parent) : QWidget(paren
     */
 
     m_pTimer=new QTimer(this);
-    m_pTimer->start(1000);//����
+    m_pTimer->start(1000);//分钟
     connect(m_pTimer,SIGNAL(timeout()),SLOT(onUpdateTime()));
 
-    videoWidget = new VideoStream(ui_res_width,ui_res_height);
+    videoWidget = new VideoStream(ui_res_width,ui_res_height,this);
+    connect(videoWidget,SIGNAL(ClickMenuBtn()),this,SLOT(OnVideoStreamMenuBtnClicked()));
 }
 
 MainWindow::~MainWindow()
@@ -83,8 +86,12 @@ MainWindow::~MainWindow()
     delete m_pNetStatus;
     delete m_pCenter;
     delete m_pMainMenu;
-	delete m_pTimer;
-    delete []m_pMenuTab;
+    delete m_pTimer;
+    /*
+    for (int i = 0; i < MENU_MAX; i++){
+        delete m_pMenuTab[i];
+    }
+    */
     //delete []m_pChildApps;
 
     delete videoWidget;
@@ -171,6 +178,7 @@ void MainWindow::DeleteChildApp(int index)
 
 void MainWindow::showEvent(QShowEvent * e)
 {
+
     /*
     std::vector<int> vAppIDs;
     std::vector<std::string> vAppNames;
@@ -200,4 +208,27 @@ void MainWindow::StartVideoStream(const char* url)
 void MainWindow::StopVideoStream()
 {
     videoWidget->stopStream();
+}
+
+void MainWindow::OnVideoStreamMenuBtnClicked()
+{
+    videoWidget->hide();
+    m_bInVideoStream = true;
+    m_pList->getActiveApp()->OnShowCommand();
+}
+
+void MainWindow::BackToVideoStream()
+{
+    if(m_bInVideoStream)
+    {
+        LOGI("---MainWindow::showEvent");
+        m_bInVideoStream = false;
+        videoWidget->show();
+
+    }
+}
+
+bool MainWindow::InVideoStream()
+{
+    return m_bInVideoStream;
 }

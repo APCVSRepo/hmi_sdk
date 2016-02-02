@@ -72,7 +72,9 @@ public:
 
 #ifndef VIDEO_STREAM_WIDGET
 signals:
-    void GetImage(const QImage &image); 
+    void GetImage(const QImage &image);
+
+    void ClickMenuBtn();
 public slots:
     void PlayImageSlots();
 #endif
@@ -124,6 +126,10 @@ private:
 
     QLabel *m_pTimeLab;
     QTimer *m_pTimer;
+
+public:
+    void Pause();
+    void Resume();
 };
 
 #endif // VIDEOSTREAM_H

@@ -21,9 +21,19 @@ public:
 
     // 清空所有项
     void ClearAllItem();
+
+signals:
+    void ItemClickedSignal(QListWidgetItem *pItem);
 public slots:
     void OnTimeOutSlot();
+
+    void OnScrollBarValueChange(int iValue);
+
+    void OnItemClicked(CustomComboboxItem *pItem);
 private:
+    enum SCROLLBARPOS {TOP = 0,MIDDLE,BOTTOM};
+    void SetScrollBarStyle(int iMode);
+
     // 定时检查鼠标位置，给悬停的选项高亮
     QTimer *m_pTimer;
     void SetScrollParams(int page,int range);

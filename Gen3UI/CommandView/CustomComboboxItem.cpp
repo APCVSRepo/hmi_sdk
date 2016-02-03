@@ -102,7 +102,8 @@ void CustomComboboxItem::mousePressEvent(QMouseEvent *event)
 
 void CustomComboboxItem::mouseReleaseEvent(QMouseEvent *event)
 {
-    ChangeBkPic(PRESS_STATE);
+    ChangeBkPic(NORMAL_STATE);
+    emit ItemClicked(this);
 }
 
 

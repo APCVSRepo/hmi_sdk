@@ -1,11 +1,10 @@
 #include "MainWidget.h"
 //#include "../Config/Config.h"
 
-
 #define MARGIN 10
 
 MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(parent)
-{    
+{
     if(parent)
      {
          setGeometry(0,0,parent->width(),parent->height());
@@ -35,7 +34,6 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(pare
          pTopLayout->addWidget(m_pShowLine + i,0,Qt::AlignLeft);
          m_pShowLine[i].setStyleSheet("border:0px;font: 14px \"Liberation Serif\";color:rgb(0,0,0)");
      }
-
 
      QHBoxLayout *pCenterLayout = new QHBoxLayout;
      m_pIconLab = new QLabel;

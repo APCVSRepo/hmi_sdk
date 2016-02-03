@@ -1,4 +1,5 @@
 #include "CommandView.h"
+#include "UI/Common/AppBase.h"
 
 CCommandView::CCommandView(AppListInterface *pList,QWidget *parent) :
     QWidget(parent),m_pCurrentMenu(nullptr)
@@ -23,26 +24,30 @@ CCommandView::CCommandView(AppListInterface *pList,QWidget *parent) :
     m_pBottomLayout = new QHBoxLayout;
     m_pReturnBtn = new CButton;
     m_pAppNameLab = new QLabel;
-    m_pCommandList = new CustomCombobox(iHeight*0.8);
-    m_pCommandList->setMinimumWidth(width()*0.9);
-    m_pCommandList->setMaximumWidth(width()*0.9);
+    m_pCommandList = new CustomCombobox(iHeight - 80);
+    m_pCommandList->setMinimumWidth(width()*0.9-20);
+    m_pCommandList->setMaximumWidth(width()*0.9-20);
 
     m_pTopLayout->addWidget(m_pReturnBtn);
     m_pTopLayout->addWidget(m_pAppNameLab);
     m_pTopLayout->addStretch(1);
+    m_pTopLayout->setContentsMargins(7,0,0,0);
+
 
     m_pBottomLayout->addStretch(1);
     m_pBottomLayout->addWidget(m_pCommandList);
+    m_pBottomLayout->setContentsMargins(0,0,10,0);
 
     m_pMainLayout->addLayout(m_pTopLayout);
-    m_pMainLayout->addLayout(m_pBottomLayout);
+    m_pMainLayout->addLayout(m_pBottomLayout,1);
+    m_pMainLayout->setSpacing(0);
 
-    m_pAppNameLab->setStyleSheet(QString("font: 60 40px \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
+    m_pAppNameLab->setStyleSheet(QString("margin-left:10px;font: 60 32px \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
 
-    m_pReturnBtn->initParameter(60,60,":/images/ReturnBtnNormal.png",":/images/ReturnBtnPress.png","","");
+    m_pReturnBtn->initParameter(50,50,":/images/ReturnBtnNormal.png",":/images/ReturnBtnPress.png","","");
+
     connect(m_pReturnBtn,SIGNAL(clicked()),this,SLOT(OnReturnBtnClicked()));
-
-    connect(m_pCommandList,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(OnCommandListItemClicked(QListWidgetItem *)));
+    connect(m_pCommandList,SIGNAL(ItemClickedSignal(QListWidgetItem*)),this,SLOT(OnCommandListItemClicked(QListWidgetItem*)));
 }
 
 CCommandView::~CCommandView()
@@ -136,10 +141,42 @@ void CCommandView::showEvent(QShowEvent * e)
         }
     }
     m_pCurrentMenu = nullptr;
-    RefreshCommandList(0);
+
+    RefreshCommandList();
+
+    AppBase::SetEdlidedText(m_pAppNameLab,m_pList->getActiveApp()->getAppName().c_str(),width()*0.8);
 }
 
 void CCommandView::OnReturnBtnClicked()
 {
     m_pList->getActiveApp()->OnCommandClick(-1);
+}
+
+void CCommandView::OnCommandListItemClicked(QListWidgetItem *pItem)
+{
+    int iRow = m_pCommandList->row(pItem);
+
+    if(m_pCurrentMenu == nullptr)
+    {
+        if(iRow == 0)
+        {
+            m_pList->OnAppExit();
+        }
+        else
+        {
+            if(m_CmdVec[iRow].bMenu)
+            {
+                m_pCurrentMenu = &m_CmdVec[iRow];
+                RefreshCommandList(m_pCurrentMenu);
+            }
+            else
+            {
+                m_pList->getActiveApp()->OnCommandClick(m_CmdVec[iRow].iId);
+            }
+        }
+    }
+    else
+    {
+        m_pList->getActiveApp()->OnCommandClick(m_pCurrentMenu->CmdVec[iRow].iId);
+    }
 }

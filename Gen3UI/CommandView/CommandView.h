@@ -32,6 +32,8 @@ signals:
 
 public slots:
     void OnReturnBtnClicked();
+
+    void OnCommandListItemClicked(QListWidgetItem *pItem);
 private:
     void AddCommand(int iCmdId,std::string strName);
     void AddMenu(int iMenuId,std::string strName);

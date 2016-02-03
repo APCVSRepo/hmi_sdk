@@ -28,12 +28,10 @@ void CAppButton::setIcon(const QString on,const QString off,bool bPaint)
             img_on = img_on.scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             QImage onImage(qurl.path(QUrl::FullyDecoded));
             //onImage = onImage.scaled(height()*0.4,height()*0.4);
-            LOGI("---%d,%d\t\t%d,%d",onImage.size().width(),onImage.size().height(),img_on.size().width(),img_on.size().height());
             do
             {
                 QPainter painter(&img_on);
                 QRect irect=onImage.rect();
-                LOGI("---%d,%d,%d,%d",irect.left(),irect.top(),irect.right(),irect.bottom());
                 QRect orect=img_on.rect();
                 int sx=(orect.width()-irect.width())/2;
                 int sy=(orect.height()-irect.height())/4;
@@ -48,7 +46,6 @@ void CAppButton::setIcon(const QString on,const QString off,bool bPaint)
             img_off = img_off.scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             QImage offImage(qurl.path(QUrl::FullyDecoded));
             //offImage = offImage.scaled(width()*0.6,height()*0.6,Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-            LOGI("---%d,%d\t\t%d,%d",offImage.size().width(),offImage.size().height(),img_on.size().width(),img_on.size().height());
             do{
                 QPainter painter(&img_off);
                 QRect irect=offImage.rect();
@@ -66,48 +63,6 @@ void CAppButton::setIcon(const QString on,const QString off,bool bPaint)
     }
 
     MenuButton::setIcon(img_on,img_off);
-
-    /*
-    LOGI("---%d,%d\t\t-%s",width(),height(),on.toStdString().data(),off.toStdString().data());
-    QImage img_on,img_off;
-    if(!img_on.load(on)){
-        QUrl qurl(on);
-        img_on.load(":images/app_on.png");
-        img_on = img_on.scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        QImage onImage(qurl.path(QUrl::FullyDecoded));
-        onImage = onImage.scaled(height()*0.4,height()*0.4);
-        LOGI("---%d,%d\t\t%d,%d",onImage.size().width(),onImage.size().height(),img_on.size().width(),img_on.size().height());
-        do
-        {
-            QPainter painter(&img_on);
-            QRect irect=onImage.rect();
-            LOGI("---%d,%d,%d,%d",irect.left(),irect.top(),irect.right(),irect.bottom());
-            QRect orect=img_on.rect();
-            int sx=(orect.width()-irect.width())/2;
-            int sy=(orect.height()-irect.height())/4;
-            painter.drawImage(sx,sy,onImage,0,0);
-        }while(0);
-    }
-
-    if(!img_off.load(off)){
-        QUrl qurl(off);
-        img_off.load(":images/app_off.png");
-        img_off = img_off.scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        QImage offImage(qurl.path(QUrl::FullyDecoded));
-        offImage = offImage.scaled(width()*0.6,height()*0.6,Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        LOGI("---%d,%d\t\t%d,%d",offImage.size().width(),offImage.size().height(),img_on.size().width(),img_on.size().height());
-        do{
-            QPainter painter(&img_off);
-            QRect irect=offImage.rect();
-            QRect orect=img_off.rect();
-            int sx=(orect.width()-irect.width())/2;
-            int sy=(orect.height()-irect.height())/4;
-            painter.drawImage(sx,sy,offImage);
-        }while(0);
-    }
-
-    MenuButton::setIcon(img_on,img_off);
-    */
 }
 
 void CAppButton::setFuncId(int id)

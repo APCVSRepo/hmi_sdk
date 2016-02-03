@@ -26,6 +26,9 @@ public:
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+
+signals:
+    void ItemClicked(CustomComboboxItem *pItem);
 private:
     QLabel *m_pIconLab;
     QLabel *m_pMenuArrowLab;

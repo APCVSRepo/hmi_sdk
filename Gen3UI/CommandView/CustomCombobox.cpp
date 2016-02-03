@@ -19,15 +19,6 @@ CustomCombobox::CustomCombobox(int iMaxHeight,bool bUp,QWidget *parent) : QListW
     setStyleSheet(cssString());
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setVerticalScrollBar(&m_scrollWidget);
-    m_scrollWidget.setStyleSheet(QString::fromUtf8("\
-QScrollBar::vertical {background:none;border:0px solid grey;width: 30px;margin:30px 0px 30px 0px;border-image: url(:images/SliderBack.png);}\
-QScrollBar::handle:vertical {background: rgb(255,113,125);border: 1px solid grey;border-radius:0px;min-height: 20px;width:30px;border-image: url(:images/Slider.png);}\
-QScrollBar::add-line:vertical {height: 31px;subcontrol-origin:margin;}\
-QScrollBar::sub-line:vertical {height: 31px;subcontrol-origin:margin;}\
-QScrollBar::up-arrow:vertical {background:none;}\
-QScrollBar::down-arrow:vertical {border-image: url(:images/DownArrowNormal.png);}\
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background: none;border:0,0,0,0;}\
-QScrollArea {border:0,0,0,0;background:rgb(63,70,87);}"));
     m_scrollWidget.init(m_iMaxHeight);
     //SetScrollParams(4,4);
     setFrameShape(QFrame::NoFrame);
@@ -36,16 +27,23 @@ QScrollArea {border:0,0,0,0;background:rgb(63,70,87);}"));
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setBackgroundRole(QPalette::Background);
 
-    setMouseTracking(true);
+    SetScrollBarStyle(TOP);
 
+    /*
     m_pTimer = new QTimer;
     connect(m_pTimer,SIGNAL(timeout()),this,SLOT(OnTimeOutSlot()));
     m_pTimer->start(50);
+    */
+    setMouseTracking(true);
+
+    connect(&m_scrollWidget,SIGNAL(valueChanged(int)),this,SLOT(OnScrollBarValueChange(int)));
+
+    connect(this,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(OnItemClicked(QListWidgetItem*)));
 }
 
 CustomCombobox::~CustomCombobox()
 {
-    delete m_pTimer;
+
 }
 
 void CustomCombobox::ClearAllItem()
@@ -68,10 +66,47 @@ void CustomCombobox::ClearAllItem()
     m_iOldHoverItemIndex = -1;
 }
 
+void CustomCombobox::SetScrollBarStyle(int iMode)
+{
+    if(iMode == TOP)
+    {
+        m_scrollWidget.setStyleSheet(QString::fromUtf8("\
+                                                       QScrollBar::vertical {width:55px;margin-top:10px;margin-bottom:10px;padding-top:60px;padding-bottom:60px;border:0px;background-color:rgba(0,0,0,0%)}\
+                                                       QScrollBar::sub-line{height:50px;border-image:url(:images/UpArrowDisable.png)}\
+                                                       QScrollBar::add-line{height:50px;border-image:url(:images/DownArrowNormal.png)}\
+                                                       QScrollBar::sub-page{border-image:url(:images/SliderBack.png);margin-left:13px;margin-right:13px}\
+                                                       QScrollBar::add-page{border-image:url(:images/SliderBack.png);margin-left:13px;margin-right:13px}\
+                                                       QScrollBar::handle{border-image:url(:images/Slider.png);margin-left:13px;margin-right:13px}\
+                                                       "));
+    }
+    else if(iMode == MIDDLE)
+    {
+        m_scrollWidget.setStyleSheet(QString::fromUtf8("\
+                                                       QScrollBar::vertical {width:55px;margin-top:10px;margin-bottom:10px;padding-top:60px;padding-bottom:60px;border:0px;background-color:rgba(0,0,0,0%)}\
+                                                       QScrollBar::sub-line{height:50px;border-image:url(:images/UpArrowNormal.png)}\
+                                                       QScrollBar::add-line{height:50px;border-image:url(:images/DownArrowNormal.png)}\
+                                                       QScrollBar::sub-page{border-image:url(:images/SliderBack.png);margin-left:13px;margin-right:13px}\
+                                                       QScrollBar::add-page{border-image:url(:images/SliderBack.png);margin-left:13px;margin-right:13px}\
+                                                       QScrollBar::handle{border-image:url(:images/Slider.png);margin-left:13px;margin-right:13px}\
+                                                       "));
+    }
+    else if(iMode == BOTTOM)
+    {
+        m_scrollWidget.setStyleSheet(QString::fromUtf8("\
+                                                       QScrollBar::vertical {width:55px;margin-top:10px;margin-bottom:10px;padding-top:60px;padding-bottom:60px;border:0px;background-color:rgba(0,0,0,0%)}\
+                                                       QScrollBar::sub-line{height:50px;border-image:url(:images/UpArrowNormal.png)}\
+                                                       QScrollBar::add-line{height:50px;border-image:url(:images/DownArrowDisable.png)}\
+                                                       QScrollBar::sub-page{border-image:url(:images/SliderBack.png);margin-left:13px;margin-right:13px}\
+                                                       QScrollBar::add-page{border-image:url(:images/SliderBack.png);margin-left:13px;margin-right:13px}\
+                                                       QScrollBar::handle{border-image:url(:images/Slider.png);margin-left:13px;margin-right:13px}\
+                                                       "));
+    }
+}
+
 void CustomCombobox::AddListItem(QString strText,bool bMenu)
 {
     QListWidgetItem *item = new QListWidgetItem;
-    int w = width()-30;
+    int w = width()-70;
     int h = m_iMaxHeight * PAGEITEMWEIGHT;
     item->setSizeHint(QSize(w,h));
     //item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsDragEnabled);
@@ -84,7 +119,7 @@ void CustomCombobox::AddListItem(QString strText,bool bMenu)
     itemWidget->setIsMenu(bMenu);
     m_itemList.push_back(itemWidget);
 
-    //connect(itemWidget,SIGNAL(MouseOnItemSignal(CustomComboboxItem *)),this,SLOT(OnMouseMoveOnItem(CustomComboboxItem *)));
+    connect(itemWidget,SIGNAL(ItemClicked(CustomComboboxItem*)),this,SLOT(OnItemClicked(CustomComboboxItem*)));
 
     m_iHeight += h;
     if(m_iHeight > m_iMaxHeight)
@@ -150,6 +185,34 @@ void CustomCombobox::OnTimeOutSlot()
     }
 }
 
+void CustomCombobox::OnScrollBarValueChange(int iValue)
+{
+    if(iValue == m_scrollWidget.minimum())
+    {
+        SetScrollBarStyle(TOP);
+    }
+    else if(iValue == m_scrollWidget.maximum())
+    {
+        SetScrollBarStyle(BOTTOM);
+    }
+    else
+    {
+        SetScrollBarStyle(MIDDLE);
+    }
+}
+
+void CustomCombobox::OnItemClicked(CustomComboboxItem *pItem)
+{
+    for(int i = 0;i != count();++i)
+    {
+        if(itemWidget(item(i)) == pItem)
+        {
+            emit ItemClickedSignal(item(i));
+            return;
+        }
+    }
+}
+
 QString CustomCombobox::cssString()
 {
 #if 0
@@ -172,4 +235,6 @@ QString CustomCombobox::cssString()
     return QString::fromUtf8("QListWidget:item:hover{border:0px;}");
 #endif
 }
+
+
 

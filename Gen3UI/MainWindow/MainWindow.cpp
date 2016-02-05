@@ -75,8 +75,8 @@ MainWindow::MainWindow(AppListInterface * pList,QWidget *parent) : QWidget(paren
     m_pTimer->start(1000);//分钟
     connect(m_pTimer,SIGNAL(timeout()),SLOT(onUpdateTime()));
 
-    videoWidget = new VideoStream(ui_res_width,ui_res_height,this);
-    connect(videoWidget,SIGNAL(ClickMenuBtn()),this,SLOT(OnVideoStreamMenuBtnClicked()));
+    //videoWidget = new VideoStream(ui_res_width,ui_res_height,this);
+    //connect(videoWidget,SIGNAL(ClickMenuBtn()),this,SLOT(OnVideoStreamMenuBtnClicked()));
 }
 
 MainWindow::~MainWindow()
@@ -94,7 +94,7 @@ MainWindow::~MainWindow()
     */
     //delete []m_pChildApps;
 
-    delete videoWidget;
+    //delete videoWidget;
 }
 
 QWidget* MainWindow::CenterWidget()
@@ -201,24 +201,25 @@ void MainWindow::showEvent(QShowEvent * e)
 
 void MainWindow::StartVideoStream(const char* url)
 {
-    videoWidget->setUrl(url);
-    videoWidget->startStream();
+    //videoWidget->setUrl(url);
+    //videoWidget->startStream();
 }
 
 void MainWindow::StopVideoStream()
 {
-    videoWidget->stopStream();
+    //videoWidget->stopStream();
 }
 
 void MainWindow::OnVideoStreamMenuBtnClicked()
 {
-    videoWidget->hide();
-    m_bInVideoStream = true;
-    m_pList->getActiveApp()->OnShowCommand();
+    //videoWidget->hide();
+    //m_bInVideoStream = true;
+    //m_pList->getActiveApp()->OnShowCommand();
 }
 
 void MainWindow::BackToVideoStream()
 {
+    /*
     if(m_bInVideoStream)
     {
         LOGI("---MainWindow::showEvent");
@@ -226,6 +227,7 @@ void MainWindow::BackToVideoStream()
         videoWidget->show();
 
     }
+    */
 }
 
 bool MainWindow::InVideoStream()

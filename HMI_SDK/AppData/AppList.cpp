@@ -304,6 +304,7 @@ void AppList::appUnregistered(Json::Value jsonObj)
                 if(m_pCurApp->m_iAppID == appID)
                 {
                     m_pCurApp = NULL;
+                    //m_pUIManager->onVideoStreamStop();
                 }
             }
             delete *i;

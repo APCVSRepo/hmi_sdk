@@ -49,8 +49,8 @@ MainMenu::MainMenu(AppListInterface * pList, QWidget *parent) : BaseWidght(0,0,u
     stackWidget->setGeometry(ui_content_left,5,ui_app_width,ui_app_height);
     stackWidget->setWindowFlags(Qt::FramelessWindowHint);
 
-    videoWidget = new VideoStream(ui_res_width,ui_res_height);
-    connect(this,SIGNAL(menuBtnClicked(QString)),this,SLOT(menuBtnClickedSlots(QString)));
+    //videoWidget = new VideoStream(ui_res_width,ui_res_height);
+    //connect(this,SIGNAL(menuBtnClicked(QString)),this,SLOT(menuBtnClickedSlots(QString)));
 }
 
 MainMenu::~MainMenu()

@@ -147,7 +147,7 @@ void Channel::onReceiveData(void * pData, int iLength)
 
 void Channel::onMessage(Json::Value &jsonObj)
 {
-    //LOGI("%s:receive:%s",m_sComponentName.c_str(),jsonObj.toStyledString().data());
+    LOGI("%s:receive:%s",m_sComponentName.c_str(),jsonObj.toStyledString().data());
     bool run = false;
     // id
     if (jsonObj.isMember("id"))
@@ -247,7 +247,7 @@ void Channel::sendError(int resultCode, int id, std::string method, std::string 
 
 void Channel::SendJson(Json::Value &data)
 {
-    //LOGI("---send:%s",data.toStyledString().c_str());
+    LOGI("---send:%s",data.toStyledString().c_str());
     Json::FastWriter writer;
     std::string json_file = writer.write(data);
     const char * pStr = json_file.c_str();

@@ -169,8 +169,7 @@ HEADERS  += HMI_SDK/AppData/AppListInterface.h \
 RESOURCES += \
     UI/images.qrc
 
-OTHER_FILES += \
-    UI/LiberationSerif-Regular.ttf
+OTHER_FILES +=
 INCLUDEPATH +=  $$PWD/Include/ffmpeg \
                 $$PWD/Include/msp
 

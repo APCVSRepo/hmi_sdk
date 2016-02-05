@@ -25,6 +25,7 @@ enum ShowType
     ID_NOTIFY,
     ID_MEDIACLOCK,
     ID_MAIN,
+    ID_VIDEOSTREAM,
     ID_UI_MAX
 };
 

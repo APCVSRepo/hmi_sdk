@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <main.h>
 #include <QDir>
+#include <QFontDatabase>
 
 HMI_Initial::HMI_Initial():QObject(NULL)
 {
@@ -18,10 +19,14 @@ HMI_Initial::HMI_Initial():QObject(NULL)
     m_uiManager = new CGen3UIManager(m_appList);
     m_appList->setUIManager(m_uiManager);
     QTimer::singleShot(500,this,SLOT(initApps()));
+
+    QFontDatabase::addApplicationFont(":/LiberationSerif-Regular.ttf");
 }
 
 HMI_Initial::~HMI_Initial()
 {
+
+
     delete m_uiManager;
     delete m_appList;
     SDLConnector::Close();

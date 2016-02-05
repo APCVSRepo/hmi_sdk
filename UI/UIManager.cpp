@@ -55,6 +55,7 @@ void CUIManager::initAppHMI()
     m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
     m_vUIWidgets[ID_SLIDER]=new Slider(m_pList, pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;
+    m_vUIWidgets[ID_VIDEOSTREAM] = new VideoStream(m_pList,pMain);
 
     for(int i = 0; i < ID_UI_MAX; i++)
         if(m_vUIWidgets[i])
@@ -103,7 +104,9 @@ void CUIManager::onVideoStartSlots()
     fflush(stdout);
     std::string str_url = AppControl->getUrlString();
     //_D("%s\n",str_url.data());
-    ((MainMenu *)m_vUIWidgets[ID_MAIN])->StartVideoStream(str_url.c_str());
+    VideoStream *pVideoStream = ((VideoStream *)m_vUIWidgets[ID_VIDEOSTREAM]);//->StartVideoStream(str_url.c_str());
+    pVideoStream->setUrl(str_url.c_str());
+    pVideoStream->startStream();
 }
 
 void CUIManager::onVideoStreamStop()
@@ -113,7 +116,7 @@ void CUIManager::onVideoStreamStop()
 
 void CUIManager::onVideoStopSlots()
 {
-    ((MainMenu *)m_vUIWidgets[ID_MAIN])->StopVideoStream();
+    ((VideoStream *)m_vUIWidgets[ID_VIDEOSTREAM])->stopStream();
 }
 
 void CUIManager::AppShowSlot(int type)

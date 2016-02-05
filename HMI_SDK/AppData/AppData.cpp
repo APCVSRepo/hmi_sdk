@@ -180,11 +180,13 @@ Result AppData::recvFromServer(Json::Value jsonObj)
         {
             videoStreamStart(jsonObj);
             m_pUIManager->onVideoStreamStart();
+            ShowUI(ID_VIDEOSTREAM);
         }
         else if(str_method == "Navigation.StopStream")
         {
             videoStreamStop(jsonObj);
             m_pUIManager->onVideoStreamStop();
+            ShowPreviousUI();
         }
         else if(str_method == "UI.SetMediaClockTimer")
         {

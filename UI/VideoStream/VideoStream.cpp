@@ -17,18 +17,20 @@ using namespace std;
 QByteArray  arrayBuffer;
 pthread_mutex_t  _mutex_video_buffer;
 #endif
-VideoStream::VideoStream(int w,int h,QWidget *parent) :
+VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
 #ifdef VIDEO_STREAM_WIDGET
     QVideoWidget(parent)
 #else
     QWidget(parent),pAVFormatContext(nullptr),pAVFrame(nullptr),pSwsContext(nullptr)
 #endif
 {
-    m_i_w = w;
-    m_i_h = h;
+    m_pList = pList;
 
-    this->setWindowFlags(Qt::FramelessWindowHint);//去掉标题栏
-    this->setGeometry(0,0,m_i_w,m_i_h);
+    setWindowFlags(Qt::FramelessWindowHint);
+    if(parent)
+    {
+        setGeometry(0,0,parent->width(),parent->height());
+    }
 
 #ifdef VIDEO_STREAM_WIDGET
     m_VideoPlayer=new QMediaPlayer;
@@ -92,11 +94,7 @@ VideoStream::VideoStream(int w,int h,QWidget *parent) :
     m_pTimer = new QTimer(this);
     m_pTimer->start(1000);
     connect(m_pTimer,SIGNAL(timeout()),this,SLOT(onUpdateTime()));
-
-    hide();
 }
-
-
 
 
 VideoStream::~VideoStream()
@@ -112,6 +110,7 @@ VideoStream::~VideoStream()
     if(pAVFormatContext != nullptr)
     {
         avformat_free_context(pAVFormatContext);
+        pAVFormatContext = nullptr;
     }
     if(pAVFrame != nullptr)
     {
@@ -324,6 +323,7 @@ void VideoStream::stopStream()
     avformat_close_input(&pAVFormatContext);
     LOGI("avformat_free_context");
     avformat_free_context(pAVFormatContext);
+    pAVFormatContext = nullptr;
     LOGI("av_frame_free");
     av_frame_free(&pAVFrame);
     LOGI("sws_freeContext");
@@ -439,7 +439,8 @@ void VideoStream::OnClickedZoomOutBtn()
 
 void VideoStream::OnClickedMenuBtn()
 {
-    emit ClickMenuBtn();
+    m_pList->getActiveApp()->OnShowCommand();
+    //emit ClickMenuBtn();
 }
 
 void VideoStream::onUpdateTime()

@@ -40,6 +40,7 @@ extern "C"
 #endif
 
 #include "Common/Button.h"
+#include "AppData/AppListInterface.h"
 
 class VideoStream :
         #ifdef VIDEO_STREAM_WIDGET
@@ -50,7 +51,7 @@ class VideoStream :
 {
     Q_OBJECT
 public:
-    explicit VideoStream(int w,int h,QWidget *parent = 0);
+    explicit VideoStream(AppListInterface * pList,QWidget *parent = 0);
     ~VideoStream();
 
     static bool PointInRect(QRect rect,QPoint point);
@@ -127,9 +128,8 @@ private:
     QLabel *m_pTimeLab;
     QTimer *m_pTimer;
 
-public:
-    void Pause();
-    void Resume();
+private:
+    AppListInterface *m_pList;
 };
 
 #endif // VIDEOSTREAM_H

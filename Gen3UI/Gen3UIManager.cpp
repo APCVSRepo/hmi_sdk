@@ -59,6 +59,7 @@ void CGen3UIManager::initAppHMI()
     m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
     m_vUIWidgets[ID_SLIDER]=new Slider(m_pList, pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;
+    m_vUIWidgets[ID_VIDEOSTREAM] = new VideoStream(m_pList,pMain);
 
     for(int i = 0; i < ID_UI_MAX; i++)
         if(m_vUIWidgets[i])
@@ -107,7 +108,9 @@ void CGen3UIManager::onVideoStartSlots()
     fflush(stdout);
     std::string str_url = AppControl->getUrlString();
     //_D("%s\n",str_url.data());
-    ((MainMenu *)m_vUIWidgets[ID_MAIN])->StartVideoStream(str_url.c_str());
+    VideoStream *pVideoStream = ((VideoStream *)m_vUIWidgets[ID_VIDEOSTREAM]);//->StartVideoStream(str_url.c_str());
+    pVideoStream->setUrl(str_url.c_str());
+    pVideoStream->startStream();
 }
 
 void CGen3UIManager::onVideoStreamStop()
@@ -117,7 +120,8 @@ void CGen3UIManager::onVideoStreamStop()
 
 void CGen3UIManager::onVideoStopSlots()
 {
-    ((MainMenu *)m_vUIWidgets[ID_MAIN])->StopVideoStream();
+    LOGI("--CGen3UIManager::onVideoStopSlots");
+    ((VideoStream *)m_vUIWidgets[ID_VIDEOSTREAM])->stopStream();
 }
 
 void CGen3UIManager::AppShowSlot(int type)
@@ -133,15 +137,13 @@ void CGen3UIManager::AppShowSlot(int type)
     else
     {
         if(m_iCurUI != ID_MAIN)
+        {
+            LOGI("---m_iCurUI=%d hide",m_iCurUI);
             m_vUIWidgets[m_iCurUI]->hide();
+        }
         //m_vUIWidgets[m_iCurUI]->hide();
         m_iCurUI = type;
         m_vUIWidgets[m_iCurUI]->show();
-
-        if(((MainWindow *)m_vUIWidgets[ID_MAIN])->InVideoStream() && type != ID_COMMAND)
-        {
-            ((MainWindow *)m_vUIWidgets[ID_MAIN])->BackToVideoStream();
-        }
     }
 }
 

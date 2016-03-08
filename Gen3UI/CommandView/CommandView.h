@@ -3,10 +3,10 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
-#include "Common/Button.h"
+#include "UI/Common/Button.h"
 #include <QLabel>
 #include "CustomCombobox.h"
-#include "AppListInterface.h"
+#include "AppData/AppListInterface.h"
 
 
 typedef struct CommandInformation
@@ -39,7 +39,7 @@ private:
     void AddMenu(int iMenuId,std::string strName);
     void AddSubCommand(int iParentId,int iCmdId,std::string strName);
 
-    void RefreshCommandList(tagCmdInf *pMenu = NULL);
+    void RefreshCommandList(tagCmdInf *pMenu = nullptr);
 
     tagCmdInf *m_pCurrentMenu;
 

@@ -1,5 +1,5 @@
 #include "AppListView.h"
-//#include "Notify/Notify.h"
+#include "Notify/Notify.h"
 
 CAppListView::CAppListView(AppListInterface * pList,QWidget *parent) : QWidget(parent)
 {
@@ -44,10 +44,9 @@ CAppListView::~CAppListView()
 
 void CAppListView::onChildAppSelected(int funcId)
 {
-
     if(funcId==-1){
-        //Notify n(this);
-        //n.showDlg();
+        Notify n(this);
+        n.showDlg();
     }
     else if(funcId==-2){
 
@@ -56,7 +55,6 @@ void CAppListView::onChildAppSelected(int funcId)
     {
          m_pList->OnAppActivated(funcId);
     }
-
 }
 
 void CAppListView::InsertChildApp(int index,int appId,QString text,QString on,QString off,bool bPaint)
@@ -111,4 +109,5 @@ void CAppListView::showEvent(QShowEvent * e)
             InsertChildApp(2+i,vAppIDs.at(i),vAppNames.at(i).c_str(),vIconPath.at(i).c_str(),vIconPath.at(i).c_str(),true);
         }
     }
+    //this->show();
 }

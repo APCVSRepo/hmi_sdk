@@ -1,5 +1,5 @@
 #include "MainWidget.h"
-#include "Config/Config.h"
+//#include "../Config/Config.h"
 
 #define MARGIN 10
 
@@ -106,8 +106,94 @@ void MainWidget::SetAppName(QString strName)
 void MainWidget::BtnMenuClickedSlots()
 {
     m_pList->getActiveApp()->OnShowCommand();
+    /*
+    m_pCommandList->SetPos(m_pMenuBtn->geometry().left(),m_pMenuBtn->geometry().top(),m_pMenuBtn->geometry().width()*2.5,0);
+    m_CmdVec.clear();
+
+    std::vector<SMenuCommand> CmdList = m_pList->getActiveApp()->getCommandList();
+    std::vector<SMenuCommand> TmpCmdList;
+    for(unsigned int i = 0; i < CmdList.size(); i++)
+    {
+        if(0 != CmdList.at(i).i_cmdID && 0 == CmdList.at(i).i_menuID)
+        {
+            AddCommand(CmdList.at(i).i_cmdID,CmdList.at(i).str_menuName);
+        }
+        else if(0 == CmdList.at(i).i_cmdID && 0 != CmdList.at(i).i_menuID)
+        {
+            AddMenu(CmdList.at(i).i_menuID,CmdList.at(i).str_menuName);
+
+            TmpCmdList = m_pList->getActiveApp()->getCommandList(CmdList.at(i).i_menuID);
+            for(unsigned int j = 0; j < TmpCmdList.size(); j++)
+            {
+                AddSubCommand(CmdList.at(i).i_menuID,TmpCmdList.at(j).i_cmdID,TmpCmdList.at(j).str_menuName.data());
+            }
+        }
+    }
+    m_pCurrentMenu = nullptr;
+    RefreshCommandList(0);
+    */
 }
 
+/*
+void MainWidget::AddCommand(int iCmdId,std::string strName)
+{
+    tagCmdInf tempCmdInf;
+    tempCmdInf.strCmd = strName;
+    tempCmdInf.bMenu = false;
+    tempCmdInf.iId = iCmdId;
+    tempCmdInf.iParentId = 0;
+    m_CmdVec.push_back(tempCmdInf);
+}
+
+void MainWidget::AddMenu(int iMenuId,std::string strName)
+{
+    tagCmdInf tempCmdInf;
+    tempCmdInf.strCmd = strName;
+    tempCmdInf.bMenu = true;
+    tempCmdInf.iId = iMenuId;
+    tempCmdInf.iParentId = 0;
+    m_CmdVec.push_back(tempCmdInf);
+}
+
+void MainWidget::AddSubCommand(int iParentId,int iCmdId,std::string strName)
+{
+    tagCmdInf tempCmdInf;
+    tempCmdInf.strCmd = strName;
+    tempCmdInf.bMenu = false;
+    tempCmdInf.iId = iCmdId;
+    tempCmdInf.iParentId = iParentId;
+    for(int i = 0;i != m_CmdVec.size();++i)
+    {
+        if(m_CmdVec[i].bMenu && m_CmdVec[i].iId == iParentId)
+        {
+            m_CmdVec[i].CmdVec.push_back(tempCmdInf);
+            return;
+        }
+    }
+}
+
+
+void MainWidget::RefreshCommandList(tagCmdInf *pMenu)
+{
+    m_pCommandList->ClearAllItem();
+
+    if(pMenu == nullptr)
+    {
+        for(int i = 0;i != m_CmdVec.size();++i)
+        {
+            m_pCommandList->AddListItem(m_CmdVec[i].strCmd.c_str(),m_CmdVec[i].bMenu);
+        }
+    }
+    else
+    {
+        for(int i = 0;i != pMenu->CmdVec.size();++i)
+        {
+            m_pCommandList->AddListItem(pMenu->CmdVec[i].strCmd.c_str(),pMenu->CmdVec[i].bMenu);
+        }
+    }
+    m_pCommandList->show();
+}
+*/
 void MainWidget::SoftBtnClickedSlot(int iSoftBtnID)
 {
     if(iSoftBtnID != 0)
@@ -116,13 +202,60 @@ void MainWidget::SoftBtnClickedSlot(int iSoftBtnID)
     }
 }
 
+void MainWidget::mousePressEvent(QMouseEvent * event)
+{
+    //HideCommandList();
+}
+
+void MainWidget::OnCommandListItemClicked(QListWidgetItem *pItem)
+{
+    /*
+    int iRow = m_pCommandList->row(pItem);
+    HideCommandList();
+
+    if(m_pCurrentMenu == nullptr)
+    {
+        if(iRow == 0)
+        {
+            //emit ExitApp();
+            m_pList->OnAppExit();
+        }
+        else
+        {
+            if(m_CmdVec[iRow].bMenu)
+            {
+                m_pCurrentMenu = &m_CmdVec[iRow];
+                RefreshCommandList(m_pCurrentMenu);
+            }
+            else
+            {
+                //emit CommandClick(m_CmdVec[iRow].iId);
+                m_pList->getActiveApp()->OnCommandClick(m_CmdVec[iRow].iId);
+            }
+        }
+    }
+    else
+    {
+        //emit CommandClick(m_pCurrentMenu->CmdVec[iRow].iId);
+        m_pList->getActiveApp()->OnCommandClick(m_pCurrentMenu->CmdVec[iRow].iId);
+    }
+    */
+}
+/*
+void MainWidget::HideCommandList()
+{
+
+    m_pCommandList->ClearAllItem();
+    m_pCommandList->hide();
+
+}
+*/
 void MainWidget::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
 {
     int iBtnCount = vec_softButtons.size() > 3?3:vec_softButtons.size();
     for(int i = 0;i != iBtnCount;++i)
     {
         m_pSoftBtn[i].setText(vec_softButtons[i].str_text.c_str());
-        m_pSoftBtn[i].setId(vec_softButtons[i].i_softButtonID);
     }
 }
 

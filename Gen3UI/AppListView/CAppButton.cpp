@@ -26,7 +26,7 @@ void CAppButton::setIcon(const QString on,const QString off,bool bPaint)
             QUrl qurl(on);
             img_on.load(":images/app_on.png");
             img_on = img_on.scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-            QImage onImage(qurl.path());
+            QImage onImage(qurl.path(QUrl::FullyDecoded));
             //onImage = onImage.scaled(height()*0.4,height()*0.4);
             do
             {
@@ -44,7 +44,7 @@ void CAppButton::setIcon(const QString on,const QString off,bool bPaint)
             QUrl qurl(off);
             img_off.load(":images/app_off.png");
             img_off = img_off.scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-            QImage offImage(qurl.path());
+            QImage offImage(qurl.path(QUrl::FullyDecoded));
             //offImage = offImage.scaled(width()*0.6,height()*0.6,Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             do{
                 QPainter painter(&img_off);

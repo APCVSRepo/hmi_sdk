@@ -1,4 +1,4 @@
-﻿#include "Gen3UIManager.h"
+﻿#include "UIManager.h"
 #include "AppData/AppList.h"
 #include <pthread.h>
 #include <QThread>
@@ -14,17 +14,13 @@
 #include "AudioTrans/MspVRAudio.h"
 #endif
 
-#include "AppListView/AppListView.h"
-#include "Show/MainWidget.h"
-#include "CommandView/CommandView.h"
-
-CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
+CUIManager::CUIManager(AppListInterface * pList, QWidget *parent) :
     QWidget(parent)
 {
     m_pList = pList;
 }
 
-CGen3UIManager::~CGen3UIManager()
+CUIManager::~CUIManager()
 {
     for(int i = 0; i < ID_UI_MAX; i++)
     {
@@ -41,21 +37,21 @@ CGen3UIManager::~CGen3UIManager()
 #endif
 }
 
-void CGen3UIManager::initAppHMI()
+void CUIManager::initAppHMI()
 {
-    MainWindow * pMain = new MainWindow(m_pList);
-    QWidget* pParent = pMain->CenterWidget();
-    //pMain->show();
+    MainMenu * pMain = new MainMenu(m_pList);
+	QWidget* pParent = pMain->CenterWidget();
+    pMain->show();
     //MainWidget *pNewShow = new MainWidget(m_pList,pMain);
     m_vUIWidgets[ID_MAIN] = pMain;
-    m_vUIWidgets[ID_APPLINK] = new CAppListView(m_pList, pParent);
+    m_vUIWidgets[ID_APPLINK] = new AppLinkMenu(m_pList, pMain);
     m_vUIWidgets[ID_ALERT]=new CAlertUI(m_pList, pParent);
     m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pList, pParent);
     m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pList, pParent);
     m_vUIWidgets[ID_CHOICESET]=new Choiceset(m_pList, pParent);
-    m_vUIWidgets[ID_COMMAND]=new CCommandView(m_pList, pParent);
+    m_vUIWidgets[ID_COMMAND]=new Command(m_pList, pParent);
     m_vUIWidgets[ID_SCROLLMSG]=new CScrollMsg(m_pList, pParent);
-    m_vUIWidgets[ID_SHOW] = new MainWidget(m_pList,pParent);
+    m_vUIWidgets[ID_SHOW] = new Show(m_pList, pParent);
     m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
     m_vUIWidgets[ID_SLIDER]=new Slider(m_pList, pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;
@@ -78,32 +74,32 @@ void CGen3UIManager::initAppHMI()
     //emit finishMainHMI();
 }
 
-void CGen3UIManager::onAppActive()
+void CUIManager::onAppActive()
 {
     QString qs = AppControl->getAppName().c_str();
-    //((MainMenu *)m_vUIWidgets[ID_MAIN])->SetTitle(qs);
+    ((MainMenu *)m_vUIWidgets[ID_MAIN])->SetTitle(qs);
     //((MainWidget *)m_vUIWidgets[ID_MAIN])->SetAppName(qs);
 }
 
-void CGen3UIManager::onAppStop()
+void CUIManager::onAppStop()
 {
 
 }
 
 //show app
-void CGen3UIManager::onAppShow(int type)
+void CUIManager::onAppShow(int type)
 {
     if((type >= 0) && (type < ID_UI_MAX))
         emit onAppShowSignal(type);
 }
 
-void CGen3UIManager::onVideoStreamStart()
+void CUIManager::onVideoStreamStart()
 {
     fflush(stdout);
     emit onVideoStartSignal();
 }
 
-void CGen3UIManager::onVideoStartSlots()
+void CUIManager::onVideoStartSlots()
 {
     fflush(stdout);
     std::string str_url = AppControl->getUrlString();
@@ -113,18 +109,17 @@ void CGen3UIManager::onVideoStartSlots()
     pVideoStream->startStream();
 }
 
-void CGen3UIManager::onVideoStreamStop()
+void CUIManager::onVideoStreamStop()
 {
     emit onVideoStopSignal();
 }
 
-void CGen3UIManager::onVideoStopSlots()
+void CUIManager::onVideoStopSlots()
 {
-    LOGI("--CGen3UIManager::onVideoStopSlots");
     ((VideoStream *)m_vUIWidgets[ID_VIDEOSTREAM])->stopStream();
 }
 
-void CGen3UIManager::AppShowSlot(int type)
+void CUIManager::AppShowSlot(int type)
 {
     if(ID_MEDIACLOCK == type)
     {
@@ -138,17 +133,17 @@ void CGen3UIManager::AppShowSlot(int type)
     {
         if(m_iCurUI != ID_MAIN)
         {
-            LOGI("---m_iCurUI=%d hide",m_iCurUI);
             m_vUIWidgets[m_iCurUI]->hide();
         }
         //m_vUIWidgets[m_iCurUI]->hide();
         m_iCurUI = type;
+
         m_vUIWidgets[m_iCurUI]->show();
     }
 }
 
 #include <QCoreApplication>
-void CGen3UIManager::waitMSec(int ms)
+void CUIManager::waitMSec(int ms)
 {
     QTime t;
     t.start();
@@ -156,7 +151,7 @@ void CGen3UIManager::waitMSec(int ms)
         QCoreApplication::processEvents();
 }
 
-void CGen3UIManager::tsSpeak(int VRID, std::string strText)
+void CUIManager::tsSpeak(int VRID, std::string strText)
 {
     bool ret = ts.speak(strText.c_str());
     /*
@@ -191,7 +186,7 @@ void CGen3UIManager::tsSpeak(int VRID, std::string strText)
     }
 }
 
-void CGen3UIManager::OnEndAudioPassThru()
+void CUIManager::OnEndAudioPassThru()
 {
     ((CAudioPassThru *)m_vUIWidgets[ID_AUDIOPASSTHRU])->onButtonClickedSlots(PERFORMAUDIOPASSTHRU_CANCEL);
 }

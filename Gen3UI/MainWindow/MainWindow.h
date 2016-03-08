@@ -6,8 +6,8 @@
 #include "Common/MenuButton.h"
 #include <QTimer>
 #include <QTextEdit>
-#include "AppListInterface.h"
-//#include "VideoStream/VideoStream.h"
+#include <AppData/AppListInterface.h>
+#include "VideoStream/VideoStream.h"
 
 
 class MainWindow : public QWidget
@@ -50,7 +50,7 @@ public slots:
 
     void OnVideoStreamMenuBtnClicked();
 private:
-    //VideoStream* videoWidget;
+    VideoStream* videoWidget;
 
     QLabel *m_pIcon;
     QLabel *m_pTime;

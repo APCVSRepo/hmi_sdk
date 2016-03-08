@@ -3,8 +3,8 @@
 
 #include <QWidget>
 #include "CAppButton.h"
-#include "AppListInterface.h"
-//#include "UI/Common/AppBase.h"
+#include "AppData/AppListInterface.h"
+#include "UI/Common/AppBase.h"
 
 class CAppListView : public QWidget
 {

@@ -1,8 +1,8 @@
 #include "CommandView.h"
-#include "UI/Common/AppBase.h"
+#include "Common/AppBase.h"
 
 CCommandView::CCommandView(AppListInterface *pList,QWidget *parent) :
-    QWidget(parent),m_pCurrentMenu(nullptr)
+    QWidget(parent),m_pCurrentMenu(NULL)
 {
     int iHeight = 0;
     if(parent)
@@ -99,7 +99,7 @@ void CCommandView::RefreshCommandList(tagCmdInf *pMenu)
 {
     m_pCommandList->ClearAllItem();
 
-    if(pMenu == nullptr)
+    if(pMenu == NULL)
     {
         for(int i = 0;i != m_CmdVec.size();++i)
         {
@@ -140,7 +140,7 @@ void CCommandView::showEvent(QShowEvent * e)
             }
         }
     }
-    m_pCurrentMenu = nullptr;
+    m_pCurrentMenu = NULL;
 
     RefreshCommandList();
 
@@ -156,7 +156,7 @@ void CCommandView::OnCommandListItemClicked(QListWidgetItem *pItem)
 {
     int iRow = m_pCommandList->row(pItem);
 
-    if(m_pCurrentMenu == nullptr)
+    if(m_pCurrentMenu == NULL)
     {
         if(iRow == 0)
         {

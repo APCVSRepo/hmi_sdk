@@ -38,7 +38,7 @@ CustomCombobox::CustomCombobox(int iMaxHeight,bool bUp,QWidget *parent) : QListW
 
     connect(&m_scrollWidget,SIGNAL(valueChanged(int)),this,SLOT(OnScrollBarValueChange(int)));
 
-    connect(this,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(OnItemClicked(QListWidgetItem*)));
+    //connect(this,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(OnItemClicked(QListWidgetItem*)));
 }
 
 CustomCombobox::~CustomCombobox()
@@ -48,7 +48,7 @@ CustomCombobox::~CustomCombobox()
 
 void CustomCombobox::ClearAllItem()
 {
-    QListWidgetItem *pTempItem = nullptr;
+    QListWidgetItem *pTempItem = NULL;
     while(count() != 0)
     {
         pTempItem = item(0);

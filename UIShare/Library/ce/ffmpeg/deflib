@@ -1,0 +1,27 @@
+#!/bin/bash
+
+LIST_FFMPEG_LIB="
+	avutil-52
+	avdevice-55
+	avformat-55
+	avfilter-3
+	avcodec-55
+	swscale-2
+	swresample-0
+"
+
+def_all_libs(){
+ for opt;do
+    pexports  $opt.dll > $opt.def
+    lib /machine:ARM  /def:$opt.def  /out:$opt.lib
+ done
+}
+
+def_all_libs  $LIST_FFMPEG_LIB
+if [ $? -eq 0 ]; then
+  echo "done
+else
+  exit 0
+fi
+
+

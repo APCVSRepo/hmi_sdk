@@ -1,21 +1,22 @@
 ﻿#ifndef CGEN3UIMANAGER_H
 #define CGEN3UIMANAGER_H
-#include "UI/Alert/AlertUI.h"
-#include "UI/AudioPassThru/AudioPassThru.h"
-#include "UI/Choiceset/Choiceset.h"
-#include "UI/Choiceset/ChoicesetVR.h"
-#include "UI/Command/Command.h"
-#include "UI/ScrollableMessage/ScrollMsg.h"
-#include "UI/Show/Show.h"
-#include "UI/Config/Config.h"
-#include "UI/Slider/Slider.h"
-#include "UI/Notify/Notify.h"
-#include "UI/Common/AppBase.h"
-#include "UI/TextSpeech/textspeech.h"
-#include "UI/UIInterface.h"
-#include "AppData/AppListInterface.h"
+//#include "UI/Alert/AlertUI.h"
+//#include "UI/AudioPassThru/AudioPassThru.h"
+//#include "UI/Choiceset/Choiceset.h"
+//#include "UI/Choiceset/ChoicesetVR.h"
+//#include "UI/Command/Command.h"
+//#include "UI/ScrollableMessage/ScrollMsg.h"
+//#include "UI/Show/Show.h"
+//#include "UI/Config/Config.h"
+//#include "UI/Slider/Slider.h"
+//#include "UI/Notify/Notify.h"
+//#include "UI/Common/AppBase.h"
+//#include "UI/TextSpeech/textspeech.h"
+#include "UIInterface.h"
+#include "AppListInterface.h"
 #include "QMessageBox"
-#include "Gen3UI/MainWindow/MainWindow.h"
+//#include "Gen3UI/MainWindow/MainWindow.h"
+
 
 #ifdef SDL_SUPPORT_LIB
 #include "AudioTrans/MspVRAudio.h"
@@ -64,7 +65,7 @@ private:
 #ifdef SDL_SUPPORT_LIB
     msp_vr_audio *m_MspVR;
 #endif
-    TextSpeech ts;
+    //TextSpeech ts;
     void waitMSec(int ms);
 };
 

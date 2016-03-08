@@ -4,9 +4,6 @@
 #include <qlabel.h>
 #include "Common/AppBase.h"
 #include "Common/Button.h"
-//#include "CustomCombobox.h"
-
-#include "Show/Show.h"
 
 
 
@@ -19,14 +16,11 @@ public:
 
     void SetAppName(QString strName);
 protected:
-    virtual void mousePressEvent(QMouseEvent * event);
     virtual void showEvent(QShowEvent * e);
 signals:
     void ExitApp();
     void CommandClick(int iCmdId);
 public slots:
-    // 列表框点击响应槽
-    void OnCommandListItemClicked(QListWidgetItem *pItem);
     // 菜单点击相应槽
     void BtnMenuClickedSlots();
     // 软按键点击相应槽

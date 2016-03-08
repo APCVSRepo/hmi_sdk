@@ -67,7 +67,7 @@ void CustomComboboxItem::SetBkPic(QString strNormalPicPath,QString strPressPicPa
 
 void CustomComboboxItem::ChangeBkPic(int iFlag)
 {    
-    QPixmap *pPixmap = nullptr;
+    QPixmap *pPixmap = NULL;
     if(iFlag != m_iBkState)
     {
         if(iFlag == NORMAL_STATE)

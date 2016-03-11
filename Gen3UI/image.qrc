@@ -95,5 +95,11 @@
         <file>images/MediaShow/source_normal.png</file>
         <file>images/MediaShow/source_press.png</file>
         <file>images/MediaShow/split.png</file>
+        <file>images/choice_item_normal.png</file>
+        <file>images/choice_item_press.png</file>
+        <file>images/choicevr_back.png</file>
+        <file>images/choicevr_title.png</file>
+        <file>images/alert_softbtn_normal.png</file>
+        <file>images/alert_softbtn_press.png</file>
     </qresource>
 </RCC>

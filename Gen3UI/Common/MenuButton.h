@@ -11,6 +11,7 @@ public:
     virtual void setIcon(const QString on,const QString off);
     virtual void setIcon(QImage on,QImage off);
     virtual void setActive(bool active);
+    std::string Text();
 protected:
     virtual void paintEvent(QPaintEvent *);
 private:

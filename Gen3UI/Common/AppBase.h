@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <AppListInterface.h>
+#include <QLineEdit>
 
 #define AppControl m_pList->getActiveApp()
 
@@ -29,6 +30,7 @@ public:
     ~AppBase();
 
     static void SetEdlidedText(QLabel *pLabel,QString strText,int iWidth);
+    static void SetEdlidedText(QLineEdit *pEdit,QString strText,int iWidth);
 protected:
     //virtual void setTitle(QString title){((MainMenu*)parent()->parent()->parent())->SetTitle(title);}
 

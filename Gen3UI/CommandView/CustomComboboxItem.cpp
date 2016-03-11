@@ -104,6 +104,12 @@ void CustomComboboxItem::mouseReleaseEvent(QMouseEvent *event)
 {
     ChangeBkPic(NORMAL_STATE);
     emit ItemClicked(this);
+    emit ItemClicked(m_iIndex);
+}
+
+void CustomComboboxItem::SetIndex(int iIndex)
+{
+    m_iIndex = iIndex;
 }
 
 

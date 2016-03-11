@@ -85,3 +85,8 @@ void MenuButton::paintEvent(QPaintEvent *e)
     QRectF rect=QRectF(0,1.0*height()*15/24,width(),height()/3);
     painter.drawText(rect,m_text,QTextOption(Qt::AlignCenter));
 }
+
+std::string MenuButton::Text()
+{
+    return m_text.toStdString();
+}

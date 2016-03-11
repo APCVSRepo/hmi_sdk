@@ -24,7 +24,6 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
     QWidget(parent),pAVFormatContext(NULL),pAVFrame(NULL),pSwsContext(NULL)
 #endif
 {
-    /*
     m_pList = pList;
 
     setWindowFlags(Qt::FramelessWindowHint);
@@ -95,7 +94,6 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
     m_pTimer = new QTimer(this);
     m_pTimer->start(1000);
     connect(m_pTimer,SIGNAL(timeout()),this,SLOT(onUpdateTime()));
-    */
 }
 
 

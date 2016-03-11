@@ -20,6 +20,8 @@
 //#include "Show/MainWidget.h"
 #include "CommandView/CommandView.h"
 #include "Show/MediaShow.h"
+#include "Alert/AlertView.h"
+#include "ChoiceSet/ChoiceSet.h"
 
 CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
     QWidget(parent)
@@ -56,10 +58,10 @@ void CGen3UIManager::initAppHMI()
     //MainWidget *pNewShow = new MainWidget(m_pList,pMain);
     m_vUIWidgets[ID_MAIN] = pMain;
     m_vUIWidgets[ID_APPLINK] = new CAppListView(m_pList, pParent);
-    //m_vUIWidgets[ID_ALERT]=new CAlertUI(m_pList, pParent);
+    m_vUIWidgets[ID_ALERT]=new AlertView(m_pList, pParent);
     //m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pList, pParent);
     //m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pList, pParent);
-    //m_vUIWidgets[ID_CHOICESET]=new Choiceset(m_pList, pParent);
+    m_vUIWidgets[ID_CHOICESET] = new CChoiceSet(m_pList, pParent);
     m_vUIWidgets[ID_COMMAND]=new CCommandView(m_pList, pParent);
     //m_vUIWidgets[ID_SCROLLMSG]=new CScrollMsg(m_pList, pParent);
     m_vUIWidgets[ID_SHOW] = new CMediaShow(m_pList,pParent);

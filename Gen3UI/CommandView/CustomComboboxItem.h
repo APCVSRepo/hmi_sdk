@@ -21,14 +21,15 @@ public:
     enum BkState{NORMAL_STATE = 0,PRESS_STATE,HOVER_STATE};
     void ChangeBkPic(int iFlag);
 
-    QString GetItemText();
-
+    QString GetItemText();    
+    void SetIndex(int iIndex);
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 
 signals:
     void ItemClicked(CustomComboboxItem *pItem);
+    void ItemClicked(int iIndex);
 private:
     QLabel *m_pIconLab;
     QLabel *m_pMenuArrowLab;
@@ -40,6 +41,7 @@ private:
     QString m_strPressBk;
 
     int m_iBkState;
+    int m_iIndex;
 };
 
 #endif // CUSTOMCOMBOBOXITEM_H

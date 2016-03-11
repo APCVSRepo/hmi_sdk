@@ -370,17 +370,21 @@ void AppData::OnPerformAudioPassThru(int code)
     ShowPreviousUI();
 }
 
-void AppData::OnPerformInteraction(int code, int row)
+void AppData::OnPerformInteraction(int code, int choiceID)
 {
     Json::Value jsonChoice=m_json_interaction["Choiceset"];
     Json::Value jsonChoiceVR;
     bool isVrMode=m_json_interaction.isMember("ChoicesetVR");
     if(isVrMode)
         jsonChoiceVR =m_json_interaction["ChoicesetVR"];
+    /*
     int choiceID=0;
     if(jsonChoice.isMember("choiceSet")){
         choiceID=jsonChoice["choiceSet"][row]["choiceID"].asInt();
     }
+    */
+
+    /*
     if(isVrMode){
         if(code==RESULT_TIMED_OUT){
             if(jsonChoiceVR.isMember("timeoutPrompt")){
@@ -399,6 +403,7 @@ void AppData::OnPerformInteraction(int code, int row)
             }
         }
     }
+    */
 
     ToSDL->OnPerformInteraction(code, m_json_interaction["id"].asInt(), choiceID);
     ShowPreviousUI();

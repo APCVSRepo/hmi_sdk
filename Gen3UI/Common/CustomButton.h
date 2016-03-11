@@ -21,6 +21,7 @@ public:
 
     void SetTextStyle(std::string strQtStyle);
     void SetText(std::string strText,int iAlign = Qt::AlignCenter);
+    std::string Text();
     void SetBackPicPath(std::string strNormalPic,std::string strPressPic = "",std::string strHoverPic = "");
     void SetLeftIcon(std::string strIcon);
     void SetRightIcon(std::string strIcon);
@@ -58,6 +59,7 @@ private:
     QTime m_pressedTime;
     QTimer *m_pCheckHoverTimer;
 
+    std::string m_Text;
     int m_iId;
     std::string m_strCustomName;
 };

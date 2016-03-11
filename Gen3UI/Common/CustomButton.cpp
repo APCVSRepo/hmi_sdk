@@ -53,11 +53,17 @@ void CCustomButton::SetTextStyle(std::string strQtStyle)
 
 void CCustomButton::SetText(std::string strText,int iAlign)
 {    
+    m_Text = strText;
     QFontMetrics qfm(m_pTextLab->font());
     QString strTemp(qfm.elidedText(strText.c_str(),Qt::ElideRight,width()));
     m_pTextLab->setText(strTemp);
     m_pTextLab->setAlignment((Qt::Alignment)iAlign);
     m_pTextLab->setAttribute(Qt::WA_TranslucentBackground,true);
+}
+
+std::string CCustomButton::Text()
+{
+    return m_Text;
 }
 
 void CCustomButton::SetPadding(int iPadding)

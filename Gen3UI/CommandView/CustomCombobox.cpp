@@ -17,6 +17,8 @@ CustomCombobox::CustomCombobox(int iMaxHeight,bool bUp,QWidget *parent) : QListW
 #endif
 
     setStyleSheet(cssString());
+
+
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setVerticalScrollBar(&m_scrollWidget);
     m_scrollWidget.init(m_iMaxHeight);

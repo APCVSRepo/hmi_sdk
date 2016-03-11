@@ -33,3 +33,9 @@ void AppBase::SetEdlidedText(QLabel *pLabel,QString strText,int iWidth)
     QFontMetrics qfm(pLabel->font());
     pLabel->setText(qfm.elidedText(strText,Qt::ElideRight,iWidth));
 }
+
+void AppBase::SetEdlidedText(QLineEdit *pEdit,QString strText,int iWidth)
+{
+    QFontMetrics qfm(pEdit->font());
+    pEdit->setText(qfm.elidedText(strText,Qt::ElideRight,iWidth));
+}

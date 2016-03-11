@@ -45,11 +45,15 @@ SOURCES += \
     Common/Button.cpp \
     Common/ScrollBar.cpp \
     Common/AppBase.cpp \
-    Show/CustomButton.cpp \
+    Common/CustomButton.cpp \
     Show/MainWidget.cpp \
     Show/MediaShow.cpp \
     Config/Config.cpp \
-    VideoStream/VideoStream.cpp
+    VideoStream/VideoStream.cpp \
+    Alert/AlertView.cpp \
+    Common/CustomListView.cpp \
+    ChoiceSet/ChoiceSet.cpp \
+    ChoiceSet/ChoiceSetVR.cpp
 
 HEADERS += \
     Gen3UIManager.h \
@@ -74,12 +78,16 @@ HEADERS += \
     Common/Button.h \
     Common/ScrollBar.h \
     Common/AppBase.h \
-    Show/CustomButton.h \
+    Common/CustomButton.h \
     Show/MainWidget.h \
     Show/MediaShow.h \
     Config/Config.h \
     main.h \
-    VideoStream/VideoStream.h
+    VideoStream/VideoStream.h \
+    Alert/AlertView.h \
+    Common/CustomListView.h \
+    ChoiceSet/ChoiceSet.h \
+    ChoiceSet/ChoiceSetVR.h
 
 unix {
     target.path = /usr/lib

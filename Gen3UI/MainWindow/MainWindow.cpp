@@ -1,10 +1,8 @@
 #include "MainWindow.h"
-//#include "Config/Config.h"
+#include "Config/Config.h"
 #include <QTime>
 //#include "Notify/Notify.h"
 
-const int ui_res_width = 800;
-const int ui_res_height = 480;
 
 MainWindow::MainWindow(AppListInterface * pList,QWidget *parent) : QWidget(parent),
     m_bInVideoStream(false)

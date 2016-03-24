@@ -4,5 +4,5 @@ SUBDIRS       = \
                 Gen3UI \
                 UIShare \
 
-hmi_sdk.depends += Gen3UI
+#hmi_sdk.depends += Gen3UI
 

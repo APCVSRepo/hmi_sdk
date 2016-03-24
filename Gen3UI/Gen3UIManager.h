@@ -19,7 +19,7 @@
 
 
 #ifdef SDL_SUPPORT_LIB
-#include "AudioTrans/MspVRAudio.h"
+//#include "AudioTrans/MspVRAudio.h"
 #endif
 
 class CGen3UIManager : public QWidget, public UIInterface
@@ -63,7 +63,7 @@ private:
     AppListInterface * m_pList;
 
 #ifdef SDL_SUPPORT_LIB
-    msp_vr_audio *m_MspVR;
+    //msp_vr_audio *m_MspVR;
 #endif
     //TextSpeech ts;
     void waitMSec(int ms);

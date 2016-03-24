@@ -216,8 +216,7 @@ ANDROID_EXTRA_LIBS +=$$PWD/Library/android/msp/libttsespeak.so
 }
 
 RESOURCES += \
-    Library/android/sdl/config/android.qrc \
-    Config/config.qrc
+    Library/android/sdl/config/android.qrc
 }
 
 

@@ -11,7 +11,7 @@
 #include <QDir>
 #ifdef SDL_SUPPORT_LIB
 #include "main.h"
-#include "AudioTrans/MspVRAudio.h"
+//#include "AudioTrans/MspVRAudio.h"
 #endif
 
 #include "VideoStream/VideoStream.h"
@@ -22,6 +22,8 @@
 #include "Show/MediaShow.h"
 #include "Alert/AlertView.h"
 #include "ChoiceSet/ChoiceSet.h"
+#include <QApplication>
+#include <QDesktopWidget>
 
 CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
     QWidget(parent)
@@ -46,12 +48,18 @@ CGen3UIManager::~CGen3UIManager()
 
 
 #ifdef SDL_SUPPORT_LIB
-    delete m_MspVR;
+    //delete m_MspVR;
 #endif
 }
 
 void CGen3UIManager::initAppHMI()
 {
+#ifdef ANDROID
+    UIConfig::loadResolution(QApplication::desktop()->width(),QApplication::desktop()->height()-30);
+#else
+    UIConfig::loadResolution(800,480);
+#endif
+
     MainWindow * pMain = new MainWindow(m_pList);
     QWidget* pParent = pMain->CenterWidget();
     //pMain->show();
@@ -84,7 +92,7 @@ void CGen3UIManager::initAppHMI()
     m_iCurUI = ID_MAIN;
 
 #ifdef SDL_SUPPORT_LIB
-    m_MspVR = new msp_vr_audio;
+    //m_MspVR = new msp_vr_audio;
 #endif
 //
     connect(this,SIGNAL(onAppShowSignal(int)),this,SLOT(AppShowSlot(int)));

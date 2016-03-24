@@ -1,12 +1,10 @@
 ﻿#include "HMI_Initial.h"
 #include <QTimer>
-#include <QDesktopWidget>
 #include "Connect/SDLConnector.h"
 #include <QApplication>
 #include <main.h>
 #include <QDir>
 #include <QFontDatabase>
-#include <QLibrary>
 
 typedef UIInterface *(*InitFunc)(AppListInterface *);
                 typedef void  (*CloseFunc)();
@@ -16,9 +14,11 @@ HMI_Initial::HMI_Initial():QObject(NULL)
 {
     m_appList = new AppList;
 
-
-    QLibrary myLib("Gen3UI");
-    InitFunc Init = (InitFunc)myLib.resolve("UILib_Init");
+    std::string strFilePath = GetUILibPath();
+    strFilePath += "Gen3UI";
+    LOGI("---%s",strFilePath.c_str());
+    m_UILib.setFileName(strFilePath.c_str());
+    InitFunc Init = (InitFunc)m_UILib.resolve("UILib_Init");
     if (Init)
     {
         m_uiManager = Init(m_appList);
@@ -39,8 +39,7 @@ HMI_Initial::~HMI_Initial()
     delete m_appList;
     SDLConnector::Close();
 
-    QLibrary myLib("/home/patrick/projects/AppLinkEmulater-build/hmi_sdk/bin/libGen3UI.so");
-    CloseFunc CloseUI = (CloseFunc)myLib.resolve("UILib_Close");
+    CloseFunc CloseUI = (CloseFunc)m_UILib.resolve("UILib_Close");
     if (CloseUI)
     {
         CloseUI();
@@ -127,4 +126,27 @@ void HMI_Initial::initSDL()
     pthread_create(&sdlthread,NULL,SDLStartThread,NULL);
 }
 #endif
+
+std::string HMI_Initial::GetUILibPath()
+{
+    const int iBuffLen = 512;
+    char aPathBuff[iBuffLen];
+    std::string strResult("");
+#ifdef WIN32
+    WCHAR wPathBuff[iBuffLen];
+    int iRet = GetModuleFileName(NULL,wPathBuff,iBuffLen);
+    //GetCurrentDirectory(iBuffLen,wPathBuff);
+    int len = WideCharToMultiByte(CP_ACP,0,wPathBuff,wcslen(wPathBuff),aPathBuff,iBuffLen,NULL,NULL);
+    strResult = aPathBuff;
+    int pos = strResult.find_last_of('\\',strResult.size()-1);
+    strResult.erase(pos,strResult.size()-1);
+    strResult += "/UILib/";
+
+#elif defined(__ANDROID__)
+    getcwd(aPathBuff,iBuffLen);
+    strResult = aPathBuff;
+    strResult += "/../lib/";
+#endif
+    return strResult;
+}
 

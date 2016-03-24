@@ -3,7 +3,6 @@
 #include <vector>
 #include <iostream>
 #include <pthread.h>
-//#include "Config/Config.h"
 
 #ifdef linux
 #include <sys/time.h>

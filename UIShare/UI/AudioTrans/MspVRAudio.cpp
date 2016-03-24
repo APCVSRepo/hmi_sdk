@@ -7,10 +7,12 @@
 #include <QAudioDeviceInfo>
 #include <QAudioFormat>
 #include "pthread.h"
-#include <unistd.h>
 #include "Config/Config.h"
 #ifdef WIN32
 #include <Windows.h>
+#endif
+#ifdef linux
+#include <unistd.h>
 #endif
 
 void logprint(char buf[])

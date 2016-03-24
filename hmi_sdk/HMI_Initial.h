@@ -5,6 +5,7 @@
 #include "UIInterface.h"
 //#include "UI/UIManager.h"
 //#include "Gen3UI/Gen3UIManager.h"
+#include <QLibrary>
 
 class HMI_Initial:public QObject
 {
@@ -28,12 +29,13 @@ private:
     static bool FileCopyToConfigdir(const char *dir_);
 #endif
 #endif
-
+    std::string GetUILibPath();
 private:
     AppList *m_appList;
     //CUIManager *m_uiManager;
     //CGen3UIManager *m_uiManager;
     UIInterface *m_uiManager;
+    QLibrary m_UILib;
 };
 
 #endif // APPMANAGER_H

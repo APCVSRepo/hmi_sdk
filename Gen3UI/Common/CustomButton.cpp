@@ -3,6 +3,7 @@
 
 std::string ChangeSlash(std::string strSrc)
 {
+#ifdef WIN32
     char *pTemp = new char[strSrc.size()+1];
     strcpy(pTemp,strSrc.c_str());
     for(int i = 0;i != strSrc.size();++i)
@@ -14,6 +15,7 @@ std::string ChangeSlash(std::string strSrc)
     }
     strSrc = pTemp;
     delete []pTemp;
+#endif
     return strSrc;
 }
 
@@ -152,7 +154,7 @@ void CCustomButton::SetLeftIcon(std::string strIcon)
     else
     {
         m_pLeftIconLab->setMinimumWidth(height());
-        QString strTemp = QString("padding:%1px;image:url(%2)").arg(height()*0.15).arg(ChangeSlash(QUrl(strIcon.c_str()).path().toStdString()).c_str());
+        QString strTemp = QString("background:transparent;border:transparent;padding:%1px;image:url(%2)").arg(height()*0.15).arg(ChangeSlash(QUrl(strIcon.c_str()).path().toStdString()).c_str());
         m_pLeftIconLab->setStyleSheet(strTemp);
     }
 }
@@ -166,7 +168,7 @@ void CCustomButton::SetRightIcon(std::string strIcon)
     else
     {
         m_pRightIconLab->setMinimumWidth(height());
-        QString strTemp = QString("padding:%1px;image:url(%2)").arg(height()*0.15).arg(ChangeSlash(QUrl(strIcon.c_str()).path().toStdString()).c_str());
+        QString strTemp = QString("background:transparent;border:transparent;padding:%1px;image:url(%2)").arg(height()*0.15).arg(ChangeSlash(QUrl(strIcon.c_str()).path().toStdString()).c_str());
         m_pRightIconLab->setStyleSheet(strTemp);
     }
 }

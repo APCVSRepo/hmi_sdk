@@ -14,7 +14,7 @@
 #include<Connect/Channel.h>
 #ifdef WIN32
 #ifdef WINCE
-#include "unistd.h"
+//#include "unistd.h"
 #else
 #include <direct.h>
 #endif
@@ -111,10 +111,10 @@ Json::Value Channel::ReadSpecifyJson(const char* fileName)
 
 #ifdef WIN32
     ::sprintf(szResult, "%s\\Config\\%s", szPath, fileName);
-#elif linux
-    ::sprintf(szResult, "%s/Config/%s", szPath, fileName);
 #elif ANDROID
     ::sprintf(szResult, "%s/%s", szPath,fileName);
+#elif linux
+    ::sprintf(szResult, "%s/Config/%s", szPath, fileName);
 #else
     ::sprintf(szResult, "%s/%s", szPath, fileName);
 #endif

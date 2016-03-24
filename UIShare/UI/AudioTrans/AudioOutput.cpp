@@ -1,7 +1,7 @@
 #include "AudioOutput.h"
 #include "Config/Config.h"
 #include <qendian.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 AudioOutput::AudioOutput(int smpl_rate,int smpl_size,QObject *parent):QObject(parent)
 {

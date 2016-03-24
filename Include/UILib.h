@@ -15,6 +15,17 @@
 #define UISHARED_EXPORT
 #endif
 
+
+/*
+#include <QtCore/qglobal.h>
+
+#if defined(HMIUI_LIBRARY)
+#  define UISHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define UISHARED_EXPORT Q_DECL_IMPORT
+#endif
+*/
+
 #include "AppListInterface.h"
 #include "UIInterface.h"
 

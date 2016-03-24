@@ -1,4 +1,5 @@
 ﻿#include <QApplication>
+#include <QDesktopWidget>
 #include <QTextCodec>
 
 //#include "UI/Config/Config.h"

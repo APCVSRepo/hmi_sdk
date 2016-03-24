@@ -24,10 +24,10 @@ MOC_DIR=temp/moc
 RCC_DIR=temp/rcc
 UI_DIR=temp/ui
 OBJECTS_DIR=temp/obj
-DESTDIR=../bin
+DESTDIR=../bin/UILib
 
-target.path=$$OUT_PWD/../bin
-INSTALLS+=target
+#target.path=$$OUT_PWD/../bin/UILib
+#INSTALLS+=target
 
 SOURCES += \
     Gen3UIManager.cpp \
@@ -192,6 +192,4 @@ LIBS += -L$$PWD/Library/android/msp -lttsespeak
 ANDROID_EXTRA_LIBS +=$$PWD/Library/android/msp/libttsespeak.so
 }
 
-RESOURCES += \
-    Config/config.qrc
 }

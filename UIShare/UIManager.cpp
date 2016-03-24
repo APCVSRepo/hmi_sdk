@@ -1,4 +1,6 @@
 ﻿#include "UIManager.h"
+#include <QApplication>
+#include <QDesktopWidget>
 //#include "AppData/AppList.h"
 //#include <pthread.h>
 #include <QThread>

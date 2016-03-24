@@ -1,9 +1,27 @@
 ﻿#include "global_first.h"
 #include "AppList.h"
+#include <QUrl>
 
 extern std::string string_To_UTF8(const std::string & str);
 extern bool IsTextUTF8(char* str, unsigned long long length);
 
+std::string ChangeSlash(std::string strSrc)
+{
+#ifdef WIN32
+    char *pTemp = new char[strSrc.size()+1];
+    strcpy(pTemp,strSrc.c_str());
+    for(int i = 0;i != strSrc.size();++i)
+    {
+        if(pTemp[i] == '\\')
+        {
+            pTemp[i] = '/';
+        }
+    }
+    strSrc = pTemp;
+    delete []pTemp;
+#endif
+    return strSrc;
+}
 
 AppList::AppList()
 {
@@ -134,7 +152,8 @@ Result AppList::recvFromServer(Json::Value jsonObj)
             {
                 if(iAppId == (*Iter)->m_iAppID)
                 {
-                    (*Iter)->m_strAppIconFilePath = jsonObj["params"]["syncFileName"]["value"].asString();
+                    QUrl iconPathUrl(jsonObj["params"]["syncFileName"]["value"].asString().c_str());
+                    (*Iter)->m_strAppIconFilePath = ChangeSlash(iconPathUrl.path().toStdString());
                     if(m_pCurApp == NULL)
                     {
                         m_pUIManager->onAppShow(ID_APPLINK);

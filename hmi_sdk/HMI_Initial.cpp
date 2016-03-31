@@ -16,7 +16,6 @@ HMI_Initial::HMI_Initial():QObject(NULL)
 
     std::string strFilePath = GetUILibPath();
     strFilePath += "Gen3UI";
-    LOGI("---%s",strFilePath.c_str());
     m_UILib.setFileName(strFilePath.c_str());
     InitFunc Init = (InitFunc)m_UILib.resolve("UILib_Init");
     if (Init)

@@ -228,7 +228,7 @@ bool VideoStream::Init()
 #ifdef VIDEO_STREAM_MEM
     int result=avformat_open_input(&pAVFormatContext,NULL,NULL,NULL);
 #else
-    int result=avformat_open_input(&pAVFormatContext,"tcp://127.0.0.1:5050",NULL,NULL);//"tcp://127.0.0.1:5050"//m_str_url.toUtf8().data()
+    int result=avformat_open_input(&pAVFormatContext,m_str_url.toUtf8().data(),NULL,NULL);//"tcp://127.0.0.1:5050"//m_str_url.toUtf8().data()
 #endif
     if (result<0){
         char errbuf[1024]={0};

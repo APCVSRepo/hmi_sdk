@@ -230,6 +230,7 @@ void SDLConnector::OnMediaClockResponse(int id,int code)
 
 void SDLConnector::OnScrollMessageResponse(int id, int reason)
 {
+    /*
     Json::Value root;
     if(reason == SCROLLMESSAGE_TIMEOUT || reason == SCROLLMESSAGE_CLICK_SOFTBUTTON){
         Json::Value result;
@@ -246,6 +247,13 @@ void SDLConnector::OnScrollMessageResponse(int id, int reason)
         error["date"] = data;
 		m_UI.sendError(id, error);
     }
+    m_UI.onSystemContext("MAIN");
+    */
+
+    Json::Value result;
+    result["code"] = reason;
+    result["method"] = "UI.ScrollableMessage";
+    m_UI.sendResult(id, result);
     m_UI.onSystemContext("MAIN");
 }
 
@@ -287,7 +295,7 @@ void SDLConnector::OnSliderResponse(int code, int sliderid, int sliderPosition)
         Json::Value result;
         result["code"] = code;
         result["method"] = "UI.Slider";
-        result["sliderPosition"] = sliderPosition + 1;
+        result["sliderPosition"] = sliderPosition;
         m_UI.sendResult(sliderid, result);
     }else{
 

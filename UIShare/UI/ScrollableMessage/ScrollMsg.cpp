@@ -327,7 +327,6 @@ void CScrollMsg::showEvent(QShowEvent * e)
             int size=m_jsonData["softButtons"].size();
             for (int i = 0; i < size; i++)
             {
-
                 addSoftButton(m_jsonData["softButtons"][i]["softButtonID"].asInt(),
                         m_jsonData["softButtons"][i]["text"].asString().c_str(),m_jsonData["softButtons"][i]["isHighlighted"].asBool());
                 connect(m_btnSoft[i], SIGNAL(clicked(int)), this, SLOT(onButtonClickedSlots(int)));

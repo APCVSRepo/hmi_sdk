@@ -24,6 +24,8 @@
 #include "ChoiceSet/ChoiceSet.h"
 #include <QApplication>
 #include <QDesktopWidget>
+#include "ScrollableMessage/ScollMsgView.h"
+#include "SliderView/SliderView.h"
 
 CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
     QWidget(parent)
@@ -62,8 +64,6 @@ void CGen3UIManager::initAppHMI()
 
     MainWindow * pMain = new MainWindow(m_pList);
     QWidget* pParent = pMain->CenterWidget();
-    //pMain->show();
-    //MainWidget *pNewShow = new MainWidget(m_pList,pMain);
     m_vUIWidgets[ID_MAIN] = pMain;
     m_vUIWidgets[ID_APPLINK] = new CAppListView(m_pList, pParent);
     m_vUIWidgets[ID_ALERT]=new AlertView(m_pList, pParent);
@@ -71,10 +71,10 @@ void CGen3UIManager::initAppHMI()
     //m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pList, pParent);
     m_vUIWidgets[ID_CHOICESET] = new CChoiceSet(m_pList, pParent);
     m_vUIWidgets[ID_COMMAND]=new CCommandView(m_pList, pParent);
-    //m_vUIWidgets[ID_SCROLLMSG]=new CScrollMsg(m_pList, pParent);
+    m_vUIWidgets[ID_SCROLLMSG] = new CScollMsgView(m_pList, pParent);
     m_vUIWidgets[ID_SHOW] = new CMediaShow(m_pList,pParent);
     //m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
-    //m_vUIWidgets[ID_SLIDER]=new Slider(m_pList, pParent);
+    m_vUIWidgets[ID_SLIDER] = new CSliderView(m_pList, pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;
     m_vUIWidgets[ID_VIDEOSTREAM] = new VideoStream(m_pList,pMain);
 
@@ -129,7 +129,6 @@ void CGen3UIManager::onVideoStreamStart()
 
 void CGen3UIManager::onVideoStartSlots()
 {
-
     fflush(stdout);
     std::string str_url = AppControl->getUrlString();
     //_D("%s\n",str_url.data());

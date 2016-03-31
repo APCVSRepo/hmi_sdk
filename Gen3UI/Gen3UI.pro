@@ -53,7 +53,10 @@ SOURCES += \
     Alert/AlertView.cpp \
     Common/CustomListView.cpp \
     ChoiceSet/ChoiceSet.cpp \
-    ChoiceSet/ChoiceSetVR.cpp
+    ChoiceSet/ChoiceSetVR.cpp \
+    ScrollableMessage/ScollMsgView.cpp \
+    SliderView/SliderView.cpp \
+    AudioPassThru/AudioPassView.cpp
 
 HEADERS += \
     Gen3UIManager.h \
@@ -87,7 +90,10 @@ HEADERS += \
     Alert/AlertView.h \
     Common/CustomListView.h \
     ChoiceSet/ChoiceSet.h \
-    ChoiceSet/ChoiceSetVR.h
+    ChoiceSet/ChoiceSetVR.h \
+    ScrollableMessage/ScollMsgView.h \
+    SliderView/SliderView.h \
+    AudioPassThru/AudioPassView.h
 
 unix {
     target.path = /usr/lib

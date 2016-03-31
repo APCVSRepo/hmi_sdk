@@ -101,5 +101,6 @@
         <file>images/choicevr_title.png</file>
         <file>images/alert_softbtn_normal.png</file>
         <file>images/alert_softbtn_press.png</file>
+        <file>images/slider_handle.png</file>
     </qresource>
 </RCC>

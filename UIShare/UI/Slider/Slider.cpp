@@ -92,7 +92,7 @@ void Slider::sliderClickedSlots( int code, int sliderPosition)
 {
     if(AppControl)
     {
-        AppControl->OnSliderResponse(code, sliderPosition);
+        AppControl->OnSliderResponse(code, sliderPosition+1);
     }
 }
 

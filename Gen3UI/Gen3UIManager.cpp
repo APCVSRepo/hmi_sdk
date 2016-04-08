@@ -7,7 +7,12 @@
 #include <unistd.h>
 #endif
 
+#if defined(WINCE)
+//#include<sys/stat.h>
+#include "Config/Config.h"
+#else
 #include<sys/stat.h>
+#endif
 #include <QDir>
 #ifdef SDL_SUPPORT_LIB
 #include "main.h"

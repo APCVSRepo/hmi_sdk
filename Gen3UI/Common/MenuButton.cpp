@@ -88,5 +88,9 @@ void MenuButton::paintEvent(QPaintEvent *e)
 
 std::string MenuButton::Text()
 {
+#if defined(WINCE)
+    return m_text.toLocal8Bit().data();
+#else
     return m_text.toStdString();
+#endif
 }

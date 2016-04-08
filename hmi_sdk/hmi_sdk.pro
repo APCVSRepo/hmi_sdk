@@ -11,7 +11,7 @@ win32:QT += axcontainer
 #DEFINES +=VIDEO_STREAM_WIDGET
 
 DEFINES += __STDINT_MACROS  #for ffmpeg
-#CONFIG  += wince  ##wince
+CONFIG  += wince  ##wince
 
 TARGET = AppLink_HMI
 TEMPLATE = app
@@ -131,8 +131,8 @@ INSTALLS +=qt_dll
 wince{
 HEADERS += \
     Include/global_first.h
-INCLUDEPATH += $$PWD/Include/pthread \
-               $$PWD/Include
+INCLUDEPATH += $$PWD/../Include/pthread \
+               $$PWD/../Include
 LIBS +=  $$PWD/Library/ce/pthread.lib
 LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
 pthread.path=$$OUT_PWD/bin
@@ -142,6 +142,9 @@ ffmpeg.files=$$PWD/Library/ce/ffmpeg/*.dll
 
 INSTALLS +=pthread
 INSTALLS+=ffmpeg
+qt_dll.path=$$DESTDIR
+qt_dll.files=$$(QT_DIR)/bin/*.dll
+INSTALLS +=qt_dll
 }
 
 

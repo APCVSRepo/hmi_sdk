@@ -7,6 +7,7 @@
 #include <QBoxLayout>
 #include <QMouseEvent>
 #include <QTime>
+#include <string>
 
 class CButton : public QWidget
 {

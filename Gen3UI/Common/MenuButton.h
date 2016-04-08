@@ -1,6 +1,7 @@
 #ifndef MENUBUTTON_H
 #define MENUBUTTON_H
 #include <QPushButton>
+#include <string>
 
 class MenuButton : public QPushButton
 {

@@ -7,6 +7,7 @@
 #include <QMouseEvent>
 #include <QTime>
 #include <QTimer>
+#include <string>
 
 std::string ChangeSlash(std::string strSrc);
 

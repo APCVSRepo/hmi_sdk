@@ -235,7 +235,11 @@ void CMediaShow::showEvent(QShowEvent * e)
         if (jsonParams.isMember("graphic"))
         {
             QUrl graphicUrl(jsonParams["graphic"]["value"].asString().c_str());
+#if defined(WINCE)
+            QString strStyle = QString("background:transparent;border-image:url(%1)").arg(ChangeSlash(graphicUrl.path().toLocal8Bit().data()).c_str());
+#else
             QString strStyle = QString("background:transparent;border-image:url(%1)").arg(ChangeSlash(graphicUrl.path().toStdString()).c_str());
+#endif
             m_pMusicPicLab->setStyleSheet(strStyle);
         }
         else

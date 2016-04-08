@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QBoxLayout>
 #include <QScrollBar>
+#include <string>
+#include <vector>
 
 class CustomListView : public QWidget
 {

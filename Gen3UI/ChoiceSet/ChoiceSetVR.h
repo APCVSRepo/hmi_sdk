@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <string>
 
 class CChoiceSetVR : public QWidget
 {

@@ -12,6 +12,7 @@ TARGET = Gen3UI
 TEMPLATE = lib
 
 CONFIG += ffmpeg
+CONFIG  += wince  ##wince
 
 DEFINES += HMIUI_LIBRARY __STDC_CONSTANT_MACROS
 
@@ -147,13 +148,13 @@ LIBS += -L$$PWD/Library/linux/ffmpeg  -lavcodec -lavdevice -lavfilter -lavformat
 wince{
 HEADERS += \
     Include/global_first.h
-INCLUDEPATH += $$PWD/Include/pthread \
-               $$PWD/Include
+INCLUDEPATH += $$PWD/../Include/pthread \
+               $$PWD/../Include
 LIBS +=  $$PWD/Library/ce/pthread.lib
 LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
-pthread.path=$$OUT_PWD/bin
+pthread.path=$$OUT_PWD/../bin
 pthread.files=$$PWD/Library/ce/*.dll
-ffmpeg.path=$$OUT_PWD/bin
+ffmpeg.path=$$OUT_PWD/../bin
 ffmpeg.files=$$PWD/Library/ce/ffmpeg/*.dll
 
 INSTALLS +=pthread

@@ -177,7 +177,11 @@ void CChoiceSet::OnListItemClicked(int iChoiceId)
 
 void CChoiceSet::OnEditChanged(QString strkey)
 {
+#if defined(WINCE)
+    m_pListView->ItemFilter(strkey.toLocal8Bit().data());
+#else
     m_pListView->ItemFilter(strkey.toStdString());
+#endif
 }
 
 void CChoiceSet::OnReturnBtnClicked()

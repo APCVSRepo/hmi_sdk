@@ -7,7 +7,7 @@ extern bool IsTextUTF8(char* str, unsigned long long length);
 
 std::string ChangeSlash(std::string strSrc)
 {
-#ifdef WIN32
+#if defined(WIN32) || defined(WINCE)
     char *pTemp = new char[strSrc.size()+1];
     strcpy(pTemp,strSrc.c_str());
     for(int i = 0;i != strSrc.size();++i)
@@ -153,7 +153,11 @@ Result AppList::recvFromServer(Json::Value jsonObj)
                 if(iAppId == (*Iter)->m_iAppID)
                 {
                     QUrl iconPathUrl(jsonObj["params"]["syncFileName"]["value"].asString().c_str());
+#if defined(WINCE)
+                    (*Iter)->m_strAppIconFilePath = ChangeSlash(iconPathUrl.path().toLocal8Bit().data());
+#else
                     (*Iter)->m_strAppIconFilePath = ChangeSlash(iconPathUrl.path().toStdString());
+#endif
                     if(m_pCurApp == NULL)
                     {
                         m_pUIManager->onAppShow(ID_APPLINK);

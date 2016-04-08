@@ -154,7 +154,11 @@ void CCustomButton::SetLeftIcon(std::string strIcon)
     else
     {
         m_pLeftIconLab->setMinimumWidth(height());
+#if defined(WINCE)
+        QString strTemp = QString("background:transparent;border:transparent;padding:%1px;image:url(%2)").arg(height()*0.15).arg(ChangeSlash(QUrl(strIcon.c_str()).path().toLocal8Bit().data()).c_str());
+#else
         QString strTemp = QString("background:transparent;border:transparent;padding:%1px;image:url(%2)").arg(height()*0.15).arg(ChangeSlash(QUrl(strIcon.c_str()).path().toStdString()).c_str());
+#endif
         m_pLeftIconLab->setStyleSheet(strTemp);
     }
 }
@@ -168,7 +172,11 @@ void CCustomButton::SetRightIcon(std::string strIcon)
     else
     {
         m_pRightIconLab->setMinimumWidth(height());
+#if defined(WINCE)
+        QString strTemp = QString("background:transparent;border:transparent;padding:%1px;image:url(%2)").arg(height()*0.15).arg(ChangeSlash(QUrl(strIcon.c_str()).path().toLocal8Bit().data()).c_str());
+#else
         QString strTemp = QString("background:transparent;border:transparent;padding:%1px;image:url(%2)").arg(height()*0.15).arg(ChangeSlash(QUrl(strIcon.c_str()).path().toStdString()).c_str());
+#endif
         m_pRightIconLab->setStyleSheet(strTemp);
     }
 }

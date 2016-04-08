@@ -3,9 +3,8 @@
 
 
 
-#if defined(WIN32)
-
-#if defined(HMIUI_LIBRARY)
+#if defined(WIN32) || defined(WINCE)
+#ifdef HMIUI_LIBRARY
 #define UISHARED_EXPORT __declspec(dllexport)
 #else
 #define UISHARED_EXPORT __declspec(dllimport)
@@ -19,7 +18,7 @@
 /*
 #include <QtCore/qglobal.h>
 
-#if defined(HMIUI_LIBRARY)
+#if defined(TESTLIB_LIBRARY)
 #  define UISHARED_EXPORT Q_DECL_EXPORT
 #else
 #  define UISHARED_EXPORT Q_DECL_IMPORT

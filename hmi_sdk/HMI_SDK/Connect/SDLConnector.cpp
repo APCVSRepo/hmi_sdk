@@ -90,6 +90,24 @@ bool SDLConnector::ConnectToSDL(IMessageInterface * pMsgHandler, INetworkStatus 
     pthread_create(&thread_connect,NULL,SDLConnector::ConnectThread,this);
     return m_sdl_is_connected;
 }
+bool SDLConnector::ConnectToVideoStream(IMessageInterface * pMsgHandler, std::string sIP, int iPort, INetworkStatus * pNetwork)
+{
+    m_pNetwork = pNetwork;
+    m_pMsgHandler = pMsgHandler;
+
+    m_VideoStream.SetCallback(pMsgHandler);
+
+    m_channels.push_back(&m_VideoStream);
+
+    m_sdl_is_connected = m_Sockets.ConnectToVS(&m_VideoStream, sIP, iPort, this);
+    LOGI("m_sdl_is_connected=====%d", m_sdl_is_connected);
+    if(m_sdl_is_connected)
+    {
+//        m_VideoStream.onOpen();
+    }
+
+    return m_sdl_is_connected;
+}
 
 void SDLConnector::Connect()
 {

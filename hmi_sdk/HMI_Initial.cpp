@@ -25,7 +25,7 @@ HMI_Initial::HMI_Initial():QObject(NULL)
     }
     else
     {
-        LOGE("can't load UILib");
+        LOGE("can't load UILib, %s", strFilePath.data());
     }
 
     QTimer::singleShot(500,this,SLOT(initApps()));
@@ -131,7 +131,7 @@ std::string HMI_Initial::GetUILibPath()
     const int iBuffLen = 512;
     char aPathBuff[iBuffLen];
     std::string strResult("");
-#ifdef WIN32
+#if defined(WIN32) || defined(WINCE)
     WCHAR wPathBuff[iBuffLen];
     int iRet = GetModuleFileName(NULL,wPathBuff,iBuffLen);
     //GetCurrentDirectory(iBuffLen,wPathBuff);
@@ -139,7 +139,7 @@ std::string HMI_Initial::GetUILibPath()
     strResult = aPathBuff;
     int pos = strResult.find_last_of('\\',strResult.size()-1);
     strResult.erase(pos,strResult.size()-1);
-    strResult += "/UILib/";
+    strResult += "\\UILib\\";
 
 #elif defined(__ANDROID__)
     getcwd(aPathBuff,iBuffLen);

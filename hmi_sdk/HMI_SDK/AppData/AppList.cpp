@@ -341,3 +341,9 @@ void AppList::appUnregistered(Json::Value jsonObj)
         }
     }
 }
+
+void AppList::IconnectToVS(IMessageInterface * pMsgHandler, std::string sIP, int iPort)
+{
+    LOGI("2");
+    ToSDL->ConnectToVideoStream(pMsgHandler,sIP,iPort);
+}

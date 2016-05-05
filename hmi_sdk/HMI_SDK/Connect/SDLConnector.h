@@ -9,6 +9,7 @@
 #include "Connect/UI.h"
 #include "Connect/VehicleInfo.h"
 #include "Connect/VR.h"
+#include "Connect/CVideoStream.h"
 #include "Connect/SocketsToSDL.h"
 #include <string>
 #include "json/json.h"
@@ -30,6 +31,7 @@ public:
     static void Close();
 
     bool ConnectToSDL(IMessageInterface * pMsgHandler, INetworkStatus * pNetwork = NULL);
+    bool ConnectToVideoStream(IMessageInterface * pMsgHandler, std::string sIP, int iPort, INetworkStatus * pNetwork = NULL);
     void ChangeMsgHandler(IMessageInterface * pMsgHandler);
     bool IsSDLConnected();
 
@@ -46,6 +48,7 @@ private:
     TTS m_TTS;
     VehicleInfo m_Vehicle;
     UI m_UI;
+    CVideoStream m_VideoStream;
 
     INetworkStatus * m_pNetwork;
     IMessageInterface * m_pMsgHandler;

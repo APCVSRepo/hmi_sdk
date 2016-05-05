@@ -11,7 +11,7 @@ win32:QT += axcontainer
 #DEFINES +=VIDEO_STREAM_WIDGET
 
 DEFINES += __STDINT_MACROS  #for ffmpeg
-CONFIG  += wince  ##wince
+#CONFIG  += wince  ##wince
 
 TARGET = AppLink_HMI
 TEMPLATE = app
@@ -48,7 +48,8 @@ SOURCES += \
     HMI_Initial.cpp \
     Tools/json/json_reader.cpp \
     Tools/json/json_value.cpp \
-    Tools/json/json_writer.cpp
+    Tools/json/json_writer.cpp \
+    HMI_SDK/Connect/CVideoStream.cpp
 
 
 INCLUDEPATH += $$PWD/   \
@@ -87,7 +88,8 @@ HEADERS  += \
     Tools/json/value.h \
     Tools/json/version.h \
     Tools/json/writer.h \
-    Include/AppCommon.h
+    Include/AppCommon.h \
+    HMI_SDK/Connect/CVideoStream.h
 
 
 INCLUDEPATH +=  $$PWD/../Include/ffmpeg \
@@ -132,7 +134,8 @@ wince{
 HEADERS += \
     Include/global_first.h
 INCLUDEPATH += $$PWD/../Include/pthread \
-               $$PWD/../Include
+               $$PWD/../Include \
+               $$PWD/../Include/wince
 LIBS +=  $$PWD/Library/ce/pthread.lib
 LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
 pthread.path=$$OUT_PWD/bin
@@ -188,6 +191,15 @@ ANDROID_EXTRA_LIBS +=$$PWD/Library/android/msp/libttsespeak.so
 RESOURCES += \
     Library/android/sdl/config/android.qrc \
     Config/config.qrc
+
+#QT += androidextras
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
+#DISTFILES += \
+#    ../android/AndroidManifest.xml \
+#    ../android/src/an/qt/useJar/ExtendsQtNative.java \
+#    ../android/src/an/qt/useJar/ExtendsQtSurface.java \
+#    ../android/src/an/qt/useJar/ExtendsQtWithJava.java
+
 }
 
 

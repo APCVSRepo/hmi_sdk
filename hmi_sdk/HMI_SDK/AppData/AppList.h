@@ -21,6 +21,8 @@ public:
     void OnAppExit();
     void ShowPreviousUI();
 
+    void IconnectToVS(IMessageInterface * pMsgHandler, std::string sIP, int iPort);
+
 public: //IMessageInterface
     Result onRequest(Json::Value);
     void onNotification(Json::Value);

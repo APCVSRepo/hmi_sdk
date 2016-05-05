@@ -204,43 +204,24 @@ void* StartSocketThread(void* p) {
 bool SocketsToSDL::ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * pNetwork)
 {
     m_pNetwork = pNetwork;
-
-	sockaddr_in toLocal;
-	memset(&toLocal, 0, sizeof(toLocal));
-	toLocal.sin_family = AF_INET;
-    toLocal.sin_addr.s_addr = inet_addr(m_sHost.c_str());
-    toLocal.sin_port = htons(m_iPort);
-
-    size_t namelen = sizeof(toLocal);
 	if (!CreateSignal())
 		return false;
 
-	int iNum = Channels.size();
+    int iNum = Channels.size();
     for (int i = 0; i < iNum; i++)
 	{
-		SOCK_HANDLE * pHandle = new SOCK_HANDLE();
-		pHandle->pDataReceiver = Channels[i];
-		pHandle->socket = socket(AF_INET, SOCK_STREAM, 0);
-		try
-		{
-			if (SOCKET_ERROR == ::connect(pHandle->socket, (const sockaddr *)&toLocal, namelen))
-				goto FAILED;
-#ifdef WIN32
-            {
-                u_long iMode = 1;
-                if (SOCKET_ERROR == ioctlsocket(pHandle->socket, FIONBIO, (u_long FAR*) &iMode))
-                    goto FAILED;
-            }
-#else
-            fcntl(pHandle->socket, F_SETFL, O_NONBLOCK);
-#endif
-		}
-		catch (...)
-		{
-			goto FAILED;
-		}
-		m_SocketHandles.push_back(pHandle);
-		Channels[i]->setSocketManager(this, pHandle);
+        LOGE("-------");
+        SOCK_HANDLE * pHandle = getNewSocketHandle(Channels[i], m_sHost, m_iPort);
+
+        if(pHandle != NULL)
+        {
+            m_SocketHandles.push_back(pHandle);
+            Channels[i]->setSocketManager(this, pHandle);
+        }
+        else
+        {
+            goto FAILED;
+        }
 	}
 
     m_bTerminate = false;
@@ -252,6 +233,85 @@ bool SocketsToSDL::ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * 
 FAILED:
     CloseSockets();
     return false;
+}
+
+SOCK_HANDLE * SocketsToSDL::getNewSocketHandle(IChannel * newChannel, std::string sIP, int iPort)
+{
+    sockaddr_in toLocal;
+    memset(&toLocal, 0, sizeof(toLocal));
+    toLocal.sin_family = AF_INET;
+    toLocal.sin_addr.s_addr = inet_addr(sIP.c_str());
+    toLocal.sin_port = htons(iPort);
+
+#ifdef WIN32
+    int namelen = sizeof(toLocal);
+#else
+    size_t namelen = sizeof(toLocal);
+#endif
+
+    SOCK_HANDLE * pHandle = new SOCK_HANDLE();
+    pHandle->pDataReceiver = newChannel;
+    pHandle->socket = socket(AF_INET, SOCK_STREAM, 0);
+    if(pHandle->socket==SOCKET_ERROR){
+        LOGE("SOCKET INVALID");
+    }
+    try
+    {
+        LOGE("=====1====%s:%d",sIP.c_str(), iPort);
+        if (SOCKET_ERROR == ::connect(pHandle->socket, (const sockaddr *)&toLocal, namelen))
+            goto FAILED;
+#ifdef WIN32
+        {
+            LOGE("=====2====");
+            u_long iMode = 1;
+            if (SOCKET_ERROR == ioctlsocket(pHandle->socket, FIONBIO, (u_long FAR*) &iMode))
+                goto FAILED;
+        }
+LOGE("=====3====");
+#else
+        fcntl(pHandle->socket, F_SETFL, O_NONBLOCK);
+#endif
+    }
+    catch (...)
+    {
+        goto FAILED;
+    }
+    LOGI("=====4====");
+    return pHandle;
+FAILED:
+#if defined(WIN32)
+    LOGE("=====5====");
+    closesocket(pHandle->socket);
+#else
+    close(pHandle->socket);
+#endif
+    delete pHandle;
+
+    LOGE("=====6====");
+    return NULL;
+}
+
+bool SocketsToSDL::ConnectToVS( IChannel * ChannelVS, std::string sIP, int iPort,INetworkStatus * pNetwork)
+{
+
+    m_pNetwork = pNetwork;
+
+    SOCK_HANDLE * pHandle = getNewSocketHandle(ChannelVS, sIP, iPort);
+
+    if(pHandle != NULL)
+    {
+        LOGI("=====7====");
+        m_SocketHandles.push_back(pHandle);
+        ChannelVS->setSocketManager(this, pHandle);
+        Notify();
+        LOGI("=====8====");
+        return true;
+    }
+    else
+    {
+        LOGI("=====NULL====");
+        return false;
+    }
 }
 
 void SocketsToSDL::SendData(void * pHandle, void * pData, int iLength)
@@ -326,7 +386,7 @@ bool SocketsToSDL::Receive(SOCK_HANDLE * pHandle)
 		}
 		if (bytes_read > 0)
 			pHandle->pDataReceiver->onReceiveData(buffer, bytes_read);
-		else if (SOCKET_ERROR == bytes_read)
+        else if (SOCKET_ERROR == bytes_read)
             break;
         bRet = true;
     } while (bytes_read > 0);

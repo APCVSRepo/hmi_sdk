@@ -12,7 +12,7 @@ TARGET = Gen3UI
 TEMPLATE = lib
 
 CONFIG += ffmpeg
-CONFIG  += wince  ##wince
+#CONFIG  += wince  ##wince
 
 DEFINES += HMIUI_LIBRARY __STDC_CONSTANT_MACROS
 
@@ -57,7 +57,9 @@ SOURCES += \
     ChoiceSet/ChoiceSetVR.cpp \
     ScrollableMessage/ScollMsgView.cpp \
     SliderView/SliderView.cpp \
-    AudioPassThru/AudioPassView.cpp
+    AudioPassThru/AudioPassView.cpp \
+    VideoStream/MediaCodecStream.cpp \
+    VideoStream/JniNative.cpp
 
 HEADERS += \
     Gen3UIManager.h \
@@ -94,7 +96,9 @@ HEADERS += \
     ChoiceSet/ChoiceSetVR.h \
     ScrollableMessage/ScollMsgView.h \
     SliderView/SliderView.h \
-    AudioPassThru/AudioPassView.h
+    AudioPassThru/AudioPassView.h \
+    VideoStream/MediaCodecStream.h \
+    VideoStream/JniNative.h
 
 unix {
     target.path = /usr/lib
@@ -164,7 +168,7 @@ INSTALLS+=ffmpeg
 
 ################################for android
 android{
-
+QT += androidextras
 #CONFIG += msc
 #CONFIG += pico
 CONFIG  += espeak
@@ -199,4 +203,7 @@ LIBS += -L$$PWD/Library/android/msp -lttsespeak
 ANDROID_EXTRA_LIBS +=$$PWD/Library/android/msp/libttsespeak.so
 }
 
+
+
 }
+

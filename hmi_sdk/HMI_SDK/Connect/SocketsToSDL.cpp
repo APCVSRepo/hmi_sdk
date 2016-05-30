@@ -210,7 +210,6 @@ bool SocketsToSDL::ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * 
     int iNum = Channels.size();
     for (int i = 0; i < iNum; i++)
 	{
-        LOGE("-------");
         SOCK_HANDLE * pHandle = getNewSocketHandle(Channels[i], m_sHost, m_iPort);
 
         if(pHandle != NULL)
@@ -257,17 +256,14 @@ SOCK_HANDLE * SocketsToSDL::getNewSocketHandle(IChannel * newChannel, std::strin
     }
     try
     {
-        LOGE("=====1====%s:%d",sIP.c_str(), iPort);
         if (SOCKET_ERROR == ::connect(pHandle->socket, (const sockaddr *)&toLocal, namelen))
             goto FAILED;
 #ifdef WIN32
         {
-            LOGE("=====2====");
             u_long iMode = 1;
             if (SOCKET_ERROR == ioctlsocket(pHandle->socket, FIONBIO, (u_long FAR*) &iMode))
                 goto FAILED;
         }
-LOGE("=====3====");
 #else
         fcntl(pHandle->socket, F_SETFL, O_NONBLOCK);
 #endif
@@ -276,18 +272,15 @@ LOGE("=====3====");
     {
         goto FAILED;
     }
-    LOGI("=====4====");
     return pHandle;
 FAILED:
 #if defined(WIN32)
-    LOGE("=====5====");
     closesocket(pHandle->socket);
 #else
     close(pHandle->socket);
 #endif
     delete pHandle;
 
-    LOGE("=====6====");
     return NULL;
 }
 
@@ -300,18 +293,29 @@ bool SocketsToSDL::ConnectToVS( IChannel * ChannelVS, std::string sIP, int iPort
 
     if(pHandle != NULL)
     {
-        LOGI("=====7====");
         m_SocketHandles.push_back(pHandle);
         ChannelVS->setSocketManager(this, pHandle);
         Notify();
-        LOGI("=====8====");
         return true;
     }
     else
     {
-        LOGI("=====NULL====");
         return false;
     }
+}
+void SocketsToSDL::DelConnectToVS()
+{
+    SOCK_HANDLE * pHandle = m_SocketHandles.at(m_SocketHandles.size() - 1);
+
+     m_SocketHandles.pop_back();
+     usleep(1000000);
+     shutdown(pHandle->socket, SHUT_RDWR);
+//#if defined(WIN32)
+//    closesocket(pHandle->socket);
+//#else
+//    close(pHandle->socket);
+//#endif
+
 }
 
 void SocketsToSDL::SendData(void * pHandle, void * pData, int iLength)
@@ -379,15 +383,16 @@ bool SocketsToSDL::Receive(SOCK_HANDLE * pHandle)
 		try
 		{
 			bytes_read = recv(pHandle->socket, (char *)buffer, sizeof(buffer), 0);
-		}
-		catch (...)
+//            LOGE("pHandle->socket = %d,   bytes_read = %d", pHandle->socket, bytes_read);
+        }
+        catch (...)
 		{
 			return false;
 		}
 		if (bytes_read > 0)
 			pHandle->pDataReceiver->onReceiveData(buffer, bytes_read);
         else if (SOCKET_ERROR == bytes_read)
-            break;
+           break;
         bRet = true;
     } while (bytes_read > 0);
 
@@ -442,21 +447,34 @@ void SocketsToSDL::RunThread()
 			{
 				bytes_read = recv(m_Read_Sign, (char *)buffer, sizeof(buffer), 0);
 			} while (bytes_read > 0);
+            iNum = m_SocketHandles.size();
             for (int i = 0; i < iNum; i++)
             {
+                if(i + 1 > m_SocketHandles.size())
+                {
+                    break;
+                }
                 SOCK_HANDLE * pHandle = m_SocketHandles[i];
                 if(!Send(pHandle))
                     goto SOCKET_WRONG;
             }
 		}
 
+
+        iNum = m_SocketHandles.size();
         for (int i = 0; i < iNum; i++)
 		{
+            if(i + 1 > m_SocketHandles.size())
+            {
+                break;
+            }
 			SOCK_HANDLE * pHandle = m_SocketHandles[i];
 			if (FD_ISSET(pHandle->socket, &fdRead))
 			{
                 if(!Receive(pHandle))
+                {
                     goto SOCKET_WRONG;
+                }
             }
 		}
 	}

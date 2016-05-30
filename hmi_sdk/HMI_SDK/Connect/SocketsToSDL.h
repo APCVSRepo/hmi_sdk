@@ -33,6 +33,7 @@ public:
 public:
     bool ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * pNetwork = 0);
     bool ConnectToVS(IChannel * ChannelVS, std::string sIP, int iPort, INetworkStatus * pNetwork = 0);
+    void DelConnectToVS();
     void SendData(void * pHandle, void * pData, int iLength);
 
     void RunThread();

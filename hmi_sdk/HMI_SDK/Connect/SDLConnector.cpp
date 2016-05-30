@@ -109,6 +109,11 @@ bool SDLConnector::ConnectToVideoStream(IMessageInterface * pMsgHandler, std::st
     return m_sdl_is_connected;
 }
 
+void SDLConnector::DelConnectToVideoStream()
+{
+    m_Sockets.DelConnectToVS();
+}
+
 void SDLConnector::Connect()
 {
     m_sdl_is_connected = m_Sockets.ConnectTo(m_channels, this);
@@ -482,7 +487,7 @@ void SDLConnector::OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y)
          break;
      case TOUCH_END:
          params["type"] = "END";
-         event[0]["id"]=0;
+         event[0]["id"]=id;
          break;
      case TOUCH_MOVE:
          params["type"] = "MOVE";

@@ -3,7 +3,9 @@
 In this wiki:<br>
 We choose Windows x86_64 as this wiki platform<br>
 **Note:<br>**
-if your are working on different OS, such as, Ubuntu system. Please download and install relative tools according to your system.
+- hmi_sdk must be used combine with sdl_core generated dynamic library libsmartDeviceLinkCore.so. Reference this [wiki](https://github.com/APCVSRepo/hmi_sdl_android/wiki/SDL-Android-Environment-Configuration-and-Build) for how to.
+- if your are working on different OS, such as, Ubuntu system. Please download and install relative tools according to your system.
+
 ## Java SE Development Kit
 - Download and install [JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 - Add the jdk install path(such as, such as C:\Program Files (x86)\Java\jdk1.8.0_91\bin) to system environment variable ```PATH```<br>

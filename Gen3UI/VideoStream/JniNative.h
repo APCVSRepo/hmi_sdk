@@ -7,6 +7,7 @@
 #include <QAndroidJniObject>
 #include <jni.h>
 #endif
+#include "JniFrame.h"
 #include <QDebug>
 
 #define QDBG qDebug()<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
@@ -20,6 +21,10 @@ public:
     ~JniNative();
     bool registerNativeMethods();
 
+    static void notifyMsg(JNIEnv *env, jobject thiz, int msgNo, int x, int y);
+
+    static uchar *gBuffer;
+    static void setDirectBuffer(JNIEnv *env, jobject thiz, jobject buffer, jint len);
 private:
 
 };

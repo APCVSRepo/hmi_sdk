@@ -59,7 +59,8 @@ SOURCES += \
     SliderView/SliderView.cpp \
     AudioPassThru/AudioPassView.cpp \
     VideoStream/MediaCodecStream.cpp \
-    VideoStream/JniNative.cpp
+    VideoStream/JniNative.cpp \
+    VideoStream/JniFrame.cpp
 
 HEADERS += \
     Gen3UIManager.h \
@@ -98,7 +99,8 @@ HEADERS += \
     SliderView/SliderView.h \
     AudioPassThru/AudioPassView.h \
     VideoStream/MediaCodecStream.h \
-    VideoStream/JniNative.h
+    VideoStream/JniNative.h \
+    VideoStream/JniFrame.h
 
 unix {
     target.path = /usr/lib

@@ -13,11 +13,11 @@ using namespace QtAndroid;
 #include <QDebug>
 #include "../hmi_sdk/HMI_SDK/Connect/IMessageInterface.h"
 #include <QMutex>
-
+#include "JniNative.h"
 #include <unistd.h>
 #include "Common/Button.h"
 #include "AppListInterface.h"
-#define QDBG qDebug()<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
+#include "JniFrame.h"
 
 //#define PLAY_FILE_TEST
 #define FLUSH_FRAME
@@ -26,10 +26,10 @@ typedef struct dataPackage{
     uchar buf[1024];
     int len;
 }DataS;
-typedef struct FrameData{
-    uchar buf[576000];
-    int len;
-}FrameS;
+//typedef struct FrameData{
+//    uchar buf[576000];
+//    int len;
+//}FrameS;
 
 class MediaCodecStream : public QWidget, public IMessageInterface
 {
@@ -52,9 +52,6 @@ public: //IMessageInterface
 signals:
 
 public slots:
-    void OnClickedZoomInBtn();
-    void OnClickedZoomOutBtn();
-    void OnClickedMenuBtn();
 
 private:
     QImage m_VideoImage;
@@ -71,6 +68,8 @@ private:
     FILE *fp;
 #endif
     bool m_b_canPushQueue;
+
+    JniFrame m_jniFrame;
 };
 
 #endif // MEDIACODECSTREAM_H

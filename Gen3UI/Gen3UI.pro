@@ -104,7 +104,7 @@ HEADERS += \
 
 unix {
     target.path = /usr/lib
-    INSTALLS += target
+    #INSTALLS += target
 }
 
 RESOURCES += \
@@ -144,7 +144,7 @@ INSTALLS +=qt_dll
 ################################for linux
 #unix:!android:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec  -lavformat -lavutil -lswscale
 unix:!android{
-ffmpeg.path=/usr/lib
+ffmpeg.path=$$DESTDIR/../
 ffmpeg.files=$$PWD/Library/linux/ffmpeg/*.*
 INSTALLS+=ffmpeg
 

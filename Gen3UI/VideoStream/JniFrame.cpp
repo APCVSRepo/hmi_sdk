@@ -48,9 +48,11 @@ void JniFrame::MsgNofityFromJni(int msgNo, int jniX, int jniY)
                 }
                 else
                 {
+#ifdef ANDROID
                     QAndroidJniObject::callStaticMethod<void>(
                                 "an/qt/useJar/ExtendsQtSurface",
                                 "stop","()V");
+#endif
                     m_pList->getActiveApp()->OnShowCommand();
                 }
 
@@ -73,9 +75,11 @@ void JniFrame::MsgNofityFromJni(int msgNo, int jniX, int jniY)
         break;
     case MSG_NO_CMD_1:
         m_pList->OnAppExit();
+#ifdef ANDROID
         QAndroidJniObject::callStaticMethod<void>(
                     "an/qt/useJar/ExtendsQtSurface",
                     "stop","()V");
+#endif
         break;
     }
 }
@@ -102,10 +106,11 @@ void JniFrame::clearFrameQueue()
 
 void JniFrame::stopStream()
 {
+#ifdef ANDROID
     QAndroidJniObject::callStaticMethod<void>(
                 "an/qt/useJar/ExtendsQtSurface",
                 "stop","()V");
-
+#endif
     m_b_canFlush = false;
     clearFrameQueue();
 }

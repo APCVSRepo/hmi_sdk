@@ -131,7 +131,7 @@ bool SocketsToSDL::CreateSignal()
 #ifdef ANDROID
     if (getsockname(tcp, (sockaddr*)&name, (socklen_t *)&namelen) == -1){
 #else
-    if (getsockname(tcp, (sockaddr*)&name, &namelen) == -1){
+    if (getsockname(tcp, (sockaddr*)&name, (socklen_t *)&namelen) == -1){
 #endif
         goto clean;
 	}
@@ -145,7 +145,7 @@ bool SocketsToSDL::CreateSignal()
 #ifdef ANDROID
     tcp2 = accept(tcp, (sockaddr*)&name, (socklen_t *)&namelen);
 #else
-    tcp2 = accept(tcp, (sockaddr*)&name, &namelen);
+    tcp2 = accept(tcp, (sockaddr*)&name, (socklen_t *)&namelen);
 #endif
 	if (tcp2 == -1){
 		goto clean;

@@ -6,6 +6,10 @@
 #include <QDir>
 #include <QFontDatabase>
 
+#ifdef linux
+#include <unistd.h>
+#endif
+
 typedef UIInterface *(*InitFunc)(AppListInterface *);
                 typedef void  (*CloseFunc)();
                                 typedef int (*addFunc)(int,int);
@@ -139,12 +143,15 @@ std::string HMI_Initial::GetUILibPath()
     strResult = aPathBuff;
     int pos = strResult.find_last_of('\\',strResult.size()-1);
     strResult.erase(pos,strResult.size()-1);
-    strResult += "\\UILib\\";
-
+    strResult += "\\UILib\\";    
 #elif defined(__ANDROID__)
     getcwd(aPathBuff,iBuffLen);
     strResult = aPathBuff;
     strResult += "/../lib/";
+#elif defined(linux)
+    getcwd(aPathBuff,iBuffLen);
+    strResult = aPathBuff;
+    strResult += "/UILib/";
 #endif
     return strResult;
 }

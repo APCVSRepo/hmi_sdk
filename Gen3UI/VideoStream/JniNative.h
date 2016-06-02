@@ -20,11 +20,14 @@ public:
     JniNative();
     ~JniNative();
     bool registerNativeMethods();
-
+#ifdef ANDROID
     static void notifyMsg(JNIEnv *env, jobject thiz, int msgNo, int x, int y);
+#endif
 
     static uchar *gBuffer;
+#ifdef ANDROID
     static void setDirectBuffer(JNIEnv *env, jobject thiz, jobject buffer, jint len);
+#endif
 private:
 
 };

@@ -30,11 +30,13 @@ MediaCodecStream::~MediaCodecStream()
 void MediaCodecStream::showActivity()
 {
     m_b_canPushQueue = true;
+#ifdef ANDROID
     QAndroidJniObject action = QAndroidJniObject::fromString("intent_Extends_Qt_Surface");
     QAndroidJniObject intent("android/content/Intent",
                              "(Ljava/lang/String;)V",
                              action.object<jstring>());
     startActivity(intent, 0);
+#endif
 }
 
 void MediaCodecStream::hideActivity()

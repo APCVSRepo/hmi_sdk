@@ -6,6 +6,7 @@
 
 #ifdef linux
 #include <sys/time.h>
+#include <unistd.h>
 #endif
 
 static SDLConnector * g_SingleConnector = 0;

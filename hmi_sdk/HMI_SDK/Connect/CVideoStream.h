@@ -2,7 +2,7 @@
 #define CVIDEOSTREAM_H
 
 #include "Connect/Channel.h"
-#include <qDebug>
+//#include <qDebug>
 #define QDBG qDebug()<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
 
 class CVideoStream : public Channel

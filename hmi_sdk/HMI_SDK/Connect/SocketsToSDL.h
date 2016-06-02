@@ -17,12 +17,26 @@ typedef struct _SEND_DATA
     int iLength;
 }SEND_DATA;
 
-typedef struct _SOCK_HANDLE
+class CSockHandle
 {
+public:
+    CSockHandle(int bufSize = 1024);
+    ~CSockHandle();
+    bool connect(IChannel * newChannel, std::string sIP, int iPort);
+    void pushData(SEND_DATA data);
+    bool sendData();
+    bool recvData();
+    void clear();
+
     IChannel * pDataReceiver;
-    int socket;
+    int m_i_socket;
     std::queue<SEND_DATA> m_SendData;
-}SOCK_HANDLE;
+private:
+    unsigned char *m_recBuf;
+    int m_i_recBufSize;
+
+    mutable pthread_mutex_t m_SendMutex;
+};
 
 class SocketsToSDL : public ISocketManager
 {
@@ -41,8 +55,6 @@ public:
 private:
     bool CreateSignal();
     void Notify();
-    bool Send(SOCK_HANDLE * pHandle);
-    bool Receive(SOCK_HANDLE * pHandle);
     void CloseSockets();
 
 private:
@@ -59,9 +71,7 @@ private:
     std::string m_sHost;
     int m_iPort;
 
-    std::vector<SOCK_HANDLE *> m_SocketHandles;
-
-    SOCK_HANDLE *getNewSocketHandle(IChannel *newChannel, std::string sIP, int iPort);
+    std::vector<CSockHandle *> m_SocketHandles;
 };
 
 #endif // SOCKECTSTOSDL

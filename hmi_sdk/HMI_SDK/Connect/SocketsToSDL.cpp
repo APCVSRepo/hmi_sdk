@@ -243,6 +243,7 @@ void SocketsToSDL::DelConnectToVS()
     CSockHandle * pHandle = m_SocketHandles.at(m_SocketHandles.size() - 1);
 
     m_SocketHandles.pop_back();
+    Notify();
     usleep(1000000);
 //    shutdown(pHandle->m_i_socket, SHUT_RDWR);
     pHandle->clear();
@@ -254,14 +255,7 @@ void SocketsToSDL::SendData(void * pHandle, void * pData, int iLength)
         return;
 
     CSockHandle * p = (CSockHandle *)pHandle;
-	SEND_DATA data;
-	data.iLength = iLength;
-
-    void * pBuffer = ::malloc(iLength);
-	memcpy(pBuffer, pData, iLength);
-	data.pData = pBuffer;
-
-    p->pushData(data);
+    p->pushData(pData, iLength);
 	Notify();
 }
 
@@ -421,8 +415,15 @@ FAILED:
     return false;
 }
 
-void CSockHandle::pushData(SEND_DATA data)
+void CSockHandle::pushData(void * pData, int iLength)
 {
+    SEND_DATA data;
+    data.iLength = iLength;
+
+    void * pBuffer = ::malloc(iLength);
+    memcpy(pBuffer, pData, iLength);
+    data.pData = pBuffer;
+
     pthread_mutex_lock(&m_SendMutex);
     this->m_SendData.push(data);
     pthread_mutex_unlock(&m_SendMutex);

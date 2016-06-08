@@ -23,7 +23,7 @@ public:
     CSockHandle(int bufSize = 1024);
     ~CSockHandle();
     bool connect(IChannel * newChannel, std::string sIP, int iPort);
-    void pushData(SEND_DATA data);
+    void pushData(void * pData, int iLength);
     bool sendData();
     bool recvData();
     void clear();

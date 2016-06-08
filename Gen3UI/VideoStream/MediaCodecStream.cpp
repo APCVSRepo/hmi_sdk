@@ -66,7 +66,6 @@ void MediaCodecStream::startStream()
 void MediaCodecStream::stopStream()
 {
 #if defined(ANDROID)
-    QDBG;
     m_jniFrame.stopStream();
     m_b_canPushQueue = false;
 
@@ -76,10 +75,6 @@ void MediaCodecStream::stopStream()
 #endif
 }
 
-Result MediaCodecStream::onRequest(Json::Value jsonObj){return RESULT_SUCCESS;}
-void MediaCodecStream::onNotification(Json::Value jsonObj){}
-void MediaCodecStream::onResult(Json::Value jsonObj){}
-void MediaCodecStream::onError(std::string){}
 void MediaCodecStream::onRawData(void* data, int len)
 {
 #ifdef PLAY_FILE_TEST
@@ -90,7 +85,6 @@ void MediaCodecStream::onRawData(void* data, int len)
     {
         return;
     }
-#ifdef FLUSH_FRAME
 
     frameData[0] = 0;
     frameData[1] = 0;
@@ -158,15 +152,6 @@ void MediaCodecStream::onRawData(void* data, int len)
         }
     }
 
-#else
-    DataS newData;
-    memcpy(newData.buf, data, len);
-    newData.len = len;
-    g_mutex.lock();
-    g_queueData.enqueue(newData);
-    g_mutex.unlock();
-
-#endif
 }
 
 

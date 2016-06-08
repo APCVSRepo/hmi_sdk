@@ -22,16 +22,17 @@ class CSockHandle
 public:
     CSockHandle(int bufSize = 1024);
     ~CSockHandle();
-    bool connect(IChannel * newChannel, std::string sIP, int iPort);
-    void pushData(void * pData, int iLength);
-    bool sendData();
-    bool recvData();
-    void clear();
-
+    bool Connect(IChannel * newChannel, std::string sIP, int iPort);
+    void PushData(void * pData, int iLength);
+    bool SendData();
+    bool RecvData();
+    void Close();
+    int GetSocketID();
+private:
     IChannel * pDataReceiver;
     int m_i_socket;
     std::queue<SEND_DATA> m_SendData;
-private:
+
     unsigned char *m_recBuf;
     int m_i_recBufSize;
 

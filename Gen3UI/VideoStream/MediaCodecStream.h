@@ -20,16 +20,11 @@ using namespace QtAndroid;
 #include "JniFrame.h"
 
 //#define PLAY_FILE_TEST
-#define FLUSH_FRAME
 
 typedef struct dataPackage{
     uchar buf[1024];
     int len;
 }DataS;
-//typedef struct FrameData{
-//    uchar buf[576000];
-//    int len;
-//}FrameS;
 
 class MediaCodecStream : public QWidget, public IMessageInterface
 {
@@ -44,11 +39,11 @@ public:
     void stopStream();
 
 public: //IMessageInterface
-    Result onRequest(Json::Value);
-    void onNotification(Json::Value);
-    void onResult(Json::Value);
+    Result onRequest(Json::Value){return RESULT_SUCCESS;}
+    void onNotification(Json::Value){}
+    void onResult(Json::Value){}
     void onRawData(void * p, int iLength);
-    void onError(std::string error);
+    void onError(std::string error){}
 signals:
 
 public slots:

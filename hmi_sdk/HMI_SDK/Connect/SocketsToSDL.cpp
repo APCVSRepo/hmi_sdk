@@ -76,7 +76,7 @@ void SocketsToSDL::CloseSockets()
     for (int i = 0; i < iNum; i++)
     {
         CSockHandle * pHandle = m_SocketHandles[i];
-        pHandle->clear();
+        pHandle->Close();
         delete pHandle;
     }
     m_SocketHandles.clear();
@@ -115,8 +115,8 @@ bool SocketsToSDL::CreateSignal()
 	if (::listen(tcp, 5) == -1){
 		goto clean;
 	}
-#ifdef ANDROID
-    if (getsockname(tcp, (sockaddr*)&name, (socklen_t *)&namelen) == -1){
+#ifdef WIN32
+    if (getsockname(tcp, (sockaddr*)&name, &namelen) == -1){
 #else
     if (getsockname(tcp, (sockaddr*)&name, (socklen_t *)&namelen) == -1){
 #endif
@@ -129,8 +129,8 @@ bool SocketsToSDL::CreateSignal()
     if (-1 == connect(tcp1, (sockaddr*)&name, namelen)){
 		goto clean;
 	}
-#ifdef ANDROID
-    tcp2 = accept(tcp, (sockaddr*)&name, (socklen_t *)&namelen);
+#ifdef WIN32
+    tcp2 = accept(tcp, (sockaddr*)&name, &namelen);
 #else
     tcp2 = accept(tcp, (sockaddr*)&name, (socklen_t *)&namelen);
 #endif
@@ -198,7 +198,7 @@ bool SocketsToSDL::ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * 
     for (int i = 0; i < iNum; i++)
 	{
         CSockHandle * pHandle = new CSockHandle(1024);
-        if(pHandle->connect(Channels[i], m_sHost, m_iPort))
+        if(pHandle->Connect(Channels[i], m_sHost, m_iPort))
         {
             m_SocketHandles.push_back(pHandle);
             Channels[i]->setSocketManager(this, pHandle);
@@ -226,7 +226,7 @@ bool SocketsToSDL::ConnectToVS( IChannel * ChannelVS, std::string sIP, int iPort
     m_pNetwork = pNetwork;
 
     CSockHandle * pHandle = new CSockHandle(576000);
-    if(pHandle->connect(ChannelVS, sIP, iPort))
+    if(pHandle->Connect(ChannelVS, sIP, iPort))
     {
         m_SocketHandles.push_back(pHandle);
         ChannelVS->setSocketManager(this, pHandle);
@@ -244,9 +244,13 @@ void SocketsToSDL::DelConnectToVS()
 
     m_SocketHandles.pop_back();
     Notify();
+#ifdef WIN32
+    Sleep(1000);
+#else
     usleep(1000000);
+#endif
 //    shutdown(pHandle->m_i_socket, SHUT_RDWR);
-    pHandle->clear();
+    pHandle->Close();
 }
 
 void SocketsToSDL::SendData(void * pHandle, void * pData, int iLength)
@@ -255,7 +259,7 @@ void SocketsToSDL::SendData(void * pHandle, void * pData, int iLength)
         return;
 
     CSockHandle * p = (CSockHandle *)pHandle;
-    p->pushData(pData, iLength);
+    p->PushData(pData, iLength);
 	Notify();
 }
 
@@ -280,7 +284,7 @@ void SocketsToSDL::RunThread()
         for (int i = 0; i < iNum; i++)
 		{
             CSockHandle * pHandle = m_SocketHandles[i];
-            int socket = pHandle->m_i_socket;
+            int socket = pHandle->GetSocketID();
 			FD_SET(socket, &fdRead);
 #ifndef WIN32
 			FD_SET(socket, &fdWrite);
@@ -315,7 +319,7 @@ void SocketsToSDL::RunThread()
                     break;
                 }
                 CSockHandle * pHandle = m_SocketHandles[i];
-                if(!pHandle->sendData())
+                if(!pHandle->SendData())
                     goto SOCKET_WRONG;
             }
 		}
@@ -329,9 +333,9 @@ void SocketsToSDL::RunThread()
                 break;
             }
             CSockHandle * pHandle = m_SocketHandles[i];
-            if (FD_ISSET(pHandle->m_i_socket, &fdRead))
+            if (FD_ISSET(pHandle->GetSocketID(), &fdRead))
 			{
-                if(!pHandle->recvData())
+                if(!pHandle->RecvData())
                 {
                     goto SOCKET_WRONG;
                 }
@@ -366,7 +370,7 @@ CSockHandle::~CSockHandle()
     pthread_mutex_destroy(&m_SendMutex);
 }
 
-bool CSockHandle::connect(IChannel *newChannel, std::string sIP, int iPort)
+bool CSockHandle::Connect(IChannel *newChannel, std::string sIP, int iPort)
 {
     sockaddr_in toLocal;
     memset(&toLocal, 0, sizeof(toLocal));
@@ -415,7 +419,7 @@ FAILED:
     return false;
 }
 
-void CSockHandle::pushData(void * pData, int iLength)
+void CSockHandle::PushData(void * pData, int iLength)
 {
     SEND_DATA data;
     data.iLength = iLength;
@@ -429,7 +433,7 @@ void CSockHandle::pushData(void * pData, int iLength)
     pthread_mutex_unlock(&m_SendMutex);
 }
 
-bool CSockHandle::sendData()
+bool CSockHandle::SendData()
 {
     bool bRet = true;
     pthread_mutex_lock(&m_SendMutex);
@@ -464,7 +468,7 @@ bool CSockHandle::sendData()
     return bRet;
 }
 
-bool CSockHandle::recvData()
+bool CSockHandle::RecvData()
 {
     int bytes_read = 0;
 
@@ -490,7 +494,7 @@ bool CSockHandle::recvData()
     return bRet;
 }
 
-void CSockHandle::clear()
+void CSockHandle::Close()
 {
 #ifdef WIN32
     closesocket(this->m_i_socket);
@@ -503,4 +507,9 @@ void CSockHandle::clear()
         this->m_SendData.pop();
         ::free(data.pData);
     }
+}
+
+int CSockHandle::GetSocketID()
+{
+    return m_i_socket;
 }

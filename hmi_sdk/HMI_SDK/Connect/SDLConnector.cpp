@@ -172,7 +172,8 @@ void SDLConnector::OnAppActivated(int appID)
 {
     Json::Value params;
     params["appID"] = appID;
-	m_Base.sendNotification("BasicCommunication.OnAppActivated", params);
+    //m_Base.sendNotification("BasicCommunication.OnAppActivated", params);
+    m_Base.sendRequest(m_Base.GenerateId(),"SDL.ActivateApp", params);
 }
 
 void SDLConnector::OnSoftButtonClick(int id, int mode,std::string strName)

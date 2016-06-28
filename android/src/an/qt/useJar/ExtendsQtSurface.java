@@ -67,6 +67,10 @@ public class ExtendsQtSurface extends Activity{
     private static Queue<FrameStruct> frameQueue = new LinkedList<FrameStruct>();
     private static boolean bCanFlush = false;
     private static Lock lock = new ReentrantLock();
+    private PlayerThread p = new PlayerThread();
+    private static boolean bPlayRun = false;
+    private static socketThread s = new socketThread();
+    private static boolean bSocketRun = false;
 
     private static final int MSG_NO_CAN_FLUSH = 101;
     private static final int MSG_NO_ZOOM_IN = 102;
@@ -82,7 +86,6 @@ public class ExtendsQtSurface extends Activity{
     private static final String SAMPLE = "sdcard/lk.mp4";
 
     private final static String TAG = "JAVA";
-    private PlayerThread mPlayer = null;
 
 //    private View rootView;
     private TextView mTimeTv;
@@ -648,7 +651,8 @@ public class ExtendsQtSurface extends Activity{
         handler.postDelayed(updateThread, 50);
         timeHandler.postDelayed(updateTimeThread, 1000);
 
-        PlayerThread p = new PlayerThread();
+
+        bPlayRun = true;
         p.start();
     }
     Handler handler = new Handler();
@@ -675,7 +679,7 @@ public class ExtendsQtSurface extends Activity{
         @Override
         public void run() {
             FrameStruct frame;
-            while(true)
+            while(bPlayRun)
             {
                 if(bCanFlush)
                 {
@@ -819,6 +823,7 @@ public class ExtendsQtSurface extends Activity{
 
                 readIn.close();
                 client.close();
+                Log.e(TAG, "---------client.close()");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -835,7 +840,6 @@ public class ExtendsQtSurface extends Activity{
         mMediaCodec.setVideoScalingMode(MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
         mMediaCodec.start();
         bCanFlush = true;
-//        notifyQt(MSG_NO_CAN_FLUSH, 0, 0);
     }  
 
     public static boolean onFrame(byte[] buf, int offset, int length) {
@@ -877,7 +881,7 @@ public class ExtendsQtSurface extends Activity{
 
     public static void start() {
         Log.e("Media", "==start");
-        socketThread s = new socketThread();
+
         s.start();
     }
 
@@ -886,6 +890,8 @@ public class ExtendsQtSurface extends Activity{
 
         if(instance != null)
         {
+            bPlayRun = false;
+            s.interrupt();
             instance.finish();
         }
     }

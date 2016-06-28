@@ -44,11 +44,7 @@ static int logOut(const char *file, const char *func, const int line, const char
                         tmnow->tm_hour,tmnow->tm_min,tmnow->tm_sec,tv.tv_usec,
                         file, func, line, msg);
 }
-#define TIME_INTER 20
-typedef struct FrameData{
-    uchar buf[576000];
-    int len;
-}FrameS;
+
 enum{
     MSG_NO_CAN_FLUSH = 101,
     MSG_NO_ZOOM_IN = 102,
@@ -70,6 +66,7 @@ public:
 
     static void MsgNofityFromJni(int msgNo, int x, int y);
     void setAppList(AppListInterface *pList);
+    void startStream();
     void stopStream();
 private slots:
 

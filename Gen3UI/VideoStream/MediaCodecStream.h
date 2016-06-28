@@ -42,28 +42,13 @@ public: //IMessageInterface
     Result onRequest(Json::Value){return RESULT_SUCCESS;}
     void onNotification(Json::Value){}
     void onResult(Json::Value){}
-    void onRawData(void * p, int iLength);
+    void onRawData(void * p, int iLength){}
     void onError(std::string error){}
 signals:
 
 public slots:
 
 private:
-    QImage m_VideoImage;
-
-    QTimer *m_pTimer;
-
-    QTimer *m_playTimer;
-
-    QLabel *m_pVideoLab;
-
-    pthread_t threadid;
-    pthread_t msgThreadid;
-#ifdef PLAY_FILE_TEST
-    FILE *fp;
-#endif
-    bool m_b_canPushQueue;
-
     JniFrame m_jniFrame;
 };
 

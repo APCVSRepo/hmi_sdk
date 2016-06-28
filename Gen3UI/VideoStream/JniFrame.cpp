@@ -83,6 +83,15 @@ void JniFrame::setAppList(AppListInterface *pList)
     m_pList = pList;
 }
 
+void JniFrame::startStream()
+{
+#ifdef ANDROID
+    QAndroidJniObject::callStaticMethod<void>(
+                "an/qt/useJar/ExtendsQtSurface",
+                "start","()V");
+#endif
+}
+
 void JniFrame::stopStream()
 {
 #ifdef ANDROID

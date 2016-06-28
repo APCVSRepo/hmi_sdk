@@ -1,17 +1,15 @@
 #include "JniFrame.h"
 
 AppListInterface *JniFrame::m_pList = NULL;
-bool JniFrame::m_b_canFlush = false;
-QQueue<FrameS> JniFrame::m_queueFrame;
-QMutex JniFrame::m_mutex;
-static int DONE = 1;
+
 JniFrame::JniFrame(QObject *parent) : QObject(parent)
 {
-    pthread_create(&threadid,NULL,flushDataThread,NULL);
+
 }
 
 JniFrame::~JniFrame()
 {
+
 }
 
 void JniFrame::MsgNofityFromJni(int msgNo, int jniX, int jniY)
@@ -20,10 +18,6 @@ void JniFrame::MsgNofityFromJni(int msgNo, int jniX, int jniY)
     int y = jniY * 480.0/600;
     switch(msgNo)
     {
-    case MSG_NO_CAN_FLUSH:
-        m_b_canFlush = true;
-        QDBG;
-        break;
     case MSG_NO_ZOOM_IN:
         if(m_pList != NULL)
             if(m_pList->getActiveApp() != NULL)
@@ -89,56 +83,11 @@ void JniFrame::setAppList(AppListInterface *pList)
     m_pList = pList;
 }
 
-void JniFrame::pushFrameQueue(FrameS &frameData)
-{
-    m_mutex.lock();
-    m_queueFrame.push_back(frameData);
-    QDBG<<m_queueFrame.size();
-    m_mutex.unlock();
-}
-
-void JniFrame::clearFrameQueue()
-{
-    m_mutex.lock();
-    m_queueFrame.clear();
-    m_mutex.unlock();
-}
-
 void JniFrame::stopStream()
 {
 #ifdef ANDROID
     QAndroidJniObject::callStaticMethod<void>(
                 "an/qt/useJar/ExtendsQtSurface",
                 "stop","()V");
-#endif
-    m_b_canFlush = false;
-    clearFrameQueue();
-}
-
-void *JniFrame::flushDataThread(void *args)
-{
-#if defined(ANDROID)
-    while(DONE)
-    {
-        m_mutex.lock();
-        if(!m_queueFrame.empty() && m_b_canFlush)
-        {
-            FrameS dataPackage = m_queueFrame.dequeue();
-
-            if(JniNative::gBuffer != NULL)
-            {
-//                QDBG << dataPackage.len;
-                memcpy(JniNative::gBuffer, dataPackage.buf, dataPackage.len);
-                QAndroidJniObject::callStaticMethod<void>(
-                            "an/qt/useJar/ExtendsQtSurface",
-                            "flsh",
-                            "(I)V",
-                            dataPackage.len);
-            }
-        }
-        m_mutex.unlock();
-        usleep(20000);
-
-    }
 #endif
 }

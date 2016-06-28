@@ -48,12 +48,25 @@ import android.view.WindowManager;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import android.content.res.AssetManager;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.net.Socket;
+import java.io.DataInputStream;
+
+class FrameStruct {
+    byte[] buf;
+    int len;
+};
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ExtendsQtSurface extends Activity {
+public class ExtendsQtSurface extends Activity{
     public static ExtendsQtSurface instance = null;
+
+    private static Queue<FrameStruct> frameQueue = new LinkedList<FrameStruct>();
+    private static boolean bCanFlush = false;
+    private static Lock lock = new ReentrantLock();
 
     private static final int MSG_NO_CAN_FLUSH = 101;
     private static final int MSG_NO_ZOOM_IN = 102;
@@ -65,6 +78,11 @@ public class ExtendsQtSurface extends Activity {
     private static final int MSG_NO_CMD_1 = 111;
     private static final int WIDTH_DECODER = 800;
     private static final int HEIGHT_DECODER = 480;
+
+    private static final String SAMPLE = "sdcard/lk.mp4";
+
+    private final static String TAG = "JAVA";
+    private PlayerThread mPlayer = null;
 
 //    private View rootView;
     private TextView mTimeTv;
@@ -86,19 +104,19 @@ public class ExtendsQtSurface extends Activity {
     private TextView mLabel;
 
     private static SurfaceView mSurfaceView;
+    private static Surface mSurface;
     private static RandomAccessFile mFileInput;
     private static MediaCodec mMediaCodec;
 
     private AssetManager asm;
 
-//    @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.e(TAG, "===================onCreate");
 //        if(mDirectBuffer.array() == NULL)
 //        {
 //            mDirectBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
 //        }
-        setDirectBuffer();
+//        setDirectBuffer();
 
         instance = this;
         // TODO Auto-generated method stub
@@ -626,17 +644,17 @@ public class ExtendsQtSurface extends Activity {
             }
         });
 
+
         handler.postDelayed(updateThread, 50);
         timeHandler.postDelayed(updateTimeThread, 1000);
 
-
-
+        PlayerThread p = new PlayerThread();
+        p.start();
     }
     Handler handler = new Handler();
     Runnable updateThread = new Runnable() {
 
         public void run() {
-            // TODO Auto-generated method stub
             initDecoder();
         }
     };
@@ -652,6 +670,161 @@ public class ExtendsQtSurface extends Activity {
             timeHandler.postDelayed(updateTimeThread, 1000);
         }
     };
+    private class PlayerThread extends Thread {
+
+        @Override
+        public void run() {
+            FrameStruct frame;
+            while(true)
+            {
+                if(bCanFlush)
+                {
+                    lock.lock();
+                    while((frame=frameQueue.poll())!=null)
+                    {
+//                        Log.e(TAG, "frame.len = " +  frame.len + "; frameQueue.size() = " + frameQueue.size());
+                        onFrame(frame.buf, 0, frame.len);
+                    }
+                    lock.unlock();
+                }
+            }
+        }
+    }
+    static int findFirstFrame = 0;
+    static int byteCount = 4;
+    static byte[] frameData = new byte[WIDTH_DECODER * HEIGHT_DECODER * 3 / 2];
+    static int lastIndex = 0;
+    private static class socketThread extends Thread {
+
+        @Override
+        public void run() {
+
+            ////////////file
+//            int fileLength = 0;
+//            int offset = 0;
+//            int readLen = 50;
+//            byte [] fileBuffer = null;
+//            if (mFileInput == null) {
+//                try {
+//                    mFileInput = new RandomAccessFile(new File(SAMPLE), "r");
+//                } catch (FileNotFoundException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+//            }
+//            try {
+//                fileLength = (int)mFileInput.length();
+//                fileBuffer = new byte[fileLength];
+//                Log.i("yflog", "read file length:" + fileLength);
+//                mFileInput.read(fileBuffer);
+//            } catch (IOException e1) {
+//                // TODO Auto-generated catch block
+//                e1.printStackTrace();
+//            }
+            ////////////////
+
+            String host = "127.0.0.1";
+            int port = 5050;
+
+            Socket client;
+            DataInputStream readIn;
+            byte[] recvBuf = new byte[WIDTH_DECODER * HEIGHT_DECODER * 3 / 2];
+            int dataLen;
+            try {
+                client = new Socket(host, port);
+                readIn = new DataInputStream(client.getInputStream());
+
+//                while(offset < fileLength)
+//                {
+//                    dataLen = readLen;
+//                    System.arraycopy(fileBuffer, offset, recvBuf, 0, readLen);
+//                    offset += readLen;
+//                    Log.e(TAG, "dataLen = " + dataLen);
+                while((dataLen = readIn.read(recvBuf)) > 0)
+                {
+                    frameData[0] = 0;
+                    frameData[1] = 0;
+                    frameData[2] = 0;
+                    frameData[3] = 1;
+
+                    int nPos = 0;
+                    int index = 0;
+                    int flag = 0;
+
+                    int canOnFrame = 0;
+                    while (nPos < dataLen) {
+
+                        canOnFrame = 0;
+                        while (nPos < dataLen) {
+                            flag = recvBuf[nPos++];
+                            if(findFirstFrame == 1)
+                            {
+                                frameData[byteCount++] = (byte)flag;
+                            }
+                            if (flag == 0)
+                            {
+                                index = lastIndex + 1;
+                                while (flag == 0)
+                                {
+                                    if (nPos < dataLen)
+                                    {
+                                        lastIndex = 0;
+                                        flag = recvBuf[nPos++];
+                                        if(findFirstFrame == 1)
+                                        {
+                                            frameData[byteCount++] = (byte)flag;
+                                        }
+                                        index++;
+                                    }
+                                    else
+                                    {
+                                        lastIndex = index;
+                                        break;
+                                    }
+                                }
+                                if (flag == 1 && index >= 4)
+                                {
+                                    if(findFirstFrame == 0)
+                                        findFirstFrame = 1;
+                                    else
+                                    {
+                                        byteCount = byteCount - 4;
+                                        canOnFrame = 1;
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                        if(canOnFrame == 1)
+                        {
+                            FrameStruct frame = new FrameStruct();
+                            frame.buf = new byte[byteCount];
+                            frame.len = byteCount;
+                            System.arraycopy(frameData, 0, frame.buf, 0, byteCount);
+                            lock.lock();
+                            frameQueue.offer(frame);
+                            lock.unlock();
+//                            onFrame(frameData, 0, byteCount);
+                            byteCount = 4;
+                        }
+                    }
+
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+
+                    }
+                }
+
+                readIn.close();
+                client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     private static void initDecoder() {
         Log.e("================", "initDecoder");
@@ -661,11 +834,11 @@ public class ExtendsQtSurface extends Activity {
         mMediaCodec.configure(mediaFormat, mSurfaceView.getHolder().getSurface(), null, 0);
         mMediaCodec.setVideoScalingMode(MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
         mMediaCodec.start();
-        notifyQt(MSG_NO_CAN_FLUSH, 0, 0);
+        bCanFlush = true;
+//        notifyQt(MSG_NO_CAN_FLUSH, 0, 0);
     }  
 
     public static boolean onFrame(byte[] buf, int offset, int length) {
-//        Log.e(TAG, "length = " + length);
         long time = System.currentTimeMillis();
         ByteBuffer[] inputBuffers = mMediaCodec.getInputBuffers();
         int inputBufferIndex = mMediaCodec.dequeueInputBuffer(-1);
@@ -678,14 +851,12 @@ public class ExtendsQtSurface extends Activity {
         }
         else
         {
-//            Log.e("Media", "222-inputBufferIndex:"+inputBufferIndex);
             return false;
         }
 
         MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
         int outputBufferIndex = mMediaCodec.dequeueOutputBuffer(bufferInfo, 0);
 
-//        Log.e("Media", "111-outputBufferIndex:"+outputBufferIndex);
         while (outputBufferIndex >= 0) {
 //            Log.e("Media", "outputBufferIndex:"+outputBufferIndex);
             mMediaCodec.releaseOutputBuffer(outputBufferIndex, true);
@@ -696,112 +867,18 @@ public class ExtendsQtSurface extends Activity {
     }
 
     //Qt=============
-    private final static int BUFFER_SIZE = 1024*1024*2;
-    private final static String TAG = "~~~extendsQt";
     public static ExtendsQtNative m_nativeNotify = null;
-    private static ByteBuffer mDirectBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);;
-    private static int dataLen;
-//    public ExtendsQtSurface(){
-//        mDirectBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
-//    }
-
     private static void notifyQt(int msgNo, int x, int y){
         if(m_nativeNotify == null){
             m_nativeNotify = new ExtendsQtNative();
         }
         m_nativeNotify.notifyMsg(msgNo, x, y);
     }
-    private static void setDirectBuffer()
-    {
-        if(m_nativeNotify == null){
-            m_nativeNotify = new ExtendsQtNative();
-        }
-        m_nativeNotify.setDirectBuffer(mDirectBuffer,BUFFER_SIZE);
-    }
 
-    static int findFirstFrame = 0;
-    static int byteCount = 4;
-    static byte[] frameData = new byte[WIDTH_DECODER * HEIGHT_DECODER * 3 / 2];
-    static int lastIndex = 0;
-//    private static Lock lock = new ReentrantLock();
-    static byte[] buffer;
-    public static void flsh(int len) {
-        dataLen = len;
-        buffer = mDirectBuffer.array();
-        new Runnable()
-        {
-            public void run(){
-                onFrame(buffer, 0, dataLen);
-            }
-        }.run();
-
-//        frameData[0] = 0;
-//        frameData[1] = 0;
-//        frameData[2] = 0;
-//        frameData[3] = 1;
-
-//        int nPos = 0;
-//        int index = 0;
-//        int flag = 0;
-
-//        int canOnFrame = 0;
-//        while (nPos < dataLen) {
-
-//            canOnFrame = 0;
-//            while (nPos < dataLen) {
-//                flag = buffer[nPos++];
-//                if(findFirstFrame == 1)
-//                {
-//                    frameData[byteCount++] = (byte)flag;
-//                }
-//                if (flag == 0)
-//                {
-//                    index = lastIndex + 1;
-//                    while (flag == 0)
-//                    {
-//                        if (nPos < dataLen)
-//                        {
-//                            lastIndex = 0;
-//                            flag = buffer[nPos++];
-//                            if(findFirstFrame == 1)
-//                            {
-//                                frameData[byteCount++] = (byte)flag;
-//                            }
-//                            index++;
-//                        }
-//                        else
-//                        {
-//                            lastIndex = index;
-//                            break;
-//                        }
-//                    }
-//                    if (flag == 1 && index >= 4)
-//                    {
-//                        if(findFirstFrame == 0)
-//                            findFirstFrame = 1;
-//                        else
-//                        {
-//                            byteCount = byteCount - 4;
-//                            canOnFrame = 1;
-//                        }
-
-//                        break;
-//                    }
-//                }
-//            }
-//            if(canOnFrame == 1)
-//            {
-//                new Runnable()
-//                {
-//                    public void run(){
-//                        onFrame(frameData, 0, byteCount);
-//                    }
-//                }.run();
-
-//                byteCount = 4;
-//            }
-//        }
-
+    public static void start() {
+        Log.e("Media", "==start");
+        socketThread s = new socketThread();
+        s.start();
     }
 
     public static void stop() {
@@ -843,8 +920,6 @@ public class ExtendsQtSurface extends Activity {
         }
         return super.onTouchEvent(event);
     }
-
-
 
    @Override
    protected void onPause() {

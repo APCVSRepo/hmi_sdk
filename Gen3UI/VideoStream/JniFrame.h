@@ -14,7 +14,36 @@
 #include "JniNative.h"
 #include "AppListInterface.h"
 #define QDBG qDebug()<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
+#define __D(fmt,...)  logOut(__FILE__,__FUNCTION__,__LINE__,fmt"",##__VA_ARGS__)
+#include <stdio.h>
+#include <stdarg.h>
+#include <android/log.h>
+#define MAX_MSG     1000
 
+static int logOut(const char *file, const char *func, const int line, const char *fmt, ...)
+{
+    char msg[MAX_MSG]={0};
+    if(NULL != fmt)
+    {
+        va_list ap;
+        va_start(ap, fmt);
+        vsnprintf(msg, sizeof(msg), fmt, ap);
+        va_end(ap);
+    }
+    time_t tnow;
+    struct tm *tmnow;
+    time(&tnow);
+    tmnow = localtime(&tnow);
+
+    //usec
+    struct timeval tv;
+    if(gettimeofday(&tv,NULL)<0)
+        return 0;
+
+    __android_log_print(ANDROID_LOG_ERROR,"HMI","%02d:%02d:%02d.%06d %s:%s():%d  %s",
+                        tmnow->tm_hour,tmnow->tm_min,tmnow->tm_sec,tv.tv_usec,
+                        file, func, line, msg);
+}
 #define TIME_INTER 20
 typedef struct FrameData{
     uchar buf[576000];
@@ -41,19 +70,11 @@ public:
 
     static void MsgNofityFromJni(int msgNo, int x, int y);
     void setAppList(AppListInterface *pList);
-    void pushFrameQueue(FrameS &frameData);
-    void clearFrameQueue();
     void stopStream();
 private slots:
 
 private:
     static AppListInterface *m_pList;
-    static bool m_b_canFlush;
-
-    static QQueue<FrameS> m_queueFrame;
-    static QMutex m_mutex;
-    pthread_t threadid;
-    static void *flushDataThread(void *args);
 };
 
 #endif // JNIFRAME_H

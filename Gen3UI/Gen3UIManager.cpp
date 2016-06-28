@@ -162,7 +162,7 @@ void CGen3UIManager::onVideoStartSlots()
 #ifdef ANDROID
     MediaCodecStream *pVideoStream = ((MediaCodecStream *)m_vUIWidgets[ID_VIDEOSTREAM]);
     pVideoStream->startStream();
-    m_pList->IconnectToVS(pVideoStream, "127.0.0.1", 5050);
+//    m_pList->IconnectToVS(pVideoStream, "127.0.0.1", 5050);
 #else
     fflush(stdout);
     std::string str_url = AppControl->getUrlString();

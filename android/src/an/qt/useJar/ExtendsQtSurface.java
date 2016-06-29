@@ -115,11 +115,7 @@ public class ExtendsQtSurface extends Activity{
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.e(TAG, "===================onCreate");
-//        if(mDirectBuffer.array() == NULL)
-//        {
-//            mDirectBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
-//        }
-//        setDirectBuffer();
+        setDirectBuffer();
 
         instance = this;
         // TODO Auto-generated method stub
@@ -688,6 +684,11 @@ public class ExtendsQtSurface extends Activity{
                     {
 //                        Log.e(TAG, "frame.len = " +  frame.len + "; frameQueue.size() = " + frameQueue.size());
                         onFrame(frame.buf, 0, frame.len);
+                        try {
+                            Thread.sleep(30);
+                        } catch (InterruptedException e) {
+
+                        }
                     }
                     lock.unlock();
                 }
@@ -703,30 +704,6 @@ public class ExtendsQtSurface extends Activity{
         @Override
         public void run() {
 
-            ////////////file
-//            int fileLength = 0;
-//            int offset = 0;
-//            int readLen = 50;
-//            byte [] fileBuffer = null;
-//            if (mFileInput == null) {
-//                try {
-//                    mFileInput = new RandomAccessFile(new File(SAMPLE), "r");
-//                } catch (FileNotFoundException e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-//                }
-//            }
-//            try {
-//                fileLength = (int)mFileInput.length();
-//                fileBuffer = new byte[fileLength];
-//                Log.i("yflog", "read file length:" + fileLength);
-//                mFileInput.read(fileBuffer);
-//            } catch (IOException e1) {
-//                // TODO Auto-generated catch block
-//                e1.printStackTrace();
-//            }
-            ////////////////
-
             String host = "127.0.0.1";
             int port = 5050;
 
@@ -738,12 +715,6 @@ public class ExtendsQtSurface extends Activity{
                 client = new Socket(host, port);
                 readIn = new DataInputStream(client.getInputStream());
 
-//                while(offset < fileLength)
-//                {
-//                    dataLen = readLen;
-//                    System.arraycopy(fileBuffer, offset, recvBuf, 0, readLen);
-//                    offset += readLen;
-//                    Log.e(TAG, "dataLen = " + dataLen);
                 while((dataLen = readIn.read(recvBuf)) > 0)
                 {
                     frameData[0] = 0;
@@ -815,7 +786,7 @@ public class ExtendsQtSurface extends Activity{
                     }
 
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
 
                     }
@@ -877,6 +848,92 @@ public class ExtendsQtSurface extends Activity{
             m_nativeNotify = new ExtendsQtNative();
         }
         m_nativeNotify.notifyMsg(msgNo, x, y);
+    }
+    private final static int BUFFER_SIZE = 1024*16;
+    private static ByteBuffer mDirectBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
+    private static void setDirectBuffer()
+    {
+        Log.e(TAG, "setDirectBuffer");
+        if(m_nativeNotify == null){
+            m_nativeNotify = new ExtendsQtNative();
+        }
+        m_nativeNotify.setDirectBuffer(mDirectBuffer,BUFFER_SIZE);
+    }
+    static byte[] buffer;
+    public static void flsh(int len) {
+//        Log.e(TAG, "len:"+len);
+        int dataLen = len;
+//        Log.e(TAG, "dataLen:"+dataLen);
+        buffer = mDirectBuffer.array();
+
+
+        frameData[0] = 0;
+        frameData[1] = 0;
+        frameData[2] = 0;
+        frameData[3] = 1;
+
+        int nPos = 0;
+        int index = 0;
+        int flag = 0;
+
+        int canOnFrame = 0;
+        while (nPos < dataLen) {
+
+            canOnFrame = 0;
+            while (nPos < dataLen) {
+                flag = buffer[nPos++];
+                if(findFirstFrame == 1)
+                {
+                    frameData[byteCount++] = (byte)flag;
+                }
+                if (flag == 0)
+                {
+                    index = lastIndex + 1;
+                    while (flag == 0)
+                    {
+                        if (nPos < dataLen)
+                        {
+                            lastIndex = 0;
+                            flag = buffer[nPos++];
+                            if(findFirstFrame == 1)
+                            {
+                                frameData[byteCount++] = (byte)flag;
+                            }
+                            index++;
+                        }
+                        else
+                        {
+                            lastIndex = index;
+                            break;
+                        }
+                    }
+                    if (flag == 1 && index >= 4)
+                    {
+                        if(findFirstFrame == 0)
+                            findFirstFrame = 1;
+                        else
+                        {
+                            byteCount = byteCount - 4;
+                            canOnFrame = 1;
+                        }
+
+                        break;
+                    }
+                }
+            }
+            if(canOnFrame == 1)
+            {
+                FrameStruct frame = new FrameStruct();
+                frame.buf = new byte[byteCount];
+                frame.len = byteCount;
+                System.arraycopy(frameData, 0, frame.buf, 0, byteCount);
+                lock.lock();
+                frameQueue.offer(frame);
+                lock.unlock();
+                byteCount = 4;
+            }
+        }
+
     }
 
     public static void start() {

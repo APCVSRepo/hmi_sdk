@@ -1,5 +1,5 @@
 #include "MediaCodecStream.h"
-
+#include "main.h"
 MediaCodecStream::MediaCodecStream(AppListInterface * pList, QWidget *parent) : QWidget(parent)
 {
     m_jniFrame.setAppList(pList);
@@ -9,6 +9,11 @@ MediaCodecStream::MediaCodecStream(AppListInterface * pList, QWidget *parent) : 
     {
         setGeometry(0,0,parent->width(),parent->height());
     }
+
+#ifdef SDL_CALL_BACK
+    sdl_set_videostream_callback(callBack_send_data);
+    __D("sdl_set_videostream_callback\n");
+#endif
 }
 
 MediaCodecStream::~MediaCodecStream()
@@ -33,14 +38,38 @@ void MediaCodecStream::hideActivity()
 
 void MediaCodecStream::startStream()
 {
-#ifdef ANDROID
+#ifndef SDL_CALL_BACK
     m_jniFrame.startStream();
 #endif
 }
 
 void MediaCodecStream::stopStream()
 {
-#if defined(ANDROID)
     m_jniFrame.stopStream();
-#endif
 }
+
+#ifdef SDL_CALL_BACK
+#define TMP_BUF_LEN 100
+static uchar m_tmpBuf[TMP_BUF_LEN + 2048] = {0};
+static int offset = 0;
+void MediaCodecStream::callBack_send_data(const char *data, int size)
+{
+    if(size + offset > TMP_BUF_LEN)
+    {
+        if(JniNative::gBuffer != NULL)
+        {
+            memcpy(m_tmpBuf + offset, data, size);
+            memcpy(JniNative::gBuffer, m_tmpBuf, size + offset);
+            QAndroidJniObject::callStaticMethod<void>(
+                        "an/qt/useJar/ExtendsQtSurface",
+                        "flsh", "(I)V", size + offset);
+            offset = 0;
+        }
+    }
+    else
+    {
+        memcpy(m_tmpBuf + offset, data, size);
+        offset += size;
+    }
+}
+#endif

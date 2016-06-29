@@ -19,7 +19,7 @@ using namespace QtAndroid;
 #include "AppListInterface.h"
 #include "JniFrame.h"
 
-//#define PLAY_FILE_TEST
+#define SDL_CALL_BACK
 
 typedef struct dataPackage{
     uchar buf[1024];
@@ -50,6 +50,10 @@ public slots:
 
 private:
     JniFrame m_jniFrame;
+
+#ifdef SDL_CALL_BACK
+    static void callBack_send_data(const char *data, int size);
+#endif
 };
 
 #endif // MEDIACODECSTREAM_H

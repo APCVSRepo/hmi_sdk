@@ -12,7 +12,7 @@ MediaCodecStream::MediaCodecStream(AppListInterface * pList, QWidget *parent) : 
 
 #ifdef SDL_CALL_BACK
     sdl_set_videostream_callback(callBack_send_data);
-    __D("sdl_set_videostream_callback\n");
+    //__D("sdl_set_videostream_callback\n");
 #endif
 }
 
@@ -54,6 +54,7 @@ static uchar m_tmpBuf[TMP_BUF_LEN + 2048] = {0};
 static int offset = 0;
 void MediaCodecStream::callBack_send_data(const char *data, int size)
 {
+#ifdef ANDROID
     if(size + offset > TMP_BUF_LEN)
     {
         if(JniNative::gBuffer != NULL)
@@ -71,5 +72,6 @@ void MediaCodecStream::callBack_send_data(const char *data, int size)
         memcpy(m_tmpBuf + offset, data, size);
         offset += size;
     }
+#endif
 }
 #endif

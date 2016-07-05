@@ -151,8 +151,8 @@ Result AppData::recvFromServer(Json::Value jsonObj)
         }
         else if(str_method == "UI.PerformAudioPassThru")
         {
-            performAudioPassThru(jsonObj);            
-            ShowUI(ID_AUDIOPASSTHRU);
+            performAudioPassThru(jsonObj);
+//            ShowUI(ID_AUDIOPASSTHRU);
             ToSDL->OnVRStartRecord();
             return RESULT_USER_WAIT;
         }

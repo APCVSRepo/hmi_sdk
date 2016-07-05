@@ -180,6 +180,7 @@ INCLUDEPATH +=  $$PWD/Include/msp \
 DEFINES +=ANDROID \
           SDL_SUPPORT_LIB \
           SDL_SUPPORT_VR
+DEFINES += SDL_CALL_BACK
 
 LIBS += -L$$PWD/Library/android/ffmpeg -lffmpeg
 LIBS += -L$$PWD/Library/android/sdl -lsmartDeviceLinkCore

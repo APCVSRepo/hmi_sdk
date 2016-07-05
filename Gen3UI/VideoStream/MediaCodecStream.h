@@ -7,6 +7,7 @@
 #include <QAndroidJniObject>
 #include <QAndroidJniEnvironment>
 using namespace QtAndroid;
+#include <unistd.h>
 #endif
 #include <QPainter>
 #include <QQueue>
@@ -14,12 +15,10 @@ using namespace QtAndroid;
 #include "../hmi_sdk/HMI_SDK/Connect/IMessageInterface.h"
 #include <QMutex>
 #include "JniNative.h"
-#include <unistd.h>
+
 #include "Common/Button.h"
 #include "AppListInterface.h"
 #include "JniFrame.h"
-
-#define SDL_CALL_BACK
 
 typedef struct dataPackage{
     uchar buf[1024];

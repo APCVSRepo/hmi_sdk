@@ -6,18 +6,20 @@
 #include <QAndroidJniEnvironment>
 #include <QAndroidJniObject>
 #include <jni.h>
+#include <unistd.h>
+#include <android/log.h>
 #endif
 #include <QTimer>
 #include <QQueue>
 #include <QMutex>
-#include <unistd.h>
 #include "JniNative.h"
 #include "AppListInterface.h"
 #define QDBG qDebug()<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
+#if defined(ANDROID)
 #define __D(fmt,...)  logOut(__FILE__,__FUNCTION__,__LINE__,fmt"",##__VA_ARGS__)
 #include <stdio.h>
 #include <stdarg.h>
-#include <android/log.h>
+
 #define MAX_MSG     1000
 
 static int logOut(const char *file, const char *func, const int line, const char *fmt, ...)
@@ -44,6 +46,7 @@ static int logOut(const char *file, const char *func, const int line, const char
                         tmnow->tm_hour,tmnow->tm_min,tmnow->tm_sec,tv.tv_usec,
                         file, func, line, msg);
 }
+#endif
 
 enum{
     MSG_NO_CAN_FLUSH = 101,

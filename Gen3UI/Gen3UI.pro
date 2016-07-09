@@ -144,7 +144,7 @@ INSTALLS +=qt_dll
 ################################for linux
 #unix:!android:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec  -lavformat -lavutil -lswscale
 unix:!android{
-ffmpeg.path=$$DESTDIR/../
+ffmpeg.path=$$OUT_PWD/../bin
 ffmpeg.files=$$PWD/Library/linux/ffmpeg/*.*
 INSTALLS+=ffmpeg
 

@@ -389,7 +389,7 @@ bool CSockHandle::Connect(IChannel *newChannel, std::string sIP, int iPort)
     if(this->m_i_socket==SOCKET_ERROR){
         LOGE("SOCKET INVALID");
     }
-    LOGE("this->m_i_socket = %d", this->m_i_socket);
+//    LOGE("this->m_i_socket = %d", this->m_i_socket);
     try
     {
         if (SOCKET_ERROR == ::connect(this->m_i_socket, (const sockaddr *)&toLocal, namelen))

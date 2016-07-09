@@ -181,13 +181,13 @@ void CGen3UIManager::onVideoStartSlots()
 void CGen3UIManager::onVideoStreamStop()
 {
     LOGI("~~~~~~~~onVideoStreamStop");
-//    emit onVideoStopSignal();
 #ifndef WINCE
 
 #ifdef ANDROID
     m_pList->IdelConnectToVS();
     ((MediaCodecStream *)m_vUIWidgets[ID_VIDEOSTREAM])->stopStream();
 #else
+    emit onVideoStopSignal();
     ((VideoStream *)m_vUIWidgets[ID_VIDEOSTREAM])->stopStream();
 #endif
 
@@ -226,7 +226,7 @@ void CGen3UIManager::AppShowSlot(int type)
                 LOGE("~~~~~hideActivity");
                 ((MediaCodecStream *)m_vUIWidgets[m_iCurUI])->hideActivity();
 #else
-                m_vUIWidgets[m_iCurUI]->show();
+                m_vUIWidgets[m_iCurUI]->hide();
 #endif
             }
             else

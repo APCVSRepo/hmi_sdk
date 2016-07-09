@@ -215,6 +215,7 @@ void VideoStream::startStream()
     }
     else{
         LOGD("init failed");
+        this->hide();
     }
 }
 
@@ -329,7 +330,7 @@ void VideoStream::stopStream()
     LOGI("sws_freeContext");
     sws_freeContext(pSwsContext);
 #endif
-    //this->hide();
+//    this->hide();
 }
 
 #ifndef VIDEO_STREAM_WIDGET
@@ -344,8 +345,9 @@ void VideoStream::PlayImageSlots()
                 if(m_i_frameFinished){
                     sws_scale(pSwsContext,(const uint8_t* const *)pAVFrame->data,pAVFrame->linesize,0,videoHeight,pAVPicture.data,pAVPicture.linesize);
                     //发送获取一帧图像信号
-                    m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_ARGB8555_Premultiplied	);
-                    //m_VideoImage=QImage(pAVFrame->data[0],pAVFrame->width,pAVFrame->height,QImage::Format_RGB888);
+//                    m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_ARGB8555_Premultiplied	);
+                    //用Format_RGBA8888显示, 上面的一句显示出来画面是花的
+                    m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_RGBA8888);
                     update();
                 }
             }

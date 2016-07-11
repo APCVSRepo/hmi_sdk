@@ -155,7 +155,8 @@ wince{
 HEADERS += \
     Include/global_first.h
 INCLUDEPATH += $$PWD/../Include/pthread \
-               $$PWD/../Include
+               $$PWD/../Include \
+               $$PWD/../Include/wince
 LIBS +=  $$PWD/Library/ce/pthread.lib
 LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
 pthread.path=$$OUT_PWD/../bin

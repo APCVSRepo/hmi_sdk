@@ -347,7 +347,9 @@ void VideoStream::PlayImageSlots()
                     //发送获取一帧图像信号
 //                    m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_ARGB8555_Premultiplied	);
                     //用Format_RGBA8888显示, 上面的一句显示出来画面是花的
+#ifndef WINCE
                     m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_RGBA8888);
+#endif
                     update();
                 }
             }

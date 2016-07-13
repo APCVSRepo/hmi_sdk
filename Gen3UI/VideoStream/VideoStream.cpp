@@ -1,4 +1,5 @@
-﻿#include "VideoStream.h"
+﻿#ifndef WINCE
+#include "VideoStream.h"
 #include <string>
 #include <stdio.h>
 #include <stdarg.h>
@@ -456,3 +457,4 @@ void VideoStream::onUpdateTime()
 {
     m_pTimeLab->setText(QTime::currentTime().toString("HH:mm:ss"));
 }
+#endif

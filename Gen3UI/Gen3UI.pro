@@ -158,14 +158,14 @@ INCLUDEPATH += $$PWD/../Include/pthread \
                $$PWD/../Include \
                $$PWD/../Include/wince
 LIBS +=  $$PWD/Library/ce/pthread.lib
-LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
+#LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
 pthread.path=$$OUT_PWD/../bin
 pthread.files=$$PWD/Library/ce/*.dll
-ffmpeg.path=$$OUT_PWD/../bin
-ffmpeg.files=$$PWD/Library/ce/ffmpeg/*.dll
+#ffmpeg.path=$$OUT_PWD/../bin
+#ffmpeg.files=$$PWD/Library/ce/ffmpeg/*.dll
 
 INSTALLS +=pthread
-INSTALLS+=ffmpeg
+#INSTALLS+=ffmpeg
 }
 
 

@@ -1,6 +1,6 @@
 ﻿#ifndef VIDEOSTREAM_H
 #define VIDEOSTREAM_H
-
+#ifndef WINCE
 #include <QWidget>
 #include "Config/Config.h"
 #include <QLabel>
@@ -132,5 +132,5 @@ private:
 private:
     AppListInterface *m_pList;
 };
-
+#endif
 #endif // VIDEOSTREAM_H

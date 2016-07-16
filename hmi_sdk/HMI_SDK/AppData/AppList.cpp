@@ -10,8 +10,8 @@ std::string ChangeSlash(std::string strSrc)
 #if defined(WIN32) || defined(WINCE)
     char *pTemp = new char[strSrc.size()+1];
     strcpy(pTemp,strSrc.c_str());
-    for (int i = 0;i != strSrc.size();++i){
-        if (pTemp[i] == '\\'){
+    for (int i = 0;i != strSrc.size();++i) {
+        if (pTemp[i] == '\\') {
             pTemp[i] = '/';
         }
     }
@@ -29,7 +29,7 @@ AppList::AppList()
 AppList::~AppList()
 {
     int i;
-    for (i = 0; i < m_AppDatas.size(); i++){
+    for (i = 0; i < m_AppDatas.size(); i++) {
         delete m_AppDatas[i];
     }
 }
@@ -43,7 +43,7 @@ void AppList::setUIManager(UIInterface *pUIManager)
 
 void AppList::ShowPreviousUI()
 {
-    if (m_pCurApp){
+    if (m_pCurApp) {
         if (m_pCurApp->ShowPreviousUI(false))
             return;
     }
@@ -62,7 +62,7 @@ Result AppList::onRequest(Json::Value jsonObj)
 
 void AppList::onNotification(Json::Value jsonObj)
 {
-    if (jsonObj.isMember("method") && jsonObj["method"].asString() != "BasicCommunication.SDLLog"){
+    if (jsonObj.isMember("method") && jsonObj["method"].asString() != "BasicCommunication.SDLLog") {
         recvFromServer(jsonObj);
     }
 }
@@ -82,23 +82,23 @@ void AppList::onError(std::string)
 
 Result AppList::recvFromServer(Json::Value jsonObj)
 {
-    if (jsonObj.isMember("method")){
+    if (jsonObj.isMember("method")) {
        // LOGI(jsonObj.toStyledString().data());
         std::string str_method = jsonObj["method"].asString();
 
-        if (str_method == "BasicCommunication.OnAppRegistered"){
+        if (str_method == "BasicCommunication.OnAppRegistered") {
             newAppRegistered(jsonObj);
             m_pUIManager->onAppShow(ID_APPLINK);
-        }else if (str_method == "BasicCommunication.OnAppUnregistered"){
+        }else if (str_method == "BasicCommunication.OnAppUnregistered") {
             appUnregistered(jsonObj);
             m_pUIManager->onAppShow(ID_APPLINK);
-        }else if (str_method == "VR.VRExitApp"){
+        }else if (str_method == "VR.VRExitApp") {
             m_pUIManager->tsSpeak(ID_EXIT, "退出"+ m_pCurApp->m_szAppName);
             m_pUIManager->onAppShow(ID_APPLINK);
-        }else if (str_method == "Navigation.StopStream"){
+        }else if (str_method == "Navigation.StopStream") {
             m_pUIManager->onVideoStreamStop();
             ShowPreviousUI();
-        }else if (str_method == "VR.VRSwitchApp"){
+        }else if (str_method == "VR.VRSwitchApp") {
 //            {
 //               "jsonrpc" : "2.0",
 //               "method" : "VR.VRSwitchApp",
@@ -114,28 +114,28 @@ Result AppList::recvFromServer(Json::Value jsonObj)
             m_pUIManager->tsSpeak(ID_SWITCHAPP, strAppVRName);
 
             int iNewID = jsonObj["params"]["appID"].asInt();
-            if (m_pCurApp->m_iAppID != iNewID){
+            if (m_pCurApp->m_iAppID != iNewID) {
                 std::vector <AppData *>::iterator i;
-                for (i = m_AppDatas.begin(); i != m_AppDatas.end(); i++){
-                    if (iNewID == (*i)->m_iAppID){
+                for (i = m_AppDatas.begin(); i != m_AppDatas.end(); i++) {
+                    if (iNewID == (*i)->m_iAppID) {
                         m_pCurApp = *i;
                         m_pUIManager->onAppShow(m_pCurApp->getCurUI());
                         break;
                     }
                 }
             }
-        }else if (str_method == "UI.SetAppIcon"){
+        }else if (str_method == "UI.SetAppIcon") {
             int iAppId = jsonObj["params"]["appID"].asInt();
             std::vector <AppData *>::iterator Iter = m_AppDatas.begin();
-            while (Iter != m_AppDatas.end()){
-                if (iAppId == (*Iter)->m_iAppID){
+            while (Iter != m_AppDatas.end()) {
+                if (iAppId == (*Iter)->m_iAppID) {
                     QUrl iconPathUrl(jsonObj["params"]["syncFileName"]["value"].asString().c_str());
 #if defined(WINCE)
                     (*Iter)->m_strAppIconFilePath = ChangeSlash(iconPathUrl.path().toLocal8Bit().data());
 #else
                     (*Iter)->m_strAppIconFilePath = ChangeSlash(iconPathUrl.path().toStdString());
 #endif
-                    if (m_pCurApp == NULL){
+                    if (m_pCurApp == NULL) {
                         m_pUIManager->onAppShow(ID_APPLINK);
                     }
                     //m_pUIManager->onAppShow(m_pCurApp->getCurUI());
@@ -143,11 +143,11 @@ Result AppList::recvFromServer(Json::Value jsonObj)
                 }
                 ++Iter;
             }
-        }else if (str_method == "UI.EndAudioPassThru"){
+        }else if (str_method == "UI.EndAudioPassThru") {
             ToSDL->OnVRCancelRecord();
             m_pUIManager->OnEndAudioPassThru();
             return RESULT_SUCCESS;
-        }else{
+        } else {
             if (m_pCurApp)
                 return m_pCurApp->recvFromServer(jsonObj);
             else
@@ -224,9 +224,9 @@ void AppList::newAppRegistered(Json::Value jsonObj)
     pData->addExitAppCommand();
 
     std::vector <AppData *>::iterator i;
-    for (i = m_AppDatas.begin(); i != m_AppDatas.end(); i++){
+    for (i = m_AppDatas.begin(); i != m_AppDatas.end(); i++) {
         AppData * pOne = *i;
-        if (pOne->m_iAppID == pData->m_iAppID){
+        if (pOne->m_iAppID == pData->m_iAppID) {
             m_AppDatas.erase(i);
             delete pOne;
             break;
@@ -240,13 +240,13 @@ void AppList::OnAppActivated(int iAppID)
 {
     AppData * pData;
     int i;
-    for (i = 0; i < m_AppDatas.size(); i++){
+    for (i = 0; i < m_AppDatas.size(); i++) {
         pData = m_AppDatas[i];
         if(pData->m_iAppID == iAppID)
             break;
     }
 
-    if (i >= m_AppDatas.size()){
+    if (i >= m_AppDatas.size()) {
         return;
     }
 
@@ -268,7 +268,7 @@ void AppList::OnAppExit()
 
 void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames,std::vector<std::string> &vIconPath)
 {
-    for (int i = 0; i < m_AppDatas.size(); i++){
+    for (int i = 0; i < m_AppDatas.size(); i++) {
         vAppIDs.push_back(m_AppDatas[i]->m_iAppID);
         vAppNames.push_back(m_AppDatas[i]->m_szAppName);
         vIconPath.push_back(m_AppDatas[i]->m_strAppIconFilePath);
@@ -278,7 +278,7 @@ void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vA
 
 void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames)
 {
-    for (int i = 0; i < m_AppDatas.size(); i++){
+    for (int i = 0; i < m_AppDatas.size(); i++) {
         vAppIDs.push_back(m_AppDatas[i]->m_iAppID);
         vAppNames.push_back(m_AppDatas[i]->m_szAppName);
     }
@@ -289,10 +289,10 @@ void AppList::appUnregistered(Json::Value jsonObj)
     int appID = jsonObj["params"]["appID"].asInt();
 
     std::vector <AppData *>::iterator i;
-    for (i = m_AppDatas.begin(); i != m_AppDatas.end(); i++){
-        if (appID == (*i)->m_iAppID){
-            if (m_pCurApp){
-                if (m_pCurApp->m_iAppID == appID){
+    for (i = m_AppDatas.begin(); i != m_AppDatas.end(); i++) {
+        if (appID == (*i)->m_iAppID) {
+            if (m_pCurApp) {
+                if (m_pCurApp->m_iAppID == appID) {
                     m_pCurApp = NULL;
                     //m_pUIManager->onVideoStreamStop();
                 }

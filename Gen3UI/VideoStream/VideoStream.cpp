@@ -28,7 +28,7 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
     m_pList = pList;
 
     setWindowFlags(Qt::FramelessWindowHint);
-    if (parent){
+    if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
     }
 
@@ -97,21 +97,21 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
 
 VideoStream::~VideoStream()
 {
-    for (int i = 0;i != 4;++i){
+    for (int i = 0;i != 4;++i) {
         delete m_pBtnImage[i];
     }
 
 #ifdef VIDEO_STREAM_WIDGET
     delete m_VideoPlayer;
 #else
-    if (pAVFormatContext != NULL){
+    if (pAVFormatContext != NULL) {
         avformat_free_context(pAVFormatContext);
         pAVFormatContext = NULL;
     }
-    if (pAVFrame != NULL){
+    if (pAVFrame != NULL) {
         av_frame_free(&pAVFrame);
     }
-    if (pSwsContext != NULL){
+    if (pSwsContext != NULL) {
         sws_freeContext(pSwsContext);
     }
     //delete m_Screen;
@@ -143,7 +143,7 @@ void VideoStream::callBack_send_data(const char *data, int size)
     arrayBuffer.append(data,size);
 //    pthread_mutex_lock(&_mutex_video_buffer);
 //    int space=(video_start+AV_BUFFER_SIZE-video_end);
-//    if(space>=size){
+//    if(space>=size) {
 //        if(AV_BUFFER_SIZE-)
 //        memcpy(&video_buffer[video_end],data,size);
 //        video_end +=size;
@@ -155,11 +155,11 @@ void VideoStream::callBack_send_data(const char *data, int size)
 int VideoStream::read_buffer(void *opaque,uint8_t *buf,int buf_size)
 {
     int size = arrayBuffer.size();
-    if (size >= buf_size){
+    if (size >= buf_size) {
         memcpy(buf,arrayBuffer.data(),buf_size);
         arrayBuffer.remove(0,buf_size);
         return buf_size;
-    }else{
+    } else {
         memcpy(buf,arrayBuffer.data(),arrayBuffer.size());
         arrayBuffer.clear();
         return size;
@@ -197,13 +197,13 @@ void VideoStream::startStream()
 
     pAVFrame = av_frame_alloc();
 
-    if (this->Init()){
+    if (this->Init()) {
         m_Stop = false;
         this->show();
         pthread_t frame_read_;
         pthread_create(&frame_read_,NULL,VideoStream::ReadVideoFrame,this);
 
-    }else{
+    } else {
         LOGD("init failed");
         this->hide();
     }
@@ -221,7 +221,7 @@ bool VideoStream::Init()
 #else
     int result = avformat_open_input(&pAVFormatContext,m_str_url.toUtf8().data(),NULL,NULL);//"tcp://127.0.0.1:5050"//m_str_url.toUtf8().data()
 #endif
-    if (result < 0){
+    if (result < 0) {
         char errbuf[1024] = {0};
         int e = av_strerror(result,errbuf,1024);
         LOGD("avformat_open_input failed,error=%d,%d,%s",result,e,errbuf);
@@ -235,7 +235,7 @@ bool VideoStream::Init()
 #endif
    LOGD("avformat_find_stream_info");
    result = avformat_find_stream_info(pAVFormatContext,NULL);
-   if (result<0){
+   if (result<0) {
       LOGD("获取视频流信息失败%d",3);
       return false;
    }
@@ -249,7 +249,7 @@ bool VideoStream::Init()
         }
     }
     LOGD("pAVCodecContext");
-    if (videoStreamIndex == -1){
+    if (videoStreamIndex == -1) {
 
         LOGD("获取视频流索引失败,%d",2);
         return false;
@@ -260,7 +260,7 @@ bool VideoStream::Init()
    // pAVCodecContext->width=1333;
     videoWidth = pAVCodecContext->width;
     videoHeight = pAVCodecContext->height;
-    if (videoWidth*videoHeight == 0){
+    if (videoWidth*videoHeight == 0) {
         videoWidth = 800;
         videoHeight = 480;
     }
@@ -278,7 +278,7 @@ bool VideoStream::Init()
     LOGD("avcodec_open2");
     //打开对应解码器
     result = avcodec_open2(pAVCodecContext,pAVCodec,NULL);
-    if (result<0){
+    if (result<0) {
         LOGD("打开解码器失败,%d",1);
         return false;
     }
@@ -326,13 +326,13 @@ void VideoStream::stopStream()
 #ifndef VIDEO_STREAM_WIDGET
 void VideoStream::PlayImageSlots()
 {
-    while(m_Stop == false){
+    while(m_Stop == false) {
         AVPacket pAVPacket;
-        if(av_read_frame(pAVFormatContext, &pAVPacket) == 0){
+        if(av_read_frame(pAVFormatContext, &pAVPacket) == 0) {
             //LOGD("data size=%d,packet num=%d,total_size=%d\n",pAVPacket.size,packet_num++,data_size+=pAVPacket.size);
-            if(pAVPacket.stream_index == videoStreamIndex){
+            if(pAVPacket.stream_index == videoStreamIndex) {
                 avcodec_decode_video2(pAVCodecContext, pAVFrame, &m_i_frameFinished, &pAVPacket);
-                if(m_i_frameFinished){
+                if(m_i_frameFinished) {
                     sws_scale(pSwsContext,(const uint8_t* const *)pAVFrame->data,pAVFrame->linesize,0,videoHeight,pAVPicture.data,pAVPicture.linesize);
                     //发送获取一帧图像信号
 //                    m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_ARGB8555_Premultiplied	);
@@ -409,9 +409,9 @@ void VideoStream::mouseReleaseEvent(QMouseEvent *e)
 
 bool VideoStream::PointInRect(QRect rect,QPoint point)
 {
-    if(point.x() < rect.left() || point.x() > rect.right() || point.y() < rect.top() || point.y() > rect.bottom()){
+    if(point.x() < rect.left() || point.x() > rect.right() || point.y() < rect.top() || point.y() > rect.bottom()) {
         return false;
-    }else{
+    } else {
         return true;
     }
 }

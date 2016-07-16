@@ -4,8 +4,7 @@
 CSliderView::CSliderView(AppListInterface * pList, QWidget *parent) : QWidget(parent),
     m_bDynamic(false)
 {
-    if(parent)
-    {
+    if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
     }
     m_pList = pList;
@@ -37,8 +36,7 @@ CSliderView::CSliderView(AppListInterface * pList, QWidget *parent) : QWidget(pa
     pTopLayout->addWidget(m_pAppNameLab,1);
 
     pBottomLayout->addStretch(1);
-    for(int i = 0;i != 2;++i)
-    {
+    for (int i = 0;i != 2;++i) {
         pBottomLayout->addWidget(m_aSoftBtn + i);        
         m_aSoftBtn[i].SetTextStyle("font: 32px \"Liberation Serif\";color:rgb(0,0,0)");
         m_aSoftBtn[i].SetId(i);
@@ -80,13 +78,10 @@ CSliderView::~CSliderView()
 
 void CSliderView::OnSoftBtnClicked(int iSoftBtnID)
 {
-    if(iSoftBtnID == 0)
-    {
+    if (iSoftBtnID == 0) {
         m_pTimer->stop();
         AppControl->OnSliderResponse(RESULT_SUCCESS,m_pSlider->value());
-    }
-    else if(iSoftBtnID == 1)
-    {
+    } else if (iSoftBtnID == 1) {
         m_pTimer->stop();
         AppControl->OnSliderResponse(RESULT_ABORTED,m_pSlider->value());
     }
@@ -94,8 +89,7 @@ void CSliderView::OnSoftBtnClicked(int iSoftBtnID)
 
 void CSliderView::showEvent(QShowEvent * e)
 {
-    if (AppControl)
-    {
+    if (AppControl) {
         AppBase::SetEdlidedText(m_pAppNameLab,AppControl->getAppName().c_str(),width()*0.9);
 
         Json::Value m_jsonData = AppControl->getSlider();
@@ -108,18 +102,13 @@ void CSliderView::showEvent(QShowEvent * e)
         AppBase::SetEdlidedText(m_pHeaderLab,m_jsonData["params"]["sliderHeader"].asString().c_str(),width()*0.9);
 
         m_FooterStrVec.clear();
-        if (m_jsonData["params"].isMember("sliderFooter"))
-        {
-            if(m_jsonData["params"]["sliderFooter"].size() == 1)
-            {
+        if (m_jsonData["params"].isMember("sliderFooter")) {
+            if (m_jsonData["params"]["sliderFooter"].size() == 1) {
                 m_bDynamic = false;
-            }
-            else
-            {
+            } else {
                 m_bDynamic = true;
             }
-            for(int i = 0; i < m_jsonData["params"]["sliderFooter"].size(); i++)
-            {
+            for (int i = 0; i < m_jsonData["params"]["sliderFooter"].size(); i++) {
                 m_FooterStrVec.push_back(m_jsonData["params"]["sliderFooter"][i].asString());
             }
         }
@@ -132,12 +121,9 @@ void CSliderView::showEvent(QShowEvent * e)
 
 void CSliderView::UpdateFooter(int iPos)
 {
-    if(m_bDynamic)
-    {
+    if (m_bDynamic) {
         AppBase::SetEdlidedText(m_pFooterLab,m_FooterStrVec[iPos-1].c_str(),width()*0.9);
-    }
-    else
-    {
+    } else {
         AppBase::SetEdlidedText(m_pFooterLab,m_FooterStrVec[0].c_str(),width()*0.9);
     }
 }

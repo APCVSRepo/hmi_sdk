@@ -28,12 +28,12 @@ void MenuButton::setActive(bool active)
 void MenuButton::setIcon(const QString on,const QString off)
 {
 
-    if(!m_pOnImage.load(on)){
+    if (!m_pOnImage.load(on)) {
         QUrl qurl(on);
         m_pOnImage.load(qurl.path());
     }
 
-    if(!m_pOffImage.load(off)){
+    if (!m_pOffImage.load(off)) {
         QUrl qurl(off);
         m_pOffImage.load(qurl.path());
     }
@@ -51,8 +51,7 @@ void MenuButton::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     QColor   wordColor;
 
-    if(m_isActive)
-    {
+    if (m_isActive) {
         QRect irect=m_pOnImage.rect();
         QRect orect=rect();
         int sx=(irect.width()-orect.width())/2;
@@ -61,9 +60,7 @@ void MenuButton::paintEvent(QPaintEvent *e)
        //painter.drawImage(0,0,orect.width(),orect.height(),m_pOnImage,sx,sy);
         painter.drawImage(orect,m_pOnImage);
        wordColor=Qt::white;
-    }
-    else
-    {
+    } else {
         QRect irect=m_pOffImage.rect();
         QRect orect=rect();
         int sx=(irect.width()-orect.width())/2;

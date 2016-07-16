@@ -3,8 +3,7 @@
 
 CScollMsgView::CScollMsgView(AppListInterface * pList, QWidget *parent) : QWidget(parent)
 {
-    if(parent)
-    {
+    if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
     }
     m_pList = pList;
@@ -61,27 +60,20 @@ void CScollMsgView::SetTimeOut(int iDuration)
 
 void CScollMsgView::showEvent(QShowEvent * e)
 {
-    if (AppControl)
-    {
+    if (AppControl) {
         AppBase::SetEdlidedText(m_pAppNameLab,AppControl->getAppName().c_str(),width()*0.7);
 
         Json::Value m_jsonData = AppControl->getScrollableMsgJson()["params"];
-
         SetTimeOut(m_jsonData["timeout"].asInt());
-
-        if (m_jsonData.isMember("messageText"))
-        {
+        if (m_jsonData.isMember("messageText")) {
             m_pText->setText(m_jsonData["messageText"]["fieldText"].asString().c_str());
         }
 
-        if (m_jsonData.isMember("softButtons"))
-        {
+        if (m_jsonData.isMember("softButtons")) {
             m_pSoftBtn->SetId(m_jsonData["softButtons"][0]["softButtonID"].asInt());
             m_pSoftBtn->SetText(m_jsonData["softButtons"][0]["text"].asString().c_str());
             m_pSoftBtn->show();
-        }
-        else
-        {
+        } else {
             m_pSoftBtn->hide();
         }
     }
@@ -102,8 +94,7 @@ void CScollMsgView::OnReturnBtnClicked()
 void CScollMsgView::OnSoftBtnClicked(int iBtnId)
 {
     //m_pTimer->stop();
-    if(iBtnId != 0)
-    {
+    if (iBtnId != 0) {
         AppControl->OnSoftButtonClick(iBtnId,BUTTON_SHORT);
     }
 }

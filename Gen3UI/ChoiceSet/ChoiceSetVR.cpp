@@ -5,8 +5,7 @@
 CChoiceSetVR::CChoiceSetVR(QWidget *parent) :
     QWidget(parent)
 {
-    if(parent)
-    {
+    if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
     }
     //m_pList = pList;
@@ -23,8 +22,7 @@ CChoiceSetVR::CChoiceSetVR(QWidget *parent) :
     m_pTitleLab = new QLabel;
 
     pMainLayout->addWidget(m_pTitleLab);
-    for(int i = 0;i != 4;++i)
-    {
+    for (int i = 0;i != 4;++i) {
         pMainLayout->addWidget(m_aChoiceLab+i);
         m_aChoiceLab[i].setStyleSheet("font: 30px \"Liberation Serif\";color:rgb(0,0,0)");
         m_aChoiceLab[i].setAlignment(Qt::AlignCenter);
@@ -32,8 +30,7 @@ CChoiceSetVR::CChoiceSetVR(QWidget *parent) :
     pMainLayout->addLayout(pCmdLayout);
     pMainLayout->setContentsMargins(20,20,20,20);
 
-    for(int i = 0;i != 3;++i)
-    {
+    for (int i = 0;i != 3;++i) {
         pCmdLayout->addWidget(m_aCmdLab+i,1);
         m_aCmdLab[i].setStyleSheet("font: 30px \"Liberation Serif\";color:rgb(0,0,0)");
         m_aCmdLab[i].setAlignment(Qt::AlignCenter);
@@ -65,8 +62,7 @@ void CChoiceSetVR::SetTitle(std::string strTitle)
 
 void CChoiceSetVR::SetChoice(int iPos,std::string strChoice)
 {
-    if(iPos < 4)
-    {
+    if (iPos < 4) {
         AppBase::SetEdlidedText(m_aChoiceLab+iPos,strChoice.c_str(),width()*0.8);
     }
 }

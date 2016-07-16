@@ -24,7 +24,7 @@ SDLConnector::~SDLConnector()
 
 void SDLConnector::Close()
 {
-    if (g_SingleConnector){
+    if (g_SingleConnector) {
         delete g_SingleConnector;
         g_SingleConnector =  0;
     }
@@ -47,13 +47,13 @@ void SDLConnector::onNetworkBroken()
     if (m_pNetwork)
         m_pNetwork->onNetworkBroken();
 
-    while (!m_bReleased){
+    while (!m_bReleased) {
 #if defined(WIN32)|| defined(WINCE)
         Sleep(1000);
 #else
         usleep(1000000);
 #endif
-        if (!ConnectToSDL(m_pMsgHandler,m_pNetwork)){
+        if (!ConnectToSDL(m_pMsgHandler,m_pNetwork)) {
             if (m_pNetwork)
                 m_pNetwork->onConnected();
             break;
@@ -96,7 +96,7 @@ bool SDLConnector::ConnectToVideoStream(IMessageInterface * pMsgHandler, std::st
 
     m_sdl_is_connected = m_Sockets.ConnectToVS(&m_VideoStream, sIP, iPort, this);
     LOGI("m_sdl_is_connected=====%d", m_sdl_is_connected);
-    if (m_sdl_is_connected){
+    if (m_sdl_is_connected) {
 //        m_VideoStream.onOpen();
     }
 
@@ -111,7 +111,7 @@ void SDLConnector::DelConnectToVideoStream()
 void SDLConnector::Connect()
 {
     m_sdl_is_connected = m_Sockets.ConnectTo(m_channels, this);
-    if (m_sdl_is_connected){
+    if (m_sdl_is_connected) {
         m_VR.onOpen();
         m_Vehicle.onOpen();
         m_UI.onOpen();
@@ -130,12 +130,12 @@ void SDLConnector::Connect()
 void* SDLConnector::ConnectThread(void* arg)
 {
     SDLConnector * connector=(SDLConnector*)arg;
-    if (connector==NULL){
+    if (connector==NULL) {
         return NULL;
     }
 
-    while (true){
-        if (!connector->IsSDLConnected()){
+    while (true) {
+        if (!connector->IsSDLConnected()) {
              connector->Connect();
         }
 #ifdef WIN32
@@ -168,14 +168,14 @@ void SDLConnector::OnAppActivated(int appID)
 
 void SDLConnector::OnSoftButtonClick(int id, int mode,std::string strName)
 {
-    if (!strName.empty()){
+    if (!strName.empty()) {
         _onButtonClickAction(strName, "BUTTONDOWN", id);
         _onButtonClickAction(strName, "BUTTONUP", id);
         if (mode == BUTTON_SHORT)
             _onButtonClickAction(strName, "SHORT", id);
         else
             _onButtonClickAction(strName, "LONG", id);
-    }else{
+    } else {
         _onButtonClickAction("CUSTOM_BUTTON", "BUTTONDOWN", id);
         _onButtonClickAction("CUSTOM_BUTTON", "BUTTONUP", id);
         if (mode == BUTTON_SHORT)
@@ -214,12 +214,12 @@ void SDLConnector::OnAppOut(int appID)
 // reason 0:timeout 1:aborted 2:clickSB
 void SDLConnector::OnAlertResponse(int id, int reason)
 {
-    if (reason == RESULT_SUCCESS){
+    if (reason == RESULT_SUCCESS) {
         Json::Value result;
         result["code"] = 0;
         result["method"] = "UI.Alert";
 		m_UI.sendResult(id,result);
-    }else{
+    } else {
         Json::Value error;
         Json::Value data;
         data["method"] = "UI.Alert";
@@ -243,7 +243,7 @@ void SDLConnector::OnScrollMessageResponse(int id, int reason)
 {
     /*
     Json::Value root;
-    if(reason == SCROLLMESSAGE_TIMEOUT || reason == SCROLLMESSAGE_CLICK_SOFTBUTTON){
+    if(reason == SCROLLMESSAGE_TIMEOUT || reason == SCROLLMESSAGE_CLICK_SOFTBUTTON) {
         Json::Value result;
         result["code"] = 0;
         result["method"] = "UI.ScrollableMessage";
@@ -283,7 +283,7 @@ void SDLConnector::OnPerformInteraction(int code, int performInteractionID, int 
     Json::Value result;
     result["code"] = code;
     result["method"] = "UI.PerformInteraction";
-    if(code == 0){
+    if(code == 0) {
         result["choiceID"] = choiceID;
     }
 
@@ -302,16 +302,16 @@ void SDLConnector::OnVRCommand(int appID, int cmdID)
 void SDLConnector::OnSliderResponse(int code, int sliderid, int sliderPosition)
 {
     std::string info_msg = "";
-    if (code == SLIDER_OK){
+    if (code == SLIDER_OK) {
         Json::Value result;
         result["code"] = code;
         result["method"] = "UI.Slider";
         result["sliderPosition"] = sliderPosition;
         m_UI.sendResult(sliderid, result);
-    }else{
-        if (code == SLIDER_TIMEOUT){
+    } else {
+        if (code == SLIDER_TIMEOUT) {
             info_msg = "Slider request timeout.";
-        }else{
+        } else {
             info_msg = "Slider request aborted.";
         }
         Json::Value error;
@@ -328,12 +328,12 @@ void SDLConnector::OnSliderResponse(int code, int sliderid, int sliderPosition)
 void SDLConnector::OnSetMediaClockTimerResponse(int iCode,int iRequestId)
 {
     //std::string info_msg = "";
-    if (iCode == RESULT_SUCCESS){
+    if (iCode == RESULT_SUCCESS) {
         Json::Value result;
         result["code"] = iCode;
         result["method"] = "UI.SetMediaClockTimer";
         m_UI.sendResult(iRequestId, result);
-    }else{
+    } else {
         Json::Value error;
         Json::Value data;
         data["method"] = "UI.SetMediaClockTimer";
@@ -349,12 +349,12 @@ void SDLConnector::OnPerformAudioPassThru(int appID, int performaududiopassthruI
 {
     _stopPerformAudioPassThru(appID);
     Json::Value root;
-    if (code == 0){
+    if (code == 0) {
         Json::Value result;
         result["code"] = code;
         result["method"] = "UI.PerformAudioPassThru";
 		m_UI.sendResult(performaududiopassthruID, result);
-    }else if (code == 5){
+    }else if (code == 5) {
         Json::Value error;
         Json::Value data;
 
@@ -363,7 +363,7 @@ void SDLConnector::OnPerformAudioPassThru(int appID, int performaududiopassthruI
         error["message"] = "PerformAudioPassThru was not completed successful!";
         error["data"] = data;
 		m_UI.sendError(performaududiopassthruID, error);
-    }else{
+    } else {
         Json::Value error;
         Json::Value data;
 
@@ -426,13 +426,13 @@ void SDLConnector::_buttonEventUp(std::string buttonname)
 
 void SDLConnector::OnTTSSpeek(int speekID, int code)
 {
-    if (code == SPEEK_OK){
+    if (code == SPEEK_OK) {
 		Json::Value result;
 
         result["method"] = "TTS.Speak";
         result["code"] = code;
 		m_TTS.sendResult(speekID, result);
-    }else{
+    } else {
         Json::Value error;
         Json::Value data;
 
@@ -464,7 +464,7 @@ void SDLConnector::OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y)
      static int id = 0;
 //     [{"c":[{"x":103,"y":247}]
 
-     switch(touch){
+     switch(touch) {
      case TOUCH_START:
          id++;
          params["type"] = "BEGIN";

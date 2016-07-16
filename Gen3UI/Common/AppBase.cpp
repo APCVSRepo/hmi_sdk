@@ -1,8 +1,6 @@
 ﻿#include "AppBase.h"
 #include <QMouseEvent>
 
-
-
 AppBase::AppBase(AppListInterface * pList, QWidget *parent) : QWidget(parent)
 {
     const int ui_app_width = 800;

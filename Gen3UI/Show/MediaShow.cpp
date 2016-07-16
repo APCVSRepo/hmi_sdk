@@ -9,8 +9,7 @@
 
 CMediaShow::CMediaShow(AppListInterface * pList, QWidget *parent) : QWidget(parent)
 {
-    if(parent)
-    {
+    if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
     }
     m_pList = pList;
@@ -60,8 +59,7 @@ CMediaShow::CMediaShow(AppListInterface * pList, QWidget *parent) : QWidget(pare
 
     pLeftCenterLayout->addLayout(pTimeShowLayout);
     pLeftCenterLayout->addWidget(m_pMusicPB);
-    for(int i = 0;i != 4;++i)
-    {
+    for (int i = 0;i != 4;++i) {
         pLeftCenterLayout->addWidget(m_aShowLine + i);
         m_aShowLine[i].setStyleSheet("border:0px;font: 28px \"Liberation Serif\";color:rgb(0,0,0)");
     }
@@ -81,14 +79,12 @@ CMediaShow::CMediaShow(AppListInterface * pList, QWidget *parent) : QWidget(pare
     pBottomCenterLayout->addWidget(m_pShadowLab);
     pBottomCenterLayout->addStretch(1);
 
-    for(int i = 0;i != 6;++i)
-    {
+    for (int i = 0;i != 6;++i) {
         m_pBtnLayout->addWidget(m_aSoftBtn + i);
         m_aSoftBtn[i].setSize(0,0);
         m_aSoftBtn[i].setTextStyle("border:0px;font: 32px \"Liberation Serif\";color:rgb(0,0,0)");
 
-        if(i != 5)
-        {
+        if (i != 5) {
             m_pBtnLayout->addWidget(m_aSplit + i);
             m_aSplit[i].setStyleSheet("max-height:0px;max-width:0px;border-image:url(:/images/MediaShow/split.png)");
             //m_aSplit[i].hide();
@@ -132,8 +128,7 @@ CMediaShow::CMediaShow(AppListInterface * pList, QWidget *parent) : QWidget(pare
     m_aSoftBtn[8].setStyleSheet("background:transparent");
 
     //set softBtnId
-    for(int i = 0;i != 6;++i)
-    {
+    for (int i = 0;i != 6;++i) {
         m_aSoftBtn[i].setId(0);
     }
     m_aSoftBtn[6].setId(CMD_PREV);
@@ -143,8 +138,7 @@ CMediaShow::CMediaShow(AppListInterface * pList, QWidget *parent) : QWidget(pare
     m_aSoftBtn[8].SetCustomName("SEEKRIGHT");
     SetPlayBtnID(false);
 
-    for(int i = 0;i != 6;++i)
-    {
+    for (int i = 0;i != 6;++i) {
         connect(&m_aSoftBtn[i],SIGNAL(clicked(int)),this,SLOT(SoftBtnClickedSlot(int)));
     }
     connect(m_aSoftBtn + 6,SIGNAL(clicked(int,std::string)),this,SLOT(SoftBtnClickedSlot(int,std::string)));
@@ -162,8 +156,7 @@ void CMediaShow::SoftBtnClickedSlot(int iSoftBtnID,std::string strName)
 
 void CMediaShow::SoftBtnClickedSlot(int iSoftBtnID)
 {
-    if(iSoftBtnID != 0)
-    {
+    if (iSoftBtnID != 0) {
         m_pList->getActiveApp()->OnSoftButtonClick(iSoftBtnID,0);
     }
 }
@@ -180,13 +173,10 @@ void CMediaShow::SetAppName(QString strName)
 
 void CMediaShow::showEvent(QShowEvent * e)
 {
-
-    for(int i = 0;i != 4;++i)
-    {
+    for (int i = 0;i != 4;++i) {
         m_aShowLine[i].setText("");
     }
-    for(int i = 0;i != 9;++i)
-    {
+    for (int i = 0;i != 9;++i) {
         m_aSoftBtn[i].setText("");
     }
     m_pTimeElapseLab->setText("");
@@ -194,46 +184,32 @@ void CMediaShow::showEvent(QShowEvent * e)
 
     Json::Value pObj;
     std::vector <SSoftButton > vec_softButtons;
-    if (m_pList->getActiveApp())
-    {
+    if (m_pList->getActiveApp()) {
         m_pSourceBtn->SetLeftIcon(m_pList->getActiveApp()->getAppIconFile());
         SetAppName(m_pList->getActiveApp()->getAppName().c_str());
 
         pObj = m_pList->getActiveApp()->getShowData();
-        if(pObj.isNull())
+        if (pObj.isNull())
             return;
         Json::Value jsonParams = pObj["params"];
 
-        for (unsigned int i = 0; i < jsonParams["showStrings"].size(); i++)
-        {
+        for (unsigned int i = 0; i < jsonParams["showStrings"].size(); i++) {
             Json::Value  fieldName = jsonParams["showStrings"][i];
-            if ("mainField1" == fieldName["fieldName"].asString())
-            {
+            if ("mainField1" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_aShowLine,fieldName["fieldText"].asString().c_str(),width()*0.3);
-            }
-            else if ("mainField2" == fieldName["fieldName"].asString())
-            {
+            } else if ("mainField2" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_aShowLine+1,fieldName["fieldText"].asString().c_str(),width()*0.3);
-            }
-            else if ("mainField3" == fieldName["fieldName"].asString())
-            {
+            } else if ("mainField3" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_aShowLine+2,fieldName["fieldText"].asString().c_str(),width()*0.3);
-            }
-            else if ("mainField4" == fieldName["fieldName"].asString())
-            {
+            } else if ("mainField4" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_aShowLine+3,fieldName["fieldText"].asString().c_str(),width()*0.3);
-            }
-            else if ("mediaTrack" == fieldName["fieldName"].asString())
-            {
+            } else if ("mediaTrack" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_pTimeElapseLab,fieldName["fieldText"].asString().c_str(),width()*0.3);
-            }
-            else if ("mediaClock" == fieldName["fieldName"].asString())
-            {
+            } else if ("mediaClock" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_pTimeRemainLab,fieldName["fieldText"].asString().c_str(),width()*0.3);
             }
         }
-        if (jsonParams.isMember("graphic"))
-        {
+        if (jsonParams.isMember("graphic")) {
             QUrl graphicUrl(jsonParams["graphic"]["value"].asString().c_str());
 #if defined(WINCE)
             QString strStyle = QString("background:transparent;border-image:url(%1)").arg(ChangeSlash(graphicUrl.path().toLocal8Bit().data()).c_str());
@@ -241,16 +217,12 @@ void CMediaShow::showEvent(QShowEvent * e)
             QString strStyle = QString("background:transparent;border-image:url(%1)").arg(ChangeSlash(graphicUrl.path().toStdString()).c_str());
 #endif
             m_pMusicPicLab->setStyleSheet(strStyle);
-        }
-        else
-        {
+        } else {
             m_pMusicPicLab->setStyleSheet("background:transparent");
         }
 
-        if (jsonParams.isMember("softButtons"))
-        {
-            for (int i = 0; i < jsonParams["softButtons"].size(); i++)
-            {
+        if (jsonParams.isMember("softButtons")) {
+            for (int i = 0; i < jsonParams["softButtons"].size(); i++) {
                 SSoftButton tmpSoftButton;
                 tmpSoftButton.b_isHighlighted = jsonParams["softButtons"][i]["isHighlighted"].asBool();
                 tmpSoftButton.i_softButtonID = jsonParams["softButtons"][i]["softButtonID"].asInt();
@@ -258,9 +230,7 @@ void CMediaShow::showEvent(QShowEvent * e)
                 vec_softButtons.push_back(tmpSoftButton);
             }
             m_pShadowLab->setStyleSheet("max-height:6px;border-image:url(:/images/MediaShow/shadow.png)");
-        }
-        else
-        {
+        } else {
             m_pShadowLab->setStyleSheet("background:transparent");
         }
         setSoftButtons(vec_softButtons);
@@ -269,42 +239,30 @@ void CMediaShow::showEvent(QShowEvent * e)
 
 void CMediaShow::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
 {
-    for(int i = 0;i != 6;++i)
-    {
+    for (int i = 0;i != 6;++i) {
         m_aSoftBtn[i].setSize(0,0);
 
-        if(i < 5)
-        {
+        if (i < 5) {
             m_aSplit[i].setStyleSheet("max-width:0px;border-image:url(:/images/MediaShow/split.png)");
         }
     }
 
-    if(vec_softButtons.size() == 1)
-    {
+    if (vec_softButtons.size() == 1) {
         m_aSoftBtn[0].initParameter(125,50,":/images/MediaShow/center_normal.png",":/images/MediaShow/center_press.png","",vec_softButtons[0].str_text.c_str());
         m_aSoftBtn[0].setId(vec_softButtons[0].i_softButtonID);
-    }
-    else
-    {
+    } else {
         int iSize = vec_softButtons.size()>6?6:vec_softButtons.size();
-        for(int i = 0;i != iSize;++i)
-        {
-            if(i == 0)
-            {
+        for(int i = 0;i != iSize;++i) {
+            if (i == 0) {
                 m_aSoftBtn[i].initParameter(125,50,":/images/MediaShow/left_normal.png",":/images/MediaShow/left_press.png","",vec_softButtons[i].str_text.c_str());
-            }
-            else if(i == iSize - 1)
-            {
+            } else if (i == iSize - 1) {
                 m_aSoftBtn[i].initParameter(125,50,":/images/MediaShow/right_normal.png",":/images/MediaShow/right_press.png","",vec_softButtons[i].str_text.c_str());
-            }
-            else
-            {
+            } else {
                 m_aSoftBtn[i].initParameter(125,50,":/images/MediaShow/center_normal.png",":/images/MediaShow/center_press.png","",vec_softButtons[i].str_text.c_str());
             }
             m_aSoftBtn[i].setId(vec_softButtons[i].i_softButtonID);
 
-            if(i < iSize - 1)
-            {
+            if (i < iSize - 1) {
                 m_aSplit[i].setStyleSheet("max-width:1px;border-image:url(:/images/MediaShow/split.png)");
             }
         }
@@ -324,46 +282,31 @@ void CMediaShow::UpdateMediaColckTimer()
     m_MediaClockEndTime.setHMS(m_i_endH,m_i_endM,m_i_endS);
 
 
-    if(jsonObj["params"]["updateMode"].asString() == "COUNTUP")
-    {
-        if(nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS))
-        {
+    if (jsonObj["params"]["updateMode"].asString() == "COUNTUP") {
+        if (nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS)) {
             m_b_countup = true;
             emit startMediaClock(true);
             AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
-        }
-        else
-        {
+        } else {
             emit startMediaClock(false);
             AppControl->OnSetMediaClockTimerResponse(RESULT_DATA_NOT_AVAILABLE);
         }
-    }
-    else if(jsonObj["params"]["updateMode"].asString() == "COUNTDOWN")
-    {
-        if(nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS))
-        {
+    } else if (jsonObj["params"]["updateMode"].asString() == "COUNTDOWN") {
+        if (nowMeidaClockTime.setHMS(m_i_startH, m_i_startM, m_i_startS)) {
             m_b_countup = false;
             emit startMediaClock(true);
             AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
-        }
-        else
-        {
+        } else {
             emit startMediaClock(false);
             AppControl->OnSetMediaClockTimerResponse(RESULT_DATA_NOT_AVAILABLE);
         }
-    }
-    else if(jsonObj["params"]["updateMode"].asString() == "PAUSE")
-    {
+    } else if (jsonObj["params"]["updateMode"].asString() == "PAUSE") {
         emit startMediaClock(false);
         AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
-    }
-    else if(jsonObj["params"]["updateMode"].asString() == "RESUME")
-    {
+    } else if (jsonObj["params"]["updateMode"].asString() == "RESUME") {
         emit startMediaClock(true);
         AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
-    }
-    else if(jsonObj["params"]["updateMode"].asString() == "CLEAR")
-    {
+    } else if (jsonObj["params"]["updateMode"].asString() == "CLEAR") {
         emit startMediaClock(false);
         setMediaClock(false,"");
         AppControl->OnSetMediaClockTimerResponse(RESULT_SUCCESS);
@@ -372,18 +315,15 @@ void CMediaShow::UpdateMediaColckTimer()
 
 void CMediaShow::mediaClockSlots(bool isStart)
 {
-    if(isStart)
-    {
-      if(m_timerId!=0)
+    if (isStart) {
+      if (m_timerId!=0)
         this->killTimer(m_timerId);
       m_timerId=this->startTimer(1000);
 
       m_pMusicPB->setRange(0,m_i_endH*3600+m_i_endM*60+m_i_endS);
       m_pMusicPB->setValue(m_i_startH*3600+m_i_startM*60+m_i_startS);
-    }
-    else
-    {
-        if(m_timerId!=0)
+    } else {
+        if (m_timerId!=0)
           this->killTimer(m_timerId);
     }
 
@@ -392,20 +332,16 @@ void CMediaShow::mediaClockSlots(bool isStart)
 
 void CMediaShow::timerEvent(QTimerEvent *e)
 {
-    if(m_b_countup)
-    {
+    if (m_b_countup) {
         nowMeidaClockTime = nowMeidaClockTime.addSecs(1);
-    }
-    else
-    {
+    } else {
         nowMeidaClockTime = nowMeidaClockTime.addSecs(-1);
     }
     m_pMusicPB->setValue(nowMeidaClockTime.hour()*3600+nowMeidaClockTime.minute()*60+nowMeidaClockTime.second());
 
-    if(nowMeidaClockTime.hour() == m_i_endH
+    if (nowMeidaClockTime.hour() == m_i_endH
             && nowMeidaClockTime.minute() == m_i_endM
-            && nowMeidaClockTime.second() == m_i_endS)
-    {
+            && nowMeidaClockTime.second() == m_i_endS) {
         SetPlayBtnID(false);
         this->killTimer(m_timerId);
     }
@@ -430,12 +366,9 @@ void CMediaShow::setMediaClock(QString strElapseTime,QString strRemainTime)
 
 void CMediaShow::SetPlayBtnID(bool bPlay)
 {
-    if(bPlay)
-    {
+    if (bPlay) {
         m_aSoftBtn[7].setId(CMD_PAUSE);
-    }
-    else
-    {
+    } else {
         m_aSoftBtn[7].setId(CMD_START);
     }
 }

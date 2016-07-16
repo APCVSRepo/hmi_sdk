@@ -4,8 +4,7 @@
 CAppListView::CAppListView(AppListInterface * pList,QWidget *parent) : QWidget(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint);
-    if(parent)
-    {
+    if (parent){
         setGeometry(0,0,parent->width(),parent->height());
         m_AppWidth = parent->width() / 4;
         m_AppHeight = parent->height() / 2;
@@ -26,16 +25,14 @@ CAppListView::CAppListView(AppListInterface * pList,QWidget *parent) : QWidget(p
     //QString childText[2]={"Find New App","App Setting"};
     QString childText[2]={"连接设备","连接移动应用程序"};
     int funcId[2]={-1,-2};
-    for(int i=0;i<2;i++){
+    for (int i=0;i<2;i++) {
         InsertChildApp(i,funcId[i],childText[i],appsheet_on[i],appsheet_off[i]);
     }
-
 }
 
 CAppListView::~CAppListView()
 {
-    for(int i = 0;i != m_pChildApps.size();++i)
-    {
+    for (int i = 0;i != m_pChildApps.size();++i) {
         delete m_pChildApps[i];
     }
     m_pChildApps.clear();
@@ -44,24 +41,19 @@ CAppListView::~CAppListView()
 
 void CAppListView::onChildAppSelected(int funcId)
 {
-
-    if(funcId==-1){
+    if (funcId == -1) {
         //Notify n(this);
         //n.showDlg();
-    }
-    else if(funcId==-2){
+    }else if (funcId == -2) {
 
-    }
-    else
-    {
+    } else {
          m_pList->OnAppActivated(funcId);
     }
-
 }
 
 void CAppListView::InsertChildApp(int index,int appId,QString text,QString on,QString off,bool bPaint)
 {
-    for(int i=index;i<m_pChildApps.size();i++){
+    for (int i=index;i<m_pChildApps.size();i++) {
         CAppButton *button=m_pChildApps.at(i);
         int r=(i+1)/4;
         int c=(i+1)%4;
@@ -85,7 +77,7 @@ void CAppListView::DeleteChildApp(int index)
     m_pChildApps.removeAt(index);
     disconnect(button,SIGNAL(clickedWitchFuncId(int)),this,SLOT(onChildAppSelected(int)));
     delete button;
-    for(int i=index;i<m_pChildApps.size();i++){
+    for (int i=index;i<m_pChildApps.size();i++) {
         CAppButton *button=m_pChildApps.at(i);
         int r=i/4;
         int c=i%4;
@@ -100,14 +92,11 @@ void CAppListView::showEvent(QShowEvent * e)
     std::vector<std::string> vIconPath;
     m_pList->getAppList(vAppIDs, vAppNames,vIconPath);
     int count=m_pChildApps.size();
-    for(int i=2;i<count;i++){
+    for (int i=2;i<count;i++) {
         DeleteChildApp(2);
     }
-
-    if(vAppIDs.size()>0){
-
-        for(int i=0;i<vAppIDs.size();i++)
-        {
+    if (vAppIDs.size()>0) {
+        for (int i=0;i<vAppIDs.size();i++) {
             InsertChildApp(2+i,vAppIDs.at(i),vAppNames.at(i).c_str(),vIconPath.at(i).c_str(),vIconPath.at(i).c_str(),true);
         }
     }

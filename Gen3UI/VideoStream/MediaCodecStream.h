@@ -38,11 +38,11 @@ public:
     void stopStream();
 
 public: //IMessageInterface
-    Result onRequest(Json::Value){return RESULT_SUCCESS;}
-    void onNotification(Json::Value){}
-    void onResult(Json::Value){}
-    void onRawData(void * p, int iLength){}
-    void onError(std::string error){}
+    Result onRequest(Json::Value) {return RESULT_SUCCESS;}
+    void onNotification(Json::Value) {}
+    void onResult(Json::Value) {}
+    void onRawData(void * p, int iLength) {}
+    void onError(std::string error) {}
 signals:
 
 public slots:

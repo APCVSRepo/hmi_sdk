@@ -47,7 +47,7 @@ bool JsonBuffer::getJsonFromBuffer(char * pData, int iLength, Json::Value& outpu
         m_szBuffer = m_szBuffer.substr(pos + 1);
 
     Json::Reader reader;
-    if (reader.parse(szFirstJson, output)){
+    if (reader.parse(szFirstJson, output)) {
         return true;
     }
     return false;
@@ -121,13 +121,13 @@ Json::Value Channel::ReadSpecifyJson(const char* fileName)
     //staticResult
     std::ifstream ifs;
     ifs.open(szResult);
-    if(ifs.is_open()){
+    if (ifs.is_open()) {
         Json::Reader reader;
-        if(!reader.parse(ifs,result,false)){
+        if(!reader.parse(ifs,result,false)) {
             LOGE("%s read error",fileName);
         }
         ifs.close();
-    }else{
+    } else {
         LOGE("%s can't open",szResult);
     }
     return result;
@@ -136,7 +136,7 @@ Json::Value Channel::ReadSpecifyJson(const char* fileName)
 void Channel::onReceiveData(void * pData, int iLength)
 {
     Json::Value rpc;
-    while (m_JsonBuffer.getJsonFromBuffer((char*)pData, iLength, rpc)){
+    while (m_JsonBuffer.getJsonFromBuffer((char*)pData, iLength, rpc)) {
         onMessage(rpc);
         pData = 0;
         iLength = 0;
@@ -148,35 +148,35 @@ void Channel::onMessage(Json::Value &jsonObj)
     LOGI("%s:receive:%s",m_sComponentName.c_str(),jsonObj.toStyledString().data());
     bool run = false;
     // id
-    if (jsonObj.isMember("id")){
+    if (jsonObj.isMember("id")) {
         int msgID = jsonObj["id"].asInt();
-        if (jsonObj.isMember("result")){
-            if (msgID == m_iIDRegRequest){
+        if (jsonObj.isMember("result")) {
+            if (msgID == m_iIDRegRequest) {
                 run = true;
                 m_iIDStart = jsonObj["result"].asInt();
                 m_iGenerateId = m_iIDStart;
                 onRegistered();
-            }else if (msgID == m_iIDUnRegRequest){
+            }else if (msgID == m_iIDUnRegRequest) {
                 run = true;
                 m_iIDUnRegRequest = jsonObj["result"].asInt();
                 onUnregistered();
-            }else{
+            } else {
                 run = true;
                 onResult(jsonObj);
             }
-        }else if (jsonObj.isMember("error")){
+        }else if (jsonObj.isMember("error")) {
             run = true;
             onError(jsonObj["error"].asString());
-        }else{
+        } else {
             run = true;
             onRequest(jsonObj);
         }
-    }else{
+    } else {
         run = true;
         onNotification(jsonObj);
     }
 
-    if(!run){
+    if (!run) {
         LOGE("NOT USED");
     }
 }
@@ -263,7 +263,7 @@ void Channel::onUnregistered()
 int Channel::GenerateId()
 {
     ++m_iGenerateId;
-    if (m_iGenerateId >= m_iIDStart + 1000){
+    if (m_iGenerateId >= m_iIDStart + 1000) {
         m_iGenerateId = m_iIDStart;
     }
     return m_iGenerateId;
@@ -275,15 +275,15 @@ std::string Channel::MethodName(std::string _mode,Json::Value _method)
     std::string method = "";
     std::string mms = _method.asString();
     int pos = mms.find_first_of('.');
-    if (std::string::npos == pos){
+    if (std::string::npos == pos) {
         LOGE("method:find error,%d",pos);
         return method;
     }
     mode = mms.erase(pos);
-    if (mode == _mode){
+    if (mode == _mode) {
       method = mms.erase(0,pos+1);
       LOGI("find method:%s",method.c_str());
-    }else{
+    } else {
         LOGE("mode(%s) is not match mode(%s)",mode.c_str(),_mode.c_str());
     }
     return method;
@@ -296,9 +296,9 @@ void Channel::onRequest(Json::Value &request)
     int  id = request["id"].asInt();
     Json::Value method = request["method"];
     std::string ref = MethodName(getChannelName(),method);
-    if (m_StaticResult.isMember(ref)){
+    if (m_StaticResult.isMember(ref)) {
         sendResult(id,ref);
-    }else{
+    } else {
       LOGE("%s.%s NOT use",getChannelName().c_str(),ref.c_str());
     }
 }
@@ -338,12 +338,12 @@ void Channel::sendResult(int id, std::string ref,Result code)
 void Channel::sendError(int id, std::string ref,std::string msg,Result code)
 {
     Json::Value error;
-    if (m_StaticResult[ref].isMember("error")){
+    if (m_StaticResult[ref].isMember("error")) {
         error = m_StaticResult[ref]["error"];
         error["code"] = code;
         error["message"] = msg;
         sendError(id,error);
-    }else{
+    } else {
         sendError(code,id,m_sComponentName+"."+ref,msg);
     }
 }

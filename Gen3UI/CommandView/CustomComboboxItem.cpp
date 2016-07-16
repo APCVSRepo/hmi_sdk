@@ -47,7 +47,7 @@ void CustomComboboxItem::setText(QString text)
 void CustomComboboxItem::setIsMenu(bool isMenu)
 {
     //m_b_isMenu = isMenu;
-    if(isMenu)
+    if (isMenu)
         m_pMenuArrowLab->setHidden(false);
     else
         m_pMenuArrowLab->setHidden(true);
@@ -68,18 +68,12 @@ void CustomComboboxItem::SetBkPic(QString strNormalPicPath,QString strPressPicPa
 void CustomComboboxItem::ChangeBkPic(int iFlag)
 {    
     QPixmap *pPixmap = NULL;
-    if(iFlag != m_iBkState)
-    {
-        if(iFlag == NORMAL_STATE)
-        {
+    if (iFlag != m_iBkState) {
+        if (iFlag == NORMAL_STATE) {
             pPixmap = new QPixmap(m_strNormalBk);
-        }
-        else if(iFlag == HOVER_STATE)
-        {
+        } else if (iFlag == HOVER_STATE) {
             pPixmap = new QPixmap(m_strHoverBk);
-        }
-        else
-        {
+        } else {
             pPixmap = new QPixmap(m_strPressBk);
         }
         *pPixmap = pPixmap->scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -87,7 +81,6 @@ void CustomComboboxItem::ChangeBkPic(int iFlag)
         m_iBkState = iFlag;
         delete pPixmap;
     }
-
 }
 
 QString CustomComboboxItem::GetItemText()

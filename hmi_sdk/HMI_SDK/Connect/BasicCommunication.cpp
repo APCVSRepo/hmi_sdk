@@ -44,25 +44,25 @@ void BasicCommunication::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
     int id = request["id"].asInt();
-    if (method == "BasicCommunication.MixingAudioSupported"){
+    if (method == "BasicCommunication.MixingAudioSupported") {
         sendResult(id,"MixingAudioSupported");
-    }else if (method == "BasicCommunication.AllowAllApps"){
+    }else if (method == "BasicCommunication.AllowAllApps") {
         sendResult(id,"AllowAllApps");
-    }else if (method == "BasicCommunication.AllowApp"){
+    }else if (method == "BasicCommunication.AllowApp") {
         sendResult(id,"AllowApp");
-    }else if (method == "BasicCommunication.AllowDeviceToConnect"){
+    }else if (method == "BasicCommunication.AllowDeviceToConnect") {
         sendResult(id,"AllowDeviceToConnect");
-    }else if (method == "BasicCommunication.UpdateAppList"){
+    }else if (method == "BasicCommunication.UpdateAppList") {
         sendResult(id,"UpdateAppList");
-    }else if (method == "BasicCommunication.UpdateDeviceList"){
+    }else if (method == "BasicCommunication.UpdateDeviceList") {
         sendResult(id,"UpdateDeviceList");
-    }else if (method == "BasicCommunication.ActivateApp"){
+    }else if (method == "BasicCommunication.ActivateApp") {
         sendResult(id,"ActivateApp");
-    }else if (method == "BasicCommunication.IsReady"){
+    }else if (method == "BasicCommunication.IsReady") {
         sendResult(id,"IsReady");
-    }else if (method == "BasicCommunication.GetSystemInfo"){
+    }else if (method == "BasicCommunication.GetSystemInfo") {
         sendResult(id,"GetSystemInfo");
-    }else{
+    } else {
         Channel::onRequest(request);
     }
 }
@@ -70,7 +70,7 @@ void BasicCommunication::onRequest(Json::Value &request)
 void BasicCommunication::onNotification(Json::Value &jsonObj)
 {
     std::string method = jsonObj["method"].asString();
-    if(method == "BasicCommunication.SDLLog"){
+    if(method == "BasicCommunication.SDLLog") {
 //        int app_id=jsonObj["app_id"].asInt();
 //        int correlation_id=jsonObj["correlation_id"].asInt();
 //        std::string function=jsonObj["function"].asString();

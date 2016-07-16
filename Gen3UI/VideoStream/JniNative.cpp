@@ -13,7 +13,7 @@ void JniNative::notifyMsg(JNIEnv *env, jobject thiz, int msgNo, int x, int y)
 void JniNative::setDirectBuffer(JNIEnv *env, jobject thiz, jobject buffer, jint len)
 {
     gBuffer = (unsigned char *)env->GetDirectBufferAddress(buffer);
-    if (gBuffer == NULL){
+    if (gBuffer == NULL) {
         QDBG << "GetDirectBufferAddress Failed!";
         return;
     }
@@ -44,7 +44,7 @@ bool JniNative::registerNativeMethods()
     clazz = env->GetObjectClass(javaClass.object<jobject>());
     QDBG << "find ExtendsQtNative - " << clazz;
     bool result = false;
-    if (clazz){
+    if (clazz) {
         jint ret = env->RegisterNatives(clazz, methods, sizeof(methods) / sizeof(methods[0]));
         env->DeleteLocalRef(clazz);
         QDBG << "RegisterNatives return - " << ret;

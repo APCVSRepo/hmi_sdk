@@ -58,9 +58,6 @@ class FrameStruct {
     int len;
 };
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class ExtendsQtSurface extends Activity{
     public static ExtendsQtSurface instance = null;
 
@@ -84,8 +81,7 @@ public class ExtendsQtSurface extends Activity{
     private static final int HEIGHT_DECODER = 480;
 
     private static final String SAMPLE = "sdcard/lk.mp4";
-
-    private final static String TAG = "JAVA";
+    private static final String TAG = "JAVA";
 
 //    private View rootView;
     private TextView mTimeTv;
@@ -216,9 +212,7 @@ public class ExtendsQtSurface extends Activity{
         mRl.addView(buttonLl, buttonLp);
         mRl.addView(mTimeTv, timeLp);
 
-
         ///////////////////////////////////////////////////////////
-
         MenuimageView = new ImageView(this);
         InputStream isMenuImage = null;
         try {
@@ -273,13 +267,13 @@ public class ExtendsQtSurface extends Activity{
             InputStream is = null;
             @Override
             public boolean onTouch(View arg0, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     try {
                         is = asm.open("ReturnBtnPress.png");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                }else if (event.getAction() == MotionEvent.ACTION_UP) {
                     try {
                         is = asm.open("ReturnBtnNormal.png");
                     } catch (IOException e) {
@@ -303,7 +297,6 @@ public class ExtendsQtSurface extends Activity{
         mLabel.setTextColor(Color.BLACK);
         mRl.addView(mLabel, labelLp);
         mLabel.setVisibility(View.INVISIBLE);
-
 
         buttonCmdLl = new LinearLayout(this);
         buttonCmdLl.setOrientation(LinearLayout.VERTICAL);
@@ -390,7 +383,6 @@ public class ExtendsQtSurface extends Activity{
         mButtonCmd6.setTextSize(25);
         mButtonCmd6.setTextColor(Color.BLACK);
 
-
         mRl.addView(buttonCmdLl, buttonCmdLp);
         buttonCmdLl.setVisibility(View.INVISIBLE);
 
@@ -398,13 +390,13 @@ public class ExtendsQtSurface extends Activity{
             InputStream is = null;
             @Override
             public boolean onTouch(View arg0, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     try {
                         is = asm.open("CommandItemPress.png");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                }else if (event.getAction() == MotionEvent.ACTION_UP) {
                     try {
                         is = asm.open("CommandItemNormal.png");
                     } catch (IOException e) {
@@ -419,13 +411,13 @@ public class ExtendsQtSurface extends Activity{
             InputStream is = null;
             @Override
             public boolean onTouch(View arg0, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     try {
                         is = asm.open("CommandItemPress.png");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                }else if (event.getAction() == MotionEvent.ACTION_UP) {
                     try {
                         is = asm.open("CommandItemNormal.png");
                     } catch (IOException e) {
@@ -440,13 +432,13 @@ public class ExtendsQtSurface extends Activity{
             InputStream is = null;
             @Override
             public boolean onTouch(View arg0, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     try {
                         is = asm.open("CommandItemPress.png");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                }else if (event.getAction() == MotionEvent.ACTION_UP) {
                     try {
                         is = asm.open("CommandItemNormal.png");
                     } catch (IOException e) {
@@ -461,13 +453,13 @@ public class ExtendsQtSurface extends Activity{
             InputStream is = null;
             @Override
             public boolean onTouch(View arg0, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     try {
                         is = asm.open("CommandItemPress.png");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                }else if (event.getAction() == MotionEvent.ACTION_UP) {
                     try {
                         is = asm.open("CommandItemNormal.png");
                     } catch (IOException e) {
@@ -482,13 +474,13 @@ public class ExtendsQtSurface extends Activity{
             InputStream is = null;
             @Override
             public boolean onTouch(View arg0, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     try {
                         is = asm.open("CommandItemPress.png");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                }else if (event.getAction() == MotionEvent.ACTION_UP) {
                     try {
                         is = asm.open("CommandItemNormal.png");
                     } catch (IOException e) {
@@ -503,13 +495,13 @@ public class ExtendsQtSurface extends Activity{
             InputStream is = null;
             @Override
             public boolean onTouch(View arg0, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     try {
                         is = asm.open("CommandItemPress.png");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                }else if (event.getAction() == MotionEvent.ACTION_UP) {
                     try {
                         is = asm.open("CommandItemNormal.png");
                     } catch (IOException e) {
@@ -521,7 +513,7 @@ public class ExtendsQtSurface extends Activity{
             }
         });
 
-        mButtonCmd1.setOnClickListener(new OnClickListener(){
+        mButtonCmd1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 Log.e("================", "mButtonCmd1");
@@ -540,21 +532,21 @@ public class ExtendsQtSurface extends Activity{
         imageView.setMinimumWidth(90);
         imageView.setMinimumHeight(70);
 
-        mButtonZoomIn.setOnClickListener(new OnClickListener(){
+        mButtonZoomIn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 Log.e("================", "ZoomInBtnListen");
                 notifyQt(MSG_NO_ZOOM_IN, 0, 0);
             }
         });
-        mButtonZoomOut.setOnClickListener(new OnClickListener(){
+        mButtonZoomOut.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 Log.e("================", "ZoomOutBtnListen");
                 notifyQt(MSG_NO_ZOOM_OUT, 0, 0);
             }
         });
-        mButtonMenu.setOnClickListener(new OnClickListener(){
+        mButtonMenu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 notifyQt(MSG_NO_MENU, 0, 0);
@@ -563,7 +555,6 @@ public class ExtendsQtSurface extends Activity{
                 mButtonBack.setVisibility(View.VISIBLE);
                 buttonCmdLl.setVisibility(View.VISIBLE);
                 mLabel.setVisibility(View.VISIBLE);
-
             }
         });
 
@@ -573,14 +564,14 @@ public class ExtendsQtSurface extends Activity{
             @Override
             public boolean onTouch(View arg0, MotionEvent event) {
                 // TODO Auto-generated method stub
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     try {
                         is = asm.open("ZoomInBtnPress.png");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                }else if (event.getAction() == MotionEvent.ACTION_UP) {
                     try {
                         is = asm.open("ZoomInBtnNormal.png");
                     } catch (IOException e) {
@@ -598,14 +589,13 @@ public class ExtendsQtSurface extends Activity{
             @Override
             public boolean onTouch(View arg0, MotionEvent event) {
                 // TODO Auto-generated method stub
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     try {
                         is = asm.open("ZoomOutBtnPress.png");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                }else if (event.getAction() == MotionEvent.ACTION_UP) {
                     try {
                         is = asm.open("ZoomOutBtnNormal.png");
                     } catch (IOException e) {
@@ -623,14 +613,13 @@ public class ExtendsQtSurface extends Activity{
             @Override
             public boolean onTouch(View arg0, MotionEvent event) {
                 // TODO Auto-generated method stub
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     try {
                         is = asm.open("BtnPress.png");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                }else if (event.getAction() == MotionEvent.ACTION_UP) {
                     try {
                         is = asm.open("BtnNormal.png");
                     } catch (IOException e) {
@@ -643,10 +632,8 @@ public class ExtendsQtSurface extends Activity{
             }
         });
 
-
         handler.postDelayed(updateThread, 50);
         timeHandler.postDelayed(updateTimeThread, 1000);
-
 
         bPlayRun = true;
         p.start();
@@ -671,17 +658,13 @@ public class ExtendsQtSurface extends Activity{
         }
     };
     private class PlayerThread extends Thread {
-
         @Override
         public void run() {
             FrameStruct frame;
-            while(bPlayRun)
-            {
-                if(bCanFlush)
-                {
+            while (bPlayRun) {
+                if (bCanFlush) {
                     lock.lock();
-                    while((frame=frameQueue.poll())!=null)
-                    {
+                    while ((frame=frameQueue.poll())!=null) {
 //                        Log.e(TAG, "frame.len = " +  frame.len + "; frameQueue.size() = " + frameQueue.size());
                         onFrame(frame.buf, 0, frame.len);
                         try {
@@ -703,7 +686,6 @@ public class ExtendsQtSurface extends Activity{
 
         @Override
         public void run() {
-
             String host = "127.0.0.1";
             int port = 5050;
 
@@ -715,8 +697,7 @@ public class ExtendsQtSurface extends Activity{
                 client = new Socket(host, port);
                 readIn = new DataInputStream(client.getInputStream());
 
-                while((dataLen = readIn.read(recvBuf)) > 0)
-                {
+                while ((dataLen = readIn.read(recvBuf)) > 0) {
                     frameData[0] = 0;
                     frameData[1] = 0;
                     frameData[2] = 0;
@@ -725,54 +706,41 @@ public class ExtendsQtSurface extends Activity{
                     int nPos = 0;
                     int index = 0;
                     int flag = 0;
-
                     int canOnFrame = 0;
                     while (nPos < dataLen) {
-
                         canOnFrame = 0;
                         while (nPos < dataLen) {
                             flag = recvBuf[nPos++];
-                            if(findFirstFrame == 1)
-                            {
+                            if (findFirstFrame == 1) {
                                 frameData[byteCount++] = (byte)flag;
                             }
-                            if (flag == 0)
-                            {
+                            if (flag == 0) {
                                 index = lastIndex + 1;
-                                while (flag == 0)
-                                {
-                                    if (nPos < dataLen)
-                                    {
+                                while (flag == 0) {
+                                    if (nPos < dataLen) {
                                         lastIndex = 0;
                                         flag = recvBuf[nPos++];
-                                        if(findFirstFrame == 1)
-                                        {
+                                        if(findFirstFrame == 1) {
                                             frameData[byteCount++] = (byte)flag;
                                         }
                                         index++;
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         lastIndex = index;
                                         break;
                                     }
                                 }
-                                if (flag == 1 && index >= 4)
-                                {
+                                if (flag == 1 && index >= 4) {
                                     if(findFirstFrame == 0)
                                         findFirstFrame = 1;
-                                    else
-                                    {
+                                    else{
                                         byteCount = byteCount - 4;
                                         canOnFrame = 1;
                                     }
-
                                     break;
                                 }
                             }
                         }
-                        if(canOnFrame == 1)
-                        {
+                        if (canOnFrame == 1) {
                             FrameStruct frame = new FrameStruct();
                             frame.buf = new byte[byteCount];
                             frame.len = byteCount;
@@ -784,11 +752,9 @@ public class ExtendsQtSurface extends Activity{
                             byteCount = 4;
                         }
                     }
-
                     try {
                         Thread.sleep(200);
                     } catch (InterruptedException e) {
-
                     }
                 }
 
@@ -800,7 +766,6 @@ public class ExtendsQtSurface extends Activity{
             }
         }
     }
-
 
     private static void initDecoder() {
         Log.e("================", "initDecoder");
@@ -823,9 +788,7 @@ public class ExtendsQtSurface extends Activity{
             inputBuffer.clear();
             inputBuffer.put(buf, offset, length);
             mMediaCodec.queueInputBuffer(inputBufferIndex, 0, length, 0, MediaCodec.BUFFER_FLAG_SYNC_FRAME);
-        }
-        else
-        {
+        } else {
             return false;
         }
 
@@ -843,18 +806,17 @@ public class ExtendsQtSurface extends Activity{
 
     //Qt=============
     public static ExtendsQtNative m_nativeNotify = null;
-    private static void notifyQt(int msgNo, int x, int y){
-        if(m_nativeNotify == null){
+    private static void notifyQt(int msgNo, int x, int y) {
+        if (m_nativeNotify == null) {
             m_nativeNotify = new ExtendsQtNative();
         }
         m_nativeNotify.notifyMsg(msgNo, x, y);
     }
     private final static int BUFFER_SIZE = 1024*16;
     private static ByteBuffer mDirectBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
-    private static void setDirectBuffer()
-    {
+    private static void setDirectBuffer() {
         Log.e(TAG, "setDirectBuffer");
-        if(m_nativeNotify == null){
+        if (m_nativeNotify == null) {
             m_nativeNotify = new ExtendsQtNative();
         }
         m_nativeNotify.setDirectBuffer(mDirectBuffer,BUFFER_SIZE);
@@ -865,7 +827,6 @@ public class ExtendsQtSurface extends Activity{
         int dataLen = len;
 //        Log.e(TAG, "dataLen:"+dataLen);
         buffer = mDirectBuffer.array();
-
 
         frameData[0] = 0;
         frameData[1] = 0;
@@ -882,47 +843,36 @@ public class ExtendsQtSurface extends Activity{
             canOnFrame = 0;
             while (nPos < dataLen) {
                 flag = buffer[nPos++];
-                if(findFirstFrame == 1)
-                {
+                if (findFirstFrame == 1) {
                     frameData[byteCount++] = (byte)flag;
                 }
-                if (flag == 0)
-                {
+                if (flag == 0) {
                     index = lastIndex + 1;
-                    while (flag == 0)
-                    {
-                        if (nPos < dataLen)
-                        {
+                    while (flag == 0) {
+                        if (nPos < dataLen) {
                             lastIndex = 0;
                             flag = buffer[nPos++];
-                            if(findFirstFrame == 1)
-                            {
+                            if (findFirstFrame == 1) {
                                 frameData[byteCount++] = (byte)flag;
                             }
                             index++;
-                        }
-                        else
-                        {
+                        } else {
                             lastIndex = index;
                             break;
                         }
                     }
-                    if (flag == 1 && index >= 4)
-                    {
-                        if(findFirstFrame == 0)
+                    if (flag == 1 && index >= 4) {
+                        if (findFirstFrame == 0)
                             findFirstFrame = 1;
-                        else
-                        {
+                        else{
                             byteCount = byteCount - 4;
                             canOnFrame = 1;
                         }
-
                         break;
                     }
                 }
             }
-            if(canOnFrame == 1)
-            {
+            if (canOnFrame == 1) {
                 FrameStruct frame = new FrameStruct();
                 frame.buf = new byte[byteCount];
                 frame.len = byteCount;
@@ -933,20 +883,17 @@ public class ExtendsQtSurface extends Activity{
                 byteCount = 4;
             }
         }
-
     }
 
     public static void start() {
         Log.e("Media", "==start");
-
         s.start();
     }
 
     public static void stop() {
         Log.e("Media", "==stop");
 
-        if(instance != null)
-        {
+        if (instance != null) {
             bPlayRun = false;
             s.interrupt();
             instance.finish();
@@ -958,13 +905,11 @@ public class ExtendsQtSurface extends Activity{
         // TODO Auto-generated method stub
 
         int pCount = event.getPointerCount();
-        if(event.getPointerCount() == 1)
-        {
+        if (event.getPointerCount() == 1) {
             float x = event.getX();
             float y = event.getY();
             int i = event.getAction();
-            switch (event.getAction() & MotionEvent.ACTION_MASK)
-            {
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_MOVE:
                 Log.e(TAG, "MotionEvent.ACTION_MOVE:x=" + x + ";y=" + y);
                 notifyQt(MSG_NO_MOVE, (int)x, (int)y);

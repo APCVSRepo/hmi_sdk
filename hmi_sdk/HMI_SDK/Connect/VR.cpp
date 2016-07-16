@@ -38,48 +38,30 @@ void VR::onUnregistered()
 	UnsubscribeFromNotification("VR.VRResult");
 }
 
-
 void VR::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
     int id = request["id"].asInt();
-    if (method == "VR.GetSupportedLanguages")
-    {
+    if (method == "VR.GetSupportedLanguages"){
         sendResult(id,"GetSupportedLanguages");
-    }
-    else if (method == "VR.GetLanguage")
-    {
+    }else if (method == "VR.GetLanguage"){
         sendResult(id,"GetLanguage");
-    }
-    else if (method == "VR.ChangeRegistration")
-    {
+    }else if (method == "VR.ChangeRegistration"){
         sendResult(id,"ChangeRegistration");
-    }
-    else if(method == "VR.IsReady")
-    {
+    }else if (method == "VR.IsReady"){
         sendResult(id,"IsReady");
-    }
-    else if(method == "VR.GetCapabilities")
-    {
+    }else if (method == "VR.GetCapabilities"){
         sendResult(id,"GetCapabilities");
-    }
-    else if (method == "VR.AddCommand")
-    {
+    }else if (method == "VR.AddCommand"){
         Result result=m_pCallback->onRequest(request);
         sendResult(id,"AddCommand",result);
-    }
-    else if(method == "VR.DeleteCommand")
-    {
+    }else if (method == "VR.DeleteCommand"){
         Result result=m_pCallback->onRequest(request);
         sendResult(id,"DeleteCommand",result);
-    }
-    else if(method=="VR.PerformInteraction")
-    {
+    }else if (method=="VR.PerformInteraction"){
         Result result=m_pCallback->onRequest(request);
         sendResult(id,"PerformInteraction",result);
-    }
-    else
-    {
+    }else{
         Channel::onRequest(request);
     }
 }

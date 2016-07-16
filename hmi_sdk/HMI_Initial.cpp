@@ -22,13 +22,10 @@ HMI_Initial::HMI_Initial():QObject(NULL)
     strFilePath += "Gen3UI";
     m_UILib.setFileName(strFilePath.c_str());
     InitFunc Init = (InitFunc)m_UILib.resolve("UILib_Init");
-    if (Init)
-    {
+    if (Init){
         m_uiManager = Init(m_appList);
         m_appList->setUIManager(m_uiManager);
-    }
-    else
-    {
+    }else{
         LOGE("can't load UILib, %s", strFilePath.data());
     }
 
@@ -43,8 +40,7 @@ HMI_Initial::~HMI_Initial()
     SDLConnector::Close();
 
     CloseFunc CloseUI = (CloseFunc)m_UILib.resolve("UILib_Close");
-    if (CloseUI)
-    {
+    if (CloseUI){
         CloseUI();
     }
 }
@@ -70,20 +66,20 @@ void HMI_Initial::ShowUI()
 void* HMI_Initial::SDLStartThread(void *arg)
 {
 #ifdef ANDROID
-    if(!FileCopyToConfigdir(":/assets/"))
+    if (!FileCopyToConfigdir(":/assets/"))
         return NULL;
-    if(!FileCopyToConfigdir(":/config/"))
+    if (!FileCopyToConfigdir(":/config/"))
         return NULL;
 #ifdef  TTS_FLY_MSC
-    if(!FileCopyToConfigdir(":/msctts/"))
+    if (!FileCopyToConfigdir(":/msctts/"))
         return NULL;
 #endif
 #endif
-    char  sdlconfig[50]={0};
+    char  sdlconfig[50] = {0};
     sprintf(sdlconfig,"%s/smartDeviceLink.ini",CONFIG_DIR);
-    char* argv[2]={"smartDeviceLinkCore",sdlconfig};
+    char* argv[2] = {"smartDeviceLinkCore",sdlconfig};
     sdl_start(2,argv);
-    while(true){
+    while (true){
         sleep(100);
     }
     return NULL;
@@ -91,24 +87,24 @@ void* HMI_Initial::SDLStartThread(void *arg)
 #ifdef ANDROID
 bool HMI_Initial::FileCopyToConfigdir(const char *dir_)
 {
-    QDir  dir(dir_);
-    if(!dir.exists()){
+    QDir dir(dir_);
+    if (!dir.exists()){
         LOGE("%s not exist",dir.dirName().toUtf8().data());
         return false;
     }
-    if(!QDir(CONFIG_DIR).exists()){
+    if (!QDir(CONFIG_DIR).exists()){
         QDir dir;
-        if(!dir.mkdir(CONFIG_DIR)){
+        if (!dir.mkdir(CONFIG_DIR)){
             LOGE("%s create failed",CONFIG_DIR);
             return false;
         }
         else
             LOGE("%s create success",CONFIG_DIR);
     }
-    QFileInfoList list=dir.entryInfoList();
+    QFileInfoList list = dir.entryInfoList();
     LOGI("total %d files",list.count());
-    for(int i=0;i<list.count();i++){
-        QFileInfo info=list.at(i);
+    for (int i = 0; i < list.count(); i++){
+        QFileInfo info = list.at(i);
 
         QFile file_in(info.filePath());
         file_in.open(QFile::ReadOnly);

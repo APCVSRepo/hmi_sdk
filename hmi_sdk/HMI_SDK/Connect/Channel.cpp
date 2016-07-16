@@ -47,10 +47,8 @@ bool JsonBuffer::getJsonFromBuffer(char * pData, int iLength, Json::Value& outpu
         m_szBuffer = m_szBuffer.substr(pos + 1);
 
     Json::Reader reader;
-    if (reader.parse(szFirstJson, output))
-    {
+    if (reader.parse(szFirstJson, output)){
         return true;
-
     }
     return false;
 }
@@ -68,7 +66,7 @@ Channel::Channel(int startId,std::string Channelname)
     m_iIDUnRegRequest = -1;
     m_sComponentName = Channelname;
     ReadConfigJson();
-    m_StaticResult=g_StaticResultJson[m_sComponentName];
+    m_StaticResult = g_StaticResultJson[m_sComponentName];
 }
 
 Channel::~Channel()
@@ -78,11 +76,11 @@ Channel::~Channel()
 
 void Channel::ReadConfigJson()
 {
-    if(g_StaticConfigJson.isNull())
+    if (g_StaticConfigJson.isNull())
         g_StaticConfigJson = ReadSpecifyJson("staticConfigDB.json");
-    if(g_StaticResultJson.isNull())
+    if (g_StaticResultJson.isNull())
         g_StaticResultJson = ReadSpecifyJson("staticResult.json");
-    if(g_VehicleInfoJson.isNull())
+    if (g_VehicleInfoJson.isNull())
         g_VehicleInfoJson = ReadSpecifyJson("VehicleInfo.json");
 }
 
@@ -129,8 +127,7 @@ Json::Value Channel::ReadSpecifyJson(const char* fileName)
             LOGE("%s read error",fileName);
         }
         ifs.close();
-    }
-    else{
+    }else{
         LOGE("%s can't open",szResult);
     }
     return result;
@@ -139,8 +136,7 @@ Json::Value Channel::ReadSpecifyJson(const char* fileName)
 void Channel::onReceiveData(void * pData, int iLength)
 {
     Json::Value rpc;
-    while (m_JsonBuffer.getJsonFromBuffer((char*)pData, iLength, rpc))
-    {
+    while (m_JsonBuffer.getJsonFromBuffer((char*)pData, iLength, rpc)){
         onMessage(rpc);
         pData = 0;
         iLength = 0;
@@ -152,40 +148,31 @@ void Channel::onMessage(Json::Value &jsonObj)
     LOGI("%s:receive:%s",m_sComponentName.c_str(),jsonObj.toStyledString().data());
     bool run = false;
     // id
-    if (jsonObj.isMember("id"))
-    {
+    if (jsonObj.isMember("id")){
         int msgID = jsonObj["id"].asInt();
-        if(jsonObj.isMember("result")){
-            if(msgID==m_iIDRegRequest){
-                run=true;
+        if (jsonObj.isMember("result")){
+            if (msgID == m_iIDRegRequest){
+                run = true;
                 m_iIDStart = jsonObj["result"].asInt();
-                m_iGenerateId= m_iIDStart;
+                m_iGenerateId = m_iIDStart;
                 onRegistered();
-
-            }
-            else if(msgID == m_iIDUnRegRequest){
-                run=true;
-                m_iIDUnRegRequest=jsonObj["result"].asInt();
+            }else if (msgID == m_iIDUnRegRequest){
+                run = true;
+                m_iIDUnRegRequest = jsonObj["result"].asInt();
                 onUnregistered();
-            }
-            else
-            {
-                run=true;
+            }else{
+                run = true;
                 onResult(jsonObj);
             }
-        }
-        else if(jsonObj.isMember("error")){
-            run=true;
+        }else if (jsonObj.isMember("error")){
+            run = true;
             onError(jsonObj["error"].asString());
-        }
-        else{
-            run=true;
+        }else{
+            run = true;
             onRequest(jsonObj);
         }
-    }
-    else
-    {
-        run=true;
+    }else{
+        run = true;
         onNotification(jsonObj);
     }
 
@@ -198,7 +185,7 @@ void Channel::onMessage(Json::Value &jsonObj)
 void Channel::SetStaticResult(std::string attri,std::string ref,Json::Value value)
 {
     if(m_StaticResult.isMember(attri))
-       m_StaticResult[attri][ref]=value;
+       m_StaticResult[attri][ref] = value;
 }
 
 int Channel::RegisterReqId()
@@ -276,8 +263,7 @@ void Channel::onUnregistered()
 int Channel::GenerateId()
 {
     ++m_iGenerateId;
-    if (m_iGenerateId >= m_iIDStart + 1000)
-    {
+    if (m_iGenerateId >= m_iIDStart + 1000){
         m_iGenerateId = m_iIDStart;
     }
     return m_iGenerateId;
@@ -285,20 +271,19 @@ int Channel::GenerateId()
 
 std::string Channel::MethodName(std::string _mode,Json::Value _method)
 {
-    std::string mode="";
-    std::string method="";
-    std::string mms=_method.asString();
+    std::string mode = "";
+    std::string method = "";
+    std::string mms = _method.asString();
     int pos = mms.find_first_of('.');
-    if(std::string::npos== pos){
+    if (std::string::npos == pos){
         LOGE("method:find error,%d",pos);
         return method;
     }
     mode = mms.erase(pos);
-    if(mode == _mode){
+    if (mode == _mode){
       method = mms.erase(0,pos+1);
       LOGI("find method:%s",method.c_str());
-    }
-    else{
+    }else{
         LOGE("mode(%s) is not match mode(%s)",mode.c_str(),_mode.c_str());
     }
     return method;
@@ -309,13 +294,11 @@ std::string Channel::MethodName(std::string _mode,Json::Value _method)
 void Channel::onRequest(Json::Value &request)
 {
     int  id = request["id"].asInt();
-    Json::Value method =request["method"];
-    std::string ref= MethodName(getChannelName(),method);
-    if(m_StaticResult.isMember(ref)){
+    Json::Value method = request["method"];
+    std::string ref = MethodName(getChannelName(),method);
+    if (m_StaticResult.isMember(ref)){
         sendResult(id,ref);
-    }
-    else
-    {
+    }else{
       LOGE("%s.%s NOT use",getChannelName().c_str(),ref.c_str());
     }
 }
@@ -340,10 +323,10 @@ void Channel::onError(std::string error)
 
 void Channel::sendResult(int id, std::string ref,Result code)
 {
-    if(code == RESULT_USER_WAIT)
+    if (code == RESULT_USER_WAIT)
         return;
     Json::Value result;
-    if(m_StaticResult[ref].isMember("result"))
+    if (m_StaticResult[ref].isMember("result"))
         result = m_StaticResult[ref]["result"];
     else
         result = m_StaticResult[ref];
@@ -355,13 +338,12 @@ void Channel::sendResult(int id, std::string ref,Result code)
 void Channel::sendError(int id, std::string ref,std::string msg,Result code)
 {
     Json::Value error;
-    if(m_StaticResult[ref].isMember("error")){
+    if (m_StaticResult[ref].isMember("error")){
         error = m_StaticResult[ref]["error"];
-        error["code"]=code;
-        error["message"]=msg;
+        error["code"] = code;
+        error["message"] = msg;
         sendError(id,error);
-    }
-    else{
+    }else{
         sendError(code,id,m_sComponentName+"."+ref,msg);
     }
 }
@@ -369,20 +351,20 @@ void Channel::sendError(int id, std::string ref,std::string msg,Result code)
 void Channel::sendResult(int id, Json::Value &result)
 {
     Json::Value root;
-    root["id"]=id;
-    root["jsonrpc"]="2.0";
-    root["result"]=result;
+    root["id"] = id;
+    root["jsonrpc"] = "2.0";
+    root["result"] = result;
     SendJson(root);
 }
 
 void Channel::sendRequest(int id,const std::string mothod,const Json::Value &params)
 {
     Json::Value root;
-    root["id"]=id;
-    root["jsonrpc"]="2.0";
-    root["method"]=mothod;
+    root["id"] = id;
+    root["jsonrpc"] = "2.0";
+    root["method"] = mothod;
     if(!params.isNull())
-       root["params"]=params;
+       root["params"] = params;
     SendJson(root);
 }
 
@@ -399,10 +381,10 @@ void Channel::sendError(int id, Json::Value &error)
 void Channel::sendNotification(const std::string mothod, const Json::Value &params)
 {
     Json::Value root;
-    root["jsonrpc"]="2.0";
-    root["method"]=mothod;
+    root["jsonrpc"] = "2.0";
+    root["method"] = mothod;
     if(!params.isNull())
-       root["params"]=params;
+       root["params"] = params;
     SendJson(root);
 }
 

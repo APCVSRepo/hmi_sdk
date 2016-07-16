@@ -20,16 +20,11 @@ void Buttons::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
     int  id = request["id"].asInt();
-    if (method == "Buttons.GetCapabilities")
-    {
+    if (method == "Buttons.GetCapabilities"){
         sendResult(id,"GetCapabilities");
-    }
-    else if (method == "Buttons.IsReady")
-    {
+    }else if (method == "Buttons.IsReady"){
         sendResult(id,"IsReady");
-    }
-    else
-    {
+    }else{
         Channel::onRequest(request);
     }
 }

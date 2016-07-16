@@ -12,17 +12,11 @@ void JniNative::notifyMsg(JNIEnv *env, jobject thiz, int msgNo, int x, int y)
 
 void JniNative::setDirectBuffer(JNIEnv *env, jobject thiz, jobject buffer, jint len)
 {
-    //无需拷贝，直接获取与Java端共享的直接内存地址(效率比较高，但object的构造析构开销大，建议长期使用的大型buffer采用这种方式)
     gBuffer = (unsigned char *)env->GetDirectBufferAddress(buffer);
-    if( gBuffer == NULL ) {
-        QDBG<<"GetDirectBufferAddress Failed!";
+    if (gBuffer == NULL){
+        QDBG << "GetDirectBufferAddress Failed!";
         return;
     }
-    else
-    {
-        QDBG<<"GetDirectBufferAddress success!";
-    }
-
 }
 
 JniNative::JniNative()
@@ -50,8 +44,7 @@ bool JniNative::registerNativeMethods()
     clazz = env->GetObjectClass(javaClass.object<jobject>());
     QDBG << "find ExtendsQtNative - " << clazz;
     bool result = false;
-    if(clazz)
-    {
+    if (clazz){
         jint ret = env->RegisterNatives(clazz, methods, sizeof(methods) / sizeof(methods[0]));
         env->DeleteLocalRef(clazz);
         QDBG << "RegisterNatives return - " << ret;

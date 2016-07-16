@@ -5,14 +5,12 @@ MediaCodecStream::MediaCodecStream(AppListInterface * pList, QWidget *parent) : 
     m_jniFrame.setAppList(pList);
 
     setWindowFlags(Qt::FramelessWindowHint);
-    if(parent)
-    {
+    if (parent){
         setGeometry(0,0,parent->width(),parent->height());
     }
 
 #ifdef SDL_CALL_BACK
     sdl_set_videostream_callback(callBack_send_data);
-    //__D("sdl_set_videostream_callback\n");
 #endif
 }
 
@@ -55,10 +53,8 @@ static int offset = 0;
 void MediaCodecStream::callBack_send_data(const char *data, int size)
 {
 #ifdef ANDROID
-    if(size + offset > TMP_BUF_LEN)
-    {
-        if(JniNative::gBuffer != NULL)
-        {
+    if (size + offset > TMP_BUF_LEN){
+        if (JniNative::gBuffer != NULL){
             memcpy(m_tmpBuf + offset, data, size);
             memcpy(JniNative::gBuffer, m_tmpBuf, size + offset);
             QAndroidJniObject::callStaticMethod<void>(
@@ -66,9 +62,7 @@ void MediaCodecStream::callBack_send_data(const char *data, int size)
                         "flsh", "(I)V", size + offset);
             offset = 0;
         }
-    }
-    else
-    {
+    }else{
         memcpy(m_tmpBuf + offset, data, size);
         offset += size;
     }

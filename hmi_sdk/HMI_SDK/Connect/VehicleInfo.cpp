@@ -21,53 +21,33 @@ void VehicleInfo::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
     int  id = request["id"].asInt();
-    if(method == "VehicleInfo.SubscribeVehicleData")
-    {
+    if (method == "VehicleInfo.SubscribeVehicleData"){
         sendResult(id,"SubscribeVehicleData");
-    }
-    else if(method == "VehicleInfo.UnsubscribeVehicleData")
-    {
+    }else if (method == "VehicleInfo.UnsubscribeVehicleData"){
         sendResult(id,"UnsubscribeVehicleData");
-    }
-    else if(method == "VehicleInfo.GetVehicleType")
-    {
+    }else if (method == "VehicleInfo.GetVehicleType"){
         sendResult(id,"GetVehicleType");
-    }
-    else if(method == "VehicleInfo.IsReady")
-    {
+    }else if (method == "VehicleInfo.IsReady"){
         sendResult(id,"IsReady");
-    }
-    else if(method == "VehicleInfo.GetVehicleData")
-    {
+    }else if (method == "VehicleInfo.GetVehicleData"){
         Json::Value result;
-        if(getVehicleData(request,result)){
+        if (getVehicleData(request,result)){
             sendResult(id, result);
-        }
-        else{
+        }else{
             sendError(id,result);
         }
-    }
-    else if(method == "VehicleInfo.ReadDID")
-    {
+    }else if (method == "VehicleInfo.ReadDID"){
         Json::Value result = vehicleInfoReadDIDResponse(request);
         sendResult(id,result);
-    }
-    else if(method == "VehicleInfo.GetDTCs")
-    {
+    }else if (method == "VehicleInfo.GetDTCs"){
         Json::Value result = vehicleInfoGetDTCsResponse(request);
         sendResult(id,result);
-    }
-    else if(method=="VehicleInfo.DiagnosticMessage")
-    {
+    }else if (method =="VehicleInfo.DiagnosticMessage"){
         sendResult(id,"DiagnosticMessage");
-    }
-    else
-    {
+    }else{
         Channel::onRequest(request);
     }
 }
-
-
 
 bool VehicleInfo::getVehicleData(Json::Value &message,Json::Value &result)
 {
@@ -81,11 +61,9 @@ bool VehicleInfo::getVehicleData(Json::Value &message,Json::Value &result)
     vehicle = g_VehicleInfoJson["vehicle"];
 
     Json::Value::Members mem = params.getMemberNames();
-    for (Json::Value::Members::iterator iter = mem.begin(); iter != mem.end(); iter++)
-    {
+    for (Json::Value::Members::iterator iter = mem.begin(); iter != mem.end(); iter++){
         std::string infoitem = std::string(*iter);
-        if (infoitem != "appID" && infoitem != "request")
-        {
+        if (infoitem != "appID" && infoitem != "request"){
             Json::Value require = params[infoitem];
             if (!require.isBool())
                 continue;
@@ -98,18 +76,16 @@ bool VehicleInfo::getVehicleData(Json::Value &message,Json::Value &result)
         }
     }
 
-    if(ret){
+    if (ret){
         Json::Value::Members mem = data.getMemberNames();
-        for (Json::Value::Members::iterator iter = mem.begin(); iter != mem.end(); iter++)
-        {
+        for (Json::Value::Members::iterator iter = mem.begin(); iter != mem.end(); iter++){
             std::string infoitem = std::string(*iter);
             result[infoitem] = data[infoitem];
         }
 
         result["code"] = 0;
         result["method"] = "VehicleInfo.GetVehicleData";
-    }
-    else{
+    }else{
         result["message"] = "Params rpc, are not avaliable";
         result["code"] = 9;
         result["method"]="VehicleInfo.GetVehicleData";
@@ -130,8 +106,7 @@ Json::Value VehicleInfo::vehicleInfoReadDIDResponse(Json::Value &request)
     Json::Value arrayObj;
     Json::Value item;
 
-    for (int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++){
         item["data"] = did[0];
         item["didLocation"] = didLocation[i];
         item["resultCode"] = "SUCCESS";

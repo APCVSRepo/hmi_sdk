@@ -73,8 +73,7 @@ void SocketsToSDL::CloseSockets()
     m_bTerminate = true;
 
     int iNum = m_SocketHandles.size();
-    for (int i = 0; i < iNum; i++)
-    {
+    for (int i = 0; i < iNum; i++){
         CSockHandle * pHandle = m_SocketHandles[i];
         pHandle->Close();
         delete pHandle;
@@ -195,16 +194,12 @@ bool SocketsToSDL::ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * 
 		return false;
 
     int iNum = Channels.size();
-    for (int i = 0; i < iNum; i++)
-	{
+    for (int i = 0; i < iNum; i++){
         CSockHandle * pHandle = new CSockHandle(1024);
-        if(pHandle->Connect(Channels[i], m_sHost, m_iPort))
-        {
+        if(pHandle->Connect(Channels[i], m_sHost, m_iPort)){
             m_SocketHandles.push_back(pHandle);
             Channels[i]->setSocketManager(this, pHandle);
-        }
-        else
-        {
+        }else{
             goto FAILED;
         }
 	}
@@ -222,19 +217,15 @@ FAILED:
 
 bool SocketsToSDL::ConnectToVS( IChannel * ChannelVS, std::string sIP, int iPort,INetworkStatus * pNetwork)
 {
-
     m_pNetwork = pNetwork;
 
     CSockHandle * pHandle = new CSockHandle(576000);
-    if(pHandle->Connect(ChannelVS, sIP, iPort))
-    {
+    if(pHandle->Connect(ChannelVS, sIP, iPort)){
         m_SocketHandles.push_back(pHandle);
         ChannelVS->setSocketManager(this, pHandle);
         Notify();
         return true;
-    }
-    else
-    {
+    }else{
         return false;
     }
 }
@@ -273,16 +264,14 @@ void SocketsToSDL::RunThread()
     fd_set fdWrite;
     int fd_max = m_Read_Sign;
 #endif
-	while (!m_bTerminate)
-	{
+	while (!m_bTerminate){
 		FD_ZERO(&fdRead);
 #ifndef WIN32
 		FD_ZERO(&fdWrite);
 #endif
 
 		int iNum = m_SocketHandles.size();
-        for (int i = 0; i < iNum; i++)
-		{
+        for (int i = 0; i < iNum; i++){
             CSockHandle * pHandle = m_SocketHandles[i];
             int socket = pHandle->GetSocketID();
 			FD_SET(socket, &fdRead);
@@ -294,28 +283,23 @@ void SocketsToSDL::RunThread()
 		FD_SET(m_Read_Sign, &fdRead);
 
 #ifdef WIN32
-        if (select(0, &fdRead, NULL, NULL, NULL) == SOCKET_ERROR)
+        if (select(0, &fdRead, NULL, NULL, NULL) == SOCKET_ERROR){
 #else
-        if (select(fd_max+1, &fdRead, &fdWrite, NULL, NULL) == SOCKET_ERROR)
+        if (select(fd_max+1, &fdRead, &fdWrite, NULL, NULL) == SOCKET_ERROR){
 #endif
-		{
             goto SOCKET_WRONG;
 		}
 
         bool bSend = FD_ISSET(m_Read_Sign, &fdRead);
-		if (bSend)
-		{
+		if (bSend){
 			unsigned char buffer[8];
 			int bytes_read = 0;
-			do
-			{
+			do{
 				bytes_read = recv(m_Read_Sign, (char *)buffer, sizeof(buffer), 0);
 			} while (bytes_read > 0);
             iNum = m_SocketHandles.size();
-            for (int i = 0; i < iNum; i++)
-            {
-                if(i + 1 > m_SocketHandles.size())
-                {
+            for (int i = 0; i < iNum; i++){
+                if(i + 1 > m_SocketHandles.size()){
                     break;
                 }
                 CSockHandle * pHandle = m_SocketHandles[i];
@@ -326,17 +310,13 @@ void SocketsToSDL::RunThread()
 
 
         iNum = m_SocketHandles.size();
-        for (int i = 0; i < iNum; i++)
-		{
-            if(i + 1 > m_SocketHandles.size())
-            {
+        for (int i = 0; i < iNum; i++){
+            if (i + 1 > m_SocketHandles.size()){
                 break;
             }
             CSockHandle * pHandle = m_SocketHandles[i];
-            if (FD_ISSET(pHandle->GetSocketID(), &fdRead))
-			{
-                if(!pHandle->RecvData())
-                {
+            if (FD_ISSET(pHandle->GetSocketID(), &fdRead)){
+                if (!pHandle->RecvData()){
                     goto SOCKET_WRONG;
                 }
             }
@@ -386,12 +366,11 @@ bool CSockHandle::Connect(IChannel *newChannel, std::string sIP, int iPort)
 
     this->pDataReceiver = newChannel;
     this->m_i_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if(this->m_i_socket==SOCKET_ERROR){
+    if(this->m_i_socket == SOCKET_ERROR){
         LOGE("SOCKET INVALID");
     }
 //    LOGE("this->m_i_socket = %d", this->m_i_socket);
-    try
-    {
+    try{
         if (SOCKET_ERROR == ::connect(this->m_i_socket, (const sockaddr *)&toLocal, namelen))
             goto FAILED;
 #ifdef WIN32
@@ -403,9 +382,7 @@ bool CSockHandle::Connect(IChannel *newChannel, std::string sIP, int iPort)
 #else
         fcntl(this->m_i_socket, F_SETFL, O_NONBLOCK);
 #endif
-    }
-    catch (...)
-    {
+    }catch (...){
         goto FAILED;
     }
     return true;
@@ -437,17 +414,13 @@ bool CSockHandle::SendData()
 {
     bool bRet = true;
     pthread_mutex_lock(&m_SendMutex);
-    while (!this->m_SendData.empty())
-    {
+    while (!this->m_SendData.empty()){
         SEND_DATA data = this->m_SendData.front();
-        try
-        {
+        try{
             int total = 0;
-            do
-            {
+            do{
                 int iSent = ::send(this->m_i_socket, (const char *)data.pData + total, data.iLength - total, 0);
-                if (SOCKET_ERROR == iSent)
-                {
+                if (SOCKET_ERROR == iSent){
                     bRet = false;
                     break;
                 }
@@ -457,9 +430,7 @@ bool CSockHandle::SendData()
                 break;
             this->m_SendData.pop();
             ::free(data.pData);
-        }
-        catch (...)
-        {
+        }catch (...){
             bRet = false;
             break;
         }
@@ -473,15 +444,11 @@ bool CSockHandle::RecvData()
     int bytes_read = 0;
 
     bool bRet = false;
-    do
-    {
-        try
-        {
+    do{
+        try{
             bytes_read = recv(this->m_i_socket, (char *)m_recBuf, m_i_recBufSize, 0);
 //            LOGE("pHandle->socket = %d,   bytes_read = %d", this->socket, bytes_read);
-        }
-        catch (...)
-        {
+        }catch (...){
             return false;
         }
         if (bytes_read > 0)
@@ -501,8 +468,7 @@ void CSockHandle::Close()
 #else
     close(this->m_i_socket);
 #endif
-    while (!this->m_SendData.empty())
-    {
+    while (!this->m_SendData.empty()){
         SEND_DATA data = this->m_SendData.front();
         this->m_SendData.pop();
         ::free(data.pData);

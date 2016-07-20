@@ -1,7 +1,8 @@
 #include "SliderView.h"
 #include <QBoxLayout>
 
-CSliderView::CSliderView(AppListInterface * pList, QWidget *parent) : QWidget(parent),
+CSliderView::CSliderView(AppListInterface * pList, QWidget *parent)
+    : QWidget(parent),
     m_bDynamic(false)
 {
     if (parent) {
@@ -11,7 +12,8 @@ CSliderView::CSliderView(AppListInterface * pList, QWidget *parent) : QWidget(pa
 
     setAutoFillBackground(true);
     QPixmap pixmap(":/images/MainWidget/Backgroud.png");
-    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio,
+                           Qt::SmoothTransformation);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(pixmap));
     setPalette(palette);
@@ -30,7 +32,8 @@ CSliderView::CSliderView(AppListInterface * pList, QWidget *parent) : QWidget(pa
     pMainLayout->addWidget(m_pSlider);
     pMainLayout->addWidget(m_pFooterLab);
     pMainLayout->addLayout(pBottomLayout);
-    pMainLayout->setContentsMargins(height()*0.04,height()*0.04,height()*0.04,height()*0.1);
+    pMainLayout->setContentsMargins(height()*0.04,height()*0.04,
+                                    height()*0.04,height()*0.1);
 
     pTopLayout->addWidget(m_pReturnBtn);
     pTopLayout->addWidget(m_pAppNameLab,1);
@@ -99,7 +102,9 @@ void CSliderView::showEvent(QShowEvent * e)
         int numTicks = m_jsonData["params"]["numTicks"].asInt();
         int position = m_jsonData["params"]["position"].asInt();
 
-        AppBase::SetEdlidedText(m_pHeaderLab,m_jsonData["params"]["sliderHeader"].asString().c_str(),width()*0.9);
+        AppBase::SetEdlidedText(m_pHeaderLab,
+                m_jsonData["params"]["sliderHeader"].asString().c_str(),
+                width()*0.9);
 
         m_FooterStrVec.clear();
         if (m_jsonData["params"].isMember("sliderFooter")) {
@@ -108,7 +113,7 @@ void CSliderView::showEvent(QShowEvent * e)
             } else {
                 m_bDynamic = true;
             }
-            for (int i = 0; i < m_jsonData["params"]["sliderFooter"].size(); i++) {
+            for (int i = 0; i < m_jsonData["params"]["sliderFooter"].size(); ++i) {
                 m_FooterStrVec.push_back(m_jsonData["params"]["sliderFooter"][i].asString());
             }
         }

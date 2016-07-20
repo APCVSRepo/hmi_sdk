@@ -12,7 +12,8 @@ CChoiceSetVR::CChoiceSetVR(QWidget *parent) :
 
     setAutoFillBackground(true);
     QPixmap pixmap(":/images/choicevr_back.png");
-    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio,
+                           Qt::SmoothTransformation);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(pixmap));
     setPalette(palette);

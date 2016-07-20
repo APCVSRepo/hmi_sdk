@@ -106,7 +106,7 @@ Json::Value VehicleInfo::vehicleInfoReadDIDResponse(Json::Value &request)
     Json::Value arrayObj;
     Json::Value item;
 
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; ++i) {
         item["data"] = did[0];
         item["didLocation"] = didLocation[i];
         item["resultCode"] = "SUCCESS";

@@ -29,7 +29,7 @@ AppList::AppList()
 AppList::~AppList()
 {
     int i;
-    for (i = 0; i < m_AppDatas.size(); i++) {
+    for (i = 0; i < m_AppDatas.size(); ++i) {
         delete m_AppDatas[i];
     }
 }
@@ -116,7 +116,7 @@ Result AppList::recvFromServer(Json::Value jsonObj)
             int iNewID = jsonObj["params"]["appID"].asInt();
             if (m_pCurApp->m_iAppID != iNewID) {
                 std::vector <AppData *>::iterator i;
-                for (i = m_AppDatas.begin(); i != m_AppDatas.end(); i++) {
+                for (i = m_AppDatas.begin(); i != m_AppDatas.end(); ++i) {
                     if (iNewID == (*i)->m_iAppID) {
                         m_pCurApp = *i;
                         m_pUIManager->onAppShow(m_pCurApp->getCurUI());
@@ -224,7 +224,7 @@ void AppList::newAppRegistered(Json::Value jsonObj)
     pData->addExitAppCommand();
 
     std::vector <AppData *>::iterator i;
-    for (i = m_AppDatas.begin(); i != m_AppDatas.end(); i++) {
+    for (i = m_AppDatas.begin(); i != m_AppDatas.end(); ++i) {
         AppData * pOne = *i;
         if (pOne->m_iAppID == pData->m_iAppID) {
             m_AppDatas.erase(i);
@@ -240,9 +240,9 @@ void AppList::OnAppActivated(int iAppID)
 {
     AppData * pData;
     int i;
-    for (i = 0; i < m_AppDatas.size(); i++) {
+    for (i = 0; i < m_AppDatas.size(); ++i) {
         pData = m_AppDatas[i];
-        if(pData->m_iAppID == iAppID)
+        if (pData->m_iAppID == iAppID)
             break;
     }
 
@@ -268,7 +268,7 @@ void AppList::OnAppExit()
 
 void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames,std::vector<std::string> &vIconPath)
 {
-    for (int i = 0; i < m_AppDatas.size(); i++) {
+    for (int i = 0; i < m_AppDatas.size(); ++i) {
         vAppIDs.push_back(m_AppDatas[i]->m_iAppID);
         vAppNames.push_back(m_AppDatas[i]->m_szAppName);
         vIconPath.push_back(m_AppDatas[i]->m_strAppIconFilePath);
@@ -278,7 +278,7 @@ void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vA
 
 void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames)
 {
-    for (int i = 0; i < m_AppDatas.size(); i++) {
+    for (int i = 0; i < m_AppDatas.size(); ++i) {
         vAppIDs.push_back(m_AppDatas[i]->m_iAppID);
         vAppNames.push_back(m_AppDatas[i]->m_szAppName);
     }
@@ -289,7 +289,7 @@ void AppList::appUnregistered(Json::Value jsonObj)
     int appID = jsonObj["params"]["appID"].asInt();
 
     std::vector <AppData *>::iterator i;
-    for (i = m_AppDatas.begin(); i != m_AppDatas.end(); i++) {
+    for (i = m_AppDatas.begin(); i != m_AppDatas.end(); ++i) {
         if (appID == (*i)->m_iAppID) {
             if (m_pCurApp) {
                 if (m_pCurApp->m_iAppID == appID) {

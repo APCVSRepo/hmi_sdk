@@ -50,7 +50,7 @@ bool JniNative::registerNativeMethods()
         QDBG << "RegisterNatives return - " << ret;
         result = ret >= 0;
     }
-    if(env->ExceptionCheck())
+    if (env->ExceptionCheck())
         env->ExceptionClear();
     return result;
 }

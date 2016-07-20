@@ -1,7 +1,8 @@
 #include "ScollMsgView.h"
 #include <QBoxLayout>
 
-CScollMsgView::CScollMsgView(AppListInterface * pList, QWidget *parent) : QWidget(parent)
+CScollMsgView::CScollMsgView(AppListInterface * pList, QWidget *parent)
+    : QWidget(parent)
 {
     if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
@@ -10,7 +11,9 @@ CScollMsgView::CScollMsgView(AppListInterface * pList, QWidget *parent) : QWidge
 
     setAutoFillBackground(true);
     QPixmap pixmap(":/images/MainWidget/Backgroud.png");
-    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(width(),height(),
+                           Qt::IgnoreAspectRatio,
+                           Qt::SmoothTransformation);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(pixmap));
     setPalette(palette);
@@ -30,7 +33,8 @@ CScollMsgView::CScollMsgView(AppListInterface * pList, QWidget *parent) : QWidge
     pTopLayout->addWidget(m_pReturnBtn);
     pTopLayout->addWidget(m_pAppNameLab,1);
     pTopLayout->addWidget(m_pSoftBtn);
-    pTopLayout->setContentsMargins(width()*0.015,width()*0.015,width()*0.015,width()*0.015);
+    pTopLayout->setContentsMargins(width()*0.015,width()*0.015,
+                                   width()*0.015,width()*0.015);
     pTopLayout->setSpacing(5);
 
     m_pReturnBtn->Init(width()*0.07,width()*0.065,"",":/images/ReturnBtnNormal.png",":/images/ReturnBtnPress.png");

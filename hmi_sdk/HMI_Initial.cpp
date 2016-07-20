@@ -103,7 +103,7 @@ bool HMI_Initial::FileCopyToConfigdir(const char *dir_)
     }
     QFileInfoList list = dir.entryInfoList();
     LOGI("total %d files",list.count());
-    for (int i = 0; i < list.count(); i++) {
+    for (int i = 0; i < list.count(); ++i) {
         QFileInfo info = list.at(i);
 
         QFile file_in(info.filePath());

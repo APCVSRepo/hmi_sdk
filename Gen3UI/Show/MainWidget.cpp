@@ -3,7 +3,8 @@
 
 #define MARGIN 10
 
-MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(parent)
+MainWidget::MainWidget(AppListInterface * pList, QWidget *parent)
+    : QWidget(parent)
 {
      if (parent) {
          setGeometry(0,0,parent->width(),parent->height());
@@ -12,7 +13,8 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(pare
 
      setAutoFillBackground(true);
      QPixmap pixmap(":/images/MainWidget/Backgroud.png");
-     pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+     pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio,
+                            Qt::SmoothTransformation);
      QPalette palette;
      palette.setBrush(QPalette::Background, QBrush(pixmap));
      setPalette(palette);
@@ -43,7 +45,8 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(pare
      m_pMainTitleLab->setStyleSheet(QString("font: 60 35pt \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
      m_pMainTitleLab->setText("SmartDeviceLink");
      QPixmap IconPixmap(":/images/MainWidget/AppIcon.png");
-     IconPixmap = IconPixmap.scaled(80,80, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+     IconPixmap = IconPixmap.scaled(80,80, Qt::IgnoreAspectRatio,
+                                    Qt::SmoothTransformation);
      m_pIconLab->setPixmap(IconPixmap);
      m_pIconLab->setStyleSheet("background:transparent;background-image: none");
 
@@ -74,10 +77,12 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(pare
      m_pMenuBtn->setText("Menu");
      for (int i = 0;i != 3;++i) {
          m_pSoftBtn[i].setText("-");
-         connect(&m_pSoftBtn[i],SIGNAL(clicked(int)),this,SLOT(SoftBtnClickedSlot(int)));
+         connect(&m_pSoftBtn[i],SIGNAL(clicked(int)),
+                 this,SLOT(SoftBtnClickedSlot(int)));
      }
 
-     connect(m_pMenuBtn,SIGNAL(clicked()),this,SLOT(BtnMenuClickedSlots()));
+     connect(m_pMenuBtn,SIGNAL(clicked()),
+             this,SLOT(BtnMenuClickedSlots()));
 }
 
 MainWidget::~MainWidget()
@@ -140,7 +145,7 @@ void MainWidget::showEvent(QShowEvent * e)
             return;
         Json::Value jsonParams = pObj["params"];        
 
-        for (unsigned int i = 0; i < jsonParams["showStrings"].size(); i++) {
+        for (unsigned int i = 0; i < jsonParams["showStrings"].size(); ++i) {
             Json::Value  fieldName = jsonParams["showStrings"][i];
             if ("mainField1" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_pShowLine,fieldName["fieldText"].asString().c_str(),width()*0.9);
@@ -154,7 +159,7 @@ void MainWidget::showEvent(QShowEvent * e)
         }
 
         if (jsonParams.isMember("softButtons")) {
-            for (int i = 0; i < jsonParams["softButtons"].size(); i++) {
+            for (int i = 0; i < jsonParams["softButtons"].size(); ++i) {
                 SSoftButton tmpSoftButton;
                 tmpSoftButton.b_isHighlighted = jsonParams["softButtons"][i]["isHighlighted"].asBool();
                 tmpSoftButton.i_softButtonID = jsonParams["softButtons"][i]["softButtonID"].asInt();

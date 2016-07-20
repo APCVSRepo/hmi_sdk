@@ -14,11 +14,10 @@ TTS::~TTS()
 
 }
 
-
 void TTS::onRequest(Json::Value &request)
 {
     std::string method = request["method"].asString();
-    int  id = request["id"].asInt();
+    int id = request["id"].asInt();
     if (method == "TTS.SetGlobalProperties") {
         sendResult(id,"SetGlobalProperties");
     }else if (method == "TTS.GetCapabilities") {
@@ -42,5 +41,4 @@ void TTS::onRequest(Json::Value &request)
         Channel::onRequest(request);
     }
 }
-
 

@@ -24,8 +24,8 @@
 
 static int logOut(const char *file, const char *func, const int line, const char *fmt, ...)
 {
-    char msg[MAX_MSG]={0};
-    if(NULL != fmt)
+    char msg[MAX_MSG] = { 0 };
+    if (NULL != fmt)
     {
         va_list ap;
         va_start(ap, fmt);
@@ -39,7 +39,7 @@ static int logOut(const char *file, const char *func, const int line, const char
 
     //usec
     struct timeval tv;
-    if(gettimeofday(&tv,NULL)<0)
+    if (gettimeofday(&tv,NULL) < 0)
         return 0;
 
     __android_log_print(ANDROID_LOG_ERROR,"HMI","%02d:%02d:%02d.%06d %s:%s():%d  %s",

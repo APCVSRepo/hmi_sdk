@@ -13,7 +13,8 @@ CCommandView::CCommandView(AppListInterface *pList,QWidget *parent) :
 
     setAutoFillBackground(true);
     QPixmap pixmap(":/images/MainWidget/Backgroud.png");
-    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio,
+                           Qt::SmoothTransformation);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(pixmap));
     setPalette(palette);
@@ -46,7 +47,8 @@ CCommandView::CCommandView(AppListInterface *pList,QWidget *parent) :
     m_pReturnBtn->initParameter(50,50,":/images/ReturnBtnNormal.png",":/images/ReturnBtnPress.png","","");
 
     connect(m_pReturnBtn,SIGNAL(clicked()),this,SLOT(OnReturnBtnClicked()));
-    connect(m_pCommandList,SIGNAL(ItemClickedSignal(QListWidgetItem*)),this,SLOT(OnCommandListItemClicked(QListWidgetItem*)));
+    connect(m_pCommandList,SIGNAL(ItemClickedSignal(QListWidgetItem*)),
+            this,SLOT(OnCommandListItemClicked(QListWidgetItem*)));
 }
 
 CCommandView::~CCommandView()
@@ -96,13 +98,15 @@ void CCommandView::RefreshCommandList(tagCmdInf *pMenu)
 {
     m_pCommandList->ClearAllItem();
 
-    if (pMenu == NULL) {
+    if (NULL == pMenu) {
         for (int i = 0;i != m_CmdVec.size();++i) {
-            m_pCommandList->AddListItem(m_CmdVec[i].strCmd.c_str(),m_CmdVec[i].bMenu);
+            m_pCommandList->AddListItem(m_CmdVec[i].strCmd.c_str(),
+                                        m_CmdVec[i].bMenu);
         }
     } else {
         for (int i = 0;i != pMenu->CmdVec.size();++i) {
-            m_pCommandList->AddListItem(pMenu->CmdVec[i].strCmd.c_str(),pMenu->CmdVec[i].bMenu);
+            m_pCommandList->AddListItem(pMenu->CmdVec[i].strCmd.c_str(),
+                                        pMenu->CmdVec[i].bMenu);
         }
     }
     m_pCommandList->show();
@@ -115,7 +119,7 @@ void CCommandView::showEvent(QShowEvent * e)
 
     std::vector<SMenuCommand> CmdList = m_pList->getActiveApp()->getCommandList();
     std::vector<SMenuCommand> TmpCmdList;
-    for (unsigned int i = 0; i < CmdList.size(); i++) {
+    for (unsigned int i = 0; i < CmdList.size(); ++i) {
         if (0 != CmdList.at(i).i_cmdID && 0 == CmdList.at(i).i_menuID) {
             AddCommand(CmdList.at(i).i_cmdID,CmdList.at(i).str_menuName);
         }else if (0 == CmdList.at(i).i_cmdID && 0 != CmdList.at(i).i_menuID) {
@@ -123,14 +127,18 @@ void CCommandView::showEvent(QShowEvent * e)
 
             TmpCmdList = m_pList->getActiveApp()->getCommandList(CmdList.at(i).i_menuID);
             for(unsigned int j = 0; j < TmpCmdList.size(); j++) {
-                AddSubCommand(CmdList.at(i).i_menuID,TmpCmdList.at(j).i_cmdID,TmpCmdList.at(j).str_menuName.data());
+                AddSubCommand(CmdList.at(i).i_menuID,
+                              TmpCmdList.at(j).i_cmdID,
+                              TmpCmdList.at(j).str_menuName.data());
             }
         }
     }
     m_pCurrentMenu = NULL;
     RefreshCommandList();
 
-    AppBase::SetEdlidedText(m_pAppNameLab,m_pList->getActiveApp()->getAppName().c_str(),width()*0.8);
+    AppBase::SetEdlidedText(m_pAppNameLab,
+                            m_pList->getActiveApp()->getAppName().c_str(),
+                            width()*0.8);
 }
 
 void CCommandView::OnReturnBtnClicked()
@@ -142,8 +150,8 @@ void CCommandView::OnCommandListItemClicked(QListWidgetItem *pItem)
 {
     int iRow = m_pCommandList->row(pItem);
 
-    if (m_pCurrentMenu == NULL) {
-        if (iRow == 0) {
+    if (NULL == m_pCurrentMenu) {
+        if (0 == iRow) {
             m_pList->OnAppExit();
         } else {
             if (m_CmdVec[iRow].bMenu) {

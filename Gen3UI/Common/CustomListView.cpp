@@ -40,14 +40,16 @@ void CustomListView::AddItem(std::string strText,int iId,std::string strIconPath
         CAppButton *pNewItem = new CAppButton(this);
         int r = m_ListItemVec.size()/4;
         int c = m_ListItemVec.size()%4;
-        pNewItem->setGeometry(5 + m_iItemWidth*c, 5 + m_iItemHeight*r, m_iItemWidth-40, m_iItemHeight-15);
+        pNewItem->setGeometry(5 + m_iItemWidth*c, 5 + m_iItemHeight*r,
+                              m_iItemWidth - 40, m_iItemHeight - 15);
         pNewItem->setFuncId(iId);
         pNewItem->setIcon(strIconPath.c_str(),strIconPath.c_str(),true);
         pNewItem->setText(strText.c_str());
         pNewItem->show();
 
         m_ListItemVec.push_back(pNewItem);
-        connect(pNewItem, SIGNAL(clickedWitchFuncId(int)), SLOT(OnChoiceSelected(int)));
+        connect(pNewItem, SIGNAL(clickedWitchFuncId(int)),
+                SLOT(OnChoiceSelected(int)));
     }
 }
 
@@ -109,7 +111,10 @@ void CustomListView::UpdateItemShow(int iStartItemIndex)
                 r = i / 4;
                 c = i % 4;
                 m_pItemShowVec->at(i)->show();
-                m_pItemShowVec->at(i)->setGeometry(5 + m_iItemWidth*c, 5 + m_iItemHeight*r, m_iItemWidth-40, m_iItemHeight-15);
+                m_pItemShowVec->at(i)->setGeometry(5 + m_iItemWidth*c,
+                                                   5 + m_iItemHeight*r,
+                                                   m_iItemWidth-40,
+                                                   m_iItemHeight-15);
             }
         }
     }

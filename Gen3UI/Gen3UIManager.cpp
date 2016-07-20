@@ -46,7 +46,7 @@
 CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
     QWidget(parent)
 {
-    for (int i = 0; i < ID_UI_MAX; i++) {
+    for (int i = 0; i < ID_UI_MAX; ++i) {
         m_vUIWidgets[i] = NULL;
     }
     m_pList = pList;
@@ -54,7 +54,7 @@ CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
 
 CGen3UIManager::~CGen3UIManager()
 {
-    for (int i = 0; i < ID_UI_MAX; i++) {
+    for (int i = 0; i < ID_UI_MAX; ++i) {
         if (m_vUIWidgets[i]) {
             delete m_vUIWidgets[i];
             m_vUIWidgets[i] = NULL;
@@ -101,7 +101,7 @@ void CGen3UIManager::initAppHMI()
 #endif
 #endif
 
-    for (int i = 0; i < ID_UI_MAX; i++) {
+    for (int i = 0; i < ID_UI_MAX; ++i) {
         if (m_vUIWidgets[i] != NULL) {
             m_vUIWidgets[i]->hide();
         }

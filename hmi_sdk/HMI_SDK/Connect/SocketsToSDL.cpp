@@ -73,7 +73,7 @@ void SocketsToSDL::CloseSockets()
     m_bTerminate = true;
 
     int iNum = m_SocketHandles.size();
-    for (int i = 0; i < iNum; i++) {
+    for (int i = 0; i < iNum; ++i) {
         CSockHandle * pHandle = m_SocketHandles[i];
         pHandle->Close();
         delete pHandle;
@@ -194,9 +194,9 @@ bool SocketsToSDL::ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * 
 		return false;
 
     int iNum = Channels.size();
-    for (int i = 0; i < iNum; i++) {
+    for (int i = 0; i < iNum; ++i) {
         CSockHandle * pHandle = new CSockHandle(1024);
-        if(pHandle->Connect(Channels[i], m_sHost, m_iPort)) {
+        if (pHandle->Connect(Channels[i], m_sHost, m_iPort)) {
             m_SocketHandles.push_back(pHandle);
             Channels[i]->setSocketManager(this, pHandle);
         } else {
@@ -220,7 +220,7 @@ bool SocketsToSDL::ConnectToVS( IChannel * ChannelVS, std::string sIP, int iPort
     m_pNetwork = pNetwork;
 
     CSockHandle * pHandle = new CSockHandle(576000);
-    if(pHandle->Connect(ChannelVS, sIP, iPort)) {
+    if (pHandle->Connect(ChannelVS, sIP, iPort)) {
         m_SocketHandles.push_back(pHandle);
         ChannelVS->setSocketManager(this, pHandle);
         Notify();
@@ -246,7 +246,7 @@ void SocketsToSDL::DelConnectToVS()
 
 void SocketsToSDL::SendData(void * pHandle, void * pData, int iLength)
 {
-    if(m_bTerminate)
+    if (m_bTerminate)
         return;
 
     CSockHandle * p = (CSockHandle *)pHandle;
@@ -271,7 +271,7 @@ void SocketsToSDL::RunThread()
 #endif
 
 		int iNum = m_SocketHandles.size();
-        for (int i = 0; i < iNum; i++) {
+        for (int i = 0; i < iNum; ++i) {
             CSockHandle * pHandle = m_SocketHandles[i];
             int socket = pHandle->GetSocketID();
 			FD_SET(socket, &fdRead);
@@ -298,19 +298,19 @@ void SocketsToSDL::RunThread()
 				bytes_read = recv(m_Read_Sign, (char *)buffer, sizeof(buffer), 0);
 			} while (bytes_read > 0);
             iNum = m_SocketHandles.size();
-            for (int i = 0; i < iNum; i++) {
-                if(i + 1 > m_SocketHandles.size()) {
+            for (int i = 0; i < iNum; ++i) {
+                if (i + 1 > m_SocketHandles.size()) {
                     break;
                 }
                 CSockHandle * pHandle = m_SocketHandles[i];
-                if(!pHandle->SendData())
+                if (!pHandle->SendData())
                     goto SOCKET_WRONG;
             }
 		}
 
 
         iNum = m_SocketHandles.size();
-        for (int i = 0; i < iNum; i++) {
+        for (int i = 0; i < iNum; ++i) {
             if (i + 1 > m_SocketHandles.size()) {
                 break;
             }
@@ -328,7 +328,7 @@ SOCKET_WRONG:
     m_bTerminate = true;
     CloseSockets();
 
-    if(m_pNetwork)
+    if (m_pNetwork)
         m_pNetwork->onNetworkBroken();
     return;
 }
@@ -366,7 +366,7 @@ bool CSockHandle::Connect(IChannel *newChannel, std::string sIP, int iPort)
 
     this->pDataReceiver = newChannel;
     this->m_i_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if(this->m_i_socket == SOCKET_ERROR) {
+    if (SOCKET_ERROR == this->m_i_socket) {
         LOGE("SOCKET INVALID");
     }
 //    LOGE("this->m_i_socket = %d", this->m_i_socket);

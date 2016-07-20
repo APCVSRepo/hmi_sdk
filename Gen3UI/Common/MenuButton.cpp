@@ -5,7 +5,7 @@
 #include <QUrl>
 MenuButton::MenuButton(QWidget *pParent):QPushButton(pParent)
 {
-    m_isActive=false;
+    m_isActive = false;
 }
 
 MenuButton::~MenuButton()
@@ -15,13 +15,13 @@ MenuButton::~MenuButton()
 
 void MenuButton::setText(const QString &text)
 {
-    m_text=text;
+    m_text = text;
     update();
 }
 
 void MenuButton::setActive(bool active)
 {
-    m_isActive=active;
+    m_isActive = active;
     update();
 }
 
@@ -41,8 +41,8 @@ void MenuButton::setIcon(const QString on,const QString off)
 
 void MenuButton::setIcon(QImage on, QImage off)
 {
-    m_pOnImage=on;
-    m_pOffImage=off;
+    m_pOnImage = on;
+    m_pOffImage = off;
 }
 
 void MenuButton::paintEvent(QPaintEvent *e)
@@ -52,23 +52,23 @@ void MenuButton::paintEvent(QPaintEvent *e)
     QColor   wordColor;
 
     if (m_isActive) {
-        QRect irect=m_pOnImage.rect();
-        QRect orect=rect();
-        int sx=(irect.width()-orect.width())/2;
-        int sy=(irect.height()-orect.height())/2;
-        m_pOnImage=m_pOnImage.scaled(width(),height());
+        QRect irect = m_pOnImage.rect();
+        QRect orect = rect();
+        int sx = (irect.width()-orect.width())/2;
+        int sy = (irect.height()-orect.height())/2;
+        m_pOnImage = m_pOnImage.scaled(width(),height());
        //painter.drawImage(0,0,orect.width(),orect.height(),m_pOnImage,sx,sy);
         painter.drawImage(orect,m_pOnImage);
-       wordColor=Qt::white;
+       wordColor = Qt::white;
     } else {
-        QRect irect=m_pOffImage.rect();
-        QRect orect=rect();
-        int sx=(irect.width()-orect.width())/2;
-        int sy=(irect.height()-orect.height())/2;
-        m_pOffImage=m_pOffImage.scaled(width(),height());
+        QRect irect = m_pOffImage.rect();
+        QRect orect = rect();
+        int sx = (irect.width()-orect.width())/2;
+        int sy = (irect.height()-orect.height())/2;
+        m_pOffImage = m_pOffImage.scaled(width(),height());
        //painter.drawImage(0,0,orect.width(),orect.height(),m_pOffImage,sx,sy);
         painter.drawImage(orect,m_pOffImage);
-       wordColor=Qt::black;
+       wordColor = Qt::black;
     }
 
     QPen pen(wordColor);
@@ -79,7 +79,7 @@ void MenuButton::paintEvent(QPaintEvent *e)
     font.setPixelSize(22);
     //font.setBold(true);
     painter.setFont(font);
-    QRectF rect=QRectF(0,1.0*height()*15/24,width(),height()/3);
+    QRectF rect = QRectF(0,1.0*height()*15/24,width(),height()/3);
     painter.drawText(rect,m_text,QTextOption(Qt::AlignCenter));
 }
 

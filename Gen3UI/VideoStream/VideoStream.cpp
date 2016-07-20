@@ -71,13 +71,19 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
     int iBtnWidth = 80;
 
     m_pZoomInBtn->setGeometry(QRect(40,height()*0.5-10,iBtnWidth,iBtnHeight));
-    m_pZoomInBtn->initParameter(iBtnWidth,iBtnHeight,":/images/ZoomInBtnNormal.png",":/images/ZoomInBtnPress.png","","");
+    m_pZoomInBtn->initParameter(iBtnWidth,iBtnHeight,
+                                ":/images/ZoomInBtnNormal.png",
+                                ":/images/ZoomInBtnPress.png","","");
 
     m_pZoomOutBtn->setGeometry(QRect(40,height()*0.5+iBtnHeight+10,iBtnWidth,iBtnHeight));
-    m_pZoomOutBtn->initParameter(iBtnWidth,iBtnHeight,":/images/ZoomOutBtnNormal.png",":/images/ZoomOutBtnPress.png","","");
+    m_pZoomOutBtn->initParameter(iBtnWidth,iBtnHeight,
+                                 ":/images/ZoomOutBtnNormal.png",
+                                 ":/images/ZoomOutBtnPress.png","","");
 
     m_pMenuBtn->setGeometry(QRect(40,height()*0.8+10,iBtnWidth,iBtnHeight));
-    m_pMenuBtn->initParameter(iBtnWidth,iBtnHeight,":/images/BtnNormal.png",":/images/BtnPress.png","","菜单");
+    m_pMenuBtn->initParameter(iBtnWidth,iBtnHeight,
+                              ":/images/BtnNormal.png",
+                              ":/images/BtnPress.png","","Menu");
     m_pMenuBtn->setTextStyle("border:0px;font: 20px \"Liberation Serif\";color:rgb(0,0,0)");
 
     connect(m_pZoomInBtn,SIGNAL(clicked()),this,SLOT(OnClickedZoomInBtn()));
@@ -235,22 +241,21 @@ bool VideoStream::Init()
 #endif
    LOGD("avformat_find_stream_info");
    result = avformat_find_stream_info(pAVFormatContext,NULL);
-   if (result<0) {
+   if (result < 0) {
       LOGD("获取视频流信息失败%d",3);
       return false;
    }
 
     //获取视频流索引
     videoStreamIndex = -1;
-    for (uint i = 0; i < pAVFormatContext->nb_streams; i++) {
+    for (uint i = 0; i < pAVFormatContext->nb_streams; ++i) {
         if (pAVFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO) {
             videoStreamIndex = i;
             break;
         }
     }
     LOGD("pAVCodecContext");
-    if (videoStreamIndex == -1) {
-
+    if (-1 == videoStreamIndex) {
         LOGD("获取视频流索引失败,%d",2);
         return false;
     }
@@ -304,7 +309,7 @@ void VideoStream::stopStream()
 #endif
 #ifdef VIDEO_STREM_NET
     LOGI("stop stream:%d",(int)m_Stop);
-    if(m_Stop)
+    if (m_Stop)
         return;
     LOGI("avcodec_close");
     m_Stop = true;
@@ -326,13 +331,13 @@ void VideoStream::stopStream()
 #ifndef VIDEO_STREAM_WIDGET
 void VideoStream::PlayImageSlots()
 {
-    while(m_Stop == false) {
+    while(false == m_Stop) {
         AVPacket pAVPacket;
-        if(av_read_frame(pAVFormatContext, &pAVPacket) == 0) {
+        if (av_read_frame(pAVFormatContext, &pAVPacket) == 0) {
             //LOGD("data size=%d,packet num=%d,total_size=%d\n",pAVPacket.size,packet_num++,data_size+=pAVPacket.size);
-            if(pAVPacket.stream_index == videoStreamIndex) {
+            if (pAVPacket.stream_index == videoStreamIndex) {
                 avcodec_decode_video2(pAVCodecContext, pAVFrame, &m_i_frameFinished, &pAVPacket);
-                if(m_i_frameFinished) {
+                if (m_i_frameFinished) {
                     sws_scale(pSwsContext,(const uint8_t* const *)pAVFrame->data,pAVFrame->linesize,0,videoHeight,pAVPicture.data,pAVPicture.linesize);
                     //发送获取一帧图像信号
 //                    m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_ARGB8555_Premultiplied	);
@@ -350,7 +355,7 @@ void VideoStream::PlayImageSlots()
 
 void VideoStream::paintEvent(QPaintEvent *e)
 {
-    if(!m_VideoImage.isNull())
+    if (!m_VideoImage.isNull())
     {
         QPainter painter(this);
        // painter.drawImage(0,0,QImage(pAVPicture.data[0],width(),height(),QImage::Format_RGB888));
@@ -409,7 +414,10 @@ void VideoStream::mouseReleaseEvent(QMouseEvent *e)
 
 bool VideoStream::PointInRect(QRect rect,QPoint point)
 {
-    if(point.x() < rect.left() || point.x() > rect.right() || point.y() < rect.top() || point.y() > rect.bottom()) {
+    if (point.x() < rect.left()
+            || point.x() > rect.right()
+            || point.y() < rect.top()
+            || point.y() > rect.bottom()) {
         return false;
     } else {
         return true;

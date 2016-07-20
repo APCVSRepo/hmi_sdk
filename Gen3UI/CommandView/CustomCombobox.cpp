@@ -38,9 +38,8 @@ CustomCombobox::CustomCombobox(int iMaxHeight,bool bUp,QWidget *parent) : QListW
     */
     setMouseTracking(true);
 
-    connect(&m_scrollWidget,SIGNAL(valueChanged(int)),this,SLOT(OnScrollBarValueChange(int)));
-
-    //connect(this,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(OnItemClicked(QListWidgetItem*)));
+    connect(&m_scrollWidget,SIGNAL(valueChanged(int)),
+            this,SLOT(OnScrollBarValueChange(int)));
 }
 
 CustomCombobox::~CustomCombobox()
@@ -108,13 +107,16 @@ void CustomCombobox::AddListItem(QString strText,bool bMenu)
     addItem(item);
     CustomComboboxItem *itemWidget = new CustomComboboxItem(w,h,this);
     // insertItem(index,itemWidget);
-    itemWidget->SetBkPic(":/images/CommandItemNormal.png",":/images/CommandItemPress.png",":/images/CommandItemNormal.png");
+    itemWidget->SetBkPic(":/images/CommandItemNormal.png",
+                         ":/images/CommandItemPress.png",
+                         ":/images/CommandItemNormal.png");
     setItemWidget(item,itemWidget);    
     itemWidget->setText(strText);
     itemWidget->setIsMenu(bMenu);
     m_itemList.push_back(itemWidget);
 
-    connect(itemWidget,SIGNAL(ItemClicked(CustomComboboxItem*)),this,SLOT(OnItemClicked(CustomComboboxItem*)));
+    connect(itemWidget,SIGNAL(ItemClicked(CustomComboboxItem*)),
+            this,SLOT(OnItemClicked(CustomComboboxItem*)));
 
     m_iHeight += h;
     if (m_iHeight > m_iMaxHeight) {
@@ -126,7 +128,7 @@ void CustomCombobox::AddListItem(QString strText,bool bMenu)
 
 void CustomCombobox::SetPos(int iStartX,int iStartY,int iWidth,int iHeight)
 {
-    if (m_iWidth == 0) {
+    if (0 == m_iWidth) {
         m_iStartX = iStartX;
         m_iStartY = iStartY;
         m_iWidth = iWidth;
@@ -148,7 +150,7 @@ void CustomCombobox::SetScrollParams(int page,int range)
     m_scrollWidget.setPageStep(page);
     m_scrollWidget.setRange(0,range-1);
     m_LineHeight = (height()-10)/page;
-    for (int i = 0; i<m_itemList.count(); i++) {
+    for (int i = 0; i<m_itemList.count(); ++i) {
         AppItemWidget *item = m_itemList.at(i);
         item->setFixedHeight(m_LineHeight);
     }
@@ -159,7 +161,8 @@ void CustomCombobox::OnTimeOutSlot()
 {
     int x = QCursor::pos().x();
     int y = QCursor::pos().y();
-    if (x > m_iStartX && x < m_iStartX + m_iWidth && y > m_iStartY - m_iHeight && y < m_iStartY) {
+    if (x > m_iStartX && x < m_iStartX + m_iWidth
+            && y > m_iStartY - m_iHeight && y < m_iStartY) {
         y -= m_iStartY - m_iHeight;
         int iIndex = y * PAGEITEM / m_iMaxHeight + m_scrollWidget.sliderPosition();
         if (m_iOldHoverItemIndex != iIndex) {

@@ -43,15 +43,15 @@ bool IsTextUTF8(char* str, unsigned long long length)
         //如果不是ASCII码,应该是多字节符,计算字节数
         if (nBytes == 0) {
             if (chr >= 0x80) {
-                if(chr >= 0xFC && chr <= 0xFD)
+                if (chr >= 0xFC && chr <= 0xFD)
                     nBytes = 6;
-                else if(chr >= 0xF8)
+                else if (chr >= 0xF8)
                     nBytes = 5;
-                else if(chr >= 0xF0)
+                else if (chr >= 0xF0)
                     nBytes = 4;
-                else if(chr >= 0xE0)
+                else if (chr >= 0xE0)
                     nBytes = 3;
-                else if(chr >= 0xC0)
+                else if (chr >= 0xC0)
                     nBytes = 2;
                 else
                     return FALSE;
@@ -60,15 +60,15 @@ bool IsTextUTF8(char* str, unsigned long long length)
             }
         } else {
             //多字节符的非首字节,应为 10xxxxxx
-            if( (chr&0xC0) != 0x80 )
+            if ( (chr&0xC0) != 0x80 )
                 return FALSE;
 
             nBytes--;
         }
     }
-    if( nBytes > 0 ) //违返规则
+    if ( nBytes > 0 ) //违返规则
         return FALSE;
-    if( bAllAscii ) //如果全部都是ASCII, 说明不是UTF-8
+    if ( bAllAscii ) //如果全部都是ASCII, 说明不是UTF-8
         return FALSE;
     return true;
 #else
@@ -108,16 +108,16 @@ Result AppData::recvFromServer(Json::Value jsonObj)
         }else if (str_method == "UI.DeleteSubMenu") {
             delSubMenu(jsonObj);
         }else if (str_method == "UI.Alert") {
-            if(m_json_alert.isMember("id")) {
-                if(m_json_alert["id"].asInt()!=-1)
+            if (m_json_alert.isMember("id")) {
+                if (m_json_alert["id"].asInt()!=-1)
                     return RESULT_TOO_MANY_PENDING_REQUESTS;
             }
             alert(jsonObj);
             ShowUI(ID_ALERT);
             return RESULT_USER_WAIT;
         }else if (str_method == "UI.ScrollableMessage") {
-            if(m_json_scrollableMessage.isMember("id")) {
-                if(m_json_scrollableMessage["id"].asInt()!=-1)
+            if (m_json_scrollableMessage.isMember("id")) {
+                if (m_json_scrollableMessage["id"].asInt()!=-1)
                     return RESULT_TOO_MANY_PENDING_REQUESTS;
             }
             scrollableMessage(jsonObj);
@@ -137,7 +137,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
             LOGI(m_json_interaction.toStyledString().data());
             Json::Value initialPrompt = jsonObj["params"]["initialPrompt"];
             std::string txt = initialPrompt[0]["text"].asString();
-            if(!IsTextUTF8((char *)txt.data(),txt.size()))
+            if (!IsTextUTF8((char *)txt.data(),txt.size()))
                 txt = string_To_UTF8(txt);
             m_pUIManager->tsSpeak(ID_DEFAULT, txt);
             //ShowUI(ID_CHOICESETVR);
@@ -157,11 +157,11 @@ Result AppData::recvFromServer(Json::Value jsonObj)
             ShowUI(ID_MEDIACLOCK);
             return RESULT_USER_WAIT;
         }else if (str_method == "VR.VRStatus") {
-            if("SUCCESS" == jsonObj["params"]["status"].asString()) {
+            if ("SUCCESS" == jsonObj["params"]["status"].asString()) {
 
-            }else if("FAIL" == jsonObj["params"]["status"].asString()) {
+            }else if ("FAIL" == jsonObj["params"]["status"].asString()) {
                 m_pUIManager->tsSpeak(ID_DEFAULT, "识别失败");
-            }else if("TIME_OVER" == jsonObj["params"]["status"].asString()) {
+            }else if ("TIME_OVER" == jsonObj["params"]["status"].asString()) {
                 m_pUIManager->tsSpeak(ID_DEFAULT, "识别超时");
             }
         }else if (str_method == "VR.VRCancel") {
@@ -176,12 +176,12 @@ Result AppData::recvFromServer(Json::Value jsonObj)
 //            }
             std::string strVrContent = jsonObj["params"]["vrContent"].asString();
 
-            if(!IsTextUTF8((char *)strVrContent.data(),strVrContent.size()))
+            if (!IsTextUTF8((char *)strVrContent.data(),strVrContent.size()))
                 strVrContent = string_To_UTF8(strVrContent);
 
             m_pUIManager->tsSpeak(ID_DEFAULT, strVrContent);
         }else if (str_method == "VR.VRCommandTTS") {
-            for (int i = 0; i < jsonObj["params"]["vrCommands"].size(); i++) {
+            for (int i = 0; i < jsonObj["params"]["vrCommands"].size(); ++i) {
                 m_pUIManager->tsSpeak(ID_HELP, jsonObj["params"]["vrCommands"][i].asString());
             }
         }else if (str_method == "VR.VRResult") {
@@ -194,7 +194,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
 //               }
 //            }
             std::string strVRName = jsonObj["params"]["vrName"].asString();
-            if(!IsTextUTF8((char *)strVRName.data(),strVRName.size()))
+            if (!IsTextUTF8((char *)strVRName.data(),strVRName.size()))
                 strVRName = string_To_UTF8(strVRName);
 
             m_pUIManager->tsSpeak(ID_CANCEL, strVRName);
@@ -203,11 +203,11 @@ Result AppData::recvFromServer(Json::Value jsonObj)
             tsSpeak(jsonObj);
             Json::Value ttsSpeeks = jsonObj["params"]["ttsChunks"];
             int size = ttsSpeeks.size();
-            for (int i=0;i<size;i++) {
+            for (int i=0;i<size;++i) {
                 std::string speek = ttsSpeeks[i]["text"].asString();
-                //if(ttsSpeeks[i]["type"].asString()!="TEXT")
+                //if (ttsSpeeks[i]["type"].asString()!="TEXT")
                 //    continue;
-                if(!IsTextUTF8((char *)speek.data(),speek.size()))
+                if (!IsTextUTF8((char *)speek.data(),speek.size()))
                     speek = string_To_UTF8(speek);
                 m_pUIManager->tsSpeak(ID_DEFAULT, speek);
             }
@@ -219,7 +219,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
 int AppData::getCurUI()
 {
     int iSize = m_vecUIStack.size();
-    if(iSize > 0)
+    if (iSize > 0)
         return m_vecUIStack[iSize - 1];
     return ID_MAIN;
 }
@@ -232,15 +232,15 @@ void AppData::OnShowCommand()
 //////////////////////////////////////////
 void AppData::OnMenuBtnClick(std::string btnText)
 {
-    if("FMButton" == btnText)
+    if ("FMButton" == btnText)
         ToSDL->OnCommandClick(m_iAppID, 101);
-    else if("TelButton" == btnText)
+    else if ("TelButton" == btnText)
         ToSDL->OnCommandClick(m_iAppID, 102);
-    else if("MsgButton" == btnText)
+    else if ("MsgButton" == btnText)
         ToSDL->OnCommandClick(m_iAppID, 103);
-    else if("CDButton" == btnText)
+    else if ("CDButton" == btnText)
         ToSDL->OnCommandClick(m_iAppID, 104);
-    else if("ListButton" == btnText) {
+    else if ("ListButton" == btnText) {
 //        SDLConnector::getSDLConnectore()->OnCommandClick(m_i_currentAppID, 105);
     }
 
@@ -281,7 +281,7 @@ void AppData::OnAlertResponse(int reason)
 
 void AppData::OnScrollMessageResponse(int reason)
 {
-    if(m_json_scrollableMessage["id"].asInt() != -1) {
+    if (m_json_scrollableMessage["id"].asInt() != -1) {
         ToSDL->OnScrollMessageResponse(m_json_scrollableMessage["id"].asInt(), reason);
         m_json_scrollableMessage["id"] = -1;
         ShowPreviousUI();
@@ -306,7 +306,7 @@ void AppData::OnTTSSpeek(int code)
 
 void AppData::OnPerformAudioPassThru(int code)
 {
-    if(m_json_audioPassThru == Json::Value::null)
+    if (m_json_audioPassThru == Json::Value::null)
         return;
 
     ToSDL->OnPerformAudioPassThru(m_iAppID, m_json_audioPassThru["id"].asInt(), code);
@@ -319,29 +319,29 @@ void AppData::OnPerformInteraction(int code, int choiceID)
     Json::Value jsonChoice=m_json_interaction["Choiceset"];
     Json::Value jsonChoiceVR;
     bool isVrMode=m_json_interaction.isMember("ChoicesetVR");
-    if(isVrMode)
+    if (isVrMode)
         jsonChoiceVR =m_json_interaction["ChoicesetVR"];
     /*
     int choiceID=0;
-    if(jsonChoice.isMember("choiceSet")) {
+    if (jsonChoice.isMember("choiceSet")) {
         choiceID=jsonChoice["choiceSet"][row]["choiceID"].asInt();
     }
     */
 
     /*
-    if(isVrMode) {
-        if(code==RESULT_TIMED_OUT) {
-            if(jsonChoiceVR.isMember("timeoutPrompt")) {
+    if (isVrMode) {
+        if (code==RESULT_TIMED_OUT) {
+            if (jsonChoiceVR.isMember("timeoutPrompt")) {
                 std::string speak=jsonChoiceVR["timeoutPrompt"][0]["text"].asString();
-                if(!IsTextUTF8((char *)speak.data(),speak.size()))
+                if (!IsTextUTF8((char *)speak.data(),speak.size()))
                     speak = string_To_UTF8(speak);
                 m_pUIManager->tsSpeak(ID_DEFAULT,speak);
             }
         }
         else{
-            if(jsonChoiceVR.isMember("helpPrompt")) {
+            if (jsonChoiceVR.isMember("helpPrompt")) {
                 std::string speak=jsonChoiceVR["helpPrompt"][row]["text"].asString();
-                if(!IsTextUTF8((char *)speak.data(),speak.size()))
+                if (!IsTextUTF8((char *)speak.data(),speak.size()))
                     speak = string_To_UTF8(speak);
                 m_pUIManager->tsSpeak(ID_DEFAULT,speak);
             }
@@ -379,7 +379,7 @@ std::vector<SMenuCommand> AppData::getCommandList()
     //需要排序
 
     SMenuCommand tmp;
-    for (int i = 0; i < retVec.size(); i++)
+    for (int i = 0; i < retVec.size(); ++i)
         for (int j = 0; j < retVec.size() - i - 1; j++) {
             if (retVec.at(j).i_position > retVec.at(j+1).i_position) {
                 tmp = retVec.at(j);
@@ -394,7 +394,7 @@ std::vector<SMenuCommand> AppData::getCommandList(int subMenuID)
 {
     static std::vector<SMenuCommand> retVec;
     retVec.clear();
-    std::vector <SMenuCommand>::iterator iterator;
+    std::vector <SMenuCommand>::const_iterator  iterator;
     for (iterator = m_vec_scommand.begin(); iterator != m_vec_scommand.end(); iterator++) {
         if (subMenuID == (*iterator).i_parentID) {
             retVec.push_back(*iterator);
@@ -402,7 +402,7 @@ std::vector<SMenuCommand> AppData::getCommandList(int subMenuID)
     }
     //需要排序
     SMenuCommand tmp;
-    for (int i = 0; i < retVec.size(); i++) {
+    for (int i = 0; i < retVec.size(); ++i) {
         for (int j = 0; j < retVec.size() - i - 1; j++) {
             if (retVec.at(j).i_position > retVec.at(j+1).i_position) {
                 tmp = retVec.at(j);
@@ -442,7 +442,7 @@ Json::Value AppData::getMediaClockJson()
 
 void AppData::ShowUI(int iUIType)
 {
-    if(iUIType != ID_MEDIACLOCK)
+    if (iUIType != ID_MEDIACLOCK)
         m_vecUIStack.push_back(iUIType);
 
     m_pUIManager->onAppShow(iUIType);
@@ -451,15 +451,15 @@ void AppData::ShowUI(int iUIType)
 bool AppData::ShowPreviousUI(bool bInApp)
 {
     int iSize = m_vecUIStack.size();
-    if(iSize > 0)
+    if (iSize > 0)
         m_vecUIStack.pop_back();
 
-    if(iSize > 1) {
+    if (iSize > 1) {
         m_pUIManager->onAppShow(m_vecUIStack[iSize - 2]);
         return true;
     }
 
-    if(!bInApp)
+    if (!bInApp)
         return false;
 
     ShowUI(ID_MAIN);
@@ -553,15 +553,15 @@ void AppData::addCommand(Json::Value jsonObj)
 {
     SMenuCommand tmpCommand;
 
-    if(jsonObj["params"].isMember("appID"))
+    if (jsonObj["params"].isMember("appID"))
         tmpCommand.i_appID = jsonObj["params"]["appID"].asInt();
-    if(jsonObj["params"].isMember("cmdID"))
+    if (jsonObj["params"].isMember("cmdID"))
         tmpCommand.i_cmdID = jsonObj["params"]["cmdID"].asInt();
-    if(jsonObj["params"]["menuParams"].isMember("menuName"))
+    if (jsonObj["params"]["menuParams"].isMember("menuName"))
         tmpCommand.str_menuName = jsonObj["params"]["menuParams"]["menuName"].asString();
-    if(jsonObj["params"]["menuParams"].isMember("parentID"))
+    if (jsonObj["params"]["menuParams"].isMember("parentID"))
         tmpCommand.i_parentID = jsonObj["params"]["menuParams"]["parentID"].asInt();
-    if(jsonObj["params"]["menuParams"].isMember("position"))
+    if (jsonObj["params"]["menuParams"].isMember("position"))
         tmpCommand.i_position = jsonObj["params"]["menuParams"]["position"].asInt();
 
     m_vec_scommand.push_back(tmpCommand);
@@ -598,13 +598,13 @@ void AppData::addSubMenu(Json::Value jsonObj)
 {
     SMenuCommand tmpCommand;
 
-    if(jsonObj["params"].isMember("appID"))
+    if (jsonObj["params"].isMember("appID"))
         tmpCommand.i_appID = jsonObj["params"]["appID"].asInt();
-    if(jsonObj["params"].isMember("menuID"))
+    if (jsonObj["params"].isMember("menuID"))
         tmpCommand.i_menuID = jsonObj["params"]["menuID"].asInt();
-    if(jsonObj["params"]["menuParams"].isMember("menuName"))
+    if (jsonObj["params"]["menuParams"].isMember("menuName"))
         tmpCommand.str_menuName = jsonObj["params"]["menuParams"]["menuName"].asString();
-    if(jsonObj["params"]["menuParams"].isMember("position"))
+    if (jsonObj["params"]["menuParams"].isMember("position"))
         tmpCommand.i_position = jsonObj["params"]["menuParams"]["position"].asInt();
 
     m_vec_scommand.push_back(tmpCommand);
@@ -622,7 +622,7 @@ void AppData::addSubMenu(Json::Value jsonObj)
 void AppData::delCommand(Json::Value jsonObj)
 {
     int cmdID = jsonObj["params"]["cmdID"].asInt();
-    for (int i = 0; i < m_vec_scommand.size(); i++) {
+    for (int i = 0; i < m_vec_scommand.size(); ++i) {
         if (cmdID == m_vec_scommand.at(i).i_cmdID) {
             m_vec_scommand.erase(m_vec_scommand.begin()+i);
         }
@@ -640,7 +640,7 @@ void AppData::delCommand(Json::Value jsonObj)
 void AppData::delSubMenu(Json::Value jsonObj)
 {
     int menuID = jsonObj["params"]["menuID"].asInt();
-    for (int i = 0; i < m_vec_scommand.size(); i++) {
+    for (int i = 0; i < m_vec_scommand.size(); ++i) {
         if (menuID == m_vec_scommand.at(i).i_menuID) {
             m_vec_scommand.erase(m_vec_scommand.begin()+i);
         }

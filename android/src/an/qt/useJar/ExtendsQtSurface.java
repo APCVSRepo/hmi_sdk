@@ -720,7 +720,7 @@ public class ExtendsQtSurface extends Activity{
                                     if (nPos < dataLen) {
                                         lastIndex = 0;
                                         flag = recvBuf[nPos++];
-                                        if(findFirstFrame == 1) {
+                                        if (1 == findFirstFrame) {
                                             frameData[byteCount++] = (byte)flag;
                                         }
                                         index++;
@@ -729,10 +729,10 @@ public class ExtendsQtSurface extends Activity{
                                         break;
                                     }
                                 }
-                                if (flag == 1 && index >= 4) {
-                                    if(findFirstFrame == 0)
+                                if (1 == flag && index >= 4) {
+                                    if (0 == findFirstFrame)
                                         findFirstFrame = 1;
-                                    else{
+                                    else {
                                         byteCount = byteCount - 4;
                                         canOnFrame = 1;
                                     }
@@ -740,7 +740,7 @@ public class ExtendsQtSurface extends Activity{
                                 }
                             }
                         }
-                        if (canOnFrame == 1) {
+                        if (1 == canOnFrame) {
                             FrameStruct frame = new FrameStruct();
                             frame.buf = new byte[byteCount];
                             frame.len = byteCount;

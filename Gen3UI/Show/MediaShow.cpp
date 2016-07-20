@@ -7,7 +7,8 @@
 #define CMD_PAUSE 1025
 #define CMD_NEXT 112
 
-CMediaShow::CMediaShow(AppListInterface * pList, QWidget *parent) : QWidget(parent)
+CMediaShow::CMediaShow(AppListInterface * pList, QWidget *parent)
+    : QWidget(parent)
 {
     if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
@@ -16,7 +17,8 @@ CMediaShow::CMediaShow(AppListInterface * pList, QWidget *parent) : QWidget(pare
 
     setAutoFillBackground(true);
     QPixmap pixmap(":/images/MainWidget/Backgroud.png");
-    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio,
+                           Qt::SmoothTransformation);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(pixmap));
     setPalette(palette);
@@ -193,7 +195,7 @@ void CMediaShow::showEvent(QShowEvent * e)
             return;
         Json::Value jsonParams = pObj["params"];
 
-        for (unsigned int i = 0; i < jsonParams["showStrings"].size(); i++) {
+        for (unsigned int i = 0; i < jsonParams["showStrings"].size(); ++i) {
             Json::Value  fieldName = jsonParams["showStrings"][i];
             if ("mainField1" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_aShowLine,fieldName["fieldText"].asString().c_str(),width()*0.3);
@@ -222,7 +224,7 @@ void CMediaShow::showEvent(QShowEvent * e)
         }
 
         if (jsonParams.isMember("softButtons")) {
-            for (int i = 0; i < jsonParams["softButtons"].size(); i++) {
+            for (int i = 0; i < jsonParams["softButtons"].size(); ++i) {
                 SSoftButton tmpSoftButton;
                 tmpSoftButton.b_isHighlighted = jsonParams["softButtons"][i]["isHighlighted"].asBool();
                 tmpSoftButton.i_softButtonID = jsonParams["softButtons"][i]["softButtonID"].asInt();
@@ -337,7 +339,9 @@ void CMediaShow::timerEvent(QTimerEvent *e)
     } else {
         nowMeidaClockTime = nowMeidaClockTime.addSecs(-1);
     }
-    m_pMusicPB->setValue(nowMeidaClockTime.hour()*3600+nowMeidaClockTime.minute()*60+nowMeidaClockTime.second());
+    m_pMusicPB->setValue(nowMeidaClockTime.hour()*3600 +
+                         nowMeidaClockTime.minute()*60 +
+                         nowMeidaClockTime.second());
 
     if (nowMeidaClockTime.hour() == m_i_endH
             && nowMeidaClockTime.minute() == m_i_endM

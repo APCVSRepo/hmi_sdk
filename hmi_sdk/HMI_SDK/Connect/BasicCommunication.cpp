@@ -70,13 +70,12 @@ void BasicCommunication::onRequest(Json::Value &request)
 void BasicCommunication::onNotification(Json::Value &jsonObj)
 {
     std::string method = jsonObj["method"].asString();
-    if(method == "BasicCommunication.SDLLog") {
+    if (method == "BasicCommunication.SDLLog") {
 //        int app_id=jsonObj["app_id"].asInt();
 //        int correlation_id=jsonObj["correlation_id"].asInt();
 //        std::string function=jsonObj["function"].asString();
 //        Json::Value data=jsonObj["data"];
-    }
-    else{
+    } else {
         Channel::onNotification(jsonObj);
     }
 }

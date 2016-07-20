@@ -46,10 +46,10 @@ void CAppButton::setIcon(const QString on,const QString off,bool bPaint)
             //offImage = offImage.scaled(width()*0.6,height()*0.6,Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             do{
                 QPainter painter(&img_off);
-                QRect irect=offImage.rect();
-                QRect orect=img_off.rect();
-                int sx=(orect.width()-irect.width())/2;
-                int sy=(orect.height()-irect.height())/4;
+                QRect irect = offImage.rect();
+                QRect orect = img_off.rect();
+                int sx = (orect.width()-irect.width())/2;
+                int sy = (orect.height()-irect.height())/4;
                 painter.drawImage(sx,sy,offImage);
             }while(0);
         }
@@ -63,7 +63,7 @@ void CAppButton::setIcon(const QString on,const QString off,bool bPaint)
 
 void CAppButton::setFuncId(int id)
 {
-    m_FuncId=id;
+    m_FuncId = id;
 }
 
 int CAppButton::getFuncId()

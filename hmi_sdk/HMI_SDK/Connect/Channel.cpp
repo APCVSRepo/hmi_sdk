@@ -123,7 +123,7 @@ Json::Value Channel::ReadSpecifyJson(const char* fileName)
     ifs.open(szResult);
     if (ifs.is_open()) {
         Json::Reader reader;
-        if(!reader.parse(ifs,result,false)) {
+        if (!reader.parse(ifs,result,false)) {
             LOGE("%s read error",fileName);
         }
         ifs.close();
@@ -184,7 +184,7 @@ void Channel::onMessage(Json::Value &jsonObj)
 
 void Channel::SetStaticResult(std::string attri,std::string ref,Json::Value value)
 {
-    if(m_StaticResult.isMember(attri))
+    if (m_StaticResult.isMember(attri))
        m_StaticResult[attri][ref] = value;
 }
 
@@ -363,7 +363,7 @@ void Channel::sendRequest(int id,const std::string mothod,const Json::Value &par
     root["id"] = id;
     root["jsonrpc"] = "2.0";
     root["method"] = mothod;
-    if(!params.isNull())
+    if (!params.isNull())
        root["params"] = params;
     SendJson(root);
 }
@@ -383,7 +383,7 @@ void Channel::sendNotification(const std::string mothod, const Json::Value &para
     Json::Value root;
     root["jsonrpc"] = "2.0";
     root["method"] = mothod;
-    if(!params.isNull())
+    if (!params.isNull())
        root["params"] = params;
     SendJson(root);
 }

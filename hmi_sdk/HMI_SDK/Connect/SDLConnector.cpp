@@ -123,6 +123,7 @@ void SDLConnector::Connect()
 #else
         usleep(100000);
 #endif
+        //BaseCommunication is the last Channel to register
         m_Base.onOpen();
     }
 }
@@ -283,7 +284,7 @@ void SDLConnector::OnPerformInteraction(int code, int performInteractionID, int 
     Json::Value result;
     result["code"] = code;
     result["method"] = "UI.PerformInteraction";
-    if(code == 0) {
+    if (0 == code) {
         result["choiceID"] = choiceID;
     }
 
@@ -405,7 +406,7 @@ void SDLConnector::_buttonPressed(std::string buttonname, int mode)
 {
     Json::Value params;
 
-    if(mode == BUTTON_LONG)
+    if (BUTTON_LONG == mode)
         params["mode"] = "LONG";
     else
         params["mode"] = "SHORT";

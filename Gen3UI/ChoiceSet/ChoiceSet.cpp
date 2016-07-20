@@ -16,7 +16,8 @@ CChoiceSet::CChoiceSet(AppListInterface *pList,QWidget *parent) :
 
     setAutoFillBackground(true);
     QPixmap pixmap(":/images/MainWidget/Backgroud.png");
-    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio,
+                           Qt::SmoothTransformation);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(pixmap));
     setPalette(palette);
@@ -30,7 +31,8 @@ CChoiceSet::CChoiceSet(AppListInterface *pList,QWidget *parent) :
     m_pTopText = m_pInitText;
     m_pListView = new CustomListView(LISTW,LISTH);
 
-    m_pReturnBtn->Init(55,45,"",":images/ReturnBtnNormal.png",":images/ReturnBtnPress.png");
+    m_pReturnBtn->Init(55,45,"",":images/ReturnBtnNormal.png",
+                       ":images/ReturnBtnPress.png");
 
     m_pInitText->setStyleSheet("font: 36px \"Liberation Serif\";color:rgb(0,0,0)");
     m_pInitEdit->setStyleSheet("font: 36px \"Liberation Serif\";color:rgb(0,0,0)");
@@ -42,12 +44,15 @@ CChoiceSet::CChoiceSet(AppListInterface *pList,QWidget *parent) :
 
     m_pTimer = new QTimer;
     connect(m_pTimer,SIGNAL(timeout()),SLOT(OnTimeOut()));
-    connect(m_pInitEdit,SIGNAL(textChanged(QString)),SLOT(OnEditChanged(QString)));
-    connect(m_pReturnBtn,SIGNAL(Clicked()),SLOT(OnReturnBtnClicked()));
+    connect(m_pInitEdit,SIGNAL(textChanged(QString)),
+            SLOT(OnEditChanged(QString)));
+    connect(m_pReturnBtn,SIGNAL(Clicked()),
+            SLOT(OnReturnBtnClicked()));
 
 
     m_pChoiceVR = new CChoiceSetVR(this);
-    connect(m_pChoiceVR,SIGNAL(pressed()),SLOT(OnChoiceVRPressed()));
+    connect(m_pChoiceVR,SIGNAL(pressed()),
+            SLOT(OnChoiceVRPressed()));
     m_pChoiceVR->hide();
 }
 
@@ -103,8 +108,12 @@ void CChoiceSet::showEvent(QShowEvent * e)
         }
 
         if (jsonChoice.isMember("initialText")) {
-            AppBase::SetEdlidedText(m_pInitText,jsonChoice["initialText"]["fieldText"].asString().c_str(),width()*0.7);
-            AppBase::SetEdlidedText(m_pInitEdit,jsonChoice["initialText"]["fieldText"].asString().c_str(),width()*0.7);
+            AppBase::SetEdlidedText(m_pInitText,
+                    jsonChoice["initialText"]["fieldText"].asString().c_str(),
+                    width()*0.7);
+            AppBase::SetEdlidedText(m_pInitEdit,
+                    jsonChoice["initialText"]["fieldText"].asString().c_str(),
+                    width()*0.7);
         }
 
         if (jsonChoice.isMember("timeout")) {
@@ -113,9 +122,11 @@ void CChoiceSet::showEvent(QShowEvent * e)
         }
 
         if (jsonChoice.isMember("choiceSet")) {
-            for (unsigned int i = 0; i < jsonChoice["choiceSet"].size(); i++) {
+            for (unsigned int i = 0; i < jsonChoice["choiceSet"].size(); ++i) {
                 if (m_pListView) {
-                    m_pListView->AddItem(jsonChoice["choiceSet"][i]["menuName"].asString(),jsonChoice["choiceSet"][i]["choiceID"].asInt());
+                    m_pListView->AddItem(
+                            jsonChoice["choiceSet"][i]["menuName"].asString(),
+                            jsonChoice["choiceSet"][i]["choiceID"].asInt());
                 }
             }
         }
@@ -126,8 +137,10 @@ void CChoiceSet::showEvent(QShowEvent * e)
         }
 
         if (jsonChoice.isMember("vrHelp")) {
-            for (unsigned int i = 0; i < jsonChoice["vrHelp"].size(); i++) {
-                m_pChoiceVR->SetChoice(jsonChoice["vrHelp"][i]["position"].asInt()-1,jsonChoice["vrHelp"][i]["text"].asString());
+            for (unsigned int i = 0; i < jsonChoice["vrHelp"].size(); ++i) {
+                m_pChoiceVR->SetChoice(
+                            jsonChoice["vrHelp"][i]["position"].asInt()-1,
+                            jsonChoice["vrHelp"][i]["text"].asString());
             }
             m_pChoiceVR->show();
             if (m_pListView) {
@@ -168,7 +181,7 @@ void CChoiceSet::OnReturnBtnClicked()
 void CChoiceSet::OnChoiceVRPressed()
 {
     m_pChoiceVR->hide();
-    if (m_iInteractionMode == VR_ONLY) {
+    if (VR_ONLY == m_iInteractionMode) {
         m_pTimer->stop();
         AppControl->OnPerformInteraction(RESULT_ABORTED, 0);
     } else {

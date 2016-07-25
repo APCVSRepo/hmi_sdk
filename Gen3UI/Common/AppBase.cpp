@@ -1,9 +1,8 @@
 ﻿#include "AppBase.h"
 #include <QMouseEvent>
 
-
-
-AppBase::AppBase(AppListInterface * pList, QWidget *parent) : QWidget(parent)
+AppBase::AppBase(AppListInterface * pList, QWidget *parent)
+    : QWidget(parent)
 {
     const int ui_app_width = 800;
     const int ui_app_height = 480;
@@ -22,7 +21,9 @@ void AppBase::setBkgImage(const char *img)
 {
     setAutoFillBackground(true);    //Widget增加背景图片时，这句一定要。
     QPixmap pixmap(img);
-    QPixmap fitpixmap=pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPixmap fitpixmap = pixmap.scaled(width(),height(),
+                                      Qt::IgnoreAspectRatio,
+                                      Qt::SmoothTransformation);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(fitpixmap));
     setPalette(palette);

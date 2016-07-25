@@ -1,4 +1,5 @@
-﻿#include "VideoStream.h"
+﻿#ifndef WINCE
+#include "VideoStream.h"
 #include <string>
 #include <stdio.h>
 #include <stdarg.h>
@@ -27,15 +28,13 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
     m_pList = pList;
 
     setWindowFlags(Qt::FramelessWindowHint);
-    if(parent)
-    {
+    if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
     }
 
 #ifdef VIDEO_STREAM_WIDGET
     m_VideoPlayer = new QMediaPlayer;
     m_VideoPlayer->setVideoOutput(this);
-
 #else
     av_register_all();//注册库中所有可用的文件格式和解码器
     avcodec_register_all();
@@ -49,8 +48,8 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
     pthread_mutex_init(&_mutex_video_buffer,NULL);
 #endif
 
-    isGetPacket=false;
-    m_Stop=true;
+    isGetPacket = false;
+    m_Stop = true;
 
     m_i_frameFinished = 0;
 #endif
@@ -72,13 +71,19 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
     int iBtnWidth = 80;
 
     m_pZoomInBtn->setGeometry(QRect(40,height()*0.5-10,iBtnWidth,iBtnHeight));
-    m_pZoomInBtn->initParameter(iBtnWidth,iBtnHeight,":/images/ZoomInBtnNormal.png",":/images/ZoomInBtnPress.png","","");
+    m_pZoomInBtn->initParameter(iBtnWidth,iBtnHeight,
+                                ":/images/ZoomInBtnNormal.png",
+                                ":/images/ZoomInBtnPress.png","","");
 
     m_pZoomOutBtn->setGeometry(QRect(40,height()*0.5+iBtnHeight+10,iBtnWidth,iBtnHeight));
-    m_pZoomOutBtn->initParameter(iBtnWidth,iBtnHeight,":/images/ZoomOutBtnNormal.png",":/images/ZoomOutBtnPress.png","","");
+    m_pZoomOutBtn->initParameter(iBtnWidth,iBtnHeight,
+                                 ":/images/ZoomOutBtnNormal.png",
+                                 ":/images/ZoomOutBtnPress.png","","");
 
     m_pMenuBtn->setGeometry(QRect(40,height()*0.8+10,iBtnWidth,iBtnHeight));
-    m_pMenuBtn->initParameter(iBtnWidth,iBtnHeight,":/images/BtnNormal.png",":/images/BtnPress.png","","菜单");
+    m_pMenuBtn->initParameter(iBtnWidth,iBtnHeight,
+                              ":/images/BtnNormal.png",
+                              ":/images/BtnPress.png","","Menu");
     m_pMenuBtn->setTextStyle("border:0px;font: 20px \"Liberation Serif\";color:rgb(0,0,0)");
 
     connect(m_pZoomInBtn,SIGNAL(clicked()),this,SLOT(OnClickedZoomInBtn()));
@@ -96,38 +101,31 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
     connect(m_pTimer,SIGNAL(timeout()),this,SLOT(onUpdateTime()));
 }
 
-
 VideoStream::~VideoStream()
 {
-    for(int i = 0;i != 4;++i)
-    {
+    for (int i = 0;i != 4;++i) {
         delete m_pBtnImage[i];
     }
 
 #ifdef VIDEO_STREAM_WIDGET
     delete m_VideoPlayer;
 #else
-    if(pAVFormatContext != NULL)
-    {
+    if (pAVFormatContext != NULL) {
         avformat_free_context(pAVFormatContext);
         pAVFormatContext = NULL;
     }
-    if(pAVFrame != NULL)
-    {
+    if (pAVFrame != NULL) {
         av_frame_free(&pAVFrame);
     }
-    if(pSwsContext != NULL)
-    {
+    if (pSwsContext != NULL) {
         sws_freeContext(pSwsContext);
     }
     //delete m_Screen;
 #endif
-
 }
 
 void VideoStream::setUrl(QString url)
 {
-    LOGI("setUrl");
     LOGI("url:%s",url.toUtf8().data());
     m_str_url = url;
 #ifdef VIDEO_STREAM_WIDGET
@@ -151,7 +149,7 @@ void VideoStream::callBack_send_data(const char *data, int size)
     arrayBuffer.append(data,size);
 //    pthread_mutex_lock(&_mutex_video_buffer);
 //    int space=(video_start+AV_BUFFER_SIZE-video_end);
-//    if(space>=size){
+//    if(space>=size) {
 //        if(AV_BUFFER_SIZE-)
 //        memcpy(&video_buffer[video_end],data,size);
 //        video_end +=size;
@@ -162,13 +160,12 @@ void VideoStream::callBack_send_data(const char *data, int size)
 
 int VideoStream::read_buffer(void *opaque,uint8_t *buf,int buf_size)
 {
-    int size=arrayBuffer.size();
-    if(size>=buf_size){
+    int size = arrayBuffer.size();
+    if (size >= buf_size) {
         memcpy(buf,arrayBuffer.data(),buf_size);
         arrayBuffer.remove(0,buf_size);
         return buf_size;
-    }
-    else{
+    } else {
         memcpy(buf,arrayBuffer.data(),arrayBuffer.size());
         arrayBuffer.clear();
         return size;
@@ -190,9 +187,9 @@ void VideoStream::startStream()
 void VideoStream::startStream()
 {
     LOGD("\n startStream");
-    m_Stop=true;
+    m_Stop = true;
    // m_timerPlay->stop();
-    videoStreamIndex=-1;
+    videoStreamIndex = -1;
 
     pAVFormatContext = avformat_alloc_context();//申请一个AVFormatContext结构的内存,并进行简单初始化
 #ifdef VIDEO_STREAM_MEM
@@ -204,35 +201,35 @@ void VideoStream::startStream()
 #endif
     av_log_set_callback(VideoStream::av_log_default_callback);
 
-    pAVFrame=av_frame_alloc();
+    pAVFrame = av_frame_alloc();
 
-    if(this->Init()){
-        m_Stop=false;
+    if (this->Init()) {
+        m_Stop = false;
         this->show();
         pthread_t frame_read_;
         pthread_create(&frame_read_,NULL,VideoStream::ReadVideoFrame,this);
 
-    }
-    else{
+    } else {
         LOGD("init failed");
+        this->hide();
     }
 }
 
 bool VideoStream::Init()
 {
-    if(m_str_url.isEmpty())
+    if (m_str_url.isEmpty())
         return false;
     //打开视频流
     LOGD("avformat_open_input");
 
 #ifdef VIDEO_STREAM_MEM
-    int result=avformat_open_input(&pAVFormatContext,NULL,NULL,NULL);
+    int result = avformat_open_input(&pAVFormatContext,NULL,NULL,NULL);
 #else
-    int result=avformat_open_input(&pAVFormatContext,m_str_url.toUtf8().data(),NULL,NULL);//"tcp://127.0.0.1:5050"//m_str_url.toUtf8().data()
+    int result = avformat_open_input(&pAVFormatContext,m_str_url.toUtf8().data(),NULL,NULL);//"tcp://127.0.0.1:5050"//m_str_url.toUtf8().data()
 #endif
-    if (result<0){
-        char errbuf[1024]={0};
-        int e=av_strerror(result,errbuf,1024);
+    if (result < 0) {
+        char errbuf[1024] = {0};
+        int e = av_strerror(result,errbuf,1024);
         LOGD("avformat_open_input failed,error=%d,%d,%s",result,e,errbuf);
         return false;
     }
@@ -243,23 +240,22 @@ bool VideoStream::Init()
    pAVFormatContext->max_analyze_duration = 5 * AV_TIME_BASE;
 #endif
    LOGD("avformat_find_stream_info");
-   result=avformat_find_stream_info(pAVFormatContext,NULL);
-   if (result<0){
+   result = avformat_find_stream_info(pAVFormatContext,NULL);
+   if (result < 0) {
       LOGD("获取视频流信息失败%d",3);
       return false;
    }
 
     //获取视频流索引
     videoStreamIndex = -1;
-    for (uint i = 0; i < pAVFormatContext->nb_streams; i++) {
+    for (uint i = 0; i < pAVFormatContext->nb_streams; ++i) {
         if (pAVFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO) {
             videoStreamIndex = i;
             break;
         }
     }
     LOGD("pAVCodecContext");
-    if (videoStreamIndex==-1){
-
+    if (-1 == videoStreamIndex) {
         LOGD("获取视频流索引失败,%d",2);
         return false;
     }
@@ -267,11 +263,11 @@ bool VideoStream::Init()
     //获取视频流的分辨率大小
     pAVCodecContext = pAVFormatContext->streams[videoStreamIndex]->codec;
    // pAVCodecContext->width=1333;
-    videoWidth=pAVCodecContext->width;
-    videoHeight=pAVCodecContext->height;
-    if(videoWidth*videoHeight==0){
-        videoWidth=800;
-        videoHeight=480;
+    videoWidth = pAVCodecContext->width;
+    videoHeight = pAVCodecContext->height;
+    if (videoWidth*videoHeight == 0) {
+        videoWidth = 800;
+        videoHeight = 480;
     }
 
     LOGD("Screen resolution:width:%d,height:%d",videoWidth,videoHeight);
@@ -286,20 +282,20 @@ bool VideoStream::Init()
 
     LOGD("avcodec_open2");
     //打开对应解码器
-    result=avcodec_open2(pAVCodecContext,pAVCodec,NULL);
-    if (result<0){
+    result = avcodec_open2(pAVCodecContext,pAVCodec,NULL);
+    if (result<0) {
         LOGD("打开解码器失败,%d",1);
         return false;
     }
 
-    m_Stop=false;
+    m_Stop = false;
     return true;
 }
 
 
 void* VideoStream::ReadVideoFrame(void *arg)
 {
-    VideoStream *h=(VideoStream*)arg;
+    VideoStream *h = (VideoStream*)arg;
 
     //一帧一帧读取视频
     h->PlayImageSlots();
@@ -313,11 +309,11 @@ void VideoStream::stopStream()
 #endif
 #ifdef VIDEO_STREM_NET
     LOGI("stop stream:%d",(int)m_Stop);
-    if(m_Stop)
+    if (m_Stop)
         return;
     LOGI("avcodec_close");
-    m_Stop=true;
-    isGetPacket=false;
+    m_Stop = true;
+    isGetPacket = false;
     avcodec_close(pAVCodecContext);
     LOGI("avformat_close_input");
     avformat_close_input(&pAVFormatContext);
@@ -329,23 +325,26 @@ void VideoStream::stopStream()
     LOGI("sws_freeContext");
     sws_freeContext(pSwsContext);
 #endif
-    //this->hide();
+//    this->hide();
 }
 
 #ifndef VIDEO_STREAM_WIDGET
 void VideoStream::PlayImageSlots()
 {
-    while(m_Stop==false){
+    while(false == m_Stop) {
         AVPacket pAVPacket;
-        if(av_read_frame(pAVFormatContext, &pAVPacket) == 0){
+        if (av_read_frame(pAVFormatContext, &pAVPacket) == 0) {
             //LOGD("data size=%d,packet num=%d,total_size=%d\n",pAVPacket.size,packet_num++,data_size+=pAVPacket.size);
-            if(pAVPacket.stream_index==videoStreamIndex){
+            if (pAVPacket.stream_index == videoStreamIndex) {
                 avcodec_decode_video2(pAVCodecContext, pAVFrame, &m_i_frameFinished, &pAVPacket);
-                if(m_i_frameFinished){
+                if (m_i_frameFinished) {
                     sws_scale(pSwsContext,(const uint8_t* const *)pAVFrame->data,pAVFrame->linesize,0,videoHeight,pAVPicture.data,pAVPicture.linesize);
                     //发送获取一帧图像信号
-                    m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_ARGB8555_Premultiplied	);
-                    //m_VideoImage=QImage(pAVFrame->data[0],pAVFrame->width,pAVFrame->height,QImage::Format_RGB888);
+//                    m_VideoImage=QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_ARGB8555_Premultiplied	);
+                    //用Format_RGBA8888显示, 上面的一句显示出来画面是花的
+#ifndef WINCE
+                    m_VideoImage = QImage(pAVPicture.data[0],videoWidth,videoHeight,QImage::Format_RGBA8888);
+#endif
                     update();
                 }
             }
@@ -354,12 +353,9 @@ void VideoStream::PlayImageSlots()
     }
 }
 
-
-
-
 void VideoStream::paintEvent(QPaintEvent *e)
 {
-    if(!m_VideoImage.isNull())
+    if (!m_VideoImage.isNull())
     {
         QPainter painter(this);
        // painter.drawImage(0,0,QImage(pAVPicture.data[0],width(),height(),QImage::Format_RGB888));
@@ -378,25 +374,23 @@ void VideoStream::paintEvent(QPaintEvent *e)
 
 #endif
 
-
 void VideoStream::mousePressEvent(QMouseEvent *e)
 {
-    int x=e->x();
-    int y=e->y();
-    x= x*videoWidth/width();
-    y= y*videoHeight/height();
+    int x = e->x();
+    int y = e->y();
+    x = x*videoWidth/width();
+    y = y*videoHeight/height();
     LOGD("Touch Event:type=BEGIN,x=%d,y=%d,%d,%d",x,y,e->x(),e->y());
     m_pList->getActiveApp()->OnVideoScreenTouch(TOUCH_START,x,y);
     //ToSDL->OnVideoScreenTouch(TOUCH_START,x,y);
 }
 
-
 void VideoStream::mouseMoveEvent(QMouseEvent *e)
 {
-    int x=e->x();
-    int y=e->y();
-    x= x*videoWidth/width();
-    y= y*videoHeight/height();
+    int x = e->x();
+    int y = e->y();
+    x = x*videoWidth/width();
+    y = y*videoHeight/height();
     //LOGD("Touch Event:type=MOVE,x=%d,y=%d",x,y);
 
     m_pList->getActiveApp()->OnVideoScreenTouch(TOUCH_MOVE,x,y);
@@ -408,10 +402,10 @@ void VideoStream::mouseMoveEvent(QMouseEvent *e)
 
 void VideoStream::mouseReleaseEvent(QMouseEvent *e)
 {
-    int x=e->x();
-    int y=e->y();
-    x= x*videoWidth/width();
-    y= y*videoHeight/height();
+    int x = e->x();
+    int y = e->y();
+    x = x*videoWidth/width();
+    y = y*videoHeight/height();
     //LOGD("Touch Event:type=END,x=%d,y=%d",x,y);
 
     m_pList->getActiveApp()->OnVideoScreenTouch(TOUCH_END,x,y);
@@ -420,12 +414,12 @@ void VideoStream::mouseReleaseEvent(QMouseEvent *e)
 
 bool VideoStream::PointInRect(QRect rect,QPoint point)
 {
-    if(point.x() < rect.left() || point.x() > rect.right() || point.y() < rect.top() || point.y() > rect.bottom())
-    {
+    if (point.x() < rect.left()
+            || point.x() > rect.right()
+            || point.y() < rect.top()
+            || point.y() > rect.bottom()) {
         return false;
-    }
-    else
-    {
+    } else {
         return true;
     }
 }
@@ -452,3 +446,4 @@ void VideoStream::onUpdateTime()
 {
     m_pTimeLab->setText(QTime::currentTime().toString("HH:mm:ss"));
 }
+#endif

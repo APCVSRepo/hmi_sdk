@@ -12,7 +12,7 @@ TARGET = Gen3UI
 TEMPLATE = lib
 
 CONFIG += ffmpeg
-CONFIG  += wince  ##wince
+#CONFIG  += wince  ##wince
 
 DEFINES += HMIUI_LIBRARY __STDC_CONSTANT_MACROS
 
@@ -57,7 +57,10 @@ SOURCES += \
     ChoiceSet/ChoiceSetVR.cpp \
     ScrollableMessage/ScollMsgView.cpp \
     SliderView/SliderView.cpp \
-    AudioPassThru/AudioPassView.cpp
+    AudioPassThru/AudioPassView.cpp \
+    VideoStream/MediaCodecStream.cpp \
+    VideoStream/JniNative.cpp \
+    VideoStream/JniFrame.cpp
 
 HEADERS += \
     Gen3UIManager.h \
@@ -94,11 +97,14 @@ HEADERS += \
     ChoiceSet/ChoiceSetVR.h \
     ScrollableMessage/ScollMsgView.h \
     SliderView/SliderView.h \
-    AudioPassThru/AudioPassView.h
+    AudioPassThru/AudioPassView.h \
+    VideoStream/MediaCodecStream.h \
+    VideoStream/JniNative.h \
+    VideoStream/JniFrame.h
 
 unix {
     target.path = /usr/lib
-    INSTALLS += target
+    #INSTALLS += target
 }
 
 RESOURCES += \
@@ -138,7 +144,7 @@ INSTALLS +=qt_dll
 ################################for linux
 #unix:!android:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec  -lavformat -lavutil -lswscale
 unix:!android{
-ffmpeg.path=/usr/lib
+ffmpeg.path=$$OUT_PWD/../bin
 ffmpeg.files=$$PWD/Library/linux/ffmpeg/*.*
 INSTALLS+=ffmpeg
 
@@ -149,22 +155,23 @@ wince{
 HEADERS += \
     Include/global_first.h
 INCLUDEPATH += $$PWD/../Include/pthread \
-               $$PWD/../Include
+               $$PWD/../Include \
+               $$PWD/../Include/wince
 LIBS +=  $$PWD/Library/ce/pthread.lib
-LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
+#LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
 pthread.path=$$OUT_PWD/../bin
 pthread.files=$$PWD/Library/ce/*.dll
-ffmpeg.path=$$OUT_PWD/../bin
-ffmpeg.files=$$PWD/Library/ce/ffmpeg/*.dll
+#ffmpeg.path=$$OUT_PWD/../bin
+#ffmpeg.files=$$PWD/Library/ce/ffmpeg/*.dll
 
 INSTALLS +=pthread
-INSTALLS+=ffmpeg
+#INSTALLS+=ffmpeg
 }
 
 
 ################################for android
 android{
-
+QT += androidextras
 #CONFIG += msc
 #CONFIG += pico
 CONFIG  += espeak
@@ -174,6 +181,7 @@ INCLUDEPATH +=  $$PWD/Include/msp \
 DEFINES +=ANDROID \
           SDL_SUPPORT_LIB \
           SDL_SUPPORT_VR
+DEFINES += SDL_CALL_BACK
 
 LIBS += -L$$PWD/Library/android/ffmpeg -lffmpeg
 LIBS += -L$$PWD/Library/android/sdl -lsmartDeviceLinkCore
@@ -199,4 +207,7 @@ LIBS += -L$$PWD/Library/android/msp -lttsespeak
 ANDROID_EXTRA_LIBS +=$$PWD/Library/android/msp/libttsespeak.so
 }
 
+
+
 }
+

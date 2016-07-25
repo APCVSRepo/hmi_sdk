@@ -11,7 +11,7 @@ class VehicleInfo : public Channel
 public:
     VehicleInfo();
     ~VehicleInfo();
-virtual ID_CHN_TYPE ChannelType(){return ID_CHN_VEHICLE;}
+virtual ID_CHN_TYPE ChannelType() {return ID_CHN_VEHICLE;}
 protected:
     void onRequest(Json::Value &);
 

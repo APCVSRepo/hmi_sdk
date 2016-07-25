@@ -868,7 +868,7 @@ std::vector<Reader::StructuredError> Reader::getStructuredErrors() const {
 
 bool Reader::pushError(const Value& value, const std::string& message) {
   size_t length = end_ - begin_;
-  if(value.getOffsetStart() > length
+  if (value.getOffsetStart() > length
     || value.getOffsetLimit() > length)
     return false;
   Token token;
@@ -885,7 +885,7 @@ bool Reader::pushError(const Value& value, const std::string& message) {
 
 bool Reader::pushError(const Value& value, const std::string& message, const Value& extra) {
   size_t length = end_ - begin_;
-  if(value.getOffsetStart() > length
+  if (value.getOffsetStart() > length
     || value.getOffsetLimit() > length
     || extra.getOffsetLimit() > length)
     return false;
@@ -1826,7 +1826,7 @@ std::vector<OurReader::StructuredError> OurReader::getStructuredErrors() const {
 
 bool OurReader::pushError(const Value& value, const std::string& message) {
   size_t length = end_ - begin_;
-  if(value.getOffsetStart() > length
+  if (value.getOffsetStart() > length
     || value.getOffsetLimit() > length)
     return false;
   Token token;
@@ -1843,7 +1843,7 @@ bool OurReader::pushError(const Value& value, const std::string& message) {
 
 bool OurReader::pushError(const Value& value, const std::string& message, const Value& extra) {
   size_t length = end_ - begin_;
-  if(value.getOffsetStart() > length
+  if (value.getOffsetStart() > length
     || value.getOffsetLimit() > length
     || extra.getOffsetLimit() > length)
     return false;

@@ -7,9 +7,8 @@
 #include <unistd.h>
 #endif
 
-#if defined(WINCE)
-//#include<sys/stat.h>
 #include "Config/Config.h"
+#if defined(WINCE)
 #else
 #include<sys/stat.h>
 #endif
@@ -19,7 +18,17 @@
 //#include "AudioTrans/MspVRAudio.h"
 #endif
 
+#include "Config/Config.h"
+#ifndef WINCE
+
+#ifdef ANDROID
+#include "VideoStream/MediaCodecStream.h"
+#else
 #include "VideoStream/VideoStream.h"
+#endif
+
+#endif
+
 #include "MainWindow/MainWindow.h"
 #include "AppListView/AppListView.h"
 //#include "Show/MainWidget.h"
@@ -32,11 +41,12 @@
 #include "ScrollableMessage/ScollMsgView.h"
 #include "SliderView/SliderView.h"
 
+#include "VideoStream/JniNative.h"
+
 CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
     QWidget(parent)
 {
-    for(int i = 0; i < ID_UI_MAX; i++)
-    {
+    for (int i = 0; i < ID_UI_MAX; ++i) {
         m_vUIWidgets[i] = NULL;
     }
     m_pList = pList;
@@ -44,10 +54,8 @@ CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
 
 CGen3UIManager::~CGen3UIManager()
 {
-    for(int i = 0; i < ID_UI_MAX; i++)
-    {
-        if(m_vUIWidgets[i])
-        {
+    for (int i = 0; i < ID_UI_MAX; ++i) {
+        if (m_vUIWidgets[i]) {
             delete m_vUIWidgets[i];
             m_vUIWidgets[i] = NULL;
         }
@@ -81,13 +89,20 @@ void CGen3UIManager::initAppHMI()
     //m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
     m_vUIWidgets[ID_SLIDER] = new CSliderView(m_pList, pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;
+
+#ifndef WINCE
+#ifdef ANDROID
+    JniNative jNative;
+    jNative.registerNativeMethods();
+
+    m_vUIWidgets[ID_VIDEOSTREAM] = new MediaCodecStream(m_pList,pMain);
+#else
     m_vUIWidgets[ID_VIDEOSTREAM] = new VideoStream(m_pList,pMain);
+#endif
+#endif
 
-
-    for(int i = 0; i < ID_UI_MAX; i++)
-    {
-        if(m_vUIWidgets[i] != NULL)
-        {
+    for (int i = 0; i < ID_UI_MAX; ++i) {
+        if (m_vUIWidgets[i] != NULL) {
             m_vUIWidgets[i]->hide();
         }
     }
@@ -122,7 +137,7 @@ void CGen3UIManager::onAppStop()
 //show app
 void CGen3UIManager::onAppShow(int type)
 {
-    if((type >= 0) && (type < ID_UI_MAX))
+    if ((type >= 0) && (type < ID_UI_MAX))
         emit onAppShowSignal(type);
 }
 
@@ -134,48 +149,85 @@ void CGen3UIManager::onVideoStreamStart()
 
 void CGen3UIManager::onVideoStartSlots()
 {
+#ifndef WINCE
+
+#ifdef ANDROID
+    MediaCodecStream *pVideoStream = ((MediaCodecStream *)m_vUIWidgets[ID_VIDEOSTREAM]);
+    pVideoStream->startStream();
+//    m_pList->IconnectToVS(pVideoStream, "127.0.0.1", 5050);
+#else
     fflush(stdout);
     std::string str_url = AppControl->getUrlString();
     //_D("%s\n",str_url.data());
+
     VideoStream *pVideoStream = ((VideoStream *)m_vUIWidgets[ID_VIDEOSTREAM]);//->StartVideoStream(str_url.c_str());
     pVideoStream->setUrl(str_url.c_str());
     pVideoStream->startStream();
+
+#endif
+
+#endif
+
 }
 
 void CGen3UIManager::onVideoStreamStop()
 {
+    LOGI("~~~~~~~~onVideoStreamStop");
+#ifndef WINCE
+
+#ifdef ANDROID
+    m_pList->IdelConnectToVS();
+    ((MediaCodecStream *)m_vUIWidgets[ID_VIDEOSTREAM])->stopStream();
+#else
     emit onVideoStopSignal();
+    ((VideoStream *)m_vUIWidgets[ID_VIDEOSTREAM])->stopStream();
+#endif
+
+#endif
 }
 
 void CGen3UIManager::onVideoStopSlots()
 {
-    ((VideoStream *)m_vUIWidgets[ID_VIDEOSTREAM])->stopStream();
+    LOGI("~~~~~~~onVideoStopSlots");
 }
 
 void CGen3UIManager::AppShowSlot(int type)
 {    
-    if(m_vUIWidgets[m_iCurUI] == NULL)
-    {
+    if (m_vUIWidgets[m_iCurUI] == NULL) {
         return;
     }
 
-    if(ID_MEDIACLOCK == type)
-    {
-        if(ID_SHOW == m_iCurUI)
+    if (ID_MEDIACLOCK == type) {
+        if (ID_SHOW == m_iCurUI)
         {
             CMediaShow *pShow = (CMediaShow *)m_vUIWidgets[ID_SHOW];
             pShow->UpdateMediaColckTimer();
         }
-    }
-    else
-    {
-        if(m_iCurUI != ID_MAIN)
-        {
-            m_vUIWidgets[m_iCurUI]->hide();
+    } else {
+        if (m_iCurUI != ID_MAIN) {
+
+            if (m_iCurUI == ID_VIDEOSTREAM) {
+#ifdef ANDROID
+                ((MediaCodecStream *)m_vUIWidgets[m_iCurUI])->hideActivity();
+#else
+                m_vUIWidgets[m_iCurUI]->hide();
+#endif
+            } else {
+                m_vUIWidgets[m_iCurUI]->hide();
+            }
         }
         //m_vUIWidgets[m_iCurUI]->hide();
         m_iCurUI = type;
-        m_vUIWidgets[m_iCurUI]->show();
+
+        if (m_iCurUI == ID_VIDEOSTREAM) {
+#ifdef ANDROID
+            ((MediaCodecStream *)m_vUIWidgets[m_iCurUI])->showActivity();
+#else
+            m_vUIWidgets[m_iCurUI]->show();
+#endif
+        } else {
+            m_vUIWidgets[m_iCurUI]->show();
+        }
     }
 }
 
@@ -196,8 +248,7 @@ void CGen3UIManager::tsSpeak(int VRID, std::string strText)
     bool ret = ts.speak(strText.c_str());
 
 
-    switch(VRID)
-    {
+    switch(VRID) {
     case ID_DEFAULT:
         if(ret)
             AppControl->OnTTSSpeek(0);

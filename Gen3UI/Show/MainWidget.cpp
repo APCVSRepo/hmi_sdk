@@ -3,17 +3,18 @@
 
 #define MARGIN 10
 
-MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(parent)
+MainWidget::MainWidget(AppListInterface * pList, QWidget *parent)
+    : QWidget(parent)
 {
-    if(parent)
-     {
+     if (parent) {
          setGeometry(0,0,parent->width(),parent->height());
      }
      m_pList = pList;
 
      setAutoFillBackground(true);
      QPixmap pixmap(":/images/MainWidget/Backgroud.png");
-     pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+     pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio,
+                            Qt::SmoothTransformation);
      QPalette palette;
      palette.setBrush(QPalette::Background, QBrush(pixmap));
      setPalette(palette);
@@ -29,8 +30,7 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(pare
 
 
      //m_pShowLine = new QLabel[4];
-     for(int i = 0;i != 4;++i)
-     {
+     for (int i = 0;i != 4;++i) {
          pTopLayout->addWidget(m_pShowLine + i,0,Qt::AlignLeft);
          m_pShowLine[i].setStyleSheet("border:0px;font: 14px \"Liberation Serif\";color:rgb(0,0,0)");
      }
@@ -45,7 +45,8 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(pare
      m_pMainTitleLab->setStyleSheet(QString("font: 60 35pt \"Liberation Serif\";color:rgb(0,0,0);border: 0px"));
      m_pMainTitleLab->setText("SmartDeviceLink");
      QPixmap IconPixmap(":/images/MainWidget/AppIcon.png");
-     IconPixmap = IconPixmap.scaled(80,80, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+     IconPixmap = IconPixmap.scaled(80,80, Qt::IgnoreAspectRatio,
+                                    Qt::SmoothTransformation);
      m_pIconLab->setPixmap(IconPixmap);
      m_pIconLab->setStyleSheet("background:transparent;background-image: none");
 
@@ -62,8 +63,7 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(pare
      pBottomLayout->addStretch(1);
      pBottomLayout->addLayout(pBtnLayout);
 
-     for(int i = 0;i != 3;++i)
-     {
+     for (int i = 0;i != 3;++i) {
          pBtnLayout->addWidget(&m_pSoftBtn[i],0,Qt::AlignLeft);
          m_pSoftBtn[i].initParameter(ui_btn_width,ui_btn_height,":/images/MainWidget/BtnNormal.png",":/images/MainWidget/BtnPress.png","","-");
          m_pSoftBtn[i].setTextStyle("border:0px;font: 36px \"Liberation Serif\";color:rgb(0,0,0)");
@@ -75,13 +75,14 @@ MainWidget::MainWidget(AppListInterface * pList, QWidget *parent) : QWidget(pare
      m_pMainLayout->addLayout(pBottomLayout,1);
 
      m_pMenuBtn->setText("Menu");
-     for(int i = 0;i != 3;++i)
-     {
+     for (int i = 0;i != 3;++i) {
          m_pSoftBtn[i].setText("-");
-         connect(&m_pSoftBtn[i],SIGNAL(clicked(int)),this,SLOT(SoftBtnClickedSlot(int)));
+         connect(&m_pSoftBtn[i],SIGNAL(clicked(int)),
+                 this,SLOT(SoftBtnClickedSlot(int)));
      }
 
-     connect(m_pMenuBtn,SIGNAL(clicked()),this,SLOT(BtnMenuClickedSlots()));
+     connect(m_pMenuBtn,SIGNAL(clicked()),
+             this,SLOT(BtnMenuClickedSlots()));
 }
 
 MainWidget::~MainWidget()
@@ -110,8 +111,7 @@ void MainWidget::BtnMenuClickedSlots()
 
 void MainWidget::SoftBtnClickedSlot(int iSoftBtnID)
 {
-    if(iSoftBtnID != 0)
-    {
+    if (iSoftBtnID != 0) {
         m_pList->getActiveApp()->OnSoftButtonClick(iSoftBtnID, 1);
     }
 }
@@ -119,8 +119,7 @@ void MainWidget::SoftBtnClickedSlot(int iSoftBtnID)
 void MainWidget::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
 {
     int iBtnCount = vec_softButtons.size() > 3?3:vec_softButtons.size();
-    for(int i = 0;i != iBtnCount;++i)
-    {
+    for (int i = 0;i != iBtnCount;++i) {
         m_pSoftBtn[i].setText(vec_softButtons[i].str_text.c_str());
         m_pSoftBtn[i].setId(vec_softButtons[i].i_softButtonID);
     }
@@ -128,52 +127,39 @@ void MainWidget::setSoftButtons(std::vector<SSoftButton> vec_softButtons)
 
 void MainWidget::showEvent(QShowEvent * e)
 {
-    for(int i = 0;i != 4;++i)
-    {
+    for (int i = 0;i != 4;++i) {
         m_pShowLine[i].setText("");
     }
-    for(int i = 0;i != 3;++i)
-    {
+    for (int i = 0;i != 3;++i) {
         m_pSoftBtn[i].setText("-");
     }
 
     Json::Value pObj;
     std::vector <SSoftButton > vec_softButtons;
     vec_softButtons.clear();
-    if (m_pList->getActiveApp())
-    {
+    if (m_pList->getActiveApp()) {
         SetAppName(m_pList->getActiveApp()->getAppName().c_str());
 
         pObj = m_pList->getActiveApp()->getShowData();
-        if(pObj.isNull())
+        if (pObj.isNull())
             return;
         Json::Value jsonParams = pObj["params"];        
 
-        for (unsigned int i = 0; i < jsonParams["showStrings"].size(); i++)
-        {
+        for (unsigned int i = 0; i < jsonParams["showStrings"].size(); ++i) {
             Json::Value  fieldName = jsonParams["showStrings"][i];
-            if ("mainField1" == fieldName["fieldName"].asString())
-            {
+            if ("mainField1" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_pShowLine,fieldName["fieldText"].asString().c_str(),width()*0.9);
-            }
-            else if ("mainField2" == fieldName["fieldName"].asString())
-            {
+            } else if ("mainField2" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_pShowLine+1,fieldName["fieldText"].asString().c_str(),width()*0.9);
-            }
-            else if ("mainField3" == fieldName["fieldName"].asString())
-            {
+            } else if ("mainField3" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_pShowLine+2,fieldName["fieldText"].asString().c_str(),width()*0.9);
-            }
-            else if ("mainField4" == fieldName["fieldName"].asString())
-            {
+            } else if ("mainField4" == fieldName["fieldName"].asString()) {
                 AppBase::SetEdlidedText(m_pShowLine+3,fieldName["fieldText"].asString().c_str(),width()*0.9);
             }
         }
 
-        if (jsonParams.isMember("softButtons"))
-        {
-            for (int i = 0; i < jsonParams["softButtons"].size(); i++)
-            {
+        if (jsonParams.isMember("softButtons")) {
+            for (int i = 0; i < jsonParams["softButtons"].size(); ++i) {
                 SSoftButton tmpSoftButton;
                 tmpSoftButton.b_isHighlighted = jsonParams["softButtons"][i]["isHighlighted"].asBool();
                 tmpSoftButton.i_softButtonID = jsonParams["softButtons"][i]["softButtonID"].asInt();

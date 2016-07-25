@@ -2,8 +2,7 @@
 
 CAudioPassView::CAudioPassView(AppListInterface * pList, QWidget *parent) : QWidget(parent)
 {
-    if(parent)
-    {
+    if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
     }
     m_pList = pList;

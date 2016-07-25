@@ -32,6 +32,7 @@ public:
 
     bool ConnectToSDL(IMessageInterface * pMsgHandler, INetworkStatus * pNetwork = NULL);
     bool ConnectToVideoStream(IMessageInterface * pMsgHandler, std::string sIP, int iPort, INetworkStatus * pNetwork = NULL);
+    void DelConnectToVideoStream();
     void ChangeMsgHandler(IMessageInterface * pMsgHandler);
     bool IsSDLConnected();
 

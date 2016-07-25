@@ -1139,7 +1139,7 @@ bool Value::removeIndex(ArrayIndex index, Value* removed) {
   *removed = it->second;
   ArrayIndex oldSize = size();
   // shift left all items left, into the place of the "removed"
-  for (ArrayIndex i = index; i < (oldSize - 1); ++i){
+  for (ArrayIndex i = index; i < (oldSize - 1); ++i) {
     CZString key(i);
     (*value_.map_)[key] = (*this)[i + 1];
   }

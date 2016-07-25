@@ -1,18 +1,19 @@
 #include "SliderView.h"
 #include <QBoxLayout>
 
-CSliderView::CSliderView(AppListInterface * pList, QWidget *parent) : QWidget(parent),
+CSliderView::CSliderView(AppListInterface * pList, QWidget *parent)
+    : QWidget(parent),
     m_bDynamic(false)
 {
-    if(parent)
-    {
+    if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
     }
     m_pList = pList;
 
     setAutoFillBackground(true);
     QPixmap pixmap(":/images/MainWidget/Backgroud.png");
-    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio,
+                           Qt::SmoothTransformation);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(pixmap));
     setPalette(palette);
@@ -31,14 +32,14 @@ CSliderView::CSliderView(AppListInterface * pList, QWidget *parent) : QWidget(pa
     pMainLayout->addWidget(m_pSlider);
     pMainLayout->addWidget(m_pFooterLab);
     pMainLayout->addLayout(pBottomLayout);
-    pMainLayout->setContentsMargins(height()*0.04,height()*0.04,height()*0.04,height()*0.1);
+    pMainLayout->setContentsMargins(height()*0.04,height()*0.04,
+                                    height()*0.04,height()*0.1);
 
     pTopLayout->addWidget(m_pReturnBtn);
     pTopLayout->addWidget(m_pAppNameLab,1);
 
     pBottomLayout->addStretch(1);
-    for(int i = 0;i != 2;++i)
-    {
+    for (int i = 0;i != 2;++i) {
         pBottomLayout->addWidget(m_aSoftBtn + i);        
         m_aSoftBtn[i].SetTextStyle("font: 32px \"Liberation Serif\";color:rgb(0,0,0)");
         m_aSoftBtn[i].SetId(i);
@@ -80,13 +81,10 @@ CSliderView::~CSliderView()
 
 void CSliderView::OnSoftBtnClicked(int iSoftBtnID)
 {
-    if(iSoftBtnID == 0)
-    {
+    if (iSoftBtnID == 0) {
         m_pTimer->stop();
         AppControl->OnSliderResponse(RESULT_SUCCESS,m_pSlider->value());
-    }
-    else if(iSoftBtnID == 1)
-    {
+    } else if (iSoftBtnID == 1) {
         m_pTimer->stop();
         AppControl->OnSliderResponse(RESULT_ABORTED,m_pSlider->value());
     }
@@ -94,8 +92,7 @@ void CSliderView::OnSoftBtnClicked(int iSoftBtnID)
 
 void CSliderView::showEvent(QShowEvent * e)
 {
-    if (AppControl)
-    {
+    if (AppControl) {
         AppBase::SetEdlidedText(m_pAppNameLab,AppControl->getAppName().c_str(),width()*0.9);
 
         Json::Value m_jsonData = AppControl->getSlider();
@@ -105,21 +102,18 @@ void CSliderView::showEvent(QShowEvent * e)
         int numTicks = m_jsonData["params"]["numTicks"].asInt();
         int position = m_jsonData["params"]["position"].asInt();
 
-        AppBase::SetEdlidedText(m_pHeaderLab,m_jsonData["params"]["sliderHeader"].asString().c_str(),width()*0.9);
+        AppBase::SetEdlidedText(m_pHeaderLab,
+                m_jsonData["params"]["sliderHeader"].asString().c_str(),
+                width()*0.9);
 
         m_FooterStrVec.clear();
-        if (m_jsonData["params"].isMember("sliderFooter"))
-        {
-            if(m_jsonData["params"]["sliderFooter"].size() == 1)
-            {
+        if (m_jsonData["params"].isMember("sliderFooter")) {
+            if (m_jsonData["params"]["sliderFooter"].size() == 1) {
                 m_bDynamic = false;
-            }
-            else
-            {
+            } else {
                 m_bDynamic = true;
             }
-            for(int i = 0; i < m_jsonData["params"]["sliderFooter"].size(); i++)
-            {
+            for (int i = 0; i < m_jsonData["params"]["sliderFooter"].size(); ++i) {
                 m_FooterStrVec.push_back(m_jsonData["params"]["sliderFooter"][i].asString());
             }
         }
@@ -132,12 +126,9 @@ void CSliderView::showEvent(QShowEvent * e)
 
 void CSliderView::UpdateFooter(int iPos)
 {
-    if(m_bDynamic)
-    {
+    if (m_bDynamic) {
         AppBase::SetEdlidedText(m_pFooterLab,m_FooterStrVec[iPos-1].c_str(),width()*0.9);
-    }
-    else
-    {
+    } else {
         AppBase::SetEdlidedText(m_pFooterLab,m_FooterStrVec[0].c_str(),width()*0.9);
     }
 }

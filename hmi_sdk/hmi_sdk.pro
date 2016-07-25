@@ -192,13 +192,13 @@ RESOURCES += \
     Library/android/sdl/config/android.qrc \
     Config/config.qrc
 
-#QT += androidextras
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
-#DISTFILES += \
-#    ../android/AndroidManifest.xml \
-#    ../android/src/an/qt/useJar/ExtendsQtNative.java \
-#    ../android/src/an/qt/useJar/ExtendsQtSurface.java \
-#    ../android/src/an/qt/useJar/ExtendsQtWithJava.java
+QT += androidextras
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
+DISTFILES += \
+    ../android/AndroidManifest.xml \
+    ../android/src/an/qt/useJar/ExtendsQtNative.java \
+    ../android/src/an/qt/useJar/ExtendsQtSurface.java \
+    ../android/src/an/qt/useJar/ExtendsQtWithJava.java
 
 }
 

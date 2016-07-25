@@ -36,31 +36,32 @@ CustomComboboxItem::~CustomComboboxItem()
     delete m_pMenuArrowLab;
 }
 
-
 void CustomComboboxItem::setText(QString text)
 {
-    //m_pTextLab->setText(text);
     QFontMetrics qfm(m_pTextLab->font());
     m_pTextLab->setText(qfm.elidedText(text,Qt::ElideRight,width() - height()));
 }
 
 void CustomComboboxItem::setIsMenu(bool isMenu)
 {
-    //m_b_isMenu = isMenu;
-    if(isMenu)
+    if (isMenu)
         m_pMenuArrowLab->setHidden(false);
     else
         m_pMenuArrowLab->setHidden(true);
 }
 
-void CustomComboboxItem::SetBkPic(QString strNormalPicPath,QString strPressPicPath,QString strHoverPicPath)
+void CustomComboboxItem::SetBkPic(QString strNormalPicPath,
+                                  QString strPressPicPath,
+                                  QString strHoverPicPath)
 {
     m_strNormalBk = strNormalPicPath;
     m_strHoverBk = strHoverPicPath;
     m_strPressBk = strPressPicPath;
 
     QPixmap pixmap(m_strNormalBk);
-    pixmap = pixmap.scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(width(),height(),
+                           Qt::IgnoreAspectRatio,
+                           Qt::SmoothTransformation);
     setPixmap(pixmap);
     m_iBkState = NORMAL_STATE;
 }
@@ -68,26 +69,21 @@ void CustomComboboxItem::SetBkPic(QString strNormalPicPath,QString strPressPicPa
 void CustomComboboxItem::ChangeBkPic(int iFlag)
 {    
     QPixmap *pPixmap = NULL;
-    if(iFlag != m_iBkState)
-    {
-        if(iFlag == NORMAL_STATE)
-        {
+    if (iFlag != m_iBkState) {
+        if (iFlag == NORMAL_STATE) {
             pPixmap = new QPixmap(m_strNormalBk);
-        }
-        else if(iFlag == HOVER_STATE)
-        {
+        } else if (iFlag == HOVER_STATE) {
             pPixmap = new QPixmap(m_strHoverBk);
-        }
-        else
-        {
+        } else {
             pPixmap = new QPixmap(m_strPressBk);
         }
-        *pPixmap = pPixmap->scaled(width(),height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        *pPixmap = pPixmap->scaled(width(),height(),
+                                   Qt::IgnoreAspectRatio,
+                                   Qt::SmoothTransformation);
         setPixmap(*pPixmap);
         m_iBkState = iFlag;
         delete pPixmap;
     }
-
 }
 
 QString CustomComboboxItem::GetItemText()

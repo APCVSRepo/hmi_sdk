@@ -169,12 +169,9 @@ void CButton::setIconExtra(QString imagePath)
 void CButton::changeToExtra(bool flag)
 {
     QImage image;
-    if (flag)
-    {
+    if (flag) {
         image.load(m_IconExtraPath);
-    }
-    else
-    {
+    } else {
         image.load("");
     }
     QPixmap pixmap(QPixmap::fromImage(image));
@@ -190,8 +187,7 @@ void CButton::setText(QString text, bool flag)
 {
     m_Text = text;
 
-    if (flag)
-    {
+    if (flag) {
         updateText();
     }
 }
@@ -199,8 +195,7 @@ void CButton::setText(QString text, bool flag)
 void CButton::setTextStyle(QString style, bool flag)
 {
     m_Style = style;
-    if (flag)
-    {
+    if (flag) {
         updateTextStyle();
     }
 }
@@ -297,19 +292,14 @@ void CButton::mousePressEvent(QMouseEvent *e)
 
 void CButton::mouseReleaseEvent(QMouseEvent *e)
 {
-    if(e->button()== Qt::LeftButton)
-    {
+    if (e->button() == Qt::LeftButton) {
         setIconNormal(m_IconNormalPath);
-        if((m_i_clickX == e->x()) && (m_i_clickY == e->y()))
-        {
-            if(m_i_time - (unsigned int)QTime::currentTime().secsTo(QTime(1970,1,1)) >=2 )
-            {
+        if ((m_i_clickX == e->x()) && (m_i_clickY == e->y())) {
+            if (m_i_time - (unsigned int)QTime::currentTime().secsTo(QTime(1970,1,1)) >=2 ) {
 
                 emit clickedLong();
                 emit clickedLong(m_Id);
-            }
-            else
-            {
+            } else {
                 emit clicked();
                 emit clicked(m_Id);
                 emit clicked(m_Id,m_strCustomName);
@@ -322,16 +312,14 @@ void CButton::mouseReleaseEvent(QMouseEvent *e)
 
 void CButton::mouseMoveEvent(QMouseEvent *event)
 {
-    if(event->x() > this->width() || event->y() > this->height() || event->x() < 0 || event->y() < 0)
-    {
+    if (event->x() > this->width() || event->y() > this->height() || event->x() < 0 || event->y() < 0) {
         setIconNormal(m_IconNormalPath);
     }
 }
 
 void CButton::SetLeftIcon(QString strIconPath)
 {
-    if(!m_bLeftIcon)
-    {
+    if (!m_bLeftIcon) {
         m_pIconLayout->addWidget(m_pLeftIconLab,0,Qt::AlignCenter);
         m_pIconLayout->setContentsMargins(8,0,0,2);
     }

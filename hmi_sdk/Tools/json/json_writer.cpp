@@ -127,7 +127,7 @@ std::string valueToString(double value) {
 #endif
 #else
 #ifdef ANDROID
-  if(std::isfinite(value)){
+  if (std::isfinite(value)) {
       len = snprintf(buffer, sizeof(buffer), "%.17g", value);
 #else
   if (isfinite(value)) {

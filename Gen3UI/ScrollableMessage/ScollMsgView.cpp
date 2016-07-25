@@ -1,17 +1,19 @@
 #include "ScollMsgView.h"
 #include <QBoxLayout>
 
-CScollMsgView::CScollMsgView(AppListInterface * pList, QWidget *parent) : QWidget(parent)
+CScollMsgView::CScollMsgView(AppListInterface * pList, QWidget *parent)
+    : QWidget(parent)
 {
-    if(parent)
-    {
+    if (parent) {
         setGeometry(0,0,parent->width(),parent->height());
     }
     m_pList = pList;
 
     setAutoFillBackground(true);
     QPixmap pixmap(":/images/MainWidget/Backgroud.png");
-    pixmap = pixmap.scaled(width(),height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(width(),height(),
+                           Qt::IgnoreAspectRatio,
+                           Qt::SmoothTransformation);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(pixmap));
     setPalette(palette);
@@ -31,7 +33,8 @@ CScollMsgView::CScollMsgView(AppListInterface * pList, QWidget *parent) : QWidge
     pTopLayout->addWidget(m_pReturnBtn);
     pTopLayout->addWidget(m_pAppNameLab,1);
     pTopLayout->addWidget(m_pSoftBtn);
-    pTopLayout->setContentsMargins(width()*0.015,width()*0.015,width()*0.015,width()*0.015);
+    pTopLayout->setContentsMargins(width()*0.015,width()*0.015,
+                                   width()*0.015,width()*0.015);
     pTopLayout->setSpacing(5);
 
     m_pReturnBtn->Init(width()*0.07,width()*0.065,"",":/images/ReturnBtnNormal.png",":/images/ReturnBtnPress.png");
@@ -61,27 +64,20 @@ void CScollMsgView::SetTimeOut(int iDuration)
 
 void CScollMsgView::showEvent(QShowEvent * e)
 {
-    if (AppControl)
-    {
+    if (AppControl) {
         AppBase::SetEdlidedText(m_pAppNameLab,AppControl->getAppName().c_str(),width()*0.7);
 
         Json::Value m_jsonData = AppControl->getScrollableMsgJson()["params"];
-
         SetTimeOut(m_jsonData["timeout"].asInt());
-
-        if (m_jsonData.isMember("messageText"))
-        {
+        if (m_jsonData.isMember("messageText")) {
             m_pText->setText(m_jsonData["messageText"]["fieldText"].asString().c_str());
         }
 
-        if (m_jsonData.isMember("softButtons"))
-        {
+        if (m_jsonData.isMember("softButtons")) {
             m_pSoftBtn->SetId(m_jsonData["softButtons"][0]["softButtonID"].asInt());
             m_pSoftBtn->SetText(m_jsonData["softButtons"][0]["text"].asString().c_str());
             m_pSoftBtn->show();
-        }
-        else
-        {
+        } else {
             m_pSoftBtn->hide();
         }
     }
@@ -102,8 +98,7 @@ void CScollMsgView::OnReturnBtnClicked()
 void CScollMsgView::OnSoftBtnClicked(int iBtnId)
 {
     //m_pTimer->stop();
-    if(iBtnId != 0)
-    {
+    if (iBtnId != 0) {
         AppControl->OnSoftButtonClick(iBtnId,BUTTON_SHORT);
     }
 }

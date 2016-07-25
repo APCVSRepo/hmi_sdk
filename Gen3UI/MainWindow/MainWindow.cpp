@@ -52,7 +52,7 @@ MainWindow::MainWindow(AppListInterface * pList,QWidget *parent) : QWidget(paren
                                 ":/images/setting_off.png"};
     //QString text[MENU_MAX]={"Music","Keys","Phone","Navigation","AppList","Settings"};
     QString text[MENU_MAX]={"音频","空调","电话","导航","应用程序","设置"};
-    for(int i=0;i<MENU_MAX;i++){
+    for (int i=0;i<MENU_MAX;++i) {
         m_pMenuTab[i]=new MenuButton(m_pMainMenu);
         m_pMenuTab[i]->setGeometry((ui_res_width-2*margin)/MENU_MAX*i,0,(ui_res_width-2*margin)/MENU_MAX,status_height);
         m_pMenuTab[i]->setIcon(sheet_on[i],sheet_off[i]);
@@ -68,7 +68,7 @@ MainWindow::MainWindow(AppListInterface * pList,QWidget *parent) : QWidget(paren
     QString appsheet_off[2]={":/images/phonechild_off.png",":/images/listchild_off.png"};
     QString childText[2]={"Find New App","App Setting"};
     int funcId[2]={-1,-2};
-    for(int i=0;i<2;i++){
+    for(int i=0;i<2;++i) {
         InsertChildApp(i,funcId[i],childText[i],appsheet_on[i],appsheet_off[i]);
     }
     */
@@ -90,7 +90,7 @@ MainWindow::~MainWindow()
     delete m_pMainMenu;
     delete m_pTimer;
     /*
-    for (int i = 0; i < MENU_MAX; i++){
+    for (int i = 0; i < MENU_MAX; ++i) {
         delete m_pMenuTab[i];
     }
     */
@@ -106,11 +106,11 @@ QWidget* MainWindow::CenterWidget()
 
 void MainWindow::onMenuSelected()
 {
-    MenuButton *button=static_cast<MenuButton*>(sender());
-    if(NULL==button)
+    MenuButton *button = static_cast<MenuButton*>(sender());
+    if (NULL == button)
         return;
-    for(int i=0;i<MENU_MAX;i++){
-        if(button==m_pMenuTab[i]){
+    for (int i = 0; i < MENU_MAX; ++i) {
+        if (button == m_pMenuTab[i]) {
             m_pMenuTab[i]->setActive(true);
         }
         else{
@@ -121,11 +121,11 @@ void MainWindow::onMenuSelected()
 /*
 void MainWindow::onChildAppSelected(int funcId)
 {
-    if(funcId==-1){
+    if (funcId==-1) {
         Notify n(this);
         n.showDlg();
     }
-    else if(funcId==-2){
+    else if (funcId==-2) {
 
     }
     else
@@ -144,7 +144,7 @@ void MainWindow::onUpdateTime()
 /*
 void MainWindow::InsertChildApp(int index,int appId,QString text,QString on,QString off)
 {
-    for(int i=index;i<m_pChildApps.size();i++){
+    for(int i=index;i<m_pChildApps.size();++i) {
         CAppButton *button=m_pChildApps.at(i);
         int r=(i+1)/4;
         int c=(i+1)%4;
@@ -168,7 +168,7 @@ void MainWindow::DeleteChildApp(int index)
     m_pChildApps.removeAt(index);
     disconnect(button,SIGNAL(clickedWitchFuncId(int)),this,SLOT(onChildAppSelected(int)));
     delete button;
-    for(int i=index;i<m_pChildApps.size();i++){
+    for(int i=index;i<m_pChildApps.size();++i) {
         CAppButton *button=m_pChildApps.at(i);
         int r=i/4;
         int c=i%4;
@@ -187,13 +187,13 @@ void MainWindow::showEvent(QShowEvent * e)
     std::vector<std::string> vIconPath;
     m_pList->getAppList(vAppIDs, vAppNames,vIconPath);
     int count=m_pChildApps.size();
-    for(int i=2;i<count;i++){
+    for(int i=2;i<count;++i) {
         DeleteChildApp(2);
     }
 
-    if(vAppIDs.size()>0){
+    if (vAppIDs.size()>0) {
 
-        for(int i=0;i<vAppIDs.size();i++){
+        for(int i=0;i<vAppIDs.size();++i) {
             InsertChildApp(2+i,vAppIDs.at(i),vAppNames.at(i).c_str(),vIconPath.at(i).c_str(),vIconPath.at(i).c_str());
         }
     }
@@ -222,7 +222,7 @@ void MainWindow::OnVideoStreamMenuBtnClicked()
 void MainWindow::BackToVideoStream()
 {
     /*
-    if(m_bInVideoStream)
+    if (m_bInVideoStream)
     {
         LOGI("---MainWindow::showEvent");
         m_bInVideoStream = false;

@@ -10,7 +10,7 @@
 #include "JniFrame.h"
 #include <QDebug>
 
-#define QDBG qDebug()<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
+#define QDBG // qDebug()<<__FILE__<<__FUNCTION__<<"():"<<__LINE__
 
 #define MAX_BUF_SIZE 1024*1024*2
 

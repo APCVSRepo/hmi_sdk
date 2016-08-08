@@ -294,7 +294,8 @@ void CButton::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         setIconNormal(m_IconNormalPath);
-        if ((m_i_clickX == e->x()) && (m_i_clickY == e->y())) {
+        if ((0 <= e->x()) && (e->x() <= this->width())
+            && (0 <= e->y())  && (e->y() <= this->height())) {
             if (m_i_time - (unsigned int)QTime::currentTime().secsTo(QTime(1970,1,1)) >=2 ) {
 
                 emit clickedLong();

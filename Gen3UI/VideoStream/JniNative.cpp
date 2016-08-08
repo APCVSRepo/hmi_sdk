@@ -14,7 +14,7 @@ void JniNative::setDirectBuffer(JNIEnv *env, jobject thiz, jobject buffer, jint 
 {
     gBuffer = (unsigned char *)env->GetDirectBufferAddress(buffer);
     if (gBuffer == NULL) {
-        QDBG << "GetDirectBufferAddress Failed!";
+//        QDBG << "GetDirectBufferAddress Failed!";
         return;
     }
 }
@@ -42,12 +42,12 @@ bool JniNative::registerNativeMethods()
 
     QAndroidJniObject javaClass(classname);
     clazz = env->GetObjectClass(javaClass.object<jobject>());
-    QDBG << "find ExtendsQtNative - " << clazz;
+//    QDBG << "find ExtendsQtNative - " << clazz;
     bool result = false;
     if (clazz) {
         jint ret = env->RegisterNatives(clazz, methods, sizeof(methods) / sizeof(methods[0]));
         env->DeleteLocalRef(clazz);
-        QDBG << "RegisterNatives return - " << ret;
+//        QDBG << "RegisterNatives return - " << ret;
         result = ret >= 0;
     }
     if (env->ExceptionCheck())

@@ -76,11 +76,19 @@ void* HMI_Initial::SDLStartThread(void *arg)
 #endif
 #endif
     char  sdlconfig[50] = {0};
+#ifdef ANDROID
     sprintf(sdlconfig,"%s/smartDeviceLink.ini",CONFIG_DIR);
+#else
+    sprintf(sdlconfig,"smartDeviceLink.ini");
+#endif
     char* argv[2] = {"smartDeviceLinkCore",sdlconfig};
     sdl_start(2,argv);
     while (true) {
-        sleep(100);
+#ifdef WIN32
+    Sleep(100000);
+#else
+    sleep(100);
+#endif
     }
     return NULL;
 }

@@ -60,7 +60,8 @@ SOURCES += \
     AudioPassThru/AudioPassView.cpp \
     VideoStream/MediaCodecStream.cpp \
     VideoStream/JniNative.cpp \
-    VideoStream/JniFrame.cpp
+    VideoStream/JniFrame.cpp \
+    VideoStream/CeVideoStream.cpp
 
 HEADERS += \
     Gen3UIManager.h \
@@ -100,7 +101,8 @@ HEADERS += \
     AudioPassThru/AudioPassView.h \
     VideoStream/MediaCodecStream.h \
     VideoStream/JniNative.h \
-    VideoStream/JniFrame.h
+    VideoStream/JniFrame.h \
+    VideoStream/CeVideoStream.h
 
 unix {
     target.path = /usr/lib

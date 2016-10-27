@@ -175,8 +175,11 @@ pthread.files=$$PWD/Library/ce/*.dll
 INSTALLS +=pthread
 #INSTALLS+=ffmpeg
 
-DEFINES += SDL_SUPPORT_LIB \
-            OS_WIN32 
+#DEFINES += SDL_SUPPORT_LIB \
+#            OS_WIN32
+
+DEFINES += OS_WIN32
+
 LIBS +=  $$PWD/Library/ce/sdl/smartDeviceLinkCore.lib
 }
 

@@ -44,7 +44,6 @@ void CeVideoStream::callBack_send_data(const char *data, int size)
 void CeVideoStream::onRawData(void *p, int iLength)
 {
 #ifdef TEST_FILE
-    printf("=====%d\n", iLength);
     fwrite(p,iLength,1,fp);
 #endif
 }

@@ -11,7 +11,7 @@ win32:QT += axcontainer
 #DEFINES +=VIDEO_STREAM_WIDGET
 
 DEFINES += __STDINT_MACROS  #for ffmpeg
-CONFIG  += wince  ##wince
+#CONFIG  += wince  ##wince
 
 TARGET = AppLink_HMI
 TEMPLATE = app

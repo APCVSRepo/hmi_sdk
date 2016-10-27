@@ -34,7 +34,18 @@ void Navigation::onRequest(Json::Value &request)
     }else if (method == "Navigation.StopStream") {
         Result result = m_pCallback->onRequest(request);
         sendResult(id,"StopStream",result);
-    } else {
+    }else if (method == "Navigation.StartAudioStream") {
+        printf("###########receive StartAudioStream\n");
+        Result result = m_pCallback->onRequest(request);
+        sendResult(id,"StartAudioStream",result);
+        printf("###########reply StartAudioStream\n");
+    }else if (method == "Navigation.StopAudioStream") {
+        printf("###########receive StopAudioStream");
+        Result result = m_pCallback->onRequest(request);
+        sendResult(id,"StopAudioStream",result);
+        printf("###########reply StopAudioStream");
+
+    }else {
         Channel::onRequest(request);
     }
 }

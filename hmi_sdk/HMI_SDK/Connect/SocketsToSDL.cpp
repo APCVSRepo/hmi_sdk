@@ -35,7 +35,7 @@ SocketsToSDL::SocketsToSDL()
         m_bTerminate(false)
 {
     m_sHost = "127.0.0.1";
-    m_iPort = 12346;
+    m_iPort = 8087;
 
 #ifdef WIN32
 	WSADATA wsa = { 0 };

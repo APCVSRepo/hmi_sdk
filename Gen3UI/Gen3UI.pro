@@ -60,7 +60,8 @@ SOURCES += \
     AudioPassThru/AudioPassView.cpp \
     VideoStream/MediaCodecStream.cpp \
     VideoStream/JniNative.cpp \
-    VideoStream/JniFrame.cpp
+    VideoStream/JniFrame.cpp \
+    VideoStream/CeVideoStream.cpp
 
 HEADERS += \
     Gen3UIManager.h \
@@ -100,7 +101,8 @@ HEADERS += \
     AudioPassThru/AudioPassView.h \
     VideoStream/MediaCodecStream.h \
     VideoStream/JniNative.h \
-    VideoStream/JniFrame.h
+    VideoStream/JniFrame.h \
+    VideoStream/CeVideoStream.h
 
 unix {
     target.path = /usr/lib
@@ -145,10 +147,16 @@ INSTALLS +=qt_dll
 #unix:!android:LIBS += -L$$PWD/Library/linux/ffmpeg -lavcodec  -lavformat -lavutil -lswscale
 unix:!android{
 ffmpeg.path=$$OUT_PWD/../bin
+#linux 64bit
 ffmpeg.files=$$PWD/Library/linux/ffmpeg/*.*
+#linux 32bit
+#ffmpeg.files=$$PWD/Library/linux/ffmpeg_32/*.*
 INSTALLS+=ffmpeg
 
+#linux 64bit
 LIBS += -L$$PWD/Library/linux/ffmpeg  -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
+#linux 32bit
+#LIBS += -L$$PWD/Library/linux/ffmpeg_32  -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
 }
 ################################for wince
 wince{
@@ -166,6 +174,13 @@ pthread.files=$$PWD/Library/ce/*.dll
 
 INSTALLS +=pthread
 #INSTALLS+=ffmpeg
+
+#DEFINES += SDL_SUPPORT_LIB \
+#            OS_WIN32
+
+DEFINES += OS_WIN32
+
+LIBS +=  $$PWD/Library/ce/sdl/smartDeviceLinkCore.lib
 }
 
 

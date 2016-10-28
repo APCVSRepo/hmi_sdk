@@ -120,8 +120,8 @@ INSTALLS+=pthread
 ffmpeg.path=$$OUT_PWD/../bin
 ffmpeg.files=$$PWD/Library/win32/ffmpeg/*.dll
 INSTALLS+=ffmpeg
-qt_dll.path=$$DESTDIR
-qt_dll.files=$$(QT_DIR)/bin/*.dll
+qt_dll.path=$$OUT_PWD/../bin
+qt_dll.files=$$(QTDIR)/bin/*.dll
 INSTALLS +=qt_dll
 }
 
@@ -148,6 +148,13 @@ INSTALLS+=ffmpeg
 qt_dll.path=$$DESTDIR
 qt_dll.files=$$(QT_DIR)/bin/*.dll
 INSTALLS +=qt_dll
+
+#DEFINES += SDL_SUPPORT_LIB \
+#            OS_WIN32
+
+DEFINES += OS_WIN32
+
+LIBS +=  $$PWD/Library/ce/sdl/smartDeviceLinkCore.lib
 }
 
 

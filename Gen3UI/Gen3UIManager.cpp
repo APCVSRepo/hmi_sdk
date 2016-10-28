@@ -27,6 +27,8 @@
 #include "VideoStream/VideoStream.h"
 #endif
 
+#else
+#include "VideoStream/CeVideoStream.h"
 #endif
 
 #include "MainWindow/MainWindow.h"
@@ -99,6 +101,8 @@ void CGen3UIManager::initAppHMI()
 #else
     m_vUIWidgets[ID_VIDEOSTREAM] = new VideoStream(m_pList,pMain);
 #endif
+#else
+    m_vUIWidgets[ID_VIDEOSTREAM] = new CeVideoStream(m_pList,pMain);
 #endif
 
     for (int i = 0; i < ID_UI_MAX; ++i) {
@@ -166,6 +170,12 @@ void CGen3UIManager::onVideoStartSlots()
 
 #endif
 
+#else
+    CeVideoStream *pVideoStream = ((CeVideoStream *)m_vUIWidgets[ID_VIDEOSTREAM]);
+    pVideoStream->startStream();
+#ifndef SDL_CALL_BACK
+    m_pList->IconnectToVS(pVideoStream, "127.0.0.1", 5050);
+#endif
 #endif
 
 }
@@ -182,7 +192,11 @@ void CGen3UIManager::onVideoStreamStop()
     emit onVideoStopSignal();
     ((VideoStream *)m_vUIWidgets[ID_VIDEOSTREAM])->stopStream();
 #endif
-
+#else
+#ifndef SDL_CALL_BACK
+    m_pList->IdelConnectToVS();
+#endif
+    ((CeVideoStream *)m_vUIWidgets[ID_VIDEOSTREAM])->stopStream();
 #endif
 }
 

@@ -11,7 +11,7 @@ win32:QT += axcontainer
 #DEFINES +=VIDEO_STREAM_WIDGET
 
 DEFINES += __STDINT_MACROS  #for ffmpeg
-#CONFIG  += wince  ##wince
+CONFIG  += wince  ##wince
 
 TARGET = AppLink_HMI
 TEMPLATE = app
@@ -149,10 +149,10 @@ qt_dll.path=$$DESTDIR
 qt_dll.files=$$(QT_DIR)/bin/*.dll
 INSTALLS +=qt_dll
 
-#DEFINES += SDL_SUPPORT_LIB \
-#            OS_WIN32
+DEFINES += SDL_SUPPORT_LIB \
+            OS_WIN32
 
-DEFINES += OS_WIN32
+#DEFINES += OS_WIN32
 
 LIBS +=  $$PWD/Library/ce/sdl/smartDeviceLinkCore.lib
 }

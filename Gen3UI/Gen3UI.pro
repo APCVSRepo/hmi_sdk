@@ -12,7 +12,7 @@ TARGET = Gen3UI
 TEMPLATE = lib
 
 CONFIG += ffmpeg
-#CONFIG  += wince  ##wince
+CONFIG  += wince  ##wince
 
 DEFINES += HMIUI_LIBRARY __STDC_CONSTANT_MACROS
 
@@ -175,10 +175,12 @@ pthread.files=$$PWD/Library/ce/*.dll
 INSTALLS +=pthread
 #INSTALLS+=ffmpeg
 
-#DEFINES += SDL_SUPPORT_LIB \
-#            OS_WIN32
+DEFINES += SDL_CALL_BACK
 
-DEFINES += OS_WIN32
+DEFINES += SDL_SUPPORT_LIB \
+            OS_WIN32
+
+#DEFINES += OS_WIN32
 
 LIBS +=  $$PWD/Library/ce/sdl/smartDeviceLinkCore.lib
 }

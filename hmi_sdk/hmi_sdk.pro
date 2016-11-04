@@ -149,6 +149,8 @@ qt_dll.path=$$DESTDIR
 qt_dll.files=$$(QT_DIR)/bin/*.dll
 INSTALLS +=qt_dll
 
+DEFINES += SDL_CALL_BACK
+
 DEFINES += SDL_SUPPORT_LIB \
             OS_WIN32
 
@@ -170,6 +172,7 @@ INCLUDEPATH +=  $$PWD/Include/msp \
 DEFINES +=ANDROID \
           SDL_SUPPORT_LIB \
           SDL_SUPPORT_VR
+DEFINES += SDL_CALL_BACK
 
 LIBS += -L$$PWD/Library/android/ffmpeg -lffmpeg
 LIBS += -L$$PWD/Library/android/sdl -lsmartDeviceLinkCore

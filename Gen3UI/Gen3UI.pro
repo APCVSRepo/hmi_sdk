@@ -175,6 +175,8 @@ pthread.files=$$PWD/Library/ce/*.dll
 INSTALLS +=pthread
 #INSTALLS+=ffmpeg
 
+DEFINES += SDL_CALL_BACK
+
 DEFINES += SDL_SUPPORT_LIB \
             OS_WIN32
 

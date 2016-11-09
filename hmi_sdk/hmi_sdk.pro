@@ -98,8 +98,16 @@ INCLUDEPATH +=  $$PWD/../Include/ffmpeg \
 
 ###############################for windows
 win32:!wince{
-DEFINES +=WIN32
+DEFINES +=WIN32 \
+          OS_WIN32
 INCLUDEPATH += $$PWD/../Include/pthread \
+
+DEFINES += SDL_CALL_BACK \
+           SDL_SUPPORT_LIB
+LIBS +=  $$PWD/Library/win32/sdl/smartDeviceLinkCore.lib
+sdllib.path=$$OUT_PWD/../bin
+sdllib.files=$$PWD/Library/win32/sdl/*.*
+INSTALLS+=sdllib
 
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVC2.lib
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVCE2.lib
@@ -149,14 +157,14 @@ qt_dll.path=$$DESTDIR
 qt_dll.files=$$(QT_DIR)/bin/*.dll
 INSTALLS +=qt_dll
 
-DEFINES += SDL_CALL_BACK
+DEFINES += OS_WIN32
 
-DEFINES += SDL_SUPPORT_LIB \
-            OS_WIN32
-
-#DEFINES += OS_WIN32
-
+DEFINES += SDL_CALL_BACK \
+           SDL_SUPPORT_LIB
 LIBS +=  $$PWD/Library/ce/sdl/smartDeviceLinkCore.lib
+sdllib.path=$$OUT_PWD/../bin
+sdllib.files=$$PWD/Library/ce/sdl/*.*
+INSTALLS+=sdllib
 }
 
 

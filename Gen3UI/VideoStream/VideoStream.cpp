@@ -10,9 +10,9 @@
 #include "global_first.h"
 #include "pthread.h"
 //#include "Connect/SDLConnector.h"
-//#include "main.h"
+#include "main.h"
 using namespace std;
-#ifdef VIDEO_STREAM_MEM
+#ifdef SDL_CALL_BACK
 //char * video_buffer[AV_BUFFER_SIZE];
 //int    video_start,video_end;//[)
 QByteArray  arrayBuffer;
@@ -41,7 +41,7 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
     avformat_network_init();//初始化网络流格式,使用RTSP网络流时必须先执行
 
 
-#ifdef VIDEO_STREAM_MEM
+#ifdef SDL_CALL_BACK
     sdl_set_videostream_callback(callBack_send_data);
 //    video_start=video_end=0;
     arrayBuffer.clear();
@@ -141,7 +141,7 @@ void VideoStream::av_log_default_callback(void* ptr, int level, const char* fmt,
     //LOGD("level=%d:%s",level,fmtBuf);
 }
 
-#ifdef VIDEO_STREAM_MEM
+#ifdef SDL_CALL_BACK
 
 void VideoStream::callBack_send_data(const char *data, int size)
 {
@@ -192,12 +192,17 @@ void VideoStream::startStream()
     videoStreamIndex = -1;
 
     pAVFormatContext = avformat_alloc_context();//申请一个AVFormatContext结构的内存,并进行简单初始化
-#ifdef VIDEO_STREAM_MEM
+#ifdef SDL_CALL_BACK
 //    video_start=video_end=0;
-    arrayBuffer.clear();
-    unsigned char * aviobuffer = (unsigned char *)av_malloc(AV_BUFFER_SIZE);
-    AVIOContext * avioContext = avio_alloc_context(aviobuffer,AV_BUFFER_SIZE,0,this,VideoStream::read_buffer,NULL,NULL);
-    pAVFormatContext->pb=avioContext;
+    static bool aa = false;
+    if(!aa){
+        arrayBuffer.clear();
+        unsigned char * aviobuffer = (unsigned char *)av_malloc(AV_BUFFER_SIZE);
+        AVIOContext * avioContext = avio_alloc_context(aviobuffer,AV_BUFFER_SIZE,0,this,VideoStream::read_buffer,NULL,NULL);
+        pAVFormatContext->pb=avioContext;
+        aa = true;
+    }
+
 #endif
     av_log_set_callback(VideoStream::av_log_default_callback);
 
@@ -222,7 +227,7 @@ bool VideoStream::Init()
     //打开视频流
     LOGD("avformat_open_input");
 
-#ifdef VIDEO_STREAM_MEM
+#ifdef SDL_CALL_BACK
     int result = avformat_open_input(&pAVFormatContext,NULL,NULL,NULL);
 #else
     int result = avformat_open_input(&pAVFormatContext,m_str_url.toUtf8().data(),NULL,NULL);//"tcp://127.0.0.1:5050"//m_str_url.toUtf8().data()

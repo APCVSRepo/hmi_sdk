@@ -10,6 +10,7 @@
 
 #include "Common/Button.h"
 #include "AppListInterface.h"
+#include <QTimer>
 
 #define TEST_FILE
 
@@ -37,8 +38,22 @@ public: //IMessageInterface
 signals:
 
 public slots:
+    void OnClickedMenuBtn();
 
 private:
+
+    QRect m_BtnRect[3];
+    QImage *m_pBtnImage[4];
+    unsigned char m_ucCurrentImageIndex[2];
+
+    CButton *m_pMenuBtn;
+    CButton *m_pZoomInBtn;
+    CButton *m_pZoomOutBtn;
+
+    QLabel *m_pTimeLab;
+    QTimer *m_pTimer;
+
+    AppListInterface *m_pList;
 
 #ifdef SDL_CALL_BACK
     static void callBack_send_data(const char *data, int size);

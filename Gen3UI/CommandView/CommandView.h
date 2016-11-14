@@ -16,7 +16,17 @@ typedef struct CommandInformation
     // 如果是Menu则是MenuID，如果是Command则是CommandID
     int iId;
     bool bMenu;
+    std::string strImagePath;
     std::vector<CommandInformation> CmdVec;
+
+    CommandInformation()
+    {
+        iParentId = 0;
+        iId = 0;
+        bMenu = false;
+        strCmd.clear();
+        strImagePath.clear();
+    }
 }tagCmdInf;
 
 class CCommandView : public QWidget
@@ -35,9 +45,9 @@ public slots:
 
     void OnCommandListItemClicked(QListWidgetItem *pItem);
 private:
-    void AddCommand(int iCmdId,std::string strName);
+    void AddCommand(int iCmdId,std::string strName,std::string strImagePath);
     void AddMenu(int iMenuId,std::string strName);
-    void AddSubCommand(int iParentId,int iCmdId,std::string strName);
+    void AddSubCommand(int iParentId,int iCmdId,std::string strName,std::string strImagePath);
 
     void RefreshCommandList(tagCmdInf *pMenu = NULL);
 

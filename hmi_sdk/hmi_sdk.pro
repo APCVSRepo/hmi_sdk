@@ -22,13 +22,12 @@ UI_DIR=temp/ui
 OBJECTS_DIR=temp/obj
 DESTDIR=../bin
 
-target.path=$$OUT_PWD/../bin
-INSTALLS+=target
+#target.path=$$OUT_PWD/../bin
+#INSTALLS+=target
 
 #qtdll.path=$$OUT_PWD/bin
 #qtdll.files=$$QMAKE_LIBDIR/*.dll
 #INSTALLS +=qtdll
-
 
 
 SOURCES += \
@@ -101,6 +100,13 @@ win32:!wince{
 DEFINES +=WIN32
 INCLUDEPATH += $$PWD/../Include/pthread \
 
+DEFINES += SDL_CALL_BACK \
+           SDL_SUPPORT_LIB
+LIBS +=  $$PWD/Library/win32/sdl/smartDeviceLinkCore.lib
+sdllib.path=$$OUT_PWD/../bin
+sdllib.files=$$PWD/Library/win32/sdl/*.*
+INSTALLS+=sdllib
+
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVC2.lib
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVCE2.lib
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVSE2.lib
@@ -121,7 +127,7 @@ ffmpeg.path=$$OUT_PWD/../bin
 ffmpeg.files=$$PWD/Library/win32/ffmpeg/*.dll
 INSTALLS+=ffmpeg
 qt_dll.path=$$OUT_PWD/../bin
-qt_dll.files=$$(QTDIR)/bin/*.dll
+qt_dll.files=$$QMAKE_LIBDIR_QT/bin/*.dll
 INSTALLS +=qt_dll
 }
 
@@ -138,21 +144,24 @@ INCLUDEPATH += $$PWD/../Include/pthread \
                $$PWD/../Include/wince
 LIBS +=  $$PWD/Library/ce/pthread.lib
 LIBS += -L$$PWD/Library/ce/ffmpeg  -lavcodec-55  -lavdevice-55 -lavfilter-3 -lavformat-55 -lavutil-52 -lswresample-0 -lswscale-2
-pthread.path=$$OUT_PWD/bin
+pthread.path=$$OUT_PWD/../bin
 pthread.files=$$PWD/Library/ce/*.dll
-ffmpeg.path=$$OUT_PWD/bin
+ffmpeg.path=$$OUT_PWD/../bin
 ffmpeg.files=$$PWD/Library/ce/ffmpeg/*.dll
 
 INSTALLS +=pthread
 INSTALLS+=ffmpeg
-qt_dll.path=$$DESTDIR
-qt_dll.files=$$(QT_DIR)/bin/*.dll
+qt_dll.path=$$OUT_PWD/../bin
+qt_dll.files=$$QMAKE_LIBDIR_QT/*.dll
 INSTALLS +=qt_dll
 
 DEFINES += SDL_CALL_BACK
 
 DEFINES += SDL_SUPPORT_LIB \
             OS_WIN32
+sdl_lib.path=$$OUT_PWD/../bin
+sdl_lib.files=$$PWD/Library/ce/sdl/*.*
+INSTALLS +=sdl_lib
 
 #DEFINES += OS_WIN32
 

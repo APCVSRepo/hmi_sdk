@@ -3,7 +3,7 @@
 
 std::string ChangeSlash(std::string strSrc)
 {
-#ifdef WIN32
+#if defined(WIN32) || defined(WINCE)
     char *pTemp = new char[strSrc.size()+1];
     strcpy(pTemp,strSrc.c_str());
     for (int i = 0;i != strSrc.size();++i) {

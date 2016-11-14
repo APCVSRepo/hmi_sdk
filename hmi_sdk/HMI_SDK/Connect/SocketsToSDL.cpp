@@ -28,6 +28,9 @@
 #define SOCKET_ERROR -1
 #endif
 
+// add by fanqiang
+#include "Channel.h"
+
 SocketsToSDL::SocketsToSDL()
 	:	m_Read_Sign(-1), 
 		m_Write_Sign(-1),
@@ -192,6 +195,15 @@ bool SocketsToSDL::ConnectTo(std::vector<IChannel *> Channels, INetworkStatus * 
     m_pNetwork = pNetwork;
 	if (!CreateSignal())
 		return false;
+
+    // add by fanqiang read sdl host address
+    if (!g_StaticConfigJson.isNull()){
+        Json::Value sdladdr = g_StaticConfigJson["SDLAddr"];
+        if (sdladdr.isMember("host"))
+            m_sHost = sdladdr["host"].asCString();
+        if (sdladdr.isMember("port"))
+            m_iPort = sdladdr["port"].asInt();
+    }
 
     int iNum = Channels.size();
     for (int i = 0; i < iNum; ++i) {

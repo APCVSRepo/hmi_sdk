@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QMouseEvent>
+#include <string>
 
 class CustomComboboxItem : public QLabel
 {
@@ -23,6 +24,7 @@ public:
 
     QString GetItemText();    
     void SetIndex(int iIndex);
+    void SetLeftIcon(std::string strIcon);
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

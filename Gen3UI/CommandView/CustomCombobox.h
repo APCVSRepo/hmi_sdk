@@ -15,7 +15,7 @@ public:
 
     static QString cssString();
 
-    void AddListItem(QString strText,bool bMenu);
+    void AddListItem(QString strText,bool bMenu,std::string strImagePath = "");
     // 根据朝向设定窗体位置
     void SetPos(int iStartX,int iStartY,int iWidth,int iHeight);
 

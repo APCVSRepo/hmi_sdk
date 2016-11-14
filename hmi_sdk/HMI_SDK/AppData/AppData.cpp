@@ -564,6 +564,23 @@ void AppData::addCommand(Json::Value jsonObj)
     if (jsonObj["params"]["menuParams"].isMember("position"))
         tmpCommand.i_position = jsonObj["params"]["menuParams"]["position"].asInt();
 
+    LOGI("---111");
+    if(jsonObj["params"].isMember("cmdIcon"))
+    {
+        LOGI("---222");
+        if(jsonObj["params"]["cmdIcon"]["imageType"].asString() == "DYNAMIC")
+        {
+            tmpCommand.i_ImageType = 2;
+        }
+        else if(jsonObj["params"]["cmdIcon"]["imageType"].asString() == "STATIC")
+        {
+            tmpCommand.i_ImageType = 1;
+        }
+
+        tmpCommand.str_ImagePath = jsonObj["params"]["cmdIcon"]["value"].asString();
+        LOGI("---333---%s",tmpCommand.str_ImagePath.c_str());
+    }
+
     m_vec_scommand.push_back(tmpCommand);
 
 }

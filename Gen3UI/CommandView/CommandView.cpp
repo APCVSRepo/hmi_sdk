@@ -59,13 +59,14 @@ CCommandView::~CCommandView()
     delete m_pCommandList;
 }
 
-void CCommandView::AddCommand(int iCmdId,std::string strName)
+void CCommandView::AddCommand(int iCmdId,std::string strName,std::string strImagePath)
 {
     tagCmdInf tempCmdInf;
     tempCmdInf.strCmd = strName;
     tempCmdInf.bMenu = false;
     tempCmdInf.iId = iCmdId;
     tempCmdInf.iParentId = 0;
+    tempCmdInf.strImagePath = strImagePath;
     m_CmdVec.push_back(tempCmdInf);
 }
 
@@ -79,13 +80,14 @@ void CCommandView::AddMenu(int iMenuId,std::string strName)
     m_CmdVec.push_back(tempCmdInf);
 }
 
-void CCommandView::AddSubCommand(int iParentId,int iCmdId,std::string strName)
+void CCommandView::AddSubCommand(int iParentId,int iCmdId,std::string strName,std::string strImagePath)
 {
     tagCmdInf tempCmdInf;
     tempCmdInf.strCmd = strName;
     tempCmdInf.bMenu = false;
     tempCmdInf.iId = iCmdId;
     tempCmdInf.iParentId = iParentId;
+    tempCmdInf.strImagePath = strImagePath;
     for (int i = 0; i != m_CmdVec.size(); ++i) {
         if (m_CmdVec[i].bMenu && m_CmdVec[i].iId == iParentId) {
             m_CmdVec[i].CmdVec.push_back(tempCmdInf);
@@ -101,12 +103,12 @@ void CCommandView::RefreshCommandList(tagCmdInf *pMenu)
     if (NULL == pMenu) {
         for (int i = 0;i != m_CmdVec.size();++i) {
             m_pCommandList->AddListItem(m_CmdVec[i].strCmd.c_str(),
-                                        m_CmdVec[i].bMenu);
+                                        m_CmdVec[i].bMenu,m_CmdVec[i].strImagePath);
         }
     } else {
         for (int i = 0;i != pMenu->CmdVec.size();++i) {
             m_pCommandList->AddListItem(pMenu->CmdVec[i].strCmd.c_str(),
-                                        pMenu->CmdVec[i].bMenu);
+                                        pMenu->CmdVec[i].bMenu,m_CmdVec[i].strImagePath);
         }
     }
     m_pCommandList->show();
@@ -114,14 +116,16 @@ void CCommandView::RefreshCommandList(tagCmdInf *pMenu)
 
 void CCommandView::showEvent(QShowEvent * e)
 {
+        LOGI("---");
     //m_pCommandList->SetPos(m_pMenuBtn->geometry().left(),m_pMenuBtn->geometry().top(),m_pMenuBtn->geometry().width()*2.5,0);
     m_CmdVec.clear();
+//LOGI("---");
 
     std::vector<SMenuCommand> CmdList = m_pList->getActiveApp()->getCommandList();
     std::vector<SMenuCommand> TmpCmdList;
     for (unsigned int i = 0; i < CmdList.size(); ++i) {
         if (0 != CmdList.at(i).i_cmdID && 0 == CmdList.at(i).i_menuID) {
-            AddCommand(CmdList.at(i).i_cmdID,CmdList.at(i).str_menuName);
+            AddCommand(CmdList.at(i).i_cmdID,CmdList.at(i).str_menuName,CmdList.at(i).str_ImagePath);
         }else if (0 == CmdList.at(i).i_cmdID && 0 != CmdList.at(i).i_menuID) {
             AddMenu(CmdList.at(i).i_menuID,CmdList.at(i).str_menuName);
 
@@ -129,16 +133,19 @@ void CCommandView::showEvent(QShowEvent * e)
             for(unsigned int j = 0; j < TmpCmdList.size(); j++) {
                 AddSubCommand(CmdList.at(i).i_menuID,
                               TmpCmdList.at(j).i_cmdID,
-                              TmpCmdList.at(j).str_menuName.data());
+                              TmpCmdList.at(j).str_menuName.data(),TmpCmdList.at(j).str_ImagePath);
             }
         }
     }
+LOGI("---");
     m_pCurrentMenu = NULL;
     RefreshCommandList();
+LOGI("---");
 
     AppBase::SetEdlidedText(m_pAppNameLab,
                             m_pList->getActiveApp()->getAppName().c_str(),
                             width()*0.8);
+LOGI("---");
 }
 
 void CCommandView::OnReturnBtnClicked()

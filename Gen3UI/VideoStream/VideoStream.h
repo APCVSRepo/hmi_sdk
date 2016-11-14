@@ -35,7 +35,7 @@ extern "C"
 #ifndef VIDEO_STREAM_WIDGET
 //#define     VIDEO_STREAM_FILE    // 2//1:NET  2:FILE
 #define     VIDEO_STREM_NET
-//#define     VIDEO_STREAM_MEM
+//#define     SDL_CALL_BACK
 #define     AV_BUFFER_SIZE    (1024*1024)
 #endif
 
@@ -59,7 +59,7 @@ public:
     void setUrl(QString url);
     void startStream();
     void stopStream();
-#ifdef VIDEO_STREM_MEM
+#ifdef SDL_CALL_BACK
     static void callBack_send_data(const char *data,int size);
     static int read_buffer(void *opaque,uint8_t *buf,int buf_size);
 #endif
@@ -103,7 +103,7 @@ private:
     AVPicture  pAVPicture;
     AVFormatContext *pAVFormatContext;
     AVCodecContext *pAVCodecContext;
-#ifdef VIDEO_STREAM_MEM
+#ifdef SDL_CALL_BACK
     AVIOContext  *pAVIOContext;
 #endif
 

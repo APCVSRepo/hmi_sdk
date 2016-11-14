@@ -1,4 +1,6 @@
 #include "CustomComboboxItem.h"
+#include <QUrl>
+#include "../Common/CustomButton.h"
 
 CustomComboboxItem::CustomComboboxItem(int w,int h,QWidget *parent) : QLabel(parent),
     m_iBkState(NORMAL_STATE)
@@ -21,6 +23,7 @@ CustomComboboxItem::CustomComboboxItem(int w,int h,QWidget *parent) : QLabel(par
     m_pMainLayout->addWidget(m_pMenuArrowLab,0,Qt::AlignRight);
 
     m_pTextLab->setStyleSheet("font: 32px \"Liberation Serif\";color:rgb(0,0,0);border: 0px");
+
 
     QPixmap pixmap(":/images/rightarrow.png");
     QPixmap fitpixmap=pixmap.scaled(30,30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -106,6 +109,22 @@ void CustomComboboxItem::mouseReleaseEvent(QMouseEvent *event)
 void CustomComboboxItem::SetIndex(int iIndex)
 {
     m_iIndex = iIndex;
+}
+
+void CustomComboboxItem::SetLeftIcon(std::string strIcon)
+{
+    if (strIcon.empty()) {
+        m_pIconLab->setMinimumWidth(0);
+        m_pIconLab->setStyleSheet("max-width:0px;max-height:0px");
+    } else {
+        m_pIconLab->setMinimumWidth(height());
+#if defined(WINCE)
+        QString strTemp = QString("background:transparent;border:transparent;padding:%1px;image:url(%2)").arg(height()*0.15).arg(ChangeSlash(QUrl(strIcon.c_str()).path().toLocal8Bit().data()).c_str());
+#else
+        QString strTemp = QString("background:transparent;border:transparent;padding:%1px;image:url(%2)").arg(height()*0.15).arg(ChangeSlash(QUrl(strIcon.c_str()).path().toStdString()).c_str());
+#endif
+        m_pIconLab->setStyleSheet(strTemp);
+    }
 }
 
 

@@ -15,6 +15,9 @@ typedef struct command{
     std::string str_menuName;
     int i_parentID;
     int i_position;
+    unsigned char i_ImageType;
+    std::string str_ImagePath;
+
     command()
     {
         i_appID = 0;
@@ -23,6 +26,8 @@ typedef struct command{
         str_menuName.clear();
         i_parentID = 0;
         i_position = 0;
+        i_ImageType = 0;
+        str_ImagePath.clear();
     }
 }SMenuCommand;
 

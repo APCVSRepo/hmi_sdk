@@ -236,7 +236,7 @@ void Channel::sendError(int resultCode, int id, std::string method, std::string 
 
 void Channel::SendJson(Json::Value &data)
 {
-    LOGI("---send:%s",data.toStyledString().c_str());
+    //LOGI("---send:%s",data.toStyledString().c_str());
     Json::FastWriter writer;
     std::string json_file = writer.write(data);
     const char * pStr = json_file.c_str();

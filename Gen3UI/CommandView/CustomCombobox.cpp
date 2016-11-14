@@ -97,7 +97,7 @@ void CustomCombobox::SetScrollBarStyle(int iMode)
     }
 }
 
-void CustomCombobox::AddListItem(QString strText,bool bMenu)
+void CustomCombobox::AddListItem(QString strText,bool bMenu,std::string strImagePath)
 {
     QListWidgetItem *item = new QListWidgetItem;
     int w = width()-70;
@@ -113,6 +113,10 @@ void CustomCombobox::AddListItem(QString strText,bool bMenu)
     setItemWidget(item,itemWidget);    
     itemWidget->setText(strText);
     itemWidget->setIsMenu(bMenu);
+    if(strImagePath != "")
+    {
+        itemWidget->SetLeftIcon(strImagePath);
+    }
     m_itemList.push_back(itemWidget);
 
     connect(itemWidget,SIGNAL(ItemClicked(CustomComboboxItem*)),

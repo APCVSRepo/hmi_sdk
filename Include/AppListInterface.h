@@ -9,6 +9,11 @@
 #include "UIInterface.h"
 #include "../hmi_sdk/HMI_SDK/Connect/IMessageInterface.h"
 
+struct DeviceData{
+    std::string name;
+    std::string id;
+};
+
 class AppListInterface
 {
 public:

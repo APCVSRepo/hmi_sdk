@@ -5,6 +5,7 @@
 #include "AppData.h"
 #include "UIInterface.h"
 
+
 class AppData;
 class AppList : public IMessageInterface, public AppListInterface
 {
@@ -20,6 +21,13 @@ public:
     void OnAppActivated(int appID);
     void OnAppExit();
     void ShowPreviousUI();
+    // add by fanqiang
+    void OnStartDeviceDiscovery();
+    void OnDeviceChosen(std::string name, std::string id);
+    void OnFindApplications(std::string name, std::string id);
+    void getDeviceList(std::vector<DeviceData>& vDevice);
+    void OnDeviceSelect(std::string id);
+
 
     void IconnectToVS(IMessageInterface * pMsgHandler, std::string sIP, int iPort);
     void IdelConnectToVS();
@@ -36,10 +44,14 @@ private:
     void newAppRegistered(Json::Value jsonObj);
     void appUnregistered(Json::Value jsonObj);
 
+    // add by fanqiang
+    void updateDeiveList(Json::Value jsonObj);
 private:
     UIInterface *m_pUIManager;
     std::vector <AppData *> m_AppDatas;
     AppData * m_pCurApp;
+    std::vector <DeviceData> m_devicelist;
+
 };
 
 #endif // APPLIST_H

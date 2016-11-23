@@ -346,6 +346,32 @@ void SDLConnector::OnSetMediaClockTimerResponse(int iCode,int iRequestId)
     }
 }
 
+void SDLConnector::OnStartDeviceDiscovery()
+{
+    Json::Value params;
+    m_Base.sendNotification("BasicCommunication.OnStartDeviceDiscovery", params);
+}
+
+void SDLConnector::OnDeviceChosen(std::string name, std::string id)
+{
+    Json::Value params;
+    if(!name.empty())
+        params["name"] = name;
+    if(!id.empty())
+        params["id"] = id;
+    m_Base.sendNotification("BasicCommunication.OnDeviceChosen", params);
+}
+
+void SDLConnector::OnFindApplications(std::string name, std::string id)
+{
+    Json::Value params;
+    if(!name.empty())
+        params["name"] = name;
+    if(!id.empty())
+        params["id"] = id;
+    m_Base.sendNotification("BasicCommunication.OnFindApplications", params);
+}
+
 void SDLConnector::OnPerformAudioPassThru(int appID, int performaududiopassthruID, int code)
 {
     _stopPerformAudioPassThru(appID);

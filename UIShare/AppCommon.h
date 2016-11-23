@@ -23,9 +23,9 @@ enum ShowType
     ID_SCROLLMSG,
     ID_SLIDER,
     ID_NOTIFY,
-    ID_MEDIACLOCK,
-    ID_MAIN,
+    ID_MEDIACLOCK,    
     ID_VIDEOSTREAM,
+    ID_MAIN,
     ID_UI_MAX
 };
 

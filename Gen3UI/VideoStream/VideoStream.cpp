@@ -104,21 +104,21 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
 VideoStream::~VideoStream()
 {
     for (int i = 0;i != 4;++i) {
-        delete m_pBtnImage[i];
+        //delete m_pBtnImage[i];
     }
 
 #ifdef VIDEO_STREAM_WIDGET
     delete m_VideoPlayer;
 #else
     if (pAVFormatContext != NULL) {
-        avformat_free_context(pAVFormatContext);
+        //avformat_free_context(pAVFormatContext);
         pAVFormatContext = NULL;
     }
     if (pAVFrame != NULL) {
-        av_frame_free(&pAVFrame);
+        //av_frame_free(&pAVFrame);
     }
     if (pSwsContext != NULL) {
-        sws_freeContext(pSwsContext);
+        //sws_freeContext(pSwsContext);
     }
     //delete m_Screen;
 #endif
@@ -126,7 +126,6 @@ VideoStream::~VideoStream()
 
 void VideoStream::setUrl(QString url)
 {
-    LOGI("url:%s",url.toUtf8().data());
     m_str_url = url;
 #ifdef VIDEO_STREAM_WIDGET
     m_VideoPlayer->setMedia(QMediaContent(QNetworkRequest(QUrl(url))));
@@ -330,7 +329,7 @@ void VideoStream::stopStream()
     LOGI("sws_freeContext");
     sws_freeContext(pSwsContext);
 #endif
-//    this->hide();
+    //this->hide();
 }
 
 #ifndef VIDEO_STREAM_WIDGET

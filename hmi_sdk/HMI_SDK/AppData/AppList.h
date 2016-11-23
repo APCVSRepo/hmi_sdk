@@ -4,6 +4,7 @@
 #include "AppListInterface.h"
 #include "AppData.h"
 #include "UIInterface.h"
+#include <QMutex>
 
 class AppData;
 class AppList : public IMessageInterface, public AppListInterface
@@ -40,6 +41,7 @@ private:
     UIInterface *m_pUIManager;
     std::vector <AppData *> m_AppDatas;
     AppData * m_pCurApp;
+    QMutex current_app_lock;
 };
 
 #endif // APPLIST_H

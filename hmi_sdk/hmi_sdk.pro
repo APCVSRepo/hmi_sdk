@@ -100,12 +100,12 @@ win32:!wince{
 DEFINES +=WIN32
 INCLUDEPATH += $$PWD/../Include/pthread \
 
-DEFINES += SDL_CALL_BACK \
-           SDL_SUPPORT_LIB
-LIBS +=  $$PWD/Library/win32/sdl/smartDeviceLinkCore.lib
-sdllib.path=$$OUT_PWD/../bin
-sdllib.files=$$PWD/Library/win32/sdl/*.*
-INSTALLS+=sdllib
+#DEFINES += SDL_CALL_BACK \
+#           SDL_SUPPORT_LIB
+#LIBS +=  $$PWD/Library/win32/sdl/smartDeviceLinkCore.lib
+#sdllib.path=$$OUT_PWD/../bin
+#sdllib.files=$$PWD/Library/win32/sdl/*.*
+#INSTALLS+=sdllib
 
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVC2.lib
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVCE2.lib
@@ -129,6 +129,8 @@ INSTALLS+=ffmpeg
 qt_dll.path=$$OUT_PWD/../bin
 qt_dll.files=$$QMAKE_LIBDIR_QT/bin/*.dll
 INSTALLS +=qt_dll
+
+LIBS +=  -L$$OUT_PWD/../bin/UILib -lGen3UI
 }
 
 
@@ -155,10 +157,10 @@ qt_dll.path=$$OUT_PWD/../bin
 qt_dll.files=$$QMAKE_LIBDIR_QT/*.dll
 INSTALLS +=qt_dll
 
-DEFINES += SDL_CALL_BACK
+#DEFINES += SDL_CALL_BACK
 
-DEFINES += SDL_SUPPORT_LIB \
-            OS_WIN32
+DEFINES +=  OS_WIN32\
+#            SDL_SUPPORT_LIB
 sdl_lib.path=$$OUT_PWD/../bin
 sdl_lib.files=$$PWD/Library/ce/sdl/*.*
 INSTALLS +=sdl_lib

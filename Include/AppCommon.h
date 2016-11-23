@@ -14,6 +14,7 @@ enum MenuCmdId
 enum ShowType
 {
     ID_APPLINK = 0,
+    ID_DEVICEVIEW,
     ID_CHOICESET,
     ID_COMMAND,
     ID_SHOW,
@@ -24,8 +25,8 @@ enum ShowType
     ID_SLIDER,
     ID_NOTIFY,
     ID_MEDIACLOCK,
-    ID_MAIN,
     ID_VIDEOSTREAM,
+    ID_MAIN,
     ID_UI_MAX
 };
 

@@ -66,6 +66,16 @@ void CAppButton::setFuncId(int id)
     m_FuncId = id;
 }
 
+void CAppButton::setStringId(std::string strId)
+{
+    m_strId = strId;
+}
+
+std::string CAppButton::getStrId()
+{
+    return m_strId;
+}
+
 int CAppButton::getFuncId()
 {
     return m_FuncId;

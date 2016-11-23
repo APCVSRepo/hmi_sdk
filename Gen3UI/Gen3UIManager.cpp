@@ -42,7 +42,7 @@
 #include <QDesktopWidget>
 #include "ScrollableMessage/ScollMsgView.h"
 #include "SliderView/SliderView.h"
-
+#include "AppListView/DeviceListView.h"
 #include "VideoStream/JniNative.h"
 
 CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
@@ -57,12 +57,11 @@ CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
 CGen3UIManager::~CGen3UIManager()
 {
     for (int i = 0; i < ID_UI_MAX; ++i) {
-        if (m_vUIWidgets[i]) {
+        if (m_vUIWidgets[i]) {            
             delete m_vUIWidgets[i];
             m_vUIWidgets[i] = NULL;
         }
     }
-
 
 #ifdef SDL_SUPPORT_LIB
     //delete m_MspVR;
@@ -79,18 +78,21 @@ void CGen3UIManager::initAppHMI()
 
     MainWindow * pMain = new MainWindow(m_pList);
     QWidget* pParent = pMain->CenterWidget();
-    m_vUIWidgets[ID_MAIN] = pMain;
+
     m_vUIWidgets[ID_APPLINK] = new CAppListView(m_pList, pParent);
-    m_vUIWidgets[ID_ALERT]=new AlertView(m_pList, pParent);
-    //m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pList, pParent);
-    //m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pList, pParent);
     m_vUIWidgets[ID_CHOICESET] = new CChoiceSet(m_pList, pParent);
     m_vUIWidgets[ID_COMMAND]=new CCommandView(m_pList, pParent);
-    m_vUIWidgets[ID_SCROLLMSG] = new CScollMsgView(m_pList, pParent);
     m_vUIWidgets[ID_SHOW] = new CMediaShow(m_pList,pParent);
-    //m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
+    m_vUIWidgets[ID_ALERT]=new AlertView(m_pList, pParent);
+    m_vUIWidgets[ID_AUDIOPASSTHRU]=NULL;//new CAudioPassThru(m_pList, pParent);
+    m_vUIWidgets[ID_CHOICESETVR]=NULL;//new CChoicesetVR(m_pList, pParent);
+    m_vUIWidgets[ID_SCROLLMSG] = new CScollMsgView(m_pList, pParent);
     m_vUIWidgets[ID_SLIDER] = new CSliderView(m_pList, pParent);
+    m_vUIWidgets[ID_NOTIFY]=NULL;//new Notify(pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;
+    m_vUIWidgets[ID_MAIN] = pMain;
+    m_vUIWidgets[ID_DEVICEVIEW] = new CDeviceListView(m_pList, pParent);
+
 
 #ifndef WINCE
 #ifdef ANDROID
@@ -104,6 +106,7 @@ void CGen3UIManager::initAppHMI()
 #else
     m_vUIWidgets[ID_VIDEOSTREAM] = new CeVideoStream(m_pList,pMain);
 #endif
+
 
     for (int i = 0; i < ID_UI_MAX; ++i) {
         if (m_vUIWidgets[i] != NULL) {

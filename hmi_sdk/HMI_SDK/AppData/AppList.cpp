@@ -52,7 +52,10 @@ void AppList::ShowPreviousUI()
 
 AppDataInterface* AppList::getActiveApp()
 {
-    return m_pCurApp;
+    current_app_lock.lock();
+    AppDataInterface *ptemp = m_pCurApp;
+    current_app_lock.unlock();
+    return ptemp;
 }
 
 Result AppList::onRequest(Json::Value jsonObj)
@@ -95,7 +98,7 @@ Result AppList::recvFromServer(Json::Value jsonObj)
         }else if (str_method == "VR.VRExitApp") {
             m_pUIManager->tsSpeak(ID_EXIT, "退出"+ m_pCurApp->m_szAppName);
             m_pUIManager->onAppShow(ID_APPLINK);
-        }else if (str_method == "Navigation.StopStream") {
+        }else if (str_method == "Navigation.StopStream") {            
             m_pUIManager->onVideoStreamStop();
             ShowPreviousUI();
         }else if (str_method == "VR.VRSwitchApp") {
@@ -217,6 +220,7 @@ Result AppList::recvFromServer(Json::Value jsonObj)
 //}
 void AppList::newAppRegistered(Json::Value jsonObj)
 {
+    LOGI(jsonObj.toStyledString().c_str());
     AppData * pData = new AppData();
     pData->setUIManager(m_pUIManager);
     pData->m_iAppID = jsonObj["params"]["application"]["appID"].asInt();
@@ -253,6 +257,7 @@ void AppList::OnAppActivated(int iAppID)
     if (m_pCurApp != NULL)
         ToSDL->OnAppOut(m_pCurApp->m_iAppID);
     m_pCurApp = pData;
+    LOGI("---");
     ToSDL->OnAppActivated(iAppID);
     m_pUIManager->onAppShow(m_pCurApp->getCurUI());
     m_pUIManager->onAppActive();
@@ -262,6 +267,7 @@ void AppList::OnAppExit()
 {
     ToSDL->OnAppExit(m_pCurApp->m_iAppID);
     m_pCurApp = NULL;
+    LOGI("---");
     m_pUIManager->onAppShow(ID_APPLINK);
     m_pUIManager->onAppStop();
 }
@@ -272,7 +278,6 @@ void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vA
         vAppIDs.push_back(m_AppDatas[i]->m_iAppID);
         vAppNames.push_back(m_AppDatas[i]->m_szAppName);
         vIconPath.push_back(m_AppDatas[i]->m_strAppIconFilePath);
-        LOGI("---%s",m_AppDatas[i]->m_strAppIconFilePath.c_str());
     }
 }
 
@@ -291,14 +296,17 @@ void AppList::appUnregistered(Json::Value jsonObj)
     std::vector <AppData *>::iterator i;
     for (i = m_AppDatas.begin(); i != m_AppDatas.end(); ++i) {
         if (appID == (*i)->m_iAppID) {
+            current_app_lock.lock();
             if (m_pCurApp) {
                 if (m_pCurApp->m_iAppID == appID) {
                     m_pCurApp = NULL;
+                    LOGI("---%x",m_pCurApp);
                     //m_pUIManager->onVideoStreamStop();
                 }
             }
             delete *i;
             m_AppDatas.erase(i);
+            current_app_lock.unlock();
             break;
         }
     }

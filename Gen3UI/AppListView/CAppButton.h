@@ -17,6 +17,7 @@ public:
     std::string getStrId();
 signals:
     void clickedWitchFuncId(int funcId);
+    void OnClicked(std::string strId);
 public slots:
 
 protected:

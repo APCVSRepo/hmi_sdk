@@ -28,7 +28,6 @@ public:
 
     int getCurUI();
 
-    void OnShowDeviceList();
     void OnShowCommand();
     void OnSoftButtonClick(int sbID, int mode,std::string strName = "");
     void OnCommandClick(int cmdID);

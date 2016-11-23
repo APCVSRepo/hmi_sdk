@@ -224,11 +224,6 @@ int AppData::getCurUI()
     return ID_MAIN;
 }
 
-void AppData::OnShowDeviceList()
-{
-    ShowUI(ID_DEVICEVIEW);
-}
-
 void AppData::OnShowCommand()
 {
     ShowUI(ID_COMMAND);

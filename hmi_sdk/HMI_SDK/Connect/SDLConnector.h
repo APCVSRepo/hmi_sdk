@@ -102,6 +102,13 @@ public:
     void OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y);
 
     void OnSetMediaClockTimerResponse(int iCode,int iRequestId);
+
+    // add by fanqiang
+    // search device
+    void OnStartDeviceDiscovery(void);
+    void OnDeviceChosen(std::string name, std::string id);
+    void OnFindApplications(std::string name, std::string id);
+
 private:
     void _onButtonClickAction(std::string, std::string, int);
     void _stopPerformAudioPassThru(int);

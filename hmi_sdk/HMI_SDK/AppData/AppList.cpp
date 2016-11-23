@@ -41,6 +41,11 @@ void AppList::setUIManager(UIInterface *pUIManager)
         m_pCurApp->setUIManager(pUIManager);
 }
 
+void AppList::OnShowDeviceList()
+{
+    m_pUIManager->onAppShow(ID_DEVICEVIEW);
+}
+
 void AppList::ShowPreviousUI()
 {
     if (m_pCurApp) {
@@ -48,6 +53,44 @@ void AppList::ShowPreviousUI()
             return;
     }
     m_pUIManager->onAppShow(ID_APPLINK);
+}
+
+void AppList::OnStartDeviceDiscovery()
+{
+    ToSDL->OnStartDeviceDiscovery();
+}
+
+void AppList::OnDeviceChosen(std::string name, std::string id)
+{
+    ToSDL->OnDeviceChosen(name, id);
+}
+
+void AppList::OnFindApplications(std::string name, std::string id)
+{
+    ToSDL->OnFindApplications(name, id);
+}
+
+void AppList::getDeviceList(std::vector<DeviceData> &vDevice)
+{
+    vDevice = m_devicelist;
+}
+
+void AppList::OnDeviceSelect(std::string id)
+{
+    DeviceData data;
+    int i;
+    for (i = 0; i < m_devicelist.size(); ++i) {
+        data = m_devicelist[i];
+        if (data.id == id)
+            break;
+    }
+
+    if (i >= m_devicelist.size()) {
+        return;
+    }
+
+    ToSDL->OnDeviceChosen(data.name, data.id);
+    ToSDL->OnFindApplications(data.name, data.id);
 }
 
 AppDataInterface* AppList::getActiveApp()
@@ -150,7 +193,12 @@ Result AppList::recvFromServer(Json::Value jsonObj)
             ToSDL->OnVRCancelRecord();
             m_pUIManager->OnEndAudioPassThru();
             return RESULT_SUCCESS;
-        } else {
+        }else if (str_method == "BasicCommunication.UpdateDeviceList") {
+            // add by fanqiang
+            updateDeiveList(jsonObj);
+            m_pUIManager->onAppShow(ID_APPLINK); //xxxxxx
+        }
+        else {
             if (m_pCurApp)
                 return m_pCurApp->recvFromServer(jsonObj);
             else
@@ -309,6 +357,19 @@ void AppList::appUnregistered(Json::Value jsonObj)
             current_app_lock.unlock();
             break;
         }
+    }
+}
+
+void AppList::updateDeiveList(Json::Value jsonObj)
+{
+    m_devicelist.clear();
+    int size = jsonObj["params"]["deviceList"].size();
+    for(int i = 0; i < size; i++){
+        DeviceData data;
+        Json::Value device = jsonObj["params"]["deviceList"][i];
+        data.name = device["name"].asString();
+        data.id = device["id"].asString();
+        m_devicelist.push_back(data);
     }
 }
 

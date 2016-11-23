@@ -11,7 +11,7 @@ win32:QT += axcontainer
 #DEFINES +=VIDEO_STREAM_WIDGET
 
 DEFINES += __STDINT_MACROS  #for ffmpeg
-CONFIG  += wince  ##wince
+#CONFIG  += wince  ##wince
 
 TARGET = AppLink_HMI
 TEMPLATE = app
@@ -130,7 +130,7 @@ qt_dll.path=$$OUT_PWD/../bin
 qt_dll.files=$$QMAKE_LIBDIR_QT/bin/*.dll
 INSTALLS +=qt_dll
 
-LIBS +=  -L$$OUT_PWD/../bin/UILib -lGen3UI
+#LIBS +=  -L$$OUT_PWD/../bin/UILib -lGen3UI
 }
 
 

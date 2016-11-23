@@ -92,4 +92,5 @@ void CAppButton::mouseReleaseEvent(QMouseEvent *e)
     //MenuButton::mouseReleaseEvent(e);
     setActive(false);
     emit clickedWitchFuncId(m_FuncId);
+    emit OnClicked(m_strId);
 }

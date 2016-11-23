@@ -12,14 +12,14 @@ public:
     explicit CDeviceListView(AppListInterface * pList,QWidget *parent = 0);
     ~CDeviceListView();
 
-    void InsertDevice(int index,int funcId,QString text,QString on,QString off,bool bPaint = false);
+    void InsertDevice(int index,std::string DeviceId,QString text,QString on,QString off,bool bPaint = false);
     void DeleteDevice(int index);
 protected:
     virtual void showEvent(QShowEvent * e);
 signals:
 
 public slots:
-    void onDeviceSelected(int id);
+    void onDeviceSelected(std::string strId);
 
 private:
     QList<CAppButton*> m_pDevices;

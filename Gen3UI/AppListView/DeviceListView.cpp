@@ -21,14 +21,18 @@ CDeviceListView::CDeviceListView(AppListInterface * pList,QWidget *parent)
 
     m_pList = pList;
 
+
+    //QString childText[2]={"Find New App","App Setting"};
     QString appsheet_on[2] = {":/images/phonechild_on.png",
                               ":/images/listchild_on.png"};
     QString appsheet_off[2] = {":/images/phonechild_off.png",
                                ":/images/listchild_off.png"};
-    //QString childText[2]={"Find New App","App Setting"};
-    /*
-    QString childText[2] = {"连接设备","连接移动应用程序"};
+
+    QString childText[2] = {"返回","连接移动应用程序"};
     int funcId[2] = {-1,-2};
+    InsertDevice(0,"return",childText[0],
+                   appsheet_on[0],appsheet_off[0]);
+    /*
     for (int i = 0; i < 2; ++i) {
         InsertChildApp(i,funcId[i],childText[i],
                        appsheet_on[i],appsheet_off[i]);
@@ -43,12 +47,18 @@ CDeviceListView::~CDeviceListView()
     m_pDevices.clear();
 }
 
-void CDeviceListView::onDeviceSelected(int id)
+void CDeviceListView::onDeviceSelected(std::string strId)
 {
-    //m_pList->OnDeviceSelect(id);
+    if(strId == "return")
+    {
+        m_pList->ShowPreviousUI();
+    }
+    else {
+        m_pList->OnDeviceSelect(strId);
+    }
 }
 
-void CDeviceListView::InsertDevice(int index,int appId,QString text,
+void CDeviceListView::InsertDevice(int index,std::string DeviceId,QString text,
                                   QString on,QString off,bool bPaint)
 {
     for (int i = index; i < m_pDevices.size(); ++i) {
@@ -63,12 +73,12 @@ void CDeviceListView::InsertDevice(int index,int appId,QString text,
     int c = index%4;
     newbutton->setGeometry(5 + m_AppWidth*c, 5 + m_AppHeight*r,
                            m_AppWidth - 10, m_AppHeight - 10);
-    //newbutton->setStringId(appId);
+    newbutton->setStringId(DeviceId);
     newbutton->setIcon(on, off,bPaint);
     newbutton->setText(text);
     newbutton->show();
-    connect(newbutton, SIGNAL(clickedWitchFuncId(int)),
-            SLOT(onDeviceSelected(int)));
+    connect(newbutton, SIGNAL(OnClicked(std::string)),
+            SLOT(onDeviceSelected(std::string)));
     m_pDevices.insert(index, newbutton);
 }
 
@@ -76,8 +86,8 @@ void CDeviceListView::DeleteDevice(int index)
 {
     CAppButton *button = m_pDevices.at(index);
     m_pDevices.removeAt(index);
-    disconnect(button,SIGNAL(clickedWitchFuncId(int)),
-               this,SLOT(onDeviceSelected(int)));
+    disconnect(button,SIGNAL(OnClicked(std::string)),
+               this,SLOT(onDeviceSelected(std::string)));
     delete button;
     for (int i = index;i<m_pDevices.size();++i) {
         CAppButton *button = m_pDevices.at(i);
@@ -90,20 +100,27 @@ void CDeviceListView::DeleteDevice(int index)
 
 void CDeviceListView::showEvent(QShowEvent * e)
 {
-    std::vector<int> vAppIDs;
-    std::vector<std::string> vAppNames;
-    std::vector<std::string> vIconPath;
-    //m_pList->getDeviceList(vAppIDs, vAppNames,vIconPath);
-    int count = m_pDevices.size();
-    for (int i = 2; i < count; ++i) {
-        DeleteDevice(2);
+    std::vector<DeviceData> DeviceList;
+
+    m_pList->getDeviceList(DeviceList);
+
+    QString appsheet_on[2] = {":/images/phonechild_on.png",
+                              ":/images/listchild_on.png"};
+    QString appsheet_off[2] = {":/images/phonechild_off.png",
+                               ":/images/listchild_off.png"};
+
+    int count = DeviceList.size();
+    for (int i = 1; i < count; ++i) {
+        DeleteDevice(1);
     }
-    if (vAppIDs.size() > 0) {
-        for (int i = 0; i < vAppIDs.size(); ++i) {
-            InsertDevice(2+i,vAppIDs.at(i),
-                           vAppNames.at(i).c_str(),
-                           vIconPath.at(i).c_str(),
-                           vIconPath.at(i).c_str(),
+
+
+    if (DeviceList.size() > 0) {
+        for (int i = 0; i < DeviceList.size(); ++i) {
+            InsertDevice(1+i,DeviceList[i].id,
+                           DeviceList[i].name.c_str(),
+                           appsheet_on[0],
+                           appsheet_off[0],
                            true);
         }
     }

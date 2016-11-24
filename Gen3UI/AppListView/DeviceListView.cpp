@@ -29,7 +29,6 @@ CDeviceListView::CDeviceListView(AppListInterface * pList,QWidget *parent)
                                ":/images/listchild_off.png"};
 
     QString childText[2] = {"返回","连接移动应用程序"};
-    int funcId[2] = {-1,-2};
     InsertDevice(0,"return",childText[0],
                    appsheet_on[0],appsheet_off[0]);
     /*
@@ -98,22 +97,30 @@ void CDeviceListView::DeleteDevice(int index)
     }
 }
 
+void CDeviceListView::ClearDeviceList()
+{
+    for(int i = 0;i < m_pDevices.size();++i)
+    {
+        delete m_pDevices[i];
+    }
+    m_pDevices.clear();
+}
+
 void CDeviceListView::showEvent(QShowEvent * e)
 {
-    std::vector<DeviceData> DeviceList;
-
-    m_pList->getDeviceList(DeviceList);
+    ClearDeviceList();
 
     QString appsheet_on[2] = {":/images/phonechild_on.png",
                               ":/images/listchild_on.png"};
     QString appsheet_off[2] = {":/images/phonechild_off.png",
                                ":/images/listchild_off.png"};
 
-    int count = DeviceList.size();
-    for (int i = 1; i < count; ++i) {
-        DeleteDevice(1);
-    }
+    QString childText[2] = {"返回","连接移动应用程序"};
+    InsertDevice(0,"return",childText[0],
+                   appsheet_on[0],appsheet_off[0]);
 
+    std::vector<DeviceData> DeviceList;
+    m_pList->getDeviceList(DeviceList);
 
     if (DeviceList.size() > 0) {
         for (int i = 0; i < DeviceList.size(); ++i) {

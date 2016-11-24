@@ -22,6 +22,7 @@ public slots:
     void onDeviceSelected(std::string strId);
 
 private:
+    void ClearDeviceList();
     QList<CAppButton*> m_pDevices;
 
     AppListInterface *m_pList;

@@ -57,8 +57,6 @@ public slots:
 
     void onVideoStartSlots();
     void onVideoStopSlots();
-
-    void OnAppUnregister();
 private:
     QWidget * m_vUIWidgets[ID_UI_MAX];
     int m_iCurUI;

@@ -15,6 +15,7 @@ public:
     virtual void OnEndAudioPassThru() = 0;
 
     virtual void tsSpeak(int VRID, std::string strText) = 0;
+    virtual void ShowDeviceList() = 0;
 };
 
 #endif // UIINTERFACE_H

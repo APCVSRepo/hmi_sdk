@@ -48,13 +48,11 @@ CDeviceListView::~CDeviceListView()
 
 void CDeviceListView::onDeviceSelected(std::string strId)
 {
-    if(strId == "return")
+    if(strId != "return")
     {
-        m_pList->ShowPreviousUI();
-    }
-    else {
         m_pList->OnDeviceSelect(strId);
     }
+    m_pList->ShowPreviousUI();
 }
 
 void CDeviceListView::InsertDevice(int index,std::string DeviceId,QString text,

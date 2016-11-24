@@ -40,6 +40,10 @@ public:
     void tsSpeak(int VRID, std::string strText);
 
     void OnEndAudioPassThru();
+
+    // add by fanqiang
+    void ShowDeviceList();
+
 signals:
     //void finishMainHMI();
     void onAppShowSignal(int type);

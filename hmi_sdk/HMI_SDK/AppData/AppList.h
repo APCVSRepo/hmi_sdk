@@ -30,7 +30,6 @@ public:
     void getDeviceList(std::vector<DeviceData>& vDevice);
     void OnDeviceSelect(std::string id);
 
-
     void IconnectToVS(IMessageInterface * pMsgHandler, std::string sIP, int iPort);
     void IdelConnectToVS();
 

@@ -220,7 +220,8 @@ void CGen3UIManager::AppShowSlot(int type)
             CMediaShow *pShow = (CMediaShow *)m_vUIWidgets[ID_SHOW];
             pShow->UpdateMediaColckTimer();
         }
-    } else {
+    }
+    else {
         if (m_iCurUI != ID_MAIN) {
 
             if (m_iCurUI == ID_VIDEOSTREAM) {
@@ -295,4 +296,13 @@ void CGen3UIManager::tsSpeak(int VRID, std::string strText)
 void CGen3UIManager::OnEndAudioPassThru()
 {
     //((CAudioPassThru *)m_vUIWidgets[ID_AUDIOPASSTHRU])->onButtonClickedSlots(PERFORMAUDIOPASSTHRU_CANCEL);
+}
+
+void CGen3UIManager::ShowDeviceList()
+{
+    if(m_iCurUI == ID_DEVICEVIEW)
+    {
+        if(m_vUIWidgets[m_iCurUI])
+            m_vUIWidgets[m_iCurUI]->show();
+    }
 }

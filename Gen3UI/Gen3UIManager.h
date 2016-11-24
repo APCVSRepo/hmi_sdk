@@ -33,6 +33,7 @@ public:
     void onAppStop();
     //hmi
     void onAppShow(int type);
+    void onAppUnregister(int appId);
 
     void onVideoStreamStart();
     void onVideoStreamStop();
@@ -44,6 +45,7 @@ signals:
     //void finishMainHMI();
     void onAppShowSignal(int type);
     void onAppActivatedSignal(AppDataInterface* pInterface);
+    void OnAppUnregisterSignal(int appId);
 
     void onVideoStartSignal();
     void onVideoStopSignal();
@@ -51,12 +53,12 @@ signals:
 public slots:
     void initAppHMI();
     void AppShowSlot(int type);
-
+    void OnAppUnregisterSlot(int appId);
 
     void onVideoStartSlots();
     void onVideoStopSlots();
 
-
+    void OnAppUnregister();
 private:
     QWidget * m_vUIWidgets[ID_UI_MAX];
     int m_iCurUI;

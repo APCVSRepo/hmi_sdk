@@ -95,9 +95,7 @@ void AppList::OnDeviceSelect(std::string id)
 
 AppDataInterface* AppList::getActiveApp()
 {
-    current_app_lock.lock();
     AppDataInterface *ptemp = m_pCurApp;
-    current_app_lock.unlock();
     return ptemp;
 }
 
@@ -136,8 +134,8 @@ Result AppList::recvFromServer(Json::Value jsonObj)
             newAppRegistered(jsonObj);
             m_pUIManager->onAppShow(ID_APPLINK);
         }else if (str_method == "BasicCommunication.OnAppUnregistered") {
-            appUnregistered(jsonObj);
-            m_pUIManager->onAppShow(ID_APPLINK);
+            int appID = jsonObj["params"]["appID"].asInt();
+            m_pUIManager->onAppUnregister(appID);
         }else if (str_method == "VR.VRExitApp") {
             m_pUIManager->tsSpeak(ID_EXIT, "退出"+ m_pCurApp->m_szAppName);
             m_pUIManager->onAppShow(ID_APPLINK);
@@ -337,16 +335,13 @@ void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vA
     }
 }
 
-void AppList::appUnregistered(Json::Value jsonObj)
+void AppList::appUnregistered(int appId)
 {
-    int appID = jsonObj["params"]["appID"].asInt();
-
     std::vector <AppData *>::iterator i;
     for (i = m_AppDatas.begin(); i != m_AppDatas.end(); ++i) {
-        if (appID == (*i)->m_iAppID) {
-            current_app_lock.lock();
+        if (appId == (*i)->m_iAppID) {
             if (m_pCurApp) {
-                if (m_pCurApp->m_iAppID == appID) {
+                if (m_pCurApp->m_iAppID == appId) {
                     m_pCurApp = NULL;
                     LOGI("---%x",m_pCurApp);
                     //m_pUIManager->onVideoStreamStop();
@@ -354,10 +349,16 @@ void AppList::appUnregistered(Json::Value jsonObj)
             }
             delete *i;
             m_AppDatas.erase(i);
-            current_app_lock.unlock();
             break;
         }
     }
+    m_pUIManager->onAppShow(ID_APPLINK);
+}
+
+void AppList::appUnregistered(Json::Value jsonObj)
+{
+
+
 }
 
 void AppList::updateDeiveList(Json::Value jsonObj)

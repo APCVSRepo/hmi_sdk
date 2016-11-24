@@ -125,6 +125,7 @@ void CGen3UIManager::initAppHMI()
     connect(this,SIGNAL(onAppShowSignal(int)),this,SLOT(AppShowSlot(int)));
     connect(this,SIGNAL(onVideoStartSignal()),this,SLOT(onVideoStartSlots()));
     connect(this,SIGNAL(onVideoStopSignal()),this,SLOT(onVideoStopSlots()));
+    connect(this,SIGNAL(OnAppUnregisterSignal(int)),this,SLOT(OnAppUnregisterSlot(int)));
 
     //emit finishMainHMI();
 }
@@ -146,6 +147,16 @@ void CGen3UIManager::onAppShow(int type)
 {
     if ((type >= 0) && (type < ID_UI_MAX))
         emit onAppShowSignal(type);
+}
+
+void CGen3UIManager::onAppUnregister(int appId)
+{
+    emit OnAppUnregisterSignal(appId);
+}
+
+void CGen3UIManager::OnAppUnregisterSlot(int appId)
+{
+    m_pList->appUnregistered(appId);
 }
 
 void CGen3UIManager::onVideoStreamStart()
@@ -220,7 +231,16 @@ void CGen3UIManager::AppShowSlot(int type)
             CMediaShow *pShow = (CMediaShow *)m_vUIWidgets[ID_SHOW];
             pShow->UpdateMediaColckTimer();
         }
-    } else {
+    }
+    /*
+    else if(ID_DEVICEVIEW == type)
+    {
+        if(m_iCurUI == ID_DEVICEVIEW)
+        {
+            m_vUIWidgets[m_iCurUI]->show();
+        }
+    }*/
+    else {
         if (m_iCurUI != ID_MAIN) {
 
             if (m_iCurUI == ID_VIDEOSTREAM) {

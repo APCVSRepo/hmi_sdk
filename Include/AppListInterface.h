@@ -29,6 +29,7 @@ public:
     virtual void getDeviceList(std::vector<DeviceData>& vDevice) = 0;
     virtual void OnStartDeviceDiscovery() = 0;
 
+    virtual void appUnregistered(int appId) = 0;
 
     virtual void IconnectToVS(IMessageInterface * pMsgHandler, std::string sIP, int iPort) = 0;
     virtual void IdelConnectToVS() = 0;

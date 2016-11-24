@@ -30,6 +30,7 @@ public:
     void getDeviceList(std::vector<DeviceData>& vDevice);
     void OnDeviceSelect(std::string id);
 
+    void appUnregistered(int appId);
 
     void IconnectToVS(IMessageInterface * pMsgHandler, std::string sIP, int iPort);
     void IdelConnectToVS();
@@ -52,7 +53,6 @@ private:
     UIInterface *m_pUIManager;
     std::vector <AppData *> m_AppDatas;
     AppData * m_pCurApp;
-    QMutex current_app_lock;
     std::vector <DeviceData> m_devicelist;
 };
 

@@ -47,6 +47,7 @@ CAppListView::~CAppListView()
 void CAppListView::onChildAppSelected(int funcId)
 {
     if (-1 == funcId) {
+        LOGI("------");
         m_pList->OnStartDeviceDiscovery();
         m_pList->OnShowDeviceList();
     }else if (-2 == funcId) {
@@ -98,6 +99,7 @@ void CAppListView::DeleteChildApp(int index)
 
 void CAppListView::showEvent(QShowEvent * e)
 {
+    LOGI("------");
     std::vector<int> vAppIDs;
     std::vector<std::string> vAppNames;
     std::vector<std::string> vIconPath;

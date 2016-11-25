@@ -155,15 +155,15 @@ INSTALLS +=qt_dll
 unix:!android{
 ffmpeg.path=$$OUT_PWD/../bin
 #linux 64bit
-ffmpeg.files=$$PWD/Library/linux/ffmpeg/*.*
+#ffmpeg.files=$$PWD/Library/linux/ffmpeg/*.*
 #linux 32bit
-#ffmpeg.files=$$PWD/Library/linux/ffmpeg_32/*.*
+ffmpeg.files=$$PWD/Library/linux/ffmpeg_32/*.*
 INSTALLS+=ffmpeg
 
 #linux 64bit
-LIBS += -L$$PWD/Library/linux/ffmpeg  -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
+#LIBS += -L$$PWD/Library/linux/ffmpeg  -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
 #linux 32bit
-#LIBS += -L$$PWD/Library/linux/ffmpeg_32  -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
+LIBS += -L$$PWD/Library/linux/ffmpeg_32  -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
 }
 ################################for wince
 wince{

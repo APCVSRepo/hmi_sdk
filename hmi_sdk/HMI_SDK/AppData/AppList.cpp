@@ -193,7 +193,7 @@ Result AppList::recvFromServer(Json::Value jsonObj)
         }else if (str_method == "BasicCommunication.UpdateDeviceList") {
             // add by fanqiang
             updateDeiveList(jsonObj);
-            //m_pUIManager->onAppShow(ID_DEVICEVIEW); //xxxxxx
+            m_pUIManager->ShowDeviceList();
         }
         else {
             if (m_pCurApp)

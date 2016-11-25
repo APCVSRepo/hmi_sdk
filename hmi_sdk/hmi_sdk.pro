@@ -102,7 +102,7 @@ INCLUDEPATH += $$PWD/../Include/pthread \
 
 #DEFINES += SDL_CALL_BACK \
 #           SDL_SUPPORT_LIB
-#LIBS +=  $$PWD/Library/win32/sdl/smartDeviceLinkCore.lib
+LIBS +=  $$PWD/Library/win32/sdl/smartDeviceLinkCore.lib
 #sdllib.path=$$OUT_PWD/../bin
 #sdllib.files=$$PWD/Library/win32/sdl/*.*
 #INSTALLS+=sdllib
@@ -157,10 +157,10 @@ qt_dll.path=$$OUT_PWD/../bin
 qt_dll.files=$$QMAKE_LIBDIR_QT/*.dll
 INSTALLS +=qt_dll
 
-#DEFINES += SDL_CALL_BACK
+DEFINES += SDL_CALL_BACK
 
 DEFINES +=  OS_WIN32\
-#            SDL_SUPPORT_LIB
+            SDL_SUPPORT_LIB
 sdl_lib.path=$$OUT_PWD/../bin
 sdl_lib.files=$$PWD/Library/ce/sdl/*.*
 INSTALLS +=sdl_lib

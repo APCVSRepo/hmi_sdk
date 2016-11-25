@@ -57,7 +57,7 @@ public:
     virtual void OnSliderResponse( int code, int sliderPosition) = 0;
     virtual void OnTTSSpeek(int code) = 0;
     virtual void OnPerformAudioPassThru(int code) = 0;
-    virtual void OnPerformInteraction(int code, int choiceID) = 0;
+    virtual void OnPerformInteraction(int code, int choiceID,bool bVR = false) = 0;
     virtual void OnMediaClock(int code)=0;
 
     virtual void OnMenuBtnClick(std::string btnText) = 0;

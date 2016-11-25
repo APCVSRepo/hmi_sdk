@@ -51,8 +51,7 @@ CChoiceSet::CChoiceSet(AppListInterface *pList,QWidget *parent) :
 
 
     m_pChoiceVR = new CChoiceSetVR(this);
-    connect(m_pChoiceVR,SIGNAL(pressed()),
-            SLOT(OnChoiceVRPressed()));
+    connect(m_pChoiceVR,SIGNAL(pressed()),SLOT(OnChoiceVRPressed()));
     m_pChoiceVR->hide();
 }
 
@@ -71,7 +70,7 @@ void CChoiceSet::showEvent(QShowEvent * e)
 {
     if (AppControl) {
         Json::Value jsonData = AppControl->getInteractionJson();
-        Json::Value jsonChoice= jsonData["Choiceset"];
+        Json::Value jsonChoice= jsonData["Choiceset"]["params"];
 
         if (jsonChoice.isMember("interactionLayout") && jsonChoice.isMember("vrHelp")) {
             m_iInteractionMode = BOTH;
@@ -154,7 +153,9 @@ void CChoiceSet::showEvent(QShowEvent * e)
 void CChoiceSet::OnTimeOut()
 {
     m_pTimer->stop();
-    AppControl->OnPerformInteraction(PERFORMINTERACTION_TIMEOUT, 0);
+    m_pChoiceVR->hide();
+    AppControl->OnPerformInteraction(PERFORMINTERACTION_TIMEOUT,0,true);
+    AppControl->OnPerformInteraction(PERFORMINTERACTION_TIMEOUT,0);
 }
 
 void CChoiceSet::OnListItemClicked(int iChoiceId)
@@ -185,6 +186,7 @@ void CChoiceSet::OnChoiceVRPressed()
         m_pTimer->stop();
         AppControl->OnPerformInteraction(RESULT_ABORTED, 0);
     } else {
+        AppControl->OnPerformInteraction(PERFORMINTERACTION_TIMEOUT, 0,true);
         m_pTopText->show();
         m_pListView->show();
     }

@@ -116,7 +116,6 @@ Json::Value Channel::ReadSpecifyJson(const char* fileName)
 #else
     ::sprintf(szResult, "%s/%s", szPath, fileName);
 #endif
-    LOGD("szResult=%s",szResult);
 
     //staticResult
     std::ifstream ifs;
@@ -145,7 +144,7 @@ void Channel::onReceiveData(void * pData, int iLength)
 
 void Channel::onMessage(Json::Value &jsonObj)
 {
-    LOGI("%s:receive:%s",m_sComponentName.c_str(),jsonObj.toStyledString().data());
+    //LOGI("%s:receive:%s",m_sComponentName.c_str(),jsonObj.toStyledString().data());
     bool run = false;
     // id
     if (jsonObj.isMember("id")) {
@@ -281,8 +280,7 @@ std::string Channel::MethodName(std::string _mode,Json::Value _method)
     }
     mode = mms.erase(pos);
     if (mode == _mode) {
-      method = mms.erase(0,pos+1);
-      LOGI("find method:%s",method.c_str());
+      method = mms.erase(0,pos+1);\
     } else {
         LOGE("mode(%s) is not match mode(%s)",mode.c_str(),_mode.c_str());
     }

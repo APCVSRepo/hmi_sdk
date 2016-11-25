@@ -106,7 +106,6 @@ void CDeviceListView::ClearDeviceList()
 
 void CDeviceListView::showEvent(QShowEvent * e)
 {
-    LOGI("------");
     ClearDeviceList();
 
     QString appsheet_on[2] = {":/images/phonechild_on.png",

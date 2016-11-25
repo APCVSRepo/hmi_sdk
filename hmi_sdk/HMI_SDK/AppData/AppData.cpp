@@ -133,8 +133,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
             ToSDL->OnVRStartRecord();
             return RESULT_USER_WAIT;
         }else if (str_method == "VR.PerformInteraction") {
-            m_json_interaction["ChoicesetVR"]=jsonObj["params"];
-            LOGI(m_json_interaction.toStyledString().data());
+            m_json_interaction["ChoicesetVR"]=jsonObj;
             Json::Value initialPrompt = jsonObj["params"]["initialPrompt"];
             std::string txt = initialPrompt[0]["text"].asString();
             if (!IsTextUTF8((char *)txt.data(),txt.size()))
@@ -143,9 +142,7 @@ Result AppData::recvFromServer(Json::Value jsonObj)
             //ShowUI(ID_CHOICESETVR);
             return RESULT_USER_WAIT;
         }else if (str_method == "UI.PerformInteraction") {
-            m_json_interaction["id"]=jsonObj["id"];
-            m_json_interaction["Choiceset"]=jsonObj["params"];
-            LOGI(m_json_interaction.toStyledString().data());
+            m_json_interaction["Choiceset"]=jsonObj;
             ShowUI(ID_CHOICESET);
             return RESULT_USER_WAIT;
         }else if (str_method == "Navigation.StartStream") {
@@ -314,7 +311,7 @@ void AppData::OnPerformAudioPassThru(int code)
     ShowPreviousUI();
 }
 
-void AppData::OnPerformInteraction(int code, int choiceID)
+void AppData::OnPerformInteraction(int code, int choiceID,bool bVR)
 {
     Json::Value jsonChoice=m_json_interaction["Choiceset"];
     Json::Value jsonChoiceVR;
@@ -348,9 +345,15 @@ void AppData::OnPerformInteraction(int code, int choiceID)
         }
     }
     */
-
-    ToSDL->OnPerformInteraction(code, m_json_interaction["id"].asInt(), choiceID);
-    ShowPreviousUI();
+    if(bVR)
+    {
+        ToSDL->OnVRPerformInteraction(code, jsonChoiceVR["id"].asInt(), choiceID);
+    }
+    else
+    {
+        ToSDL->OnPerformInteraction(code, jsonChoice["id"].asInt(), choiceID);
+        ShowPreviousUI();
+    }
 }
 
 void AppData::OnMediaClock(int code)
@@ -564,10 +567,8 @@ void AppData::addCommand(Json::Value jsonObj)
     if (jsonObj["params"]["menuParams"].isMember("position"))
         tmpCommand.i_position = jsonObj["params"]["menuParams"]["position"].asInt();
 
-    LOGI("---111");
     if(jsonObj["params"].isMember("cmdIcon"))
     {
-        LOGI("---222");
         if(jsonObj["params"]["cmdIcon"]["imageType"].asString() == "DYNAMIC")
         {
             tmpCommand.i_ImageType = 2;
@@ -578,7 +579,6 @@ void AppData::addCommand(Json::Value jsonObj)
         }
 
         tmpCommand.str_ImagePath = jsonObj["params"]["cmdIcon"]["value"].asString();
-        LOGI("---333---%s",tmpCommand.str_ImagePath.c_str());
     }
 
     m_vec_scommand.push_back(tmpCommand);

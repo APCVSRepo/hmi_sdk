@@ -127,7 +127,6 @@ void AppList::onError(std::string)
 Result AppList::recvFromServer(Json::Value jsonObj)
 {
     if (jsonObj.isMember("method")) {
-       // LOGI(jsonObj.toStyledString().data());
         std::string str_method = jsonObj["method"].asString();
 
         if (str_method == "BasicCommunication.OnAppRegistered") {
@@ -266,7 +265,6 @@ Result AppList::recvFromServer(Json::Value jsonObj)
 //}
 void AppList::newAppRegistered(Json::Value jsonObj)
 {
-    LOGI(jsonObj.toStyledString().c_str());
     AppData * pData = new AppData();
     pData->setUIManager(m_pUIManager);
     pData->m_iAppID = jsonObj["params"]["application"]["appID"].asInt();
@@ -303,7 +301,6 @@ void AppList::OnAppActivated(int iAppID)
     if (m_pCurApp != NULL)
         ToSDL->OnAppOut(m_pCurApp->m_iAppID);
     m_pCurApp = pData;
-    LOGI("---");
     ToSDL->OnAppActivated(iAppID);
     m_pUIManager->onAppShow(m_pCurApp->getCurUI());
     m_pUIManager->onAppActive();
@@ -313,7 +310,6 @@ void AppList::OnAppExit()
 {
     ToSDL->OnAppExit(m_pCurApp->m_iAppID);
     m_pCurApp = NULL;
-    LOGI("---");
     m_pUIManager->onAppShow(ID_APPLINK);
     m_pUIManager->onAppStop();
 }
@@ -343,7 +339,6 @@ void AppList::appUnregistered(int appId)
             if (m_pCurApp) {
                 if (m_pCurApp->m_iAppID == appId) {
                     m_pCurApp = NULL;
-                    LOGI("---%x",m_pCurApp);
                     //m_pUIManager->onVideoStreamStop();
                 }
             }
@@ -376,11 +371,9 @@ void AppList::updateDeiveList(Json::Value jsonObj)
 
 void AppList::IconnectToVS(IMessageInterface * pMsgHandler, std::string sIP, int iPort)
 {
-    LOGI("IconnectToVS");
     ToSDL->ConnectToVideoStream(pMsgHandler,sIP,iPort);
 }
 void AppList::IdelConnectToVS()
 {
-    LOGI("IdelConnectToVS");
     ToSDL->DelConnectToVideoStream();
 }

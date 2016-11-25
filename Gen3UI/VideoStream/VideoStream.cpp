@@ -137,7 +137,6 @@ void VideoStream::av_log_default_callback(void* ptr, int level, const char* fmt,
     char fmtBuf[256]={0};
     vsprintf(fmtBuf,fmt,vl);
     va_end(vl);
-    //LOGD("level=%d:%s",level,fmtBuf);
 }
 
 #ifdef SDL_CALL_BACK

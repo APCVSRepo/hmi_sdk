@@ -196,7 +196,6 @@ void CGen3UIManager::onVideoStartSlots()
 
 void CGen3UIManager::onVideoStreamStop()
 {
-    LOGI("~~~~~~~~onVideoStreamStop");
 #ifndef WINCE
 
 #ifdef ANDROID
@@ -216,7 +215,6 @@ void CGen3UIManager::onVideoStreamStop()
 
 void CGen3UIManager::onVideoStopSlots()
 {
-    LOGI("~~~~~~~onVideoStopSlots");
 }
 
 void CGen3UIManager::AppShowSlot(int type)

@@ -85,6 +85,7 @@ public:
 
     // code: timeout or choice
     void OnPerformInteraction(int code, int performInteractionID, int choiceID);
+    void OnVRPerformInteraction(int code, int performInteractionID, int choiceID);
 
     // code: timeout sborted select someone
     void OnSliderResponse( int code, int sliderid, int sliderPosition);

@@ -280,7 +280,7 @@ std::string Channel::MethodName(std::string _mode,Json::Value _method)
     }
     mode = mms.erase(pos);
     if (mode == _mode) {
-      method = mms.erase(0,pos+1);\
+      method = mms.erase(0,pos+1);
     } else {
         LOGE("mode(%s) is not match mode(%s)",mode.c_str(),_mode.c_str());
     }

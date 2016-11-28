@@ -30,8 +30,8 @@ public:
     void stopStream();
 
     void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 public: //IMessageInterface
     Result onRequest(Json::Value) {return RESULT_SUCCESS;}
     void onNotification(Json::Value) {}

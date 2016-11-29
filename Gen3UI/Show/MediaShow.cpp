@@ -211,6 +211,7 @@ void CMediaShow::showEvent(QShowEvent * e)
                 AppBase::SetEdlidedText(m_pTimeRemainLab,fieldName["fieldText"].asString().c_str(),width()*0.3);
             }
         }
+
         if (jsonParams.isMember("graphic")) {
             QUrl graphicUrl(jsonParams["graphic"]["value"].asString().c_str());
 #if defined(WINCE)

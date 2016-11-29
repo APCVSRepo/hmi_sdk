@@ -116,9 +116,11 @@ VideoStream::~VideoStream()
     }
     if (pAVFrame != NULL) {
         av_frame_free(&pAVFrame);
+        pAVFrame = NULL;
     }
     if (pSwsContext != NULL) {
         sws_freeContext(pSwsContext);
+        pSwsContext = NULL;
     }
     //delete m_Screen;
 #endif
@@ -126,7 +128,6 @@ VideoStream::~VideoStream()
 
 void VideoStream::setUrl(QString url)
 {
-    LOGI("url:%s",url.toUtf8().data());
     m_str_url = url;
 #ifdef VIDEO_STREAM_WIDGET
     m_VideoPlayer->setMedia(QMediaContent(QNetworkRequest(QUrl(url))));
@@ -138,7 +139,6 @@ void VideoStream::av_log_default_callback(void* ptr, int level, const char* fmt,
     char fmtBuf[256]={0};
     vsprintf(fmtBuf,fmt,vl);
     va_end(vl);
-    //LOGD("level=%d:%s",level,fmtBuf);
 }
 
 #ifdef SDL_CALL_BACK
@@ -330,7 +330,7 @@ void VideoStream::stopStream()
     LOGI("sws_freeContext");
     sws_freeContext(pSwsContext);
 #endif
-//    this->hide();
+    //this->hide();
 }
 
 #ifndef VIDEO_STREAM_WIDGET

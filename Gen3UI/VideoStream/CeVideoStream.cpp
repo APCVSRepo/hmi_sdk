@@ -2,6 +2,7 @@
 #include "main.h"
 
 CeVideoStream::CeVideoStream(AppListInterface * pList, QWidget *parent) : QWidget(parent)
+  ,videoWidth(800),videoHeight(480)
 {
     setWindowFlags(Qt::FramelessWindowHint);
     if (parent) {
@@ -110,4 +111,36 @@ void CeVideoStream::onRawData(void *p, int iLength)
 void CeVideoStream::OnClickedMenuBtn()
 {
     m_pList->getActiveApp()->OnShowCommand();
+}
+
+void CeVideoStream::mousePressEvent(QMouseEvent *e)
+{
+    int x = e->x();
+    int y = e->y();
+    x = x*videoWidth/width();
+    y = y*videoHeight/height();
+    m_pList->getActiveApp()->OnVideoScreenTouch(TOUCH_START,x,y);
+}
+
+void CeVideoStream::mouseMoveEvent(QMouseEvent *e)
+{
+    int x = e->x();
+    int y = e->y();
+    x = x*videoWidth/width();
+    y = y*videoHeight/height();
+
+    m_pList->getActiveApp()->OnVideoScreenTouch(TOUCH_MOVE,x,y);
+}
+
+#define ZOOMINBTNID 3
+#define ZOOMOUTBTNID 4
+
+void CeVideoStream::mouseReleaseEvent(QMouseEvent *e)
+{
+    int x = e->x();
+    int y = e->y();
+    x = x*videoWidth/width();
+    y = y*videoHeight/height();
+
+    m_pList->getActiveApp()->OnVideoScreenTouch(TOUCH_END,x,y);
 }

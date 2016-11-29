@@ -41,6 +41,11 @@ void AppList::setUIManager(UIInterface *pUIManager)
         m_pCurApp->setUIManager(pUIManager);
 }
 
+void AppList::OnShowDeviceList()
+{
+    m_pUIManager->onAppShow(ID_DEVICEVIEW);
+}
+
 void AppList::ShowPreviousUI()
 {
     if (m_pCurApp) {
@@ -50,9 +55,51 @@ void AppList::ShowPreviousUI()
     m_pUIManager->onAppShow(ID_APPLINK);
 }
 
+void AppList::OnStartDeviceDiscovery()
+{
+    ToSDL->OnStartDeviceDiscovery();
+}
+
+void AppList::OnDeviceChosen(const std::string name, const std::string id)
+{
+    ToSDL->OnDeviceChosen(name, id);
+}
+
+void AppList::OnFindApplications(std::string name, std::string id)
+{
+    ToSDL->OnFindApplications(name, id);
+}
+
+void AppList::getDeviceList(std::vector<DeviceData> &vDevice)
+{
+    vDevice = m_devicelist;
+}
+
+void AppList::OnDeviceSelect(const std::string id)
+{
+    DeviceData data;
+    bool bFind = false;
+    for (int i = 0; i < m_devicelist.size(); ++i) {
+        if (id == m_devicelist[i].id)
+        {
+            data = m_devicelist[i];
+            bFind = true;
+            break;
+        }
+    }
+
+    if(bFind)
+    {
+        ToSDL->OnDeviceChosen(data.name, data.id);
+        ToSDL->OnFindApplications(data.name, data.id);
+    }
+
+}
+
 AppDataInterface* AppList::getActiveApp()
 {
-    return m_pCurApp;
+    AppDataInterface *ptemp = m_pCurApp;
+    return ptemp;
 }
 
 Result AppList::onRequest(Json::Value jsonObj)
@@ -83,19 +130,18 @@ void AppList::onError(std::string)
 Result AppList::recvFromServer(Json::Value jsonObj)
 {
     if (jsonObj.isMember("method")) {
-       // LOGI(jsonObj.toStyledString().data());
         std::string str_method = jsonObj["method"].asString();
 
         if (str_method == "BasicCommunication.OnAppRegistered") {
             newAppRegistered(jsonObj);
             m_pUIManager->onAppShow(ID_APPLINK);
         }else if (str_method == "BasicCommunication.OnAppUnregistered") {
-            appUnregistered(jsonObj);
-            m_pUIManager->onAppShow(ID_APPLINK);
+            int appID = jsonObj["params"]["appID"].asInt();
+            m_pUIManager->onAppUnregister(appID);
         }else if (str_method == "VR.VRExitApp") {
             m_pUIManager->tsSpeak(ID_EXIT, "退出"+ m_pCurApp->m_szAppName);
             m_pUIManager->onAppShow(ID_APPLINK);
-        }else if (str_method == "Navigation.StopStream") {
+        }else if (str_method == "Navigation.StopStream") {            
             m_pUIManager->onVideoStreamStop();
             ShowPreviousUI();
         }else if (str_method == "VR.VRSwitchApp") {
@@ -147,7 +193,12 @@ Result AppList::recvFromServer(Json::Value jsonObj)
             ToSDL->OnVRCancelRecord();
             m_pUIManager->OnEndAudioPassThru();
             return RESULT_SUCCESS;
-        } else {
+        }else if (str_method == "BasicCommunication.UpdateDeviceList") {
+            // add by fanqiang
+            updateDeiveList(jsonObj);
+            m_pUIManager->ShowDeviceList();
+        }
+        else {
             if (m_pCurApp)
                 return m_pCurApp->recvFromServer(jsonObj);
             else
@@ -272,7 +323,6 @@ void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vA
         vAppIDs.push_back(m_AppDatas[i]->m_iAppID);
         vAppNames.push_back(m_AppDatas[i]->m_szAppName);
         vIconPath.push_back(m_AppDatas[i]->m_strAppIconFilePath);
-        LOGI("---%s",m_AppDatas[i]->m_strAppIconFilePath.c_str());
     }
 }
 
@@ -284,33 +334,44 @@ void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vA
     }
 }
 
-void AppList::appUnregistered(Json::Value jsonObj)
+void AppList::appUnregistered(int appId)
 {
-    int appID = jsonObj["params"]["appID"].asInt();
-
-    std::vector <AppData *>::iterator i;
-    for (i = m_AppDatas.begin(); i != m_AppDatas.end(); ++i) {
-        if (appID == (*i)->m_iAppID) {
+    std::vector <AppData *>::const_iterator appdata_iter;
+    for (appdata_iter = m_AppDatas.begin(); appdata_iter != m_AppDatas.end(); ++appdata_iter) {
+        if (appId == (*appdata_iter)->m_iAppID) {
             if (m_pCurApp) {
-                if (m_pCurApp->m_iAppID == appID) {
+                if (m_pCurApp->m_iAppID == appId) {
                     m_pCurApp = NULL;
                     //m_pUIManager->onVideoStreamStop();
                 }
             }
-            delete *i;
-            m_AppDatas.erase(i);
+            delete *appdata_iter;
+            m_AppDatas.erase(appdata_iter);
             break;
         }
+    }
+
+    m_pUIManager->onAppShow(ID_APPLINK);
+}
+
+void AppList::updateDeiveList(Json::Value jsonObj)
+{
+    m_devicelist.clear();
+    int size = jsonObj["params"]["deviceList"].size();
+    for(int i = 0; i < size; i++){
+        DeviceData data;
+        Json::Value device = jsonObj["params"]["deviceList"][i];
+        data.name = device["name"].asString();
+        data.id = device["id"].asString();
+        m_devicelist.push_back(data);
     }
 }
 
 void AppList::IconnectToVS(IMessageInterface * pMsgHandler, std::string sIP, int iPort)
 {
-    LOGI("IconnectToVS");
     ToSDL->ConnectToVideoStream(pMsgHandler,sIP,iPort);
 }
 void AppList::IdelConnectToVS()
 {
-    LOGI("IdelConnectToVS");
     ToSDL->DelConnectToVideoStream();
 }

@@ -12,7 +12,7 @@ TARGET = Gen3UI
 TEMPLATE = lib
 
 CONFIG += ffmpeg
-CONFIG  += wince  ##wince
+#CONFIG  += wince  ##wince
 
 DEFINES += HMIUI_LIBRARY __STDC_CONSTANT_MACROS
 
@@ -61,7 +61,8 @@ SOURCES += \
     VideoStream/MediaCodecStream.cpp \
     VideoStream/JniNative.cpp \
     VideoStream/JniFrame.cpp \
-    VideoStream/CeVideoStream.cpp
+    VideoStream/CeVideoStream.cpp \
+    AppListView/DeviceListView.cpp
 
 HEADERS += \
     Gen3UIManager.h \
@@ -102,7 +103,8 @@ HEADERS += \
     VideoStream/MediaCodecStream.h \
     VideoStream/JniNative.h \
     VideoStream/JniFrame.h \
-    VideoStream/CeVideoStream.h
+    VideoStream/CeVideoStream.h \
+    AppListView/DeviceListView.h
 
 unix {
     target.path = /usr/lib
@@ -131,6 +133,10 @@ $$PWD/Library/win32/ffmpeg/libavformat.a  \
 $$PWD/Library/win32/ffmpeg/libavutil.a  \
 $$PWD/Library/win32/ffmpeg/libswscale.a
 
+DEFINES += SDL_CALL_BACK \
+           SDL_SUPPORT_LIB
+LIBS +=  $$PWD/Library/win32/sdl/smartDeviceLinkCore.lib
+
 #pthread.path=$$OUT_PWD/bin
 #pthread.files=$$PWD/Library/win32/*.dll
 ffmpeg.path=$$OUT_PWD/bin
@@ -149,15 +155,15 @@ INSTALLS +=qt_dll
 unix:!android{
 ffmpeg.path=$$OUT_PWD/../bin
 #linux 64bit
-ffmpeg.files=$$PWD/Library/linux/ffmpeg/*.*
+#ffmpeg.files=$$PWD/Library/linux/ffmpeg/*.*
 #linux 32bit
-#ffmpeg.files=$$PWD/Library/linux/ffmpeg_32/*.*
+ffmpeg.files=$$PWD/Library/linux/ffmpeg_32/*.*
 INSTALLS+=ffmpeg
 
 #linux 64bit
-LIBS += -L$$PWD/Library/linux/ffmpeg  -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
+#LIBS += -L$$PWD/Library/linux/ffmpeg  -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
 #linux 32bit
-#LIBS += -L$$PWD/Library/linux/ffmpeg_32  -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
+LIBS += -L$$PWD/Library/linux/ffmpeg_32  -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswresample -lswscale
 }
 ################################for wince
 wince{

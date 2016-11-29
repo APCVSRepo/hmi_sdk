@@ -116,10 +116,8 @@ void CCommandView::RefreshCommandList(tagCmdInf *pMenu)
 
 void CCommandView::showEvent(QShowEvent * e)
 {
-        LOGI("---");
     //m_pCommandList->SetPos(m_pMenuBtn->geometry().left(),m_pMenuBtn->geometry().top(),m_pMenuBtn->geometry().width()*2.5,0);
     m_CmdVec.clear();
-//LOGI("---");
 
     std::vector<SMenuCommand> CmdList = m_pList->getActiveApp()->getCommandList();
     std::vector<SMenuCommand> TmpCmdList;
@@ -137,15 +135,12 @@ void CCommandView::showEvent(QShowEvent * e)
             }
         }
     }
-LOGI("---");
     m_pCurrentMenu = NULL;
     RefreshCommandList();
-LOGI("---");
 
     AppBase::SetEdlidedText(m_pAppNameLab,
                             m_pList->getActiveApp()->getAppName().c_str(),
                             width()*0.8);
-LOGI("---");
 }
 
 void CCommandView::OnReturnBtnClicked()

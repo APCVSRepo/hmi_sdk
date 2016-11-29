@@ -95,7 +95,6 @@ bool SDLConnector::ConnectToVideoStream(IMessageInterface * pMsgHandler, std::st
     m_channels.push_back(&m_VideoStream);
 
     m_sdl_is_connected = m_Sockets.ConnectToVS(&m_VideoStream, sIP, iPort, this);
-    LOGI("m_sdl_is_connected=====%d", m_sdl_is_connected);
     if (m_sdl_is_connected) {
 //        m_VideoStream.onOpen();
     }
@@ -226,7 +225,7 @@ void SDLConnector::OnAlertResponse(int id, int reason)
         data["method"] = "UI.Alert";
         error["message"] = "Alert request aborted";
         error["code"] = 4;
-        error["date"] = data;
+        error["data"] = data;
 		m_UI.sendError(id, error);
     }
     m_UI.onSystemContext("MAIN");
@@ -280,15 +279,24 @@ void SDLConnector::OnCommandClick(int appID, int cmdID)
 
 void SDLConnector::OnPerformInteraction(int code, int performInteractionID, int choiceID)
 {
-    Json::Value root;
     Json::Value result;
     result["code"] = code;
     result["method"] = "UI.PerformInteraction";
     if (0 == code) {
         result["choiceID"] = choiceID;
     }
-
 	m_UI.sendResult(performInteractionID, result);
+}
+
+void SDLConnector::OnVRPerformInteraction(int code, int performInteractionID, int choiceID)
+{
+    Json::Value result;
+    result["code"] = code;
+    result["method"] = "VR.PerformInteraction";
+    if (0 == code) {
+        result["choiceID"] = choiceID;
+    }
+    m_VR.sendResult(performInteractionID, result);
 }
 
 void SDLConnector::OnVRCommand(int appID, int cmdID)
@@ -344,6 +352,32 @@ void SDLConnector::OnSetMediaClockTimerResponse(int iCode,int iRequestId)
 
         m_UI.sendError(iRequestId, error);
     }
+}
+
+void SDLConnector::OnStartDeviceDiscovery()
+{
+    Json::Value params;
+    m_Base.sendNotification("BasicCommunication.OnStartDeviceDiscovery", params);
+}
+
+void SDLConnector::OnDeviceChosen(std::string name, std::string id)
+{
+    Json::Value params;
+    if(!name.empty())
+        params["name"] = name;
+    if(!id.empty())
+        params["id"] = id;
+    m_Base.sendNotification("BasicCommunication.OnDeviceChosen", params);
+}
+
+void SDLConnector::OnFindApplications(std::string name, std::string id)
+{
+    Json::Value params;
+    if(!name.empty())
+        params["name"] = name;
+    if(!id.empty())
+        params["id"] = id;
+    m_Base.sendNotification("BasicCommunication.OnFindApplications", params);
 }
 
 void SDLConnector::OnPerformAudioPassThru(int appID, int performaududiopassthruID, int code)
@@ -498,11 +532,8 @@ void SDLConnector::OnVideoScreenTouch(TOUCH_TYPE touch,int x,int y)
      event[0]["ts"] = ts;
      params["event"] = event;
 
-     LOGI("%s",params.toStyledString().data());
-
    //  std::cout<<root.asString();
 	 m_UI.sendNotification("UI.OnTouchEvent", params);
-
 }
 
 //{

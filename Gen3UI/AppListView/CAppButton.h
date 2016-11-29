@@ -12,9 +12,12 @@ public:
     ~CAppButton();
     virtual void setIcon(const QString on,const QString off,bool bPaint = false);
     void setFuncId(int id);
+    void setStringId(std::string strId);
     int  getFuncId();
+    std::string getStrId();
 signals:
     void clickedWitchFuncId(int funcId);
+    void OnClicked(std::string strId);
 public slots:
 
 protected:
@@ -23,6 +26,7 @@ protected:
 
 private:
     int    m_FuncId;
+    std::string m_strId;
 };
 
 #endif // CAPPBUTTON_H

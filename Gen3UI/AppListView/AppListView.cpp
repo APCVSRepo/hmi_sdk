@@ -47,8 +47,8 @@ CAppListView::~CAppListView()
 void CAppListView::onChildAppSelected(int funcId)
 {
     if (-1 == funcId) {
-        //Notify n(this);
-        //n.showDlg();
+        m_pList->OnStartDeviceDiscovery();
+        m_pList->OnShowDeviceList();
     }else if (-2 == funcId) {
 
     } else {

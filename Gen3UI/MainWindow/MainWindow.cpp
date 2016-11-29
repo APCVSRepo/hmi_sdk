@@ -224,7 +224,6 @@ void MainWindow::BackToVideoStream()
     /*
     if (m_bInVideoStream)
     {
-        LOGI("---MainWindow::showEvent");
         m_bInVideoStream = false;
         videoWidget->show();
 

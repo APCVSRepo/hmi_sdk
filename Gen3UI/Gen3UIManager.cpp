@@ -42,7 +42,7 @@
 #include <QDesktopWidget>
 #include "ScrollableMessage/ScollMsgView.h"
 #include "SliderView/SliderView.h"
-
+#include "AppListView/DeviceListView.h"
 #include "VideoStream/JniNative.h"
 
 CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
@@ -57,12 +57,11 @@ CGen3UIManager::CGen3UIManager(AppListInterface * pList, QWidget *parent) :
 CGen3UIManager::~CGen3UIManager()
 {
     for (int i = 0; i < ID_UI_MAX; ++i) {
-        if (m_vUIWidgets[i]) {
+        if (m_vUIWidgets[i]) {            
             delete m_vUIWidgets[i];
             m_vUIWidgets[i] = NULL;
         }
     }
-
 
 #ifdef SDL_SUPPORT_LIB
     //delete m_MspVR;
@@ -79,18 +78,21 @@ void CGen3UIManager::initAppHMI()
 
     MainWindow * pMain = new MainWindow(m_pList);
     QWidget* pParent = pMain->CenterWidget();
-    m_vUIWidgets[ID_MAIN] = pMain;
+
     m_vUIWidgets[ID_APPLINK] = new CAppListView(m_pList, pParent);
-    m_vUIWidgets[ID_ALERT]=new AlertView(m_pList, pParent);
-    //m_vUIWidgets[ID_AUDIOPASSTHRU]=new CAudioPassThru(m_pList, pParent);
-    //m_vUIWidgets[ID_CHOICESETVR]=new CChoicesetVR(m_pList, pParent);
     m_vUIWidgets[ID_CHOICESET] = new CChoiceSet(m_pList, pParent);
     m_vUIWidgets[ID_COMMAND]=new CCommandView(m_pList, pParent);
-    m_vUIWidgets[ID_SCROLLMSG] = new CScollMsgView(m_pList, pParent);
     m_vUIWidgets[ID_SHOW] = new CMediaShow(m_pList,pParent);
-    //m_vUIWidgets[ID_NOTIFY]=new Notify(pParent);
+    m_vUIWidgets[ID_ALERT]=new AlertView(m_pList, pParent);
+    m_vUIWidgets[ID_AUDIOPASSTHRU]=NULL;//new CAudioPassThru(m_pList, pParent);
+    m_vUIWidgets[ID_CHOICESETVR]=NULL;//new CChoicesetVR(m_pList, pParent);
+    m_vUIWidgets[ID_SCROLLMSG] = new CScollMsgView(m_pList, pParent);
     m_vUIWidgets[ID_SLIDER] = new CSliderView(m_pList, pParent);
+    m_vUIWidgets[ID_NOTIFY]=NULL;//new Notify(pParent);
     m_vUIWidgets[ID_MEDIACLOCK] = NULL;
+    m_vUIWidgets[ID_MAIN] = pMain;
+    m_vUIWidgets[ID_DEVICEVIEW] = new CDeviceListView(m_pList, pParent);
+
 
 #ifndef WINCE
 #ifdef ANDROID
@@ -104,6 +106,7 @@ void CGen3UIManager::initAppHMI()
 #else
     m_vUIWidgets[ID_VIDEOSTREAM] = new CeVideoStream(m_pList,pMain);
 #endif
+
 
     for (int i = 0; i < ID_UI_MAX; ++i) {
         if (m_vUIWidgets[i] != NULL) {
@@ -122,6 +125,7 @@ void CGen3UIManager::initAppHMI()
     connect(this,SIGNAL(onAppShowSignal(int)),this,SLOT(AppShowSlot(int)));
     connect(this,SIGNAL(onVideoStartSignal()),this,SLOT(onVideoStartSlots()));
     connect(this,SIGNAL(onVideoStopSignal()),this,SLOT(onVideoStopSlots()));
+    connect(this,SIGNAL(OnAppUnregisterSignal(int)),this,SLOT(OnAppUnregisterSlot(int)));
 
     //emit finishMainHMI();
 }
@@ -143,6 +147,16 @@ void CGen3UIManager::onAppShow(int type)
 {
     if ((type >= 0) && (type < ID_UI_MAX))
         emit onAppShowSignal(type);
+}
+
+void CGen3UIManager::onAppUnregister(int appId)
+{
+    emit OnAppUnregisterSignal(appId);
+}
+
+void CGen3UIManager::OnAppUnregisterSlot(int appId)
+{
+    m_pList->appUnregistered(appId);
 }
 
 void CGen3UIManager::onVideoStreamStart()
@@ -182,7 +196,6 @@ void CGen3UIManager::onVideoStartSlots()
 
 void CGen3UIManager::onVideoStreamStop()
 {
-    LOGI("~~~~~~~~onVideoStreamStop");
 #ifndef WINCE
 
 #ifdef ANDROID
@@ -202,7 +215,6 @@ void CGen3UIManager::onVideoStreamStop()
 
 void CGen3UIManager::onVideoStopSlots()
 {
-    LOGI("~~~~~~~onVideoStopSlots");
 }
 
 void CGen3UIManager::AppShowSlot(int type)
@@ -217,7 +229,8 @@ void CGen3UIManager::AppShowSlot(int type)
             CMediaShow *pShow = (CMediaShow *)m_vUIWidgets[ID_SHOW];
             pShow->UpdateMediaColckTimer();
         }
-    } else {
+    }
+    else {
         if (m_iCurUI != ID_MAIN) {
 
             if (m_iCurUI == ID_VIDEOSTREAM) {
@@ -292,4 +305,13 @@ void CGen3UIManager::tsSpeak(int VRID, std::string strText)
 void CGen3UIManager::OnEndAudioPassThru()
 {
     //((CAudioPassThru *)m_vUIWidgets[ID_AUDIOPASSTHRU])->onButtonClickedSlots(PERFORMAUDIOPASSTHRU_CANCEL);
+}
+
+void CGen3UIManager::ShowDeviceList()
+{
+    if(m_iCurUI == ID_DEVICEVIEW)
+    {
+        if(m_vUIWidgets[m_iCurUI])
+            m_vUIWidgets[m_iCurUI]->show();
+    }
 }

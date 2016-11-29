@@ -29,6 +29,9 @@ public:
     void startStream();
     void stopStream();
 
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 public: //IMessageInterface
     Result onRequest(Json::Value) {return RESULT_SUCCESS;}
     void onNotification(Json::Value) {}
@@ -41,6 +44,8 @@ public slots:
     void OnClickedMenuBtn();
 
 private:
+    int videoWidth;
+    int videoHeight;
 
     QRect m_BtnRect[3];
     QImage *m_pBtnImage[4];

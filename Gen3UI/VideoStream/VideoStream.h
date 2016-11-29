@@ -69,8 +69,8 @@ public:
     void paintEvent(QPaintEvent *e);
 #endif
     void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
 #ifndef VIDEO_STREAM_WIDGET
 signals:

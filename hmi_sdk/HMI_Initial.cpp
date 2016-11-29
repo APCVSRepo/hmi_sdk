@@ -36,10 +36,11 @@ HMI_Initial::HMI_Initial():QObject(NULL)
 HMI_Initial::~HMI_Initial()
 {
     //delete m_uiManager;
-    delete m_appList;
+    //delete m_appList;
     SDLConnector::Close();
 
-    CloseFunc CloseUI = (CloseFunc)m_UILib.resolve("UILib_Close");
+    //UILib_Close();
+   CloseFunc CloseUI = (CloseFunc)m_UILib.resolve("UILib_Close");
     if (CloseUI) {
         CloseUI();
     }
@@ -51,8 +52,9 @@ void HMI_Initial::initApps()
 #ifdef SDL_SUPPORT_LIB
     initSDL();
 #endif
-    //m_uiManager->initAppHMI();
     ToSDL->ConnectToSDL(m_appList);
+    //m_uiManager->initAppHMI();
+
     emit finishMainHMI();
 }
 
@@ -110,7 +112,6 @@ bool HMI_Initial::FileCopyToConfigdir(const char *dir_)
             LOGE("%s create success",CONFIG_DIR);
     }
     QFileInfoList list = dir.entryInfoList();
-    LOGI("total %d files",list.count());
     for (int i = 0; i < list.count(); ++i) {
         QFileInfo info = list.at(i);
 
@@ -121,7 +122,6 @@ bool HMI_Initial::FileCopyToConfigdir(const char *dir_)
         file_out.write(file_in.readAll());
         file_out.close();
         file_in.close();
-        LOGI("%s copy to %s",file_in.fileName().toUtf8().data(),file_out.fileName().toUtf8().data());
     }
     return true;
 }

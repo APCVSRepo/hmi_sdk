@@ -25,7 +25,7 @@ public:
     virtual void setUIManager(UIInterface *pUI) = 0;
     virtual void getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames) = 0;
     virtual void getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vAppNames,std::vector<std::string> &vIconPath) = 0;
-    virtual void OnDeviceSelect(std::string id) = 0;
+    virtual void OnDeviceSelect(const std::string id) = 0;
     virtual void getDeviceList(std::vector<DeviceData>& vDevice) = 0;
     virtual void OnStartDeviceDiscovery() = 0;
 

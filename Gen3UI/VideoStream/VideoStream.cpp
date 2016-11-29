@@ -104,21 +104,23 @@ VideoStream::VideoStream(AppListInterface * pList,QWidget *parent) :
 VideoStream::~VideoStream()
 {
     for (int i = 0;i != 4;++i) {
-        //delete m_pBtnImage[i];
+        delete m_pBtnImage[i];
     }
 
 #ifdef VIDEO_STREAM_WIDGET
     delete m_VideoPlayer;
 #else
     if (pAVFormatContext != NULL) {
-        //avformat_free_context(pAVFormatContext);
+        avformat_free_context(pAVFormatContext);
         pAVFormatContext = NULL;
     }
     if (pAVFrame != NULL) {
-        //av_frame_free(&pAVFrame);
+        av_frame_free(&pAVFrame);
+        pAVFrame = NULL;
     }
     if (pSwsContext != NULL) {
-        //sws_freeContext(pSwsContext);
+        sws_freeContext(pSwsContext);
+        pSwsContext = NULL;
     }
     //delete m_Screen;
 #endif

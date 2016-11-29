@@ -60,7 +60,7 @@ void AppList::OnStartDeviceDiscovery()
     ToSDL->OnStartDeviceDiscovery();
 }
 
-void AppList::OnDeviceChosen(std::string name, std::string id)
+void AppList::OnDeviceChosen(const std::string name, const std::string id)
 {
     ToSDL->OnDeviceChosen(name, id);
 }
@@ -75,22 +75,25 @@ void AppList::getDeviceList(std::vector<DeviceData> &vDevice)
     vDevice = m_devicelist;
 }
 
-void AppList::OnDeviceSelect(std::string id)
+void AppList::OnDeviceSelect(const std::string id)
 {
     DeviceData data;
-    int i;
-    for (i = 0; i < m_devicelist.size(); ++i) {
-        data = m_devicelist[i];
-        if (data.id == id)
+    bool bFind = false;
+    for (int i = 0; i < m_devicelist.size(); ++i) {
+        if (id == m_devicelist[i].id)
+        {
+            data = m_devicelist[i];
+            bFind = true;
             break;
+        }
     }
 
-    if (i >= m_devicelist.size()) {
-        return;
+    if(bFind)
+    {
+        ToSDL->OnDeviceChosen(data.name, data.id);
+        ToSDL->OnFindApplications(data.name, data.id);
     }
 
-    ToSDL->OnDeviceChosen(data.name, data.id);
-    ToSDL->OnFindApplications(data.name, data.id);
 }
 
 AppDataInterface* AppList::getActiveApp()
@@ -333,27 +336,22 @@ void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vA
 
 void AppList::appUnregistered(int appId)
 {
-    std::vector <AppData *>::iterator i;
-    for (i = m_AppDatas.begin(); i != m_AppDatas.end(); ++i) {
-        if (appId == (*i)->m_iAppID) {
+    std::vector <AppData *>::const_iterator appdata_iter;
+    for (appdata_iter = m_AppDatas.begin(); appdata_iter != m_AppDatas.end(); ++appdata_iter) {
+        if (appId == (*appdata_iter)->m_iAppID) {
             if (m_pCurApp) {
                 if (m_pCurApp->m_iAppID == appId) {
                     m_pCurApp = NULL;
                     //m_pUIManager->onVideoStreamStop();
                 }
             }
-            delete *i;
-            m_AppDatas.erase(i);
+            delete *appdata_iter;
+            m_AppDatas.erase(appdata_iter);
             break;
         }
     }
+
     m_pUIManager->onAppShow(ID_APPLINK);
-}
-
-void AppList::appUnregistered(Json::Value jsonObj)
-{
-
-
 }
 
 void AppList::updateDeiveList(Json::Value jsonObj)

@@ -133,8 +133,8 @@ $$PWD/Library/win32/ffmpeg/libavformat.a  \
 $$PWD/Library/win32/ffmpeg/libavutil.a  \
 $$PWD/Library/win32/ffmpeg/libswscale.a
 
-#DEFINES += SDL_CALL_BACK \
-#           SDL_SUPPORT_LIB
+DEFINES += SDL_CALL_BACK \
+           SDL_SUPPORT_LIB
 LIBS +=  $$PWD/Library/win32/sdl/smartDeviceLinkCore.lib
 
 #pthread.path=$$OUT_PWD/bin

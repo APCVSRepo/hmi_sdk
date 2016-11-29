@@ -17,10 +17,7 @@ typedef UIInterface *(*InitFunc)(AppListInterface *);
 HMI_Initial::HMI_Initial():QObject(NULL)
 {
     m_appList = new AppList;
-/*
-    m_uiManager = UILib_Init(m_appList);
-    m_appList->setUIManager(m_uiManager);
-*/
+
     std::string strFilePath = GetUILibPath();
     strFilePath += "Gen3UI";
     m_UILib.setFileName(strFilePath.c_str());

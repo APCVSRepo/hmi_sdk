@@ -100,12 +100,12 @@ win32:!wince{
 DEFINES +=WIN32
 INCLUDEPATH += $$PWD/../Include/pthread \
 
-#DEFINES += SDL_CALL_BACK \
-#           SDL_SUPPORT_LIB
+DEFINES += SDL_CALL_BACK \
+           SDL_SUPPORT_LIB
 LIBS +=  $$PWD/Library/win32/sdl/smartDeviceLinkCore.lib
-#sdllib.path=$$OUT_PWD/../bin
-#sdllib.files=$$PWD/Library/win32/sdl/*.*
-#INSTALLS+=sdllib
+sdllib.path=$$OUT_PWD/../bin
+sdllib.files=$$PWD/Library/win32/sdl/*.*
+INSTALLS+=sdllib
 
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVC2.lib
 LIBS +=  $$PWD/Library/win32/pthread/pthreadVCE2.lib

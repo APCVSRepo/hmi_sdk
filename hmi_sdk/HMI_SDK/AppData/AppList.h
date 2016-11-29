@@ -25,10 +25,10 @@ public:
     void ShowPreviousUI();
     // add by fanqiang
     void OnStartDeviceDiscovery();
-    void OnDeviceChosen(std::string name, std::string id);
+    void OnDeviceChosen(const std::string name, const std::string id);
     void OnFindApplications(std::string name, std::string id);
     void getDeviceList(std::vector<DeviceData>& vDevice);
-    void OnDeviceSelect(std::string id);
+    void OnDeviceSelect(const std::string id);
 
     void appUnregistered(int appId);
 

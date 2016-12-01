@@ -336,17 +336,17 @@ void AppList::getAppList(std::vector<int>& vAppIDs, std::vector<std::string>& vA
 
 void AppList::appUnregistered(int appId)
 {
-    std::vector <AppData *>::const_iterator appdata_iter;
-    for (appdata_iter = m_AppDatas.begin(); appdata_iter != m_AppDatas.end(); ++appdata_iter) {
-        if (appId == (*appdata_iter)->m_iAppID) {
+    std::vector <AppData *>::iterator appdata_it;
+    for (appdata_it = m_AppDatas.begin(); appdata_it != m_AppDatas.end(); ++appdata_it) {
+        if (appId == (*appdata_it)->m_iAppID) {
             if (m_pCurApp) {
                 if (m_pCurApp->m_iAppID == appId) {
                     m_pCurApp = NULL;
                     //m_pUIManager->onVideoStreamStop();
                 }
             }
-            delete *appdata_iter;
-            m_AppDatas.erase(appdata_iter);
+            delete *appdata_it;
+            m_AppDatas.erase(appdata_it);
             break;
         }
     }
